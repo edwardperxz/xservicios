@@ -158,4 +158,4 @@ php bin/cake bake view all
 - Edward: Project Manager y coordinación
 - Ana: UX/UI y templates
 - Isaí: Base de datos y backend
-- Fredy: Módulos operativos y pruebas
+- Fredy: backend, Módulos operativos y pruebas

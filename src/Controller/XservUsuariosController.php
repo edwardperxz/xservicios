@@ -11,22 +11,21 @@ class XservUsuariosController extends AppController
     {
         parent::beforeFilter($event);
 
-        // Permitir acceso sin autenticación
+        //login NO requiere autenticación
         $this->Authentication->addUnauthenticatedActions(['login']);
     }
 
     public function login()
     {
-        $this->request->allowMethod(['get', 'post']);
+        //login NO requiere autorización
+        $this->Authorization->skipAuthorization();
 
         $result = $this->Authentication->getResult();
 
-        // Si ya está logueado → fuera
         if ($result->isValid()) {
             return $this->redirect('/');
         }
 
-        // Si POST y falló
         if ($this->request->is('post') && !$result->isValid()) {
             $this->Flash->error('Usuario o contraseña incorrectos');
         }
@@ -34,10 +33,11 @@ class XservUsuariosController extends AppController
 
     public function logout()
     {
-        $this->request->allowMethod(['post', 'get']);
+        $this->Authorization->skipAuthorization();
 
         $this->Authentication->logout();
 
         return $this->redirect(['action' => 'login']);
     }
 }
+

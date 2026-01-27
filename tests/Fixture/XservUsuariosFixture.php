@@ -20,13 +20,12 @@ class XservUsuariosFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
-                'name' => 'Lorem ipsum dolor sit amet',
-                'email' => 'Lorem ipsum dolor sit amet',
+                'username' => 'Lorem ipsum dolor sit amet',
                 'password' => 'Lorem ipsum dolor sit amet',
                 'rol' => 'Lorem ipsum dolor sit amet',
-                'activo' => 1,
-                'created' => '2026-01-27 20:20:56',
-                'modified' => '2026-01-27 20:20:56',
+                'estado' => 'Lorem ipsum dolor sit amet',
+                'created_at' => '2026-01-27 20:20:56',
+                'updated_at' => '2026-01-27 20:20:56',
             ],
         ];
         parent::init();

@@ -4,20 +4,21 @@ declare(strict_types=1);
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
-use Authentication\PasswordHasher\DefaultPasswordHasher;
 
 /**
- * XservUsuario Entity
+ * XservServicio Entity
  *
  * @property int $id
- * @property string $username
- * @property string $password
- * @property string $rol
+ * @property string $nombre
+ * @property string $descripcion_es
+ * @property string $descripcion_en
+ * @property string $precio_base
+ * @property string|null $variantes
  * @property string|null $estado
  * @property \Cake\I18n\DateTime|null $created_at
  * @property \Cake\I18n\DateTime|null $updated_at
  */
-class XservUsuario extends Entity
+class XservServicio extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -29,31 +30,13 @@ class XservUsuario extends Entity
      * @var array<string, bool>
      */
     protected array $_accessible = [
-        'username' => true,
-        'password' => true,
-        'rol' => true,
+        'nombre' => true,
+        'descripcion_es' => true,
+        'descripcion_en' => true,
+        'precio_base' => true,
+        'variantes' => true,
         'estado' => true,
         'created_at' => true,
         'updated_at' => true,
     ];
-
-    /**
-     * Fields that are excluded from JSON versions of the entity.
-     *
-     * @var array<string>
-     */
-    protected array $_hidden = [
-        'password',
-    ];
-
-    /**
-     * Hash automático del password
-     */
-    protected function _setPassword(?string $password): ?string
-    {
-        if (strlen((string)$password) > 0) {
-            return (new DefaultPasswordHasher())->hash($password);
-        }
-        return null;
-    }
 }

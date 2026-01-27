@@ -40,7 +40,7 @@ class XservUsuariosTable extends Table
         parent::initialize($config);
 
         $this->setTable('xserv_usuarios');
-        $this->setDisplayField('name');
+        $this->setDisplayField('username');
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
@@ -55,16 +55,11 @@ class XservUsuariosTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->scalar('name')
-            ->maxLength('name', 100)
-            ->requirePresence('name', 'create')
-            ->notEmptyString('name');
-
-        $validator
-            ->email('email')
-            ->requirePresence('email', 'create')
-            ->notEmptyString('email')
-            ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+            ->scalar('username')
+            ->maxLength('username', 50)
+            ->requirePresence('username', 'create')
+            ->notEmptyString('username')
+            ->add('username', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
         $validator
             ->scalar('password')
@@ -74,11 +69,20 @@ class XservUsuariosTable extends Table
 
         $validator
             ->scalar('rol')
+            ->requirePresence('rol', 'create')
             ->notEmptyString('rol');
 
         $validator
-            ->boolean('activo')
-            ->notEmptyString('activo');
+            ->scalar('estado')
+            ->allowEmptyString('estado');
+
+        $validator
+            ->dateTime('created_at')
+            ->allowEmptyDateTime('created_at');
+
+        $validator
+            ->dateTime('updated_at')
+            ->allowEmptyDateTime('updated_at');
 
         return $validator;
     }
@@ -92,7 +96,7 @@ class XservUsuariosTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->isUnique(['email']), ['errorField' => 'email']);
+        $rules->add($rules->isUnique(['username']), ['errorField' => 'username']);
 
         return $rules;
     }

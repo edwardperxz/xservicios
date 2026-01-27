@@ -28,6 +28,7 @@ use Cake\Http\MiddlewareQueue;
 use Cake\ORM\Locator\TableLocator;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
+use Cake\Http\Middleware\SessionMiddleware;
 
 //Para la autentificacion de los users:
 use Authentication\AuthenticationService;
@@ -81,22 +82,19 @@ class Application extends BaseApplication
     {
         $middlewareQueue
             ->add(new ErrorHandlerMiddleware(Configure::read('Error'), $this))
-
             ->add(new AssetMiddleware([
                 'cacheTime' => Configure::read('Asset.cacheTime'),
             ]))
-
             ->add(new RoutingMiddleware($this))
-
             ->add(new BodyParserMiddleware())
+
+            ->add(new SessionMiddleware())          // 👈 FALTABA
+            ->add(new AuthenticationMiddleware($this))
+            ->add(new AuthorizationMiddleware($this))
 
             ->add(new CsrfProtectionMiddleware([
                 'httponly' => true,
-            ]))
-            
-            ->add(new AuthenticationMiddleware($this))
-            ->add(new AuthorizationMiddleware($this));
-
+            ]));
         return $middlewareQueue;
     }
 

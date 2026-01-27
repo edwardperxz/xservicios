@@ -9,12 +9,13 @@ use Authentication\PasswordHasher\DefaultPasswordHasher;
 class XservUsuario extends Entity
 {
     protected array $_accessible = [
-        'username'   => true,
-        'password'   => true,
-        'rol'        => true,
-        'estado'     => true,
-        'created_at' => true,
-        'updated_at' => true,
+        'name'     => true,
+        'email'    => true,
+        'password' => true,
+        'rol'      => true,
+        'activo'   => true,
+        'created'  => true,
+        'modified' => true,
     ];
 
     protected array $_hidden = [

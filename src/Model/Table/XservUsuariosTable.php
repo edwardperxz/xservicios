@@ -24,6 +24,8 @@ use Cake\Validation\Validator;
  * @method iterable<\App\Model\Entity\XservUsuario>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservUsuario> saveManyOrFail(iterable $entities, array $options = [])
  * @method iterable<\App\Model\Entity\XservUsuario>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservUsuario>|false deleteMany(iterable $entities, array $options = [])
  * @method iterable<\App\Model\Entity\XservUsuario>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservUsuario> deleteManyOrFail(iterable $entities, array $options = [])
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class XservUsuariosTable extends Table
 {
@@ -40,6 +42,8 @@ class XservUsuariosTable extends Table
         $this->setTable('xserv_usuarios');
         $this->setDisplayField('username');
         $this->setPrimaryKey('id');
+
+        $this->addBehavior('Timestamp');
     }
 
     /**

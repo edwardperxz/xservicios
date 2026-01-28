@@ -24,8 +24,8 @@ class XservUsuariosFixture extends TestFixture
                 'password' => 'Lorem ipsum dolor sit amet',
                 'rol' => 'Lorem ipsum dolor sit amet',
                 'estado' => 'Lorem ipsum dolor sit amet',
-                'created_at' => 1769555245,
-                'updated_at' => 1769555245,
+                'created_at' => '2026-01-27 20:20:56',
+                'updated_at' => '2026-01-27 20:20:56',
             ],
         ];
         parent::init();

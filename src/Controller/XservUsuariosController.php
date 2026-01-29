@@ -82,17 +82,22 @@ class XservUsuariosController extends AppController
     public function add()
     {
         $xservUsuario = $this->XservUsuarios->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $xservUsuario = $this->XservUsuarios->patchEntity($xservUsuario, $this->request->getData());
-            if ($this->XservUsuarios->save($xservUsuario)) {
-                $this->Flash->success(__('The xserv usuario has been saved.'));
+    if ($this->request->is('post')) {
+        $xservUsuario = $this->XservUsuarios->patchEntity($xservUsuario, $this->request->getData());
+        
+        // Forzamos el rol si no viene en el form para evitar inyecciones de privilegios
+        $xservUsuario->rol = 'cliente';
+        $xservUsuario->estado = 'activo';
 
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The xserv usuario could not be saved. Please, try again.'));
+        if ($this->XservUsuarios->save($xservUsuario)) {
+            $this->Flash->success(__('Cuenta creada con éxito. Ya puedes iniciar sesión.'));
+            return $this->redirect(['action' => 'login']);
         }
-        $this->set(compact('xservUsuario'));
+        $this->Flash->error(__('No se pudo crear la cuenta. Por favor, intente de nuevo.'));
     }
+    $this->set(compact('xservUsuario'));
+    }
+    
 
     /**
      * Edit method

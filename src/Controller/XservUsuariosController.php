@@ -169,7 +169,7 @@ class XservUsuariosController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
-        $usuario = $this->XservUsuarios->newEmptyEntity();
+        $xservUsuario = $this->XservUsuarios->newEmptyEntity();
 
         if ($this->request->is('post')) {
             $data = $this->request->getData();
@@ -178,20 +178,20 @@ class XservUsuariosController extends AppController
             $data['rol'] = 'operador';
             $data['estado'] = 'activo';
 
-            $usuario = $this->XservUsuarios->newEntity($data);
+            $xservUsuario = $this->XservUsuarios->newEntity($data);
 
-            if ($this->XservUsuarios->save($usuario)) {
+            if ($this->XservUsuarios->save($xservUsuario)) {
                 $this->Flash->success('Cuenta creada correctamente');
 
                 return $this->redirect(['action' => 'login']);
             }
 
             // DEBUG ÚTIL (déjalo mientras pruebas)
-            debug($usuario->getErrors());
+            debug($xservUsuario->getErrors());
             $this->Flash->error('No se pudo crear la cuenta');
         }
 
-        $this->set(compact('usuario'));
+        $this->set(compact('xservUsuario'));
 
         return null;
     }

@@ -21,11 +21,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - php-version: '8.2'
+          - php-version: '8.3'
             dependencies: 'lowest'
-          - php-version: '8.5'
-            dependencies: 'highest'
-          - php-version: '8.5'
+          - php-version: '8.3'
             dependencies: 'highest'
 
     steps:
@@ -63,7 +61,7 @@ jobs:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.2'
+        php-version: '8.3'
         extensions: mbstring, intl
         coverage: none
         tools: cs2pr, phpstan:1.12

@@ -134,7 +134,7 @@ class Application extends BaseApplication
 
         $service->loadIdentifier('Authentication.Password', [
             'fields' => [
-                'username' => 'username',
+                'username' => 'email',
                 'password' => 'password',
             ],
             'resolver' => [
@@ -145,7 +145,7 @@ class Application extends BaseApplication
 
         $service->loadAuthenticator('Authentication.Form', [
             'fields' => [
-                'username' => 'username',
+                'username' => 'email',
                 'password' => 'password',
             ],
             'loginUrl' => '/xserv-usuarios/login',
@@ -155,6 +155,7 @@ class Application extends BaseApplication
 
         return $service;
     }
+
 
 
     public function getAuthorizationService(

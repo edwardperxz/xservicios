@@ -11,6 +11,35 @@ use Cake\TestSuite\Fixture\TestFixture;
 class XservReservasFixture extends TestFixture
 {
     /**
+     * Fields
+     *
+     * @var array
+     */
+    public $fields = [
+        'id' => ['type' => 'integer', 'length' => null, 'null' => false, 'default' => null, 'autoIncrement' => true],
+        'codigo_reserva' => ['type' => 'string', 'length' => 20, 'null' => false],
+        'cliente_id' => ['type' => 'integer', 'length' => null, 'null' => false],
+        'servicio_id' => ['type' => 'integer', 'length' => null, 'null' => false],
+        'ruta_id' => ['type' => 'integer', 'length' => null, 'null' => true],
+        'fecha' => ['type' => 'date', 'null' => false],
+        'hora' => ['type' => 'time', 'null' => false],
+        'pasajeros' => ['type' => 'integer', 'length' => null, 'null' => false],
+        'precio_pactado' => ['type' => 'decimal', 'length' => 10, 'precision' => 2, 'null' => false],
+        'itbms_pactado' => ['type' => 'decimal', 'length' => 10, 'precision' => 2, 'null' => false, 'default' => '0.07'],
+        'punto_recogida' => ['type' => 'string', 'length' => 255, 'null' => false],
+        'punto_destino' => ['type' => 'string', 'length' => 255, 'null' => false],
+        'observaciones' => ['type' => 'text', 'null' => true],
+        'estado' => ['type' => 'string', 'length' => 255, 'null' => false, 'default' => 'pendiente'],
+        'estado_pago' => ['type' => 'string', 'length' => 255, 'null' => false, 'default' => 'pendiente'],
+        'created_at' => ['type' => 'integer', 'length' => null, 'null' => false],
+        'updated_at' => ['type' => 'integer', 'length' => null, 'null' => false],
+        '_constraints' => [
+            'primary' => ['type' => 'primary', 'columns' => ['id']],
+            'unique' => ['type' => 'unique', 'columns' => ['codigo_reserva']],
+        ],
+    ];
+
+    /**
      * Init method
      *
      * @return void

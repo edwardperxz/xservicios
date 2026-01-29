@@ -11,6 +11,26 @@ use Cake\TestSuite\Fixture\TestFixture;
 class XservConfiguracionesFixture extends TestFixture
 {
     /**
+     * Fields
+     *
+     * @var array
+     */
+    public $fields = [
+        'id' => ['type' => 'integer', 'length' => null, 'null' => false, 'default' => null, 'autoIncrement' => true],
+        'clave' => ['type' => 'string', 'length' => 100, 'null' => false],
+        'valor' => ['type' => 'text', 'null' => false],
+        'tipo_dato' => ['type' => 'string', 'length' => 255, 'null' => false, 'default' => 'string'],
+        'grupo' => ['type' => 'string', 'length' => 255, 'null' => false],
+        'descripcion_parametro' => ['type' => 'string', 'length' => 255, 'null' => true],
+        'editable_por_admin' => ['type' => 'boolean', 'length' => null, 'null' => false, 'default' => true],
+        'updated_at' => ['type' => 'integer', 'length' => null, 'null' => false],
+        '_constraints' => [
+            'primary' => ['type' => 'primary', 'columns' => ['id']],
+            'unique' => ['type' => 'unique', 'columns' => ['clave']],
+        ],
+    ];
+
+    /**
      * Init method
      *
      * @return void

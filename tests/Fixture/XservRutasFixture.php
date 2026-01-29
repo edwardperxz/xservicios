@@ -11,6 +11,22 @@ use Cake\TestSuite\Fixture\TestFixture;
 class XservRutasFixture extends TestFixture
 {
     /**
+     * Fields
+     *
+     * @var array
+     */
+    public $fields = [
+        'id' => ['type' => 'integer', 'length' => null, 'null' => false, 'default' => null, 'autoIncrement' => true],
+        'origen_id' => ['type' => 'integer', 'length' => null, 'null' => false],
+        'destino_id' => ['type' => 'integer', 'length' => null, 'null' => false],
+        'precio_base' => ['type' => 'decimal', 'length' => 10, 'precision' => 2, 'null' => false],
+        'tiempo_estimado_min' => ['type' => 'integer', 'length' => null, 'null' => true],
+        '_constraints' => [
+            'primary' => ['type' => 'primary', 'columns' => ['id']],
+        ],
+    ];
+
+    /**
      * Init method
      *
      * @return void

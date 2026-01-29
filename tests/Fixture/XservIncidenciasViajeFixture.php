@@ -16,6 +16,27 @@ class XservIncidenciasViajeFixture extends TestFixture
      * @var string
      */
     public string $table = 'xserv_incidencias_viaje';
+
+    /**
+     * Fields
+     *
+     * @var array
+     */
+    public $fields = [
+        'id' => ['type' => 'integer', 'length' => null, 'null' => false, 'default' => null, 'autoIncrement' => true],
+        'ejecucion_id' => ['type' => 'integer', 'length' => null, 'null' => false],
+        'tipo_incidencia' => ['type' => 'string', 'length' => 255, 'null' => false],
+        'descripcion' => ['type' => 'text', 'null' => false],
+        'latitud_incidencia' => ['type' => 'decimal', 'length' => 10, 'precision' => 8, 'null' => true],
+        'longitud_incidencia' => ['type' => 'decimal', 'length' => 11, 'precision' => 8, 'null' => true],
+        'severidad' => ['type' => 'string', 'length' => 255, 'null' => false, 'default' => 'baja'],
+        'resuelto' => ['type' => 'boolean', 'length' => null, 'null' => false, 'default' => false],
+        'created_at' => ['type' => 'integer', 'length' => null, 'null' => false],
+        '_constraints' => [
+            'primary' => ['type' => 'primary', 'columns' => ['id']],
+        ],
+    ];
+
     /**
      * Init method
      *

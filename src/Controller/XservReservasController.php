@@ -17,6 +17,8 @@ class XservReservasController extends AppController
      */
     public function index()
     {
+        $this->Authorization->skipAuthorization();
+        
         $query = $this->XservReservas->find()
             ->contain(['Clientes', 'Servicios', 'Rutas']);
         $xservReservas = $this->paginate($query);
@@ -33,6 +35,8 @@ class XservReservasController extends AppController
      */
     public function view(?string $id = null)
     {
+        $this->Authorization->skipAuthorization();
+        
         $xservReserva = $this->XservReservas->get($id, contain: ['Clientes', 'Servicios', 'Rutas']);
         $this->set(compact('xservReserva'));
     }
@@ -44,6 +48,8 @@ class XservReservasController extends AppController
      */
     public function add()
     {
+        $this->Authorization->skipAuthorization();
+        
         $xservReserva = $this->XservReservas->newEmptyEntity();
         if ($this->request->is('post')) {
             $xservReserva = $this->XservReservas->patchEntity($xservReserva, $this->request->getData());
@@ -69,6 +75,8 @@ class XservReservasController extends AppController
      */
     public function edit(?string $id = null)
     {
+        $this->Authorization->skipAuthorization();
+        
         $xservReserva = $this->XservReservas->get($id, contain: []);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $xservReserva = $this->XservReservas->patchEntity($xservReserva, $this->request->getData());
@@ -94,6 +102,8 @@ class XservReservasController extends AppController
      */
     public function delete(?string $id = null)
     {
+        $this->Authorization->skipAuthorization();
+        
         $this->request->allowMethod(['post', 'delete']);
         $xservReserva = $this->XservReservas->get($id);
         if ($this->XservReservas->delete($xservReserva)) {

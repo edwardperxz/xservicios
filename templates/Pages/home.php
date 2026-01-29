@@ -3,7 +3,7 @@
     .hero {
         position: relative;
         height: 480px;
-        background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+        background: url('/img/login-bg.jpeg') center/cover no-repeat;
         display: flex;
         align-items: center;
         padding: 0 3rem;

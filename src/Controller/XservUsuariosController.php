@@ -56,7 +56,7 @@ class XservUsuariosController extends AppController
     public function index()
     {
         $this->Authorization->skipAuthorization();
-        
+
         $query = $this->XservUsuarios->find();
         $xservUsuarios = $this->paginate($query);
 
@@ -72,6 +72,7 @@ class XservUsuariosController extends AppController
      */
     public function view($id = null)
     {
+        $this->Authorization->skipAuthorization();
         $xservUsuario = $this->XservUsuarios->get($id, contain: []);
         $this->set(compact('xservUsuario'));
     }
@@ -105,6 +106,8 @@ class XservUsuariosController extends AppController
      */
     public function edit($id = null)
     {
+        
+        $this->Authorization->skipAuthorization();
         $xservUsuario = $this->XservUsuarios->get($id, contain: []);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $xservUsuario = $this->XservUsuarios->patchEntity($xservUsuario, $this->request->getData());

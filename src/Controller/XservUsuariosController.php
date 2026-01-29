@@ -17,7 +17,10 @@ class XservUsuariosController extends AppController
         parent::beforeFilter($event);
 
         //login NO requiere autenticación
-        $this->Authentication->addUnauthenticatedActions(['login']);
+        $this->Authentication->addUnauthenticatedActions([
+            'login',
+            'register',
+            ]);
     }
 
     public function login()
@@ -132,4 +135,31 @@ class XservUsuariosController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+    public function register()
+    {
+        $this->Authorization->skipAuthorization();
+
+        $usuario = $this->XservUsuarios->newEmptyEntity();
+
+        if ($this->request->is('post')) {
+            $usuario = $this->XservUsuarios->patchEntity(
+                $usuario,
+                $this->request->getData()
+            );
+
+            // valores seguros por defecto
+            $usuario->rol = 'user';
+            $usuario->activo = 1;
+
+            if ($this->XservUsuarios->save($usuario)) {
+                $this->Flash->success('Cuenta creada correctamente');
+                return $this->redirect(['action' => 'login']);
+            }
+
+            $this->Flash->error('No se pudo crear la cuenta');
+        }
+
+        $this->set(compact('usuario'));
+    }
+
 }

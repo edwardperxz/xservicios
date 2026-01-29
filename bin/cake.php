@@ -1,5 +1,6 @@
 #!/usr/bin/php -q
 <?php
+@ini_set('error_reporting', E_ALL & ~E_WARNING);
 require dirname(__DIR__) . '/vendor/autoload.php';
 
 use App\Application;

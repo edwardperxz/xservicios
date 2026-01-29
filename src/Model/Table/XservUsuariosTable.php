@@ -42,8 +42,6 @@ class XservUsuariosTable extends Table
         $this->setTable('xserv_usuarios');
         $this->setDisplayField('username');
         $this->setPrimaryKey('id');
-
-        $this->addBehavior('Timestamp');
     }
 
     /**
@@ -59,7 +57,10 @@ class XservUsuariosTable extends Table
             ->maxLength('username', 50)
             ->requirePresence('username', 'create')
             ->notEmptyString('username')
-            ->add('username', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+            ->add('username', 'unique', [
+                'rule' => 'validateUnique',
+                'provider' => 'table',
+            ]);
 
         $validator
             ->scalar('password')
@@ -74,18 +75,11 @@ class XservUsuariosTable extends Table
 
         $validator
             ->scalar('estado')
-            ->allowEmptyString('estado');
-
-        $validator
-            ->dateTime('created_at')
-            ->allowEmptyDateTime('created_at');
-
-        $validator
-            ->dateTime('updated_at')
-            ->allowEmptyDateTime('updated_at');
+            ->notEmptyString('estado');
 
         return $validator;
     }
+
 
     /**
      * Returns a rules checker object that will be used for validating

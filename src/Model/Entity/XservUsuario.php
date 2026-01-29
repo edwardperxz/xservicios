@@ -33,8 +33,6 @@ class XservUsuario extends Entity
         'password' => true,
         'rol' => true,
         'estado' => true,
-        'created_at' => true,
-        'updated_at' => true,
     ];
 
     /**

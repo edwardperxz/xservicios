@@ -17,8 +17,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Cake\Event\EventInterface;
 use Cake\Core\Configure;
+use Cake\Event\EventInterface;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
@@ -57,14 +57,26 @@ class PagesController extends AppController
      * @throws \Cake\Http\Exception\NotFoundException When the view file could
      *   be found and not in debug mode.
      */
-
     public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
 
+        // Permitir acceso público a PagesController
+        $this->Authentication->allowUnauthenticated(['display', 'home']);
         $this->Authorization->skipAuthorization();
     }
 
+    /**
+     * Displays a view
+     *
+     * @param string ...$path Path segments.
+     * @return \Cake\Http\Response|null
+     * @throws \Cake\Http\Exception\ForbiddenException When a directory traversal attempt.
+     * @throws \Cake\View\Exception\MissingTemplateException When the view file could not
+     *   be found and in debug mode.
+     * @throws \Cake\Http\Exception\NotFoundException When the view file could
+     *   be found and not in debug mode.
+     */
     public function display(string ...$path): ?Response
     {
         if (!$path) {
@@ -98,4 +110,3 @@ class PagesController extends AppController
         }
     }
 }
-

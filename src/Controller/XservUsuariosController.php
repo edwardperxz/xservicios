@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Event\EventInterface;
+use Cake\Http\Response;
 
 /**
  * XservUsuarios Controller
@@ -12,7 +13,13 @@ use Cake\Event\EventInterface;
  */
 class XservUsuariosController extends AppController
 {
-    public function beforeFilter(EventInterface $event)
+    /**
+     * Before filter callback
+     *
+     * @param \Cake\Event\EventInterface $event The event
+     * @return void
+     */
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
 
@@ -20,10 +27,15 @@ class XservUsuariosController extends AppController
         $this->Authentication->addUnauthenticatedActions([
             'login',
             'register',
-            ]);
+        ]);
     }
 
-    public function login()
+    /**
+     * Login method
+     *
+     * @return \Cake\Http\Response|null Redirects on successful login, renders view otherwise.
+     */
+    public function login(): ?Response
     {
         //login NO requiere autorización
         $this->Authorization->skipAuthorization();
@@ -37,9 +49,16 @@ class XservUsuariosController extends AppController
         if ($this->request->is('post') && !$result->isValid()) {
             $this->Flash->error('Usuario o contraseña incorrectos');
         }
+
+        return null;
     }
 
-    public function logout()
+    /**
+     * Logout method
+     *
+     * @return \Cake\Http\Response Redirects to login page.
+     */
+    public function logout(): Response
     {
         $this->Authorization->skipAuthorization();
 
@@ -68,7 +87,7 @@ class XservUsuariosController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(?string $id = null)
     {
         $xservUsuario = $this->XservUsuarios->get($id, contain: []);
         $this->set(compact('xservUsuario'));
@@ -82,22 +101,22 @@ class XservUsuariosController extends AppController
     public function add()
     {
         $xservUsuario = $this->XservUsuarios->newEmptyEntity();
-    if ($this->request->is('post')) {
-        $xservUsuario = $this->XservUsuarios->patchEntity($xservUsuario, $this->request->getData());
-        
-        // Forzamos el rol si no viene en el form para evitar inyecciones de privilegios
-        $xservUsuario->rol = 'cliente';
-        $xservUsuario->estado = 'activo';
+        if ($this->request->is('post')) {
+            $xservUsuario = $this->XservUsuarios->patchEntity($xservUsuario, $this->request->getData());
 
-        if ($this->XservUsuarios->save($xservUsuario)) {
-            $this->Flash->success(__('Cuenta creada con éxito. Ya puedes iniciar sesión.'));
-            return $this->redirect(['action' => 'login']);
+            // Forzamos el rol si no viene en el form para evitar inyecciones de privilegios
+            $xservUsuario->rol = 'cliente';
+            $xservUsuario->estado = 'activo';
+
+            if ($this->XservUsuarios->save($xservUsuario)) {
+                $this->Flash->success(__('Cuenta creada con éxito. Ya puedes iniciar sesión.'));
+
+                return $this->redirect(['action' => 'login']);
+            }
+            $this->Flash->error(__('No se pudo crear la cuenta. Por favor, intente de nuevo.'));
         }
-        $this->Flash->error(__('No se pudo crear la cuenta. Por favor, intente de nuevo.'));
+        $this->set(compact('xservUsuario'));
     }
-    $this->set(compact('xservUsuario'));
-    }
-    
 
     /**
      * Edit method
@@ -106,7 +125,7 @@ class XservUsuariosController extends AppController
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null)
     {
         $xservUsuario = $this->XservUsuarios->get($id, contain: []);
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -128,7 +147,7 @@ class XservUsuariosController extends AppController
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
         $xservUsuario = $this->XservUsuarios->get($id);
@@ -140,8 +159,13 @@ class XservUsuariosController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
-    
-    public function register()
+
+    /**
+     * Register method
+     *
+     * @return \Cake\Http\Response|null Redirects on successful registration, renders view otherwise.
+     */
+    public function register(): ?Response
     {
         $this->Authorization->skipAuthorization();
 
@@ -158,6 +182,7 @@ class XservUsuariosController extends AppController
 
             if ($this->XservUsuarios->save($usuario)) {
                 $this->Flash->success('Cuenta creada correctamente');
+
                 return $this->redirect(['action' => 'login']);
             }
 
@@ -167,8 +192,7 @@ class XservUsuariosController extends AppController
         }
 
         $this->set(compact('usuario'));
+
+        return null;
     }
-
-
-
 }

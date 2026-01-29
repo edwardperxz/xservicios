@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -14,7 +13,6 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\XservUsuariosTable&\Cake\ORM\Association\BelongsTo $Usuarios
  * @property \App\Model\Table\XservClientesTable&\Cake\ORM\Association\BelongsTo $Clientes
  * @property \App\Model\Table\XservReservasTable&\Cake\ORM\Association\BelongsTo $Reservas
- *
  * @method \App\Model\Entity\XservNotificacione newEmptyEntity()
  * @method \App\Model\Entity\XservNotificacione newEntity(array $data, array $options = [])
  * @method array<\App\Model\Entity\XservNotificacione> newEntities(array $data, array $options = [])

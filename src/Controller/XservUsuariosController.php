@@ -55,6 +55,8 @@ class XservUsuariosController extends AppController
      */
     public function index()
     {
+        $this->Authorization->skipAuthorization();
+        
         $query = $this->XservUsuarios->find();
         $xservUsuarios = $this->paginate($query);
 

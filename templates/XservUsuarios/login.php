@@ -3,7 +3,7 @@
 <?= $this->Flash->render() ?>
 
 <?= $this->Form->create() ?>
-<?= $this->Form->control('email') ?>
+<?= $this->Form->control('username') ?>
 <?= $this->Form->control('password', ['type' => 'password']) ?>
 <?= $this->Form->button('Entrar') ?>
 <?= $this->Form->end() ?>

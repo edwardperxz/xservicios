@@ -10,7 +10,6 @@ use Cake\Validation\Validator;
  * XservValoraciones Model
  *
  * @property \App\Model\Table\XservReservasTable&\Cake\ORM\Association\BelongsTo $XservReservas
- *
  * @method \App\Model\Entity\XservValoracione newEmptyEntity()
  * @method \App\Model\Entity\XservValoracione newEntity(array $data, array $options = [])
  * @method array<\App\Model\Entity\XservValoracione> newEntities(array $data, array $options = [])
@@ -24,7 +23,6 @@ use Cake\Validation\Validator;
  * @method iterable<\App\Model\Entity\XservValoracione>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservValoracione> saveManyOrFail(iterable $entities, array $options = [])
  * @method iterable<\App\Model\Entity\XservValoracione>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservValoracione>|false deleteMany(iterable $entities, array $options = [])
  * @method iterable<\App\Model\Entity\XservValoracione>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservValoracione> deleteManyOrFail(iterable $entities, array $options = [])
- *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class XservValoracionesTable extends Table

@@ -11,6 +11,25 @@ use Cake\TestSuite\Fixture\TestFixture;
 class XservUsuariosFixture extends TestFixture
 {
     /**
+     * Fields
+     *
+     * @var array
+     */
+    public $fields = [
+        'id' => ['type' => 'integer', 'length' => null, 'null' => false, 'default' => null, 'autoIncrement' => true],
+        'username' => ['type' => 'string', 'length' => 50, 'null' => false],
+        'password' => ['type' => 'string', 'length' => 255, 'null' => false],
+        'rol' => ['type' => 'string', 'length' => 255, 'null' => false],
+        'estado' => ['type' => 'string', 'length' => 255, 'null' => false, 'default' => 'activo'],
+        'created_at' => ['type' => 'timestamp', 'null' => false],
+        'updated_at' => ['type' => 'timestamp', 'null' => false],
+        '_constraints' => [
+            'primary' => ['type' => 'primary', 'columns' => ['id']],
+            'unique' => ['type' => 'unique', 'columns' => ['username']],
+        ],
+    ];
+
+    /**
      * Init method
      *
      * @return void

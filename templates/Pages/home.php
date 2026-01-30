@@ -1,241 +1,442 @@
-<?php
-/**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link      https://cakephp.org CakePHP(tm) Project
- * @since     0.10.0
- * @license   https://opensource.org/licenses/mit-license.php MIT License
- * @var \App\View\AppView $this
- */
-use Cake\Cache\Cache;
-use Cake\Core\Configure;
-use Cake\Core\Plugin;
-use Cake\Datasource\ConnectionManager;
-use Cake\Error\Debugger;
-use Cake\Http\Exception\NotFoundException;
-
-$this->disableAutoLayout();
-
-$checkConnection = function (string $name) {
-    $error = null;
-    $connected = false;
-    try {
-        ConnectionManager::get($name)->getDriver()->connect();
-        // No exception means success
-        $connected = true;
-    } catch (Exception $connectionError) {
-        $error = $connectionError->getMessage();
-        if (method_exists($connectionError, 'getAttributes')) {
-            $attributes = $connectionError->getAttributes();
-            if (isset($attributes['message'])) {
-                $error .= '<br />' . $attributes['message'];
-            }
-        }
-        if ($name === 'debug_kit') {
-            $error = 'Try adding your current <b>top level domain</b> to the
-                <a href="https://book.cakephp.org/debugkit/5/en/index.html#configuration" target="_blank">DebugKit.safeTld</a>
-            config and reload.';
-            if (!in_array('sqlite', \PDO::getAvailableDrivers())) {
-                $error .= '<br />You need to install the PHP extension <code>pdo_sqlite</code> so DebugKit can work properly.';
-            }
-        }
+<style>
+    /* Hero Section */
+    .hero {
+        position: relative;
+        height: 480px;
+        background: url('/img/login-bg.jpeg') center/cover no-repeat;
+        display: flex;
+        align-items: center;
+        padding: 0 3rem;
     }
 
-    return compact('connected', 'error');
-};
+    .hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.2) 100%);
+    }
 
-if (!Configure::read('debug')) :
-    throw new NotFoundException(
-        'Please replace templates/Pages/home.php with your own version or re-enable debug mode.'
-    );
-endif;
+    .hero-content {
+        position: relative;
+        z-index: 10;
+        max-width: 500px;
+    }
 
-?>
-<!DOCTYPE html>
-<html>
-<head>
-    <?= $this->Html->charset() ?>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>
-        CakePHP: the rapid development PHP framework:
-        <?= $this->fetch('title') ?>
-    </title>
-    <?= $this->Html->meta('icon') ?>
+    .hero-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 3.25rem;
+        font-weight: 400;
+        line-height: 1.15;
+        margin-bottom: 1.25rem;
+        font-style: italic;
+    }
 
-    <?= $this->Html->css(['normalize.min', 'milligram.min', 'fonts', 'cake', 'home']) ?>
+    .hero-description {
+        font-size: 1rem;
+        color: var(--text-gray);
+        line-height: 1.6;
+        margin-bottom: 2rem;
+    }
 
-    <?= $this->fetch('meta') ?>
-    <?= $this->fetch('css') ?>
-    <?= $this->fetch('script') ?>
-</head>
-<body>
-    <header>
-        <div class="container text-center">
-            <a href="https://cakephp.org/" target="_blank" rel="noopener">
-                <img alt="CakePHP" src="https://cakephp.org/v2/img/logos/CakePHP_Logo.svg" width="350" />
-            </a>
-            <h1>
-                Welcome to CakePHP <?= h(Configure::version()) ?> Chiffon (🍰)
-            </h1>
+    .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem 2.5rem;
+        background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+        color: var(--dark-bg);
+        font-weight: 600;
+        font-size: 1rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, var(--gold-light), var(--gold));
+        transform: translateY(-2px);
+    }
+
+    /* Tabs Section */
+    .tabs-section {
+        padding: 2rem 3rem;
+    }
+
+    .tabs-nav {
+        display: flex;
+        align-items: center;
+        gap: 3rem;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid var(--dark-lighter);
+        padding-bottom: 1rem;
+    }
+
+    .tab-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1rem;
+        color: var(--text-gray);
+        cursor: pointer;
+        transition: color 0.3s;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -1rem;
+    }
+
+    .tab-item.active {
+        color: var(--text-white);
+        border-bottom-color: var(--gold);
+    }
+
+    .tab-item:hover {
+        color: var(--gold);
+    }
+
+    .tab-icon {
+        width: 20px;
+        height: 20px;
+        stroke: currentColor;
+        fill: none;
+    }
+
+    /* Content Card */
+    .content-card {
+        background: var(--dark-card);
+        border-radius: 12px;
+        padding: 1.5rem;
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .date-display {
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+    }
+
+    .date-day {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--gold);
+    }
+
+    .date-month {
+        font-size: 1.125rem;
+        color: var(--text-white);
+    }
+
+    .btn-history {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.25rem;
+        background: var(--dark-lighter);
+        color: var(--text-white);
+        border: 1px solid var(--dark-lighter);
+        border-radius: 8px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-history:hover {
+        border-color: var(--gold);
+        background: rgba(201, 169, 98, 0.1);
+    }
+
+    /* Service Items */
+    .service-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .service-item {
+        display: grid;
+        grid-template-columns: auto 1fr auto auto auto;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 1rem;
+        background: var(--dark-bg);
+        border-radius: 8px;
+    }
+
+    .service-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--dark-lighter);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .service-icon svg {
+        width: 20px;
+        height: 20px;
+        stroke: var(--gold);
+        fill: none;
+    }
+
+    .service-route {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .route-text {
+        font-size: 0.9rem;
+        color: var(--text-white);
+    }
+
+    .route-date {
+        font-size: 0.8rem;
+        color: var(--text-gray);
+    }
+
+    .route-arrow {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        color: var(--gold);
+    }
+
+    .route-arrow svg {
+        width: 20px;
+        height: 6px;
+    }
+
+    .driver-info {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .driver-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #4a4a4a, #2a2a2a);
+        overflow: hidden;
+    }
+
+    .driver-name {
+        font-size: 0.875rem;
+        color: var(--text-white);
+    }
+
+    .vehicle-type {
+        font-size: 0.875rem;
+        color: var(--text-gray);
+    }
+
+    .status-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .status-badge.completed {
+        background: rgba(74, 222, 128, 0.15);
+        color: var(--green);
+    }
+
+    .status-badge.pending {
+        background: rgba(245, 158, 11, 0.15);
+        color: var(--orange);
+    }
+
+    .status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    .service-arrow {
+        width: 24px;
+        height: 24px;
+        stroke: var(--text-gray);
+        cursor: pointer;
+        transition: stroke 0.3s;
+    }
+
+    .service-arrow:hover {
+        stroke: var(--gold);
+    }
+
+    /* Ver Más Button */
+    .ver-mas-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 1rem;
+    }
+
+    .btn-ver-mas {
+        padding: 0.75rem 1.5rem;
+        background: transparent;
+        color: var(--text-white);
+        border: 1px solid var(--dark-lighter);
+        border-radius: 8px;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-ver-mas:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+    }
+</style>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title">Transporte turístico de lujo en Chiriquí</h1>
+        <p class="hero-description">Reserva un traslado seguro, puntual y de alta calidad con Xservicios.</p>
+        <a href="<?= $this->Url->build(['controller' => 'XservReservas', 'action' => 'add']) ?>" class="btn-primary">Nueva Reserva</a>
+    </div>
+</section>
+
+<!-- Tabs Section -->
+<section class="tabs-section">
+    <nav class="tabs-nav">
+        <div class="tab-item active">
+            <span>Resumen Rápido</span>
         </div>
-    </header>
-    <main class="main">
-        <div class="container">
-            <div class="content">
-                <div class="row">
-                    <div class="column">
-                        <div class="message default text-center">
-                            <small>Please be aware that this page will not be shown if you turn off debug mode unless you replace templates/Pages/home.php with your own version.</small>
-                        </div>
-                        <div id="url-rewriting-warning" style="padding: 1rem; background: #fcebea; color: #cc1f1a; border-color: #ef5753;">
-                            <ul>
-                                <li class="bullet problem">
-                                    URL rewriting is not properly configured on your server.<br />
-                                    1) <a target="_blank" rel="noopener" href="https://book.cakephp.org/5/en/installation.html#url-rewriting">Help me configure it</a><br />
-                                    2) <a target="_blank" rel="noopener" href="https://book.cakephp.org/5/en/development/configuration.html#general-configuration">I don't / can't use URL rewriting</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <?php Debugger::checkSecurityKeys(); ?>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="column">
-                        <h4>Environment</h4>
-                        <ul>
-                        <?php if (version_compare(PHP_VERSION, '8.1.0', '>=')) : ?>
-                            <li class="bullet success">Your version of PHP is 8.1.0 or higher (detected <?= PHP_VERSION ?>).</li>
-                        <?php else : ?>
-                            <li class="bullet problem">Your version of PHP is too low. You need PHP 8.1.0 or higher to use CakePHP (detected <?= PHP_VERSION ?>).</li>
-                        <?php endif; ?>
+        <div class="tab-item">
+            <svg class="tab-icon" viewBox="0 0 24 24" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <span>Nueva Reserva</span>
+        </div>
+        <div class="tab-item">
+            <svg class="tab-icon" viewBox="0 0 24 24" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+            <span>Mis Reservas</span>
+        </div>
+        <div class="tab-item">
+            <svg class="tab-icon" viewBox="0 0 24 24" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+            <span>Valorar Servicio</span>
+        </div>
+    </nav>
 
-                        <?php if (extension_loaded('mbstring')) : ?>
-                            <li class="bullet success">Your version of PHP has the mbstring extension loaded.</li>
-                        <?php else : ?>
-                            <li class="bullet problem">Your version of PHP does NOT have the mbstring extension loaded.</li>
-                        <?php endif; ?>
+    <!-- Content Card -->
+    <div class="content-card">
+        <div class="card-header">
+            <div class="date-display">
+                <span class="date-day">29</span>
+                <span class="date-month">Enero 2026</span>
+            </div>
+            <button class="btn-history">
+                Historial de Servicios
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"/>
+                </svg>
+            </button>
+        </div>
 
-                        <?php if (extension_loaded('openssl')) : ?>
-                            <li class="bullet success">Your version of PHP has the openssl extension loaded.</li>
-                        <?php else : ?>
-                            <li class="bullet problem">Your version of PHP does NOT have the openssl extension loaded.</li>
-                        <?php endif; ?>
+        <div class="service-list">
+            <!-- Service Item 1 -->
+            <div class="service-item">
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                </div>
+                <div class="service-route">
+                    <span class="route-text">Aeropuerto</span>
+                    <span class="route-arrow">
+                        <svg viewBox="0 0 20 6">
+                            <line x1="0" y1="3" x2="16" y2="3" stroke="currentColor" stroke-width="2"/>
+                            <polygon points="14,0 20,3 14,6" fill="currentColor"/>
+                        </svg>
+                    </span>
+                    <span class="route-text">Bocas del Mar Resort</span>
+                </div>
+                <div class="driver-info">
+                    <div class="driver-avatar">
+                        <div style="width:100%;height:100%;background:linear-gradient(135deg,#6b7280,#374151);"></div>
+                    </div>
+                    <span class="driver-name">Roberto García</span>
+                </div>
+                <span class="vehicle-type">Vehículo</span>
+                <div style="display:flex;align-items:center;gap:1rem;">
+                    <span class="status-badge completed">
+                        <span class="status-dot"></span>
+                        Finalizada
+                    </span>
+                    <svg class="service-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </div>
+            </div>
 
-                        <?php if (extension_loaded('intl')) : ?>
-                            <li class="bullet success">Your version of PHP has the intl extension loaded.</li>
-                        <?php else : ?>
-                            <li class="bullet problem">Your version of PHP does NOT have the intl extension loaded.</li>
-                        <?php endif; ?>
-
-                        <?php if (ini_get('zend.assertions') !== '1') : ?>
-                            <li class="bullet problem">You should set <code>zend.assertions</code> to <code>1</code> in your <code>php.ini</code> for your development environment.</li>
-                        <?php endif; ?>
-                        </ul>
-                    </div>
-                    <div class="column">
-                        <h4>Filesystem</h4>
-                        <ul>
-                        <?php if (is_writable(TMP)) : ?>
-                            <li class="bullet success">Your tmp directory is writable.</li>
-                        <?php else : ?>
-                            <li class="bullet problem">Your tmp directory is NOT writable.</li>
-                        <?php endif; ?>
-
-                        <?php if (is_writable(LOGS)) : ?>
-                            <li class="bullet success">Your logs directory is writable.</li>
-                        <?php else : ?>
-                            <li class="bullet problem">Your logs directory is NOT writable.</li>
-                        <?php endif; ?>
-
-                        <?php $settings = Cache::getConfig('_cake_translations_'); ?>
-                        <?php if (!empty($settings)) : ?>
-                            <li class="bullet success">The <em><?= h($settings['className']) ?></em> is being used for core caching. To change the config edit config/app.php</li>
-                        <?php else : ?>
-                            <li class="bullet problem">Your cache is NOT working. Please check the settings in config/app.php</li>
-                        <?php endif; ?>
-                        </ul>
-                    </div>
+            <!-- Service Item 2 -->
+            <div class="service-item">
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
                 </div>
-                <hr>
-                <div class="row">
-                    <div class="column">
-                        <h4>Database</h4>
-                        <?php
-                        $result = $checkConnection('default');
-                        ?>
-                        <ul>
-                        <?php if ($result['connected']) : ?>
-                            <li class="bullet success">CakePHP is able to connect to the database.</li>
-                        <?php else : ?>
-                            <li class="bullet problem">CakePHP is NOT able to connect to the database.<br /><?= h($result['error']) ?></li>
-                        <?php endif; ?>
-                        </ul>
-                    </div>
-                    <div class="column">
-                        <h4>DebugKit</h4>
-                        <ul>
-                        <?php if (Plugin::isLoaded('DebugKit')) : ?>
-                            <li class="bullet success">DebugKit is loaded.</li>
-                            <?php
-                            $result = $checkConnection('debug_kit');
-                            ?>
-                            <?php if ($result['connected']) : ?>
-                                <li class="bullet success">DebugKit can connect to the database.</li>
-                            <?php else : ?>
-                                <li class="bullet problem">There are configuration problems present which need to be fixed:<br /><?= $result['error'] ?></li>
-                            <?php endif; ?>
-                        <?php else : ?>
-                            <li class="bullet problem">DebugKit is <strong>not</strong> loaded.</li>
-                        <?php endif; ?>
-                        </ul>
-                    </div>
+                <div class="service-route">
+                    <span class="route-date">28 Enero 2026</span>
+                    <span class="route-arrow">
+                        <svg viewBox="0 0 20 6">
+                            <line x1="0" y1="3" x2="16" y2="3" stroke="currentColor" stroke-width="2"/>
+                            <polygon points="14,0 20,3 14,6" fill="currentColor"/>
+                        </svg>
+                    </span>
+                    <span class="route-text">Hotel Finca Lérida</span>
                 </div>
-                <hr>
-                <div class="row">
-                    <div class="column links">
-                        <h3>Getting Started</h3>
-                        <a target="_blank" rel="noopener" href="https://book.cakephp.org/5/en/">CakePHP Documentation</a>
-                        <a target="_blank" rel="noopener" href="https://book.cakephp.org/5/en/tutorials-and-examples/cms/installation.html">The 20 min CMS Tutorial</a>
+                <div class="driver-info">
+                    <div class="driver-avatar">
+                        <div style="width:100%;height:100%;background:linear-gradient(135deg,#78716c,#44403c);"></div>
                     </div>
+                    <span class="driver-name">José Pérez</span>
                 </div>
-                <hr>
-                <div class="row">
-                    <div class="column links">
-                        <h3>Help and Bug Reports</h3>
-                        <a target="_blank" rel="noopener" href="https://slack-invite.cakephp.org/">Slack</a>
-                        <a target="_blank" rel="noopener" href="https://github.com/cakephp/cakephp/issues">CakePHP Issues</a>
-                        <a target="_blank" rel="noopener" href="https://discourse.cakephp.org/">CakePHP Forum</a>
-                    </div>
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="column links">
-                        <h3>Docs and Downloads</h3>
-                        <a target="_blank" rel="noopener" href="https://api.cakephp.org/">CakePHP API</a>
-                        <a target="_blank" rel="noopener" href="https://bakery.cakephp.org">The Bakery</a>
-                        <a target="_blank" rel="noopener" href="https://book.cakephp.org/5/en/">CakePHP Documentation</a>
-                        <a target="_blank" rel="noopener" href="https://plugins.cakephp.org">CakePHP plugins repo</a>
-                        <a target="_blank" rel="noopener" href="https://github.com/cakephp/">CakePHP Code</a>
-                        <a target="_blank" rel="noopener" href="https://github.com/FriendsOfCake/awesome-cakephp">CakePHP Awesome List</a>
-                        <a target="_blank" rel="noopener" href="https://www.cakephp.org">CakePHP</a>
-                    </div>
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="column links">
-                        <h3>Training and Certification</h3>
-                        <a target="_blank" rel="noopener" href="https://cakefoundation.org/">Cake Software Foundation</a>
-                        <a target="_blank" rel="noopener" href="https://training.cakephp.org/">CakePHP Training</a>
-                    </div>
+                <span class="vehicle-type">Vehículo</span>
+                <div style="display:flex;align-items:center;gap:1rem;">
+                    <span class="status-badge pending">
+                        <span class="status-dot"></span>
+                        Pendiente
+                    </span>
+                    <svg class="service-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
                 </div>
             </div>
         </div>
-    </main>
-</body>
-</html>
+
+        <div class="ver-mas-container">
+            <button class="btn-ver-mas">Ver Más</button>
+        </div>
+    </div>
+</section>

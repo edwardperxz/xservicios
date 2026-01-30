@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Model\Entity;
 
-use Cake\ORM\Entity;
 use Authentication\PasswordHasher\DefaultPasswordHasher;
+use Cake\ORM\Entity;
 
 /**
  * XservUsuario Entity
@@ -52,6 +52,7 @@ class XservUsuario extends Entity
         if (strlen((string)$password) > 0) {
             return (new DefaultPasswordHasher())->hash($password);
         }
+
         return null;
     }
 }

@@ -16,6 +16,16 @@ declare(strict_types=1);
  */
 namespace App;
 
+//Para la autentificacion de los users:
+use Authentication\AuthenticationService;
+use Authentication\AuthenticationServiceInterface;
+use Authentication\AuthenticationServiceProviderInterface;
+use Authentication\Middleware\AuthenticationMiddleware;
+use Authorization\AuthorizationService;
+use Authorization\AuthorizationServiceInterface;
+use Authorization\AuthorizationServiceProviderInterface;
+use Authorization\Middleware\AuthorizationMiddleware;
+use Authorization\Policy\OrmResolver;
 use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
 use Cake\Datasource\FactoryLocator;
@@ -28,21 +38,7 @@ use Cake\Http\MiddlewareQueue;
 use Cake\ORM\Locator\TableLocator;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
-
-//Para la autentificacion de los users:
-use Authentication\AuthenticationService;
-use Authentication\AuthenticationServiceInterface;
-use Authentication\AuthenticationServiceProviderInterface;
-use Authentication\Middleware\AuthenticationMiddleware;
-
-use Authorization\AuthorizationService;
-use Authorization\AuthorizationServiceInterface;
-use Authorization\AuthorizationServiceProviderInterface;
-use Authorization\Middleware\AuthorizationMiddleware;
-use Authorization\Policy\OrmResolver;
-
 use Psr\Http\Message\ServerRequestInterface;
-
 
 /**
  * Application setup class.
@@ -52,8 +48,9 @@ use Psr\Http\Message\ServerRequestInterface;
  *
  * @extends \Cake\Http\BaseApplication<\App\Application>
  */
-class Application extends BaseApplication
-    implements AuthenticationServiceProviderInterface, AuthorizationServiceProviderInterface
+class Application extends BaseApplication implements
+    AuthenticationServiceProviderInterface,
+    AuthorizationServiceProviderInterface
 {
     /**
      * Load all the application configuration and bootstrap logic.
@@ -85,15 +82,15 @@ class Application extends BaseApplication
                 'cacheTime' => Configure::read('Asset.cacheTime'),
             ]))
             ->add(new RoutingMiddleware($this))
-            ->add(new BodyParserMiddleware())            
+            ->add(new BodyParserMiddleware())
             ->add(new AuthenticationMiddleware($this))
             ->add(new AuthorizationMiddleware($this))
             ->add(new CsrfProtectionMiddleware([
                 'httponly' => true,
             ]));
+
         return $middlewareQueue;
     }
-
 
     /**
      * Register application container services.
@@ -122,8 +119,14 @@ class Application extends BaseApplication
         return $eventManager;
     }
 
+    /**
+     * Returns the authentication service instance
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request The request
+     * @return \Authentication\AuthenticationServiceInterface
+     */
     public function getAuthenticationService(
-        ServerRequestInterface $request
+        ServerRequestInterface $request,
     ): AuthenticationServiceInterface {
         $service = new AuthenticationService();
 
@@ -156,13 +159,17 @@ class Application extends BaseApplication
         return $service;
     }
 
-
-
+    /**
+     * Returns the authorization service instance
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request The request
+     * @return \Authorization\AuthorizationServiceInterface
+     */
     public function getAuthorizationService(
-        ServerRequestInterface $request
+        ServerRequestInterface $request,
     ): AuthorizationServiceInterface {
         return new AuthorizationService(
-            new OrmResolver()
+            new OrmResolver(),
         );
     }
 }

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -12,7 +11,6 @@ use Cake\Validation\Validator;
  * XservEjecucionViajes Model
  *
  * @property \App\Model\Table\XservAsignacionesTable&\Cake\ORM\Association\BelongsTo $Asignacions
- *
  * @method \App\Model\Entity\XservEjecucionViaje newEmptyEntity()
  * @method \App\Model\Entity\XservEjecucionViaje newEntity(array $data, array $options = [])
  * @method array<\App\Model\Entity\XservEjecucionViaje> newEntities(array $data, array $options = [])

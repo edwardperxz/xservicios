@@ -11,6 +11,28 @@ use Cake\TestSuite\Fixture\TestFixture;
 class XservAsignacionesFixture extends TestFixture
 {
     /**
+     * Fields
+     *
+     * @var array
+     */
+    public $fields = [
+        'id' => ['type' => 'integer', 'length' => null, 'null' => false, 'default' => null, 'autoIncrement' => true],
+        'reserva_id' => ['type' => 'integer', 'length' => null, 'null' => false],
+        'chofer_id' => ['type' => 'integer', 'length' => null, 'null' => false],
+        'vehiculo_id' => ['type' => 'integer', 'length' => null, 'null' => false],
+        'asignado_por_id' => ['type' => 'integer', 'length' => null, 'null' => false],
+        'fecha_inicio_pactada' => ['type' => 'datetime', 'null' => false],
+        'fecha_fin_pactada' => ['type' => 'datetime', 'null' => false],
+        'estado_asignacion' => ['type' => 'string', 'length' => 255, 'null' => false, 'default' => 'programada'],
+        'observaciones_chofer' => ['type' => 'text', 'null' => true],
+        'created_at' => ['type' => 'integer', 'length' => null, 'null' => false],
+        'updated_at' => ['type' => 'integer', 'length' => null, 'null' => false],
+        '_constraints' => [
+            'primary' => ['type' => 'primary', 'columns' => ['id']],
+        ],
+    ];
+
+    /**
      * Init method
      *
      * @return void

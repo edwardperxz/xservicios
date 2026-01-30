@@ -11,6 +11,22 @@ use Cake\TestSuite\Fixture\TestFixture;
 class XservUbicacionesFixture extends TestFixture
 {
     /**
+     * Fields
+     *
+     * @var array
+     */
+    public $fields = [
+        'id' => ['type' => 'integer', 'length' => null, 'null' => false, 'default' => null, 'autoIncrement' => true],
+        'nombre' => ['type' => 'string', 'length' => 150, 'null' => false],
+        'EN_PROVINCIAS' => ['type' => 'string', 'length' => 255, 'null' => false],
+        'direccion_gps' => ['type' => 'string', 'length' => 255, 'null' => true],
+        'created_at' => ['type' => 'integer', 'length' => null, 'null' => false],
+        '_constraints' => [
+            'primary' => ['type' => 'primary', 'columns' => ['id']],
+        ],
+    ];
+
+    /**
      * Init method
      *
      * @return void

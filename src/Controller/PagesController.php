@@ -14,10 +14,11 @@ declare(strict_types=1);
  * @since     0.2.9
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace App\Controller;
 
-use Cake\Event\EventInterface;
 use Cake\Core\Configure;
+use Cake\Event\EventInterface;
 use Cake\Http\Exception\ForbiddenException;
 use Cake\Http\Exception\NotFoundException;
 use Cake\Http\Response;
@@ -33,6 +34,19 @@ use Cake\View\Exception\MissingTemplateException;
 class PagesController extends AppController
 {
     /**
+     * Home de Xservicios
+     * Renderiza el layout personalizado
+     */
+    public function home(): ?Response
+    {
+        // Usar el layout corporativo de Xservicios
+        $this->viewBuilder()->setLayout('xservicios');
+
+        // Renderiza automáticamente templates/Pages/home.php
+        return null;
+    }
+
+    /**
      * Displays a view
      *
      * @param string ...$path Path segments.
@@ -40,34 +54,49 @@ class PagesController extends AppController
      * @throws \Cake\Http\Exception\ForbiddenException When a directory traversal attempt.
      * @throws \Cake\View\Exception\MissingTemplateException When the view file could not
      *   be found and in debug mode.
-     * @throws \Cake\Http\Exception\NotFoundException When the view file could not
+     * @throws \Cake\Http\Exception\NotFoundException When the view file could
      *   be found and not in debug mode.
-     * @throws \Cake\View\Exception\MissingTemplateException In debug mode.
      */
-
     public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
 
+        // Permitir acceso público a PagesController
+        $this->Authentication->allowUnauthenticated(['display', 'home']);
         $this->Authorization->skipAuthorization();
     }
 
+    /**
+     * Displays a view
+     *
+     * @param string ...$path Path segments.
+     * @return \Cake\Http\Response|null
+     * @throws \Cake\Http\Exception\ForbiddenException When a directory traversal attempt.
+     * @throws \Cake\View\Exception\MissingTemplateException When the view file could not
+     *   be found and in debug mode.
+     * @throws \Cake\Http\Exception\NotFoundException When the view file could
+     *   be found and not in debug mode.
+     */
     public function display(string ...$path): ?Response
     {
         if (!$path) {
             return $this->redirect('/');
         }
+
         if (in_array('..', $path, true) || in_array('.', $path, true)) {
             throw new ForbiddenException();
         }
+
         $page = $subpage = null;
 
         if (!empty($path[0])) {
             $page = $path[0];
         }
+
         if (!empty($path[1])) {
             $subpage = $path[1];
         }
+
         $this->set(compact('page', 'subpage'));
 
         try {
@@ -76,6 +105,7 @@ class PagesController extends AppController
             if (Configure::read('debug')) {
                 throw $exception;
             }
+
             throw new NotFoundException();
         }
     }

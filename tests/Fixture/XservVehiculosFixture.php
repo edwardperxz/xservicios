@@ -11,6 +11,28 @@ use Cake\TestSuite\Fixture\TestFixture;
 class XservVehiculosFixture extends TestFixture
 {
     /**
+     * Fields
+     *
+     * @var array
+     */
+    public $fields = [
+        'id' => ['type' => 'integer', 'length' => null, 'null' => false, 'default' => null, 'autoIncrement' => true],
+        'tipo' => ['type' => 'string', 'length' => 255, 'null' => false],
+        'nombre_unidad' => ['type' => 'string', 'length' => 50, 'null' => true],
+        'capacidad_max' => ['type' => 'integer', 'length' => null, 'null' => false],
+        'placa' => ['type' => 'string', 'length' => 20, 'null' => false],
+        'anio' => ['type' => 'integer', 'length' => null, 'null' => true],
+        'kilometraje_actual' => ['type' => 'integer', 'length' => null, 'null' => false, 'default' => 0],
+        'estado_operativo' => ['type' => 'string', 'length' => 255, 'null' => false, 'default' => 'disponible'],
+        'created_at' => ['type' => 'integer', 'length' => null, 'null' => false],
+        'updated_at' => ['type' => 'integer', 'length' => null, 'null' => false],
+        '_constraints' => [
+            'primary' => ['type' => 'primary', 'columns' => ['id']],
+            'unique' => ['type' => 'unique', 'columns' => ['placa']],
+        ],
+    ];
+
+    /**
      * Init method
      *
      * @return void

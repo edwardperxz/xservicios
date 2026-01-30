@@ -11,6 +11,29 @@ use Cake\TestSuite\Fixture\TestFixture;
 class XservNotificacionesFixture extends TestFixture
 {
     /**
+     * Fields
+     *
+     * @var array
+     */
+    public $fields = [
+        'id' => ['type' => 'integer', 'length' => null, 'null' => false, 'default' => null, 'autoIncrement' => true],
+        'usuario_id' => ['type' => 'integer', 'length' => null, 'null' => true, 'default' => null],
+        'cliente_id' => ['type' => 'integer', 'length' => null, 'null' => true, 'default' => null],
+        'reserva_id' => ['type' => 'integer', 'length' => null, 'null' => true, 'default' => null],
+        'tipo_notificacion' => ['type' => 'string', 'length' => 255, 'null' => false],
+        'medio' => ['type' => 'string', 'length' => 255, 'null' => false],
+        'destinatario' => ['type' => 'string', 'length' => 100, 'null' => false],
+        'contenido' => ['type' => 'text', 'null' => false],
+        'estado_envio' => ['type' => 'string', 'length' => 255, 'null' => false, 'default' => 'pendiente'],
+        'error_log' => ['type' => 'text', 'null' => true],
+        'enviado_at' => ['type' => 'integer', 'length' => null, 'null' => true],
+        'created_at' => ['type' => 'integer', 'length' => null, 'null' => false],
+        '_constraints' => [
+            'primary' => ['type' => 'primary', 'columns' => ['id']],
+        ],
+    ];
+
+    /**
      * Init method
      *
      * @return void

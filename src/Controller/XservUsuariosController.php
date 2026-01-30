@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Event\EventInterface;
+use Cake\Auth\DefaultPasswordHasher;
+
 
 /**
  * XservUsuarios Controller
@@ -169,6 +171,49 @@ class XservUsuariosController extends AppController
         $this->set(compact('usuario'));
     }
 
+    public function profile()
+        {
+            $this->Authorization->skipAuthorization();
+
+            $identity = $this->Authentication->getIdentity();
+            $userId = $identity->getIdentifier();
+
+            $usuario = $this->XservUsuarios->get($userId);
+
+            if ($this->request->is(['patch', 'post', 'put'])) {
+                $data = $this->request->getData();
+
+                if (empty($data['current_password'])) {
+                    $this->Flash->error('Debes ingresar tu contraseña actual');
+                    return;
+                }
+
+                $hasher = new DefaultPasswordHasher();
+                if (!$hasher->check($data['current_password'], $usuario->password)) {
+                    $this->Flash->error('Contraseña incorrecta');
+                    return;
+                }
+
+                unset(
+                    $data['current_password'],
+                    $data['rol'],
+                    $data['estado'],
+                    $data['password']
+                );
+
+                $usuario = $this->XservUsuarios->patchEntity($usuario, $data);
+
+                if ($this->XservUsuarios->save($usuario)) {
+                    $this->Flash->success('profile actualizado');
+                    return $this->redirect(['action' => 'profile']);
+                }
+
+                $this->Flash->error('No se pudo actualizar el profile');
+            }
+
+            $this->set(compact('usuario'));
+            return $this->render('edit');
+        }
 
 
 }

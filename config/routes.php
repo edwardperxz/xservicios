@@ -15,6 +15,46 @@ return function (RouteBuilder $routes): void {
         // Páginas estáticas (si las necesitas después)
         $builder->connect('/pages/*', 'Pages::display');
 
+        // ==============================
+        // XservUsuarios
+        // ==============================
+        $builder->connect(
+            '/xserv-usuarios/profile',
+            ['controller' => 'XservUsuarios', 'action' => 'profile']
+        );
+        
+        $builder->connect(
+            '/xserv-usuarios',
+            ['controller' => 'XservUsuarios', 'action' => 'index']
+        );
+
+        $builder->connect(
+            '/xserv-usuarios/login',
+            ['controller' => 'XservUsuarios', 'action' => 'login']
+        );
+
+        $builder->connect(
+            '/xserv-usuarios/register',
+            ['controller' => 'XservUsuarios', 'action' => 'register']
+        );
+
+        $builder->connect(
+            '/xserv-usuarios/ver/:id',
+            ['controller' => 'XservUsuarios', 'action' => 'view'],
+            ['pass' => ['id'], 'id' => '\d+']
+        );
+
+        $builder->connect(
+            '/xserv-usuarios/agregar',
+            ['controller' => 'XservUsuarios', 'action' => 'add']
+        );
+
+        $builder->connect(
+            '/xserv-usuarios/editar/:id',
+            ['controller' => 'XservUsuarios', 'action' => 'edit'],
+            ['pass' => ['id'], 'id' => '\d+']
+        );
+
         // Fallbacks (solo para desarrollo)
         $builder->fallbacks();
     });

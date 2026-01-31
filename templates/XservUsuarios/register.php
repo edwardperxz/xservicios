@@ -17,7 +17,10 @@ $this->layout = 'login';
         <h1 class="form-title">Crea una cuenta</h1>
         <p class="form-subtitle">Regístrate para continuar</p>
         
-        <?= $this->Form->create($xservUsuario, ['class' => 'register-form']) ?>
+        <?= $this->Form->create($xservUsuario, [
+            'url' => ['controller' => 'XservUsuarios', 'action' => 'register'],
+            'class' => 'register-form'
+        ]) ?>
             <div class="input-group">
                 <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>

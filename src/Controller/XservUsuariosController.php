@@ -67,6 +67,13 @@ class XservUsuariosController extends AppController
         return $this->redirect(['action' => 'login']);
     }
 
+
+    public function profile()
+    {
+        $this->Authorization->skipAuthorization(); // temporal
+    }
+
+
     /**
      * Index method
      *

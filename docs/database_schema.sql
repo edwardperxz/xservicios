@@ -1,3 +1,5 @@
+CREATE DATABASE IF NOT EXISTS xservicios_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 USE xservicios_db;
 
 --  Tabla Usuarios (para accesos internos: admin, operador, chofer)

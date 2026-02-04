@@ -22,6 +22,12 @@ return function (RouteBuilder $routes): void {
             '/xserv-usuarios/profile',
             ['controller' => 'XservUsuarios', 'action' => 'profile']
         );
+
+        $routes->connect('/', [
+            'controller' => 'Home',
+            'action' => 'index'
+        ]);
+
         
         $builder->connect(
             '/xserv-usuarios',

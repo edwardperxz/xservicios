@@ -12,6 +12,7 @@ class HomeController extends AppController
 
     public function index()
     {
-        // lógica del dashboard
+        $user = $this->request->getAttribute('identity');
+        $rol = $user->rol;
     }
 }

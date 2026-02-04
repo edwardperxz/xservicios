@@ -1,0 +1,766 @@
+export default function FichaChoferPage() {
+  return (
+    <div
+      dangerouslySetInnerHTML={{
+        __html: `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Xservicios - Ficha Chofer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --gold: #c9a962;
+      --gold-light: #d4b978;
+      --gold-dark: #a88b4a;
+      --chocolate: #3d2314;
+      --chocolate-light: #5a3a2a;
+      --dark-bg: #0a0a0a;
+      --dark-deep: #050505;
+      --text-white: #ffffff;
+      --text-gray: #a0a0a0;
+      --pearl: #f8f6f2;
+      --pearl-dark: #efe9e0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--dark-deep);
+      color: var(--text-white);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .page-title {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .page-title h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .page-title p {
+      color: var(--text-gray);
+      font-size: 1rem;
+    }
+
+    .fichas-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      gap: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Ficha Card */
+    .ficha-card {
+      background: linear-gradient(145deg, var(--pearl), var(--pearl-dark));
+      border-radius: 16px;
+      padding: 4px;
+      background: linear-gradient(135deg, var(--gold), var(--chocolate), var(--gold-dark), var(--chocolate-light), var(--gold));
+      box-shadow: 
+        0 10px 40px rgba(201, 169, 98, 0.2),
+        0 0 20px rgba(201, 169, 98, 0.1);
+    }
+
+    .ficha-inner {
+      background: linear-gradient(145deg, var(--pearl), var(--pearl-dark));
+      border-radius: 13px;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ficha-inner::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--gold), var(--chocolate), var(--gold));
+    }
+
+    /* Header de la ficha */
+    .ficha-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--gold);
+    }
+
+    .ficha-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .ficha-logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .ficha-logo-x {
+      color: var(--gold);
+    }
+
+    .ficha-logo-servicios {
+      color: var(--chocolate);
+    }
+
+    .ficha-subtitle {
+      font-size: 0.7rem;
+      color: var(--chocolate-light);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .ficha-badge {
+      padding: 0.35rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-senior {
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--chocolate);
+    }
+
+    .badge-experimentado {
+      background: linear-gradient(135deg, #2d7a5f, #1e5a43);
+      color: white;
+    }
+
+    .badge-profesional {
+      background: linear-gradient(135deg, #4a6fa5, #345a8a);
+      color: white;
+    }
+
+    .badge-junior {
+      background: linear-gradient(135deg, #7a5f2d, #5a4320);
+      color: white;
+    }
+
+    /* Contenido de la ficha */
+    .ficha-content {
+      display: flex;
+      gap: 1.25rem;
+    }
+
+    .ficha-image-container {
+      flex-shrink: 0;
+    }
+
+    .ficha-image {
+      width: 130px;
+      height: 160px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 3px solid var(--gold);
+      box-shadow: 0 4px 15px rgba(61, 35, 20, 0.2);
+    }
+
+    .ficha-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .ficha-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--chocolate);
+      line-height: 1.2;
+      margin-bottom: 0.25rem;
+    }
+
+    .ficha-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .ficha-label {
+      font-size: 0.75rem;
+      color: var(--chocolate-light);
+      font-weight: 500;
+      min-width: 85px;
+    }
+
+    .ficha-value {
+      font-size: 0.85rem;
+      color: var(--chocolate);
+      font-weight: 600;
+    }
+
+    .ficha-value.highlight {
+      color: var(--gold-dark);
+      font-weight: 700;
+    }
+
+    /* Sección de estadísticas */
+    .ficha-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px dashed var(--gold);
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 0.5rem;
+      background: rgba(201, 169, 98, 0.1);
+      border-radius: 8px;
+    }
+
+    .stat-value {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gold-dark);
+    }
+
+    .stat-label {
+      font-size: 0.65rem;
+      color: var(--chocolate-light);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Footer de la ficha */
+    .ficha-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 2px solid var(--gold);
+    }
+
+    .ficha-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .status-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    .status-active {
+      background: #2d7a5f;
+      box-shadow: 0 0 8px rgba(45, 122, 95, 0.5);
+    }
+
+    .status-vacation {
+      background: #f5a623;
+      box-shadow: 0 0 8px rgba(245, 166, 35, 0.5);
+    }
+
+    .status-inactive {
+      background: #c0392b;
+      box-shadow: 0 0 8px rgba(192, 57, 43, 0.5);
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .status-text {
+      font-size: 0.75rem;
+      color: var(--chocolate-light);
+      font-weight: 500;
+    }
+
+    .ficha-id {
+      font-family: 'Courier New', monospace;
+      font-size: 0.7rem;
+      color: var(--chocolate-light);
+      background: rgba(201, 169, 98, 0.15);
+      padding: 0.35rem 0.75rem;
+      border-radius: 4px;
+    }
+
+    /* Rating Section */
+    .rating-section {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+      padding: 0.75rem;
+      background: linear-gradient(135deg, rgba(201, 169, 98, 0.15), rgba(61, 35, 20, 0.08));
+      border-radius: 10px;
+      border: 1px solid rgba(201, 169, 98, 0.3);
+    }
+
+    .rating-label {
+      font-size: 0.8rem;
+      color: var(--chocolate);
+      font-weight: 600;
+    }
+
+    .rating-stars {
+      display: flex;
+      gap: 3px;
+    }
+
+    .star {
+      width: 18px;
+      height: 18px;
+    }
+
+    .star-filled {
+      fill: var(--gold);
+      filter: drop-shadow(0 1px 2px rgba(201, 169, 98, 0.4));
+    }
+
+    .star-half {
+      fill: url(#half-gradient);
+      filter: drop-shadow(0 1px 2px rgba(201, 169, 98, 0.4));
+    }
+
+    .star-empty {
+      fill: #d4d4d4;
+    }
+
+    .rating-number {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gold-dark);
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Responsive */
+    @media (max-width: 500px) {
+      .fichas-container {
+        grid-template-columns: 1fr;
+      }
+
+      .ficha-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .ficha-details {
+        align-items: center;
+      }
+
+      .ficha-row {
+        justify-content: center;
+      }
+
+      .ficha-label {
+        min-width: auto;
+      }
+
+      .rating-section {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- SVG Definitions for half star -->
+  <svg width="0" height="0" style="position: absolute;">
+    <defs>
+      <linearGradient id="half-gradient">
+        <stop offset="50%" stopColor="#c9a962"/>
+        <stop offset="50%" stopColor="#d4d4d4"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <div class="page-title">
+    <h1>Fichas de Choferes</h1>
+    <p>Credenciales oficiales del equipo de conductores de Xservicios</p>
+  </div>
+
+  <div class="fichas-container">
+    
+    <!-- Ficha Chofer 1 - Senior -->
+    <div class="ficha-card">
+      <div class="ficha-inner">
+        <div class="ficha-header">
+          <div class="ficha-logo">
+            <div>
+              <div class="ficha-logo-text">
+                <span class="ficha-logo-x">X</span><span class="ficha-logo-servicios">SERVICIOS</span>
+              </div>
+              <div class="ficha-subtitle">Credencial de Conductor</div>
+            </div>
+          </div>
+          <span class="ficha-badge badge-senior">Chofer Senior</span>
+        </div>
+
+        <div class="ficha-content">
+          <div class="ficha-image-container">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=400&fit=crop&crop=face" alt="Carlos Mendoza" class="ficha-image">
+          </div>
+
+          <div class="ficha-details">
+            <h3 class="ficha-name">Carlos Mendoza Rivera</h3>
+            
+            <div class="ficha-row">
+              <span class="ficha-label">Edad:</span>
+              <span class="ficha-value">52 años</span>
+            </div>
+            
+            <div class="ficha-row">
+              <span class="ficha-label">Categoría:</span>
+              <span class="ficha-value highlight">Chofer Senior</span>
+            </div>
+            
+            <div class="ficha-row">
+              <span class="ficha-label">Experiencia:</span>
+              <span class="ficha-value highlight">18 años</span>
+            </div>
+            
+            <div class="ficha-row">
+              <span class="ficha-label">Licencia:</span>
+              <span class="ficha-value">Tipo E - Profesional</span>
+            </div>
+
+            <div class="ficha-row">
+              <span class="ficha-label">Unidad Asig.:</span>
+              <span class="ficha-value">Coaster Toyota 2019</span>
+            </div>
+
+            <div class="ficha-stats">
+              <div class="stat-item">
+                <div class="stat-value">2,847</div>
+                <div class="stat-label">Viajes</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">0</div>
+                <div class="stat-label">Incidentes</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">99%</div>
+                <div class="stat-label">Puntualidad</div>
+              </div>
+            </div>
+
+            <div class="rating-section">
+              <span class="rating-label">Calificación:</span>
+              <div class="rating-stars">
+                <svg class="star star-filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star star-filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star star-filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star star-filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star star-filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </div>
+              <span class="rating-number">5.0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ficha-footer">
+          <div class="ficha-status">
+            <span class="status-indicator status-active"></span>
+            <span class="status-text">Activo</span>
+          </div>
+          <span class="ficha-id">ID: CHF-2007-001</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ficha Chofer 2 - Experimentado -->
+    <div class="ficha-card">
+      <div class="ficha-inner">
+        <div class="ficha-header">
+          <div class="ficha-logo">
+            <div>
+              <div class="ficha-logo-text">
+                <span class="ficha-logo-x">X</span><span class="ficha-logo-servicios">SERVICIOS</span>
+              </div>
+              <div class="ficha-subtitle">Credencial de Conductor</div>
+            </div>
+          </div>
+          <span class="ficha-badge badge-experimentado">Experimentado</span>
+        </div>
+
+        <div class="ficha-content">
+          <div class="ficha-image-container">
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=400&fit=crop&crop=face" alt="Roberto Castillo" class="ficha-image">
+          </div>
+
+          <div class="ficha-details">
+            <h3 class="ficha-name">Roberto Castillo Vargas</h3>
+            
+            <div class="ficha-row">
+              <span class="ficha-label">Edad:</span>
+              <span class="ficha-value">41 años</span>
+            </div>
+            
+            <div class="ficha-row">
+              <span class="ficha-label">Categoría:</span>
+              <span class="ficha-value highlight">Experimentado</span>
+            </div>
+            
+            <div class="ficha-row">
+              <span class="ficha-label">Experiencia:</span>
+              <span class="ficha-value highlight">12 años</span>
+            </div>
+            
+            <div class="ficha-row">
+              <span class="ficha-label">Licencia:</span>
+              <span class="ficha-value">Tipo E - Profesional</span>
+            </div>
+
+            <div class="ficha-row">
+              <span class="ficha-label">Unidad Asig.:</span>
+              <span class="ficha-value">Minibus Mercedes 2021</span>
+            </div>
+
+            <div class="ficha-stats">
+              <div class="stat-item">
+                <div class="stat-value">1,923</div>
+                <div class="stat-label">Viajes</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">1</div>
+                <div class="stat-label">Incidentes</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">97%</div>
+                <div class="stat-label">Puntualidad</div>
+              </div>
+            </div>
+
+            <div class="rating-section">
+              <span class="rating-label">Calificación:</span>
+              <div class="rating-stars">
+                <svg class="star star-filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star star-filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star star-filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star star-filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star star-half" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </div>
+              <span class="rating-number">4.5</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ficha-footer">
+          <div class="ficha-status">
+            <span class="status-indicator status-active"></span>
+            <span class="status-text">Activo</span>
+          </div>
+          <span class="ficha-id">ID: CHF-2013-015</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ficha Chofer 3 - Profesional -->
+    <div class="ficha-card">
+      <div class="ficha-inner">
+        <div class="ficha-header">
+          <div class="ficha-logo">
+            <div>
+              <div class="ficha-logo-text">
+                <span class="ficha-logo-x">X</span><span class="ficha-logo-servicios">SERVICIOS</span>
+              </div>
+              <div class="ficha-subtitle">Credencial de Conductor</div>
+            </div>
+          </div>
+          <span class="ficha-badge badge-profesional">Profesional</span>
+        </div>
+
+        <div class="ficha-content">
+          <div class="ficha-image-container">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&h=400&fit=crop&crop=face" alt="Miguel Ángel Torres" class="ficha-image">
+          </div>
+
+          <div class="ficha-details">
+            <h3 class="ficha-name">Miguel Ángel Torres</h3>
+            
+            <div class="ficha-row">
+              <span class="ficha-label">Edad:</span>
+              <span class="ficha-value">35 años</span>
+            </div>
+            
+            <div class="ficha-row">
+              <span class="ficha-label">Categoría:</span>
+              <span class="ficha-value highlight">Profesional</span>
+            </div>
+            
+            <div class="ficha-row">
+              <span class="ficha-label">Experiencia:</span>
+              <span class="ficha-value highlight">7 años</span>
+            </div>
+            
+            <div class="ficha-row">
+              <span class="ficha-label">Licencia:</span>
+              <span class="ficha-value">Tipo D - Comercial</span>
+            </div>
+
+            <div class="ficha-row">
+              <span class="ficha-label">Unidad Asig.:</span>
+              <span class="ficha-value">Coaster Hyundai 2020</span>
+            </div>
+
+            <div class="ficha-stats">
+              <div class="stat-item">
+                <div class="stat-value">986</div>
+                <div class="stat-label">Viajes</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">0</div>
+                <div class="stat-label">Incidentes</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">98%</div>
+                <div class="stat-label">Puntualidad</div>
+              </div>
+            </div>
+
+            <div class="rating-section">
+              <span class="rating-label">Calificación:</span>
+              <div class="rating-stars">
+                <svg class="star star-filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star star-filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star star-filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star star-filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star star-filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </div>
+              <span class="rating-number">4.9</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ficha-footer">
+          <div class="ficha-status">
+            <span class="status-indicator status-active"></span>
+            <span class="status-text">Activo</span>
+          </div>
+          <span class="ficha-id">ID: CHF-2018-042</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ficha Chofer 4 - Junior -->
+    <div class="ficha-card">
+      <div class="ficha-inner">
+        <div class="ficha-header">
+          <div class="ficha-logo">
+            <div>
+              <div class="ficha-logo-text">
+                <span class="ficha-logo-x">X</span><span class="ficha-logo-servicios">SERVICIOS</span>
+              </div>
+              <div class="ficha-subtitle">Credencial de Conductor</div>
+            </div>
+          </div>
+          <span class="ficha-badge badge-junior">Chofer Junior</span>
+        </div>
+
+        <div class="ficha-content">
+          <div class="ficha-image-container">
+            <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=300&h=400&fit=crop&crop=face" alt="David Hernández" class="ficha-image">
+          </div>
+
+          <div class="ficha-details">
+            <h3 class="ficha-name">David Hernández López</h3>
+            
+            <div class="ficha-row">
+              <span class="ficha-label">Edad:</span>
+              <span class="ficha-value">28 años</span>
+            </div>
+            
+            <div class="ficha-row">
+              <span class="ficha-label">Categoría:</span>
+              <span class="ficha-value highlight">Chofer Junior</span>
+            </div>
+            
+            <div class="ficha-row">
+              <span class="ficha-label">Experiencia:</span>
+              <span class="ficha-value highlight">2 años</span>
+            </div>
+            
+            <div class="ficha-row">
+              <span class="ficha-label">Licencia:</span>
+              <span class="ficha-value">Tipo D - Comercial</span>
+            </div>
+
+            <div class="ficha-row">
+              <span class="ficha-label">Unidad Asig.:</span>
+              <span class="ficha-value">Minibus Hyundai 2022</span>
+            </div>
+
+            <div class="ficha-stats">
+              <div class="stat-item">
+                <div class="stat-value">312</div>
+                <div class="stat-label">Viajes</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">0</div>
+                <div class="stat-label">Incidentes</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">95%</div>
+                <div class="stat-label">Puntualidad</div>
+              </div>
+            </div>
+
+            <div class="rating-section">
+              <span class="rating-label">Calificación:</span>
+              <div class="rating-stars">
+                <svg class="star star-filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star star-filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star star-filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star star-filled" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <svg class="star star-empty" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </div>
+              <span class="rating-number">4.2</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ficha-footer">
+          <div class="ficha-status">
+            <span class="status-indicator status-vacation"></span>
+            <span class="status-text">En vacaciones</span>
+          </div>
+          <span class="ficha-id">ID: CHF-2023-089</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
+`
+      }}
+    />
+  );
+}

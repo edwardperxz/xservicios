@@ -30,6 +30,9 @@
     </div>
 <?php endif; ?>
 
+<?= $this->Html->link('Cambiar Contraseña', ['action' => 'changePassword'], ['class' => 'button']) ?>
+
+
 <a href="<?= $this->Url->build(['controller' => 'XservUsuarios', 'action' => 'logout']) ?>" class="user-profile" style="text-decoration: none;">
                     <div class="user-avatar">US</div>
                     <span class="user-name">cerrar sesión</span>

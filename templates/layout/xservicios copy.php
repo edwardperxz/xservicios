@@ -211,7 +211,7 @@
             </svg>
 
             <?php if ($this->request->getAttribute('identity')): ?>
-                <a href="<?= $this->Url->build(['controller' => 'XservUsuarios', 'action' => 'profile']) ?>" class="user-profile" style="text-decoration: none;">
+                <a href="<?= $this->Url->build(['controller' => 'XservUsuarios', 'action' => 'logout']) ?>" class="user-profile" style="text-decoration: none;">
                     <div class="user-avatar">US</div>
                     <span class="user-name">Usuario</span>
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

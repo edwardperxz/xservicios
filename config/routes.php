@@ -17,6 +17,11 @@ return function (RouteBuilder $routes): void {
         // Páginas estáticas (si las necesitas después)
         $builder->connect('/pages/*', 'Pages::display');
 
+        // Rutas de roles
+        $builder->connect('/panel/admin', ['controller' => 'Dashboard', 'action' => 'adminPanel']);
+        $builder->connect('/panel/operador', ['controller' => 'Dashboard', 'action' => 'operadorPanel']);
+        $builder->connect('/panel/chofer', ['controller' => 'Dashboard', 'action' => 'choferPanel']);
+
         // ==============================
         // XservUsuarios
         // ==============================

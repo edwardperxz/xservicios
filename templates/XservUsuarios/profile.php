@@ -1,65 +1,29 @@
-<?php
-/**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\XservUsuario $xservUsuario
- */
-// src/Controller/DashboardController.php
-namespace App\Controller;
+<h1>Mi Perfil</h1>
 
-class DashboardController extends AppController
-{
-    public function index()
-    {
-        $user = $this->request->getAttribute('identity');
-        if (!$user) return $this->redirect(['controller' => 'XservUsuarios', 'action' => 'login']);
+<p><strong>Nombre:</strong> <?= h($user->username) ?></p>
+<p><strong>Rol:</strong> <?= h($user->rol) ?></p>
 
-        $rol = $user->rol;
-        $this->set(compact('rol', 'user'));
+<?php if ($user->rol === 'admin'): ?>
+    <h2>Acciones de Administrador</h2>
+    <div class="actions">
+        <?= $this->Html->link('Gestionar Usuarios', ['controller' => 'XservUsuarios', 'action' => 'index'], ['class' => 'button']) ?>
+        <?= $this->Html->link('Gestionar Reservas', ['controller' => 'XservReservas', 'action' => 'index'], ['class' => 'button']) ?>
+        <?= $this->Html->link('Reportes', ['controller' => 'Reportes', 'action' => 'index'], ['class' => 'button']) ?>
+    </div>
+<?php endif; ?>
 
-        // Puedes redirigir directamente a sub-panel
-        switch ($rol) {
-            case 'admin':
-                return $this->redirect(['action' => 'adminPanel']);
-            case 'operador':
-                return $this->redirect(['action' => 'operadorPanel']);
-            case 'chofer':
-                return $this->redirect(['action' => 'choferPanel']);
-        }
-    }
+<?php if ($user->rol === 'operador'): ?>
+    <h2>Acciones de Operador</h2>
+    <div class="actions">
+        <?= $this->Html->link('Ver Reservas Pendientes', ['controller' => 'XservReservas', 'action' => 'pendientes'], ['class' => 'button']) ?>
+        <?= $this->Html->link('Crear Reserva', ['controller' => 'XservReservas', 'action' => 'add'], ['class' => 'button']) ?>
+    </div>
+<?php endif; ?>
 
-    public function adminPanel()
-    {
-        $this->Authorization->skipAuthorization();
-        // Ejemplo: contar reservas y usuarios
-        $this->loadModel('XservUsuarios');
-        $this->loadModel('XservReservas');
-
-        $totalUsuarios = $this->XservUsuarios->find()->count();
-        $totalReservas = $this->XservReservas->find()->count();
-
-        $this->set(compact('totalUsuarios', 'totalReservas'));
-    }
-
-    public function operadorPanel()
-    {
-        $this->Authorization->skipAuthorization();
-        $this->loadModel('XservReservas');
-        $reservasPendientes = $this->XservReservas->find()
-            ->where(['estado' => 'pendiente'])
-            ->count();
-        $this->set(compact('reservasPendientes'));
-    }
-
-    public function choferPanel()
-    {
-        $this->Authorization->skipAuthorization();
-        $this->loadModel('XservAsignaciones');
-        $user = $this->request->getAttribute('identity');
-
-        $misAsignaciones = $this->XservAsignaciones->find()
-            ->where(['chofer_id' => $user->id, 'estado_asignacion !=' => 'finalizada'])
-            ->all();
-
-        $this->set(compact('misAsignaciones'));
-    }
-}
+<?php if ($user->rol === 'chofer'): ?>
+    <h2>Acciones de Chofer</h2>
+    <div class="actions">
+        <?= $this->Html->link('Mis Asignaciones', ['controller' => 'XservAsignaciones', 'action' => 'index'], ['class' => 'button']) ?>
+        <?= $this->Html->link('Actualizar Estado', ['controller' => 'XservAsignaciones', 'action' => 'updateStatus'], ['class' => 'button']) ?>
+    </div>
+<?php endif; ?>

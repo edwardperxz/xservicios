@@ -70,8 +70,24 @@ class XservUsuariosController extends AppController
 
     public function profile()
     {
-        $this->Authorization->skipAuthorization(); // temporal
+        $this->Authorization->skipAuthorization();
+
+        $user = $this->Authentication->getIdentity();
+        if (!$user) {
+            $this->Flash->error('Debe iniciar sesión para ver el perfil');
+            return $this->redirect(['action' => 'login']);
+        }
+
+        $chofer = null;
+        if ($user->rol === 'chofer') {
+            $chofer = $this->XservUsuarios->XservChoferes->find()
+                ->where(['usuario_id' => $user->id])
+                ->first();
+        }
+
+        $this->set(compact('user', 'chofer'));
     }
+
 
 
     /**

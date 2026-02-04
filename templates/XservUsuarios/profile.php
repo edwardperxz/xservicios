@@ -22,6 +22,8 @@
 
 <?php if ($user->rol === 'chofer'): ?>
     <h2>Acciones de Chofer</h2>
+    <p><strong>Teléfono:</strong> <?= h($chofer->telefono) ?></p>
+    <p><strong>Licencia:</strong> <?= h($chofer->tipo_licencia) ?></p>
     <div class="actions">
         <?= $this->Html->link('Mis Asignaciones', ['controller' => 'XservAsignaciones', 'action' => 'index'], ['class' => 'button']) ?>
         <?= $this->Html->link('Actualizar Estado', ['controller' => 'XservAsignaciones', 'action' => 'updateStatus'], ['class' => 'button']) ?>

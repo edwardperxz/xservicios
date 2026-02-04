@@ -33,6 +33,7 @@ class XservChoferesController extends AppController
      */
     public function view(?string $id = null)
     {
+        $this->Authorization->skipAuthorization();
         $xservChofere = $this->XservChoferes->get($id, contain: ['Usuarios']);
         $this->set(compact('xservChofere'));
     }

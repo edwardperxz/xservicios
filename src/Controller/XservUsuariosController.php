@@ -78,14 +78,25 @@ class XservUsuariosController extends AppController
             return $this->redirect(['action' => 'login']);
         }
 
-        $chofer = null;
+        // Solo redirigir si es chofer
         if ($user->rol === 'chofer') {
-            $chofer = $this->XservUsuarios->XservChoferes->find()
+            $chofer = $this->XservUsuarios->XservChoferes
+                ->find()
                 ->where(['usuario_id' => $user->id])
                 ->first();
+
+            if ($chofer) {
+                // Redirige al view del chofer
+                return $this->redirect([
+                    'controller' => 'XservChoferes',
+                    'action' => 'view',
+                    $chofer->id
+                ]);
+            }
         }
 
-        $this->set(compact('user', 'chofer'));
+        // Para admin u operador, puedes mostrar profile normal
+        $this->set(compact('user'));
     }
 
 

@@ -44,6 +44,13 @@ $this->layout = 'login';
             </div>
             
             <?= $this->Form->button('Iniciar Sesión', ['class' => 'submit-btn']) ?>
+            <div class="forgot-password register-link">
+                <a href="<?= $this->Url->build(['controller' => 'xserv-usuarios', 'action' => 'register']) ?>">
+                    ¿No tienes una cuenta? Regístrate
+                </a>
+            </div>
+
+
             
         <?= $this->Form->end() ?>
     </div>

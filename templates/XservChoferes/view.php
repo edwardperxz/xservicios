@@ -70,3 +70,10 @@
         </div>
     </div>
 </div>
+
+<?php if ($this->request->getAttribute('identity')): ?>
+    <a href="<?= $this->Url->build(['controller' => 'XservUsuarios', 'action' => 'logout']) ?>" 
+       class="button" style="text-decoration: none; display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem; background: #c9a962; color: #fff; border-radius: 4px;">
+        Cerrar sesión
+    </a>
+<?php endif; ?>

@@ -10,11 +10,47 @@ return function (RouteBuilder $routes): void {
     $routes->scope('/', function (RouteBuilder $builder): void {
 
         // Home real de Xservicios
-        $builder->connect('/', ['controller' => 'Pages', 'action' => 'home']);
+        //$builder->connect('/', ['controller' => 'Pages', 'action' => 'home']);
+        $builder->redirect('/', '/home');
+        $builder->connect('/home', ['controller' => 'Home', 'action' => 'index',]);
 
         // Páginas estáticas (si las necesitas después)
         $builder->connect('/pages/*', 'Pages::display');
 
+        // Rutas de roles
+        $builder->connect('/panel/admin', ['controller' => 'Dashboard', 'action' => 'adminPanel']);
+        $builder->connect('/panel/operador', ['controller' => 'Dashboard', 'action' => 'operadorPanel']);
+        $builder->connect('/panel/chofer', ['controller' => 'Dashboard', 'action' => 'choferPanel']);
+
+        // ==============================
+        // XservUsuarios
+        // ==============================
+        $builder->connect(
+            '/xserv-usuarios/profile',
+            ['controller' => 'XservUsuarios', 'action' => 'profile']
+        );
+
+        $builder->connect('/', [
+            'controller' => 'Home',
+            'action' => 'index'
+        ]);
+
+        
+        $builder->connect(
+            '/xserv-usuarios',
+            ['controller' => 'XservUsuarios', 'action' => 'index']
+        );
+
+        $builder->connect(
+            '/xserv-usuarios/login',
+            ['controller' => 'XservUsuarios', 'action' => 'login']
+        );
+
+        $builder->connect(
+            '/xserv-usuarios/register',
+            ['controller' => 'XservUsuarios', 'action' => 'register']
+        );
+        
         // Fallbacks (solo para desarrollo)
         $builder->fallbacks();
     });

@@ -67,6 +67,40 @@ class XservUsuariosController extends AppController
         return $this->redirect(['action' => 'login']);
     }
 
+
+    public function profile()
+    {
+        $this->Authorization->skipAuthorization();
+
+        $user = $this->Authentication->getIdentity();
+        if (!$user) {
+            $this->Flash->error('Debe iniciar sesión para ver el perfil');
+            return $this->redirect(['action' => 'login']);
+        }
+
+        // Solo redirigir si es chofer
+        if ($user->rol === 'chofer') {
+            $chofer = $this->XservUsuarios->XservChoferes
+                ->find()
+                ->where(['usuario_id' => $user->id])
+                ->first();
+
+            if ($chofer) {
+                // Redirige al view del chofer
+                return $this->redirect([
+                    'controller' => 'XservChoferes',
+                    'action' => 'view',
+                    $chofer->id
+                ]);
+            }
+        }
+
+        // Para admin u operador, puedes mostrar profile normal
+        $this->set(compact('user'));
+    }
+
+
+
     /**
      * Index method
      *
@@ -74,11 +108,30 @@ class XservUsuariosController extends AppController
      */
     public function index()
     {
+        $this->Authorization->skipAuthorization();
+
         $query = $this->XservUsuarios->find();
+
+        $filters = $this->request->getQuery();
+
+        if (!empty($filters['rol'])) {
+            $query->where(['rol' => $filters['rol']]);
+        }
+
+        if (!empty($filters['estado'])) {
+            $query->where(['estado' => $filters['estado']]);
+        }
+
+        if (!empty($filters['username'])) {
+            $query->where(['username LIKE' => '%' . $filters['username'] . '%']);
+        }
+
         $xservUsuarios = $this->paginate($query);
 
-        $this->set(compact('xservUsuarios'));
+        $this->set(compact('xservUsuarios', 'filters'));
     }
+
+
 
     /**
      * View method
@@ -89,6 +142,7 @@ class XservUsuariosController extends AppController
      */
     public function view(?string $id = null)
     {
+        $this->Authorization->skipAuthorization();
         $xservUsuario = $this->XservUsuarios->get($id, contain: []);
         $this->set(compact('xservUsuario'));
     }
@@ -127,6 +181,8 @@ class XservUsuariosController extends AppController
      */
     public function edit(?string $id = null)
     {
+        
+        $this->Authorization->skipAuthorization();
         $xservUsuario = $this->XservUsuarios->get($id, contain: []);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $xservUsuario = $this->XservUsuarios->patchEntity($xservUsuario, $this->request->getData());
@@ -195,4 +251,42 @@ class XservUsuariosController extends AppController
 
         return null;
     }
+
+    public function changePassword()
+    {
+        $this->Authorization->skipAuthorization(); // temporal si no quieres autorización complicada
+
+        $user = $this->Authentication->getIdentity();
+        if (!$user) {
+            $this->Flash->error('Debe iniciar sesión para cambiar la contraseña.');
+            return $this->redirect(['action' => 'login']);
+        }
+
+        if ($this->request->is(['post', 'put'])) {
+            $data = $this->request->getData();
+
+            $hasher = new \Authentication\PasswordHasher\DefaultPasswordHasher();
+
+            // Verificar contraseña actual
+            if (!$hasher->check($data['current_password'], $user->password)) {
+                $this->Flash->error('La contraseña actual es incorrecta.');
+            } elseif ($data['new_password'] !== $data['confirm_password']) {
+                $this->Flash->error('La nueva contraseña y la confirmación no coinciden.');
+            } else {
+                // Guardar nueva contraseña
+                $userEntity = $this->XservUsuarios->get($user->id);
+                $userEntity->password = $hasher->hash($data['new_password']);
+
+                if ($this->XservUsuarios->save($userEntity)) {
+                    $this->Flash->success('Contraseña actualizada con éxito.');
+                    return $this->redirect(['action' => 'profile']);
+                } else {
+                    $this->Flash->error('No se pudo actualizar la contraseña, intente de nuevo.');
+                }
+            }
+        }
+
+        $this->set(compact('user'));
+    }
+
 }

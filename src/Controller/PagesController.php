@@ -45,6 +45,7 @@ class PagesController extends AppController
         // Renderiza automáticamente templates/Pages/home.php
         return null;
     }
+    
 
     /**
      * Displays a view
@@ -79,9 +80,18 @@ class PagesController extends AppController
      */
     public function display(string ...$path): ?Response
     {
-        if (!$path) {
+        /**if (!$path) {
             return $this->redirect('/');
         }
+        */
+
+        if (!$path) {
+            return $this->redirect([
+                'controller' => 'Home',
+                'action' => 'index',
+            ]);
+        }
+
 
         if (in_array('..', $path, true) || in_array('.', $path, true)) {
             throw new ForbiddenException();

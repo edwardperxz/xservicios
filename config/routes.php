@@ -50,24 +50,7 @@ return function (RouteBuilder $routes): void {
             '/xserv-usuarios/register',
             ['controller' => 'XservUsuarios', 'action' => 'register']
         );
-
-        $builder->connect(
-            '/xserv-usuarios/ver/:id',
-            ['controller' => 'XservUsuarios', 'action' => 'view'],
-            ['pass' => ['id'], 'id' => '\d+']
-        );
-
-        $builder->connect(
-            '/xserv-usuarios/agregar',
-            ['controller' => 'XservUsuarios', 'action' => 'add']
-        );
-
-        $builder->connect(
-            '/xserv-usuarios/editar/:id',
-            ['controller' => 'XservUsuarios', 'action' => 'edit'],
-            ['pass' => ['id'], 'id' => '\d+']
-        );
-
+        
         // Fallbacks (solo para desarrollo)
         $builder->fallbacks();
     });

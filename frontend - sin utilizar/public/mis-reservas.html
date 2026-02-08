@@ -33,7 +33,7 @@ const reservasData: Reserva[] = [
   // Futuras reservas
   {
     id: "RES-2026-001",
-    imagenDestino: "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=400&h=300&fit=crop",
+    imagenDestino: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Bocas_del_Toro_Panama.jpg/800px-Bocas_del_Toro_Panama.jpg",
     origen: "David, Chiriquí",
     destino: "Bocas del Toro",
     fecha: "2026-02-20",
@@ -59,9 +59,9 @@ const reservasData: Reserva[] = [
   },
   {
     id: "RES-2026-002",
-    imagenDestino: "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=400&h=300&fit=crop",
+    imagenDestino: "https://upload.wikimedia.org/wikipedia/commons/4/49/Jedna_z_wyspek_archipelagu_San_Blas_w_Panamie.jpg",
     origen: "Ciudad de Panamá",
-    destino: "San Blas",
+    destino: "Islas de San Blas",
     fecha: "2026-02-25",
     hora: "06:00",
     duracion: "4h 00min",
@@ -86,7 +86,7 @@ const reservasData: Reserva[] = [
   // Reservas actuales (esta semana)
   {
     id: "RES-2026-003",
-    imagenDestino: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
+    imagenDestino: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Telephoto_shot_of_Volcan_Baru_as_seen_from_the_town_of_Volcan.jpg/800px-Telephoto_shot_of_Volcan_Baru_as_seen_from_the_town_of_Volcan.jpg",
     origen: "David, Chiriquí",
     destino: "Volcán Barú",
     fecha: "2026-02-06",
@@ -112,9 +112,9 @@ const reservasData: Reserva[] = [
   },
   {
     id: "RES-2026-004",
-    imagenDestino: "https://images.unsplash.com/photo-1551918120-9739cb430c6d?w=400&h=300&fit=crop",
+    imagenDestino: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Los_Cangilones_de_Gualaca.png/800px-Los_Cangilones_de_Gualaca.png",
     origen: "Boquete",
-    destino: "Cangilones de Gualaca",
+    destino: "Los Cangilones de Gualaca",
     fecha: "2026-02-08",
     hora: "08:00",
     duracion: "45min",
@@ -139,9 +139,9 @@ const reservasData: Reserva[] = [
   // Historial de reservas
   {
     id: "RES-2026-005",
-    imagenDestino: "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=400&h=300&fit=crop",
+    imagenDestino: "https://upload.wikimedia.org/wikipedia/commons/4/4c/Boca_Chica_Chiriqu%C3%ADpma.jpg",
     origen: "David, Chiriquí",
-    destino: "Isla Bolaños",
+    destino: "Isla Bolaños, Boca Chica",
     fecha: "2026-01-15",
     hora: "07:00",
     duracion: "2h 30min",
@@ -165,9 +165,9 @@ const reservasData: Reserva[] = [
   },
   {
     id: "RES-2026-006",
-    imagenDestino: "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=400&h=300&fit=crop",
+    imagenDestino: "https://upload.wikimedia.org/wikipedia/commons/9/9f/Playa_Blanca_Resort.jpg",
     origen: "Ciudad de Panamá",
-    destino: "Playa Blanca",
+    destino: "Playa Blanca, Coclé",
     fecha: "2026-01-10",
     hora: "09:00",
     duracion: "1h 30min",
@@ -191,9 +191,9 @@ const reservasData: Reserva[] = [
   },
   {
     id: "RES-2026-007",
-    imagenDestino: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
+    imagenDestino: "https://upload.wikimedia.org/wikipedia/commons/5/56/DirkvdM_sendero_quetzales.jpg",
     origen: "Boquete",
-    destino: "Sendero Los Quetzales",
+    destino: "Sendero Los Quetzales, Volcán",
     fecha: "2025-12-28",
     hora: "06:30",
     duracion: "2h 00min",
@@ -217,9 +217,9 @@ const reservasData: Reserva[] = [
   },
   {
     id: "RES-2026-008",
-    imagenDestino: "https://images.unsplash.com/photo-1551918120-9739cb430c6d?w=400&h=300&fit=crop",
+    imagenDestino: "https://upload.wikimedia.org/wikipedia/commons/7/76/Playas_Las_Lajas_Chiriqui.jpg",
     origen: "David, Chiriquí",
-    destino: "Playa Las Lajas",
+    destino: "Playa Las Lajas, Chiriquí",
     fecha: "2025-12-20",
     hora: "10:00",
     duracion: "1h 15min",
@@ -288,25 +288,13 @@ export default function MisReservasPage() {
 
   return (
     <>
-      <style jsx>{`
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
         * {
           margin: 0;
           padding: 0;
           box-sizing: border-box;
-        }
-
-        :root {
-          --gold: #c9a962;
-          --gold-light: #d4b978;
-          --gold-dark: #a88b4a;
-          --dark-bg: #0a0a0a;
-          --dark-deep: #050505;
-          --dark-card: #1a1a1a;
-          --dark-lighter: #2a2a2a;
-          --text-white: #ffffff;
-          --text-gray: #a0a0a0;
-          --green: #2d7a5f;
-          --green-hover: #236349;
         }
 
         .page-container {
@@ -943,8 +931,6 @@ export default function MisReservasPage() {
           }
         }
       `}</style>
-
-      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
       <div className="page-container">
         {/* Header Principal */}

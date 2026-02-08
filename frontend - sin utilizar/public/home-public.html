@@ -17,23 +17,7 @@ export default function HomePublicPage() {
       box-sizing: border-box;
     }
 
-    :root {
-      --gold: #c9a962;
-      --gold-light: #d4b978;
-      --gold-dark: #a88b4a;
-      --dark-bg: #0a0a0a;
-      --dark-deep: #050505;
-      --dark-card: #1a1a1a;
-      --dark-lighter: #2a2a2a;
-      --text-white: #ffffff;
-      --text-gray: #a0a0a0;
-      --text-dark: #1a1a1a;
-      --green: #2d7a5f;
-      --green-hover: #236349;
-      --cream: #f5f0e8;
-    }
-
-    body {
+    .xpage {
       font-family: 'Inter', sans-serif;
       background-color: var(--dark-deep);
       color: var(--text-white);
@@ -730,7 +714,7 @@ export default function HomePublicPage() {
     }
   </style>
 </head>
-<body>
+<body class="xpage">
   <!-- Header -->
   <header class="header">
     <div class="logo">
@@ -798,21 +782,21 @@ export default function HomePublicPage() {
 
   <!-- Hero Section -->
   <section class="hero-section">
-    <img src="https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=1920&h=1080&fit=crop" alt="Bocas del Toro" class="hero-image">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Bocas_del_Toro_Panama.jpg/1920px-Bocas_del_Toro_Panama.jpg" alt="Bocas del Toro, Panamá" class="hero-image">
     <div class="hero-overlay"></div>
     
     <div class="hero-content">
-      <h1 class="hero-title">VISITA<br><span>BOCAS DEL TORO</span></h1>
+      <h1 class="hero-title">VISITA<br><span>PLAYA ESTRELLA</span></h1>
       
       <div class="hero-descriptions">
         <p class="hero-desc">
-          <strong>Bocas del Toro</strong> es un archipiélago paradisíaco ubicado en el Caribe panameño, conocido por sus aguas cristalinas de tonos turquesa y su exuberante biodiversidad marina y terrestre.
+          <strong>Playa Estrella</strong> en Bocas del Toro es famosa por sus estrellas de mar que descansan en aguas cristalinas y su arena dorada rodeada de cocoteros caribeños. Un destino imperdible de Panamá.
         </p>
         <p class="hero-desc">
-          Sus islas ofrecen <strong>playas vírgenes</strong>, manglares y una cultura caribeña única que fusiona tradiciones afroantillanas e indígenas, creando una experiencia auténtica e inolvidable.
+          Ubicada en la <strong>Isla Colón</strong>, esta playa es un refugio de tranquilidad donde puedes nadar junto a estrellas de mar y disfrutar del entorno tropical más hermoso del Caribe panameño.
         </p>
         <p class="hero-desc">
-          Desde el avistamiento de <strong>delfines y estrellas de mar</strong> hasta el surf en Playa Bluff, Bocas del Toro es el destino perfecto para los amantes de la naturaleza y la aventura.
+          Con aguas poco profundas y un <strong>paisaje de postal</strong>, Playa Estrella ofrece una experiencia relajante ideal para familias, parejas y amantes de la naturaleza por igual.
         </p>
       </div>
       
@@ -839,34 +823,34 @@ export default function HomePublicPage() {
     
     <div class="destinations-grid">
       <div class="destination-card">
-        <img src="https://images.unsplash.com/photo-1567597243073-3c64c4c75de3?w=400&h=500&fit=crop" alt="Boca Chica">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Bocas_del_Toro_Panama.jpg/800px-Bocas_del_Toro_Panama.jpg" alt="Bocas del Toro, Panamá">
         <div class="destination-overlay">
           <div class="destination-rank">1er lugar</div>
-          <div class="destination-name">Boca Chica</div>
+          <div class="destination-name">Bocas del Toro</div>
         </div>
       </div>
       
       <div class="destination-card">
-        <img src="https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=400&h=500&fit=crop" alt="Cangilones de Gualaca">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Casco_Antiguo_%28San_Felipe%29_-_Pamama.jpg/800px-Casco_Antiguo_%28San_Felipe%29_-_Pamama.jpg" alt="Casco Viejo, Ciudad de Panamá">
         <div class="destination-overlay">
           <div class="destination-rank">2do lugar</div>
-          <div class="destination-name">Los Cangilones de Gualaca</div>
+          <div class="destination-name">Ciudad de Panamá</div>
         </div>
       </div>
       
       <div class="destination-card">
-        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=500&fit=crop" alt="Volcán Barú">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/49/Jedna_z_wyspek_archipelagu_San_Blas_w_Panamie.jpg" alt="Islas de San Blas, Panamá">
         <div class="destination-overlay">
           <div class="destination-rank">3er lugar</div>
-          <div class="destination-name">Volcán Barú</div>
+          <div class="destination-name">Islas de San Blas</div>
         </div>
       </div>
       
       <div class="destination-card">
-        <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=500&fit=crop" alt="San Blas">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Miraflores_Locks_Panama_canal_2.jpg/800px-Miraflores_Locks_Panama_canal_2.jpg" alt="Canal de Panamá, Esclusas de Miraflores">
         <div class="destination-overlay">
           <div class="destination-rank">4to lugar</div>
-          <div class="destination-name">Islas de San Blas</div>
+          <div class="destination-name">Canal de Panamá</div>
         </div>
       </div>
     </div>
@@ -990,19 +974,19 @@ export default function HomePublicPage() {
       
       <div class="travel-images">
         <div class="travel-image-card">
-          <img src="https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=400&h=600&fit=crop" alt="Playa Panamá">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Cayos_Holandeses_-_Guna_Yala_-_San_Blas_-_Panam%C3%A1_.jpg/800px-Cayos_Holandeses_-_Guna_Yala_-_San_Blas_-_Panam%C3%A1_.jpg" alt="San Blas, Guna Yala, Panamá">
           <div class="play-button">
             <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           </div>
         </div>
         <div class="travel-image-card">
-          <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=400&h=280&fit=crop" alt="Costa panameña">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Miraflores_Locks_Panama_canal_2.jpg/800px-Miraflores_Locks_Panama_canal_2.jpg" alt="Canal de Panamá">
           <div class="play-button">
             <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           </div>
         </div>
         <div class="travel-image-card">
-          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=280&fit=crop" alt="Playa tropical">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Bocas_del_Toro_Panama.jpg/800px-Bocas_del_Toro_Panama.jpg" alt="Bocas del Toro, Panamá">
           <div class="play-button">
             <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           </div>

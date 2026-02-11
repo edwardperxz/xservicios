@@ -30,7 +30,6 @@
                     echo $this->Form->control('punto_recogida');
                     echo $this->Form->control('punto_destino');
                     echo $this->Form->control('observaciones');
-                    echo $this->Form->control('estado_pago');
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>

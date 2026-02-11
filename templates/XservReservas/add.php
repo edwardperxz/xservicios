@@ -27,7 +27,6 @@
                     echo $this->Form->control('hora');
                     echo $this->Form->control('pasajeros');
                     echo $this->Form->control('precio_pactado');
-                    echo $this->Form->control('itbms_pactado');
                     echo $this->Form->control('punto_recogida');
                     echo $this->Form->control('punto_destino');
                     echo $this->Form->control('observaciones');

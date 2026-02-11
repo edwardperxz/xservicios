@@ -33,8 +33,6 @@
                     echo $this->Form->control('observaciones');
                     echo $this->Form->control('estado');
                     echo $this->Form->control('estado_pago');
-                    echo $this->Form->control('created_at');
-                    echo $this->Form->control('updated_at');
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>

@@ -29,6 +29,7 @@ $this->layout = 'login';
                     'label' => false,
                     'placeholder' => 'Nombre de Usuario',
                     'required' => true,
+                    'autocomplete' => 'username',
                     'templates' => ['inputContainer' => '{{content}}']
                 ]) ?>
             </div>
@@ -42,6 +43,7 @@ $this->layout = 'login';
                     'type' => 'email',
                     'placeholder' => 'Correo Electrónico',
                     'required' => true,
+                    'autocomplete' => 'email',
                     'templates' => ['inputContainer' => '{{content}}']
                 ]) ?>
             </div>
@@ -54,6 +56,7 @@ $this->layout = 'login';
                     'label' => false,
                     'placeholder' => 'Contraseña',
                     'required' => true,
+                    'autocomplete' => 'new-password',
                     'templates' => ['inputContainer' => '{{content}}']
                 ]) ?>
             </div>

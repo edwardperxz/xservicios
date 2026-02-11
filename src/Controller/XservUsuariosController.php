@@ -43,7 +43,7 @@ class XservUsuariosController extends AppController
         $result = $this->Authentication->getResult();
 
         if ($result->isValid()) {
-            return $this->redirect('/');
+            return $this->redirect(['controller' => 'Home', 'action' => 'index']);
         }
 
         if ($this->request->is('post') && !$result->isValid()) {
@@ -97,6 +97,39 @@ class XservUsuariosController extends AppController
 
         // Para admin u operador, puedes mostrar profile normal
         $this->set(compact('user'));
+    }
+
+    public function me(): ?Response
+    {
+        $this->Authorization->skipAuthorization();
+
+        $user = $this->Authentication->getIdentity();
+        if (!$user) {
+            if ($this->request->is('json') || $this->request->getHeader('X-Requested-With') === 'XMLHttpRequest') {
+                $this->response = $this->response->withType('application/json')->withStatus(401);
+                return $this->response->withStringBody(json_encode([
+                    'success' => false,
+                    'message' => 'No autenticado',
+                ]));
+            }
+
+            return $this->redirect(['action' => 'login']);
+        }
+
+        if ($this->request->is('json') || $this->request->getHeader('X-Requested-With') === 'XMLHttpRequest') {
+            $this->response = $this->response->withType('application/json');
+            return $this->response->withStringBody(json_encode([
+                'success' => true,
+                'user' => [
+                    'id' => $user->id ?? null,
+                    'username' => $user->username ?? null,
+                    'nombre' => $user->nombre ?? null,
+                    'rol' => $user->rol ?? null,
+                ],
+            ]));
+        }
+
+        return $this->redirect(['action' => 'profile']);
     }
 
 

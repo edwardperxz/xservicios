@@ -174,7 +174,7 @@ return [
      * - `traceFormat` - when logging errors, List of `'array'`, `'points'`, `'shortPoints'`, defaults to `shortPoints`.
      */
     'Error' => [
-        'errorLevel' => E_ALL,
+        'errorLevel' => E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED,
         'skipLog' => [],
         'log' => true,
         'trace' => true,

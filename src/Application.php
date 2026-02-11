@@ -135,7 +135,19 @@ class Application extends BaseApplication implements
             'queryParam' => 'redirect',
         ]);
 
-        $service->loadIdentifier('Authentication.Password', [
+        // Load authenticators first, then identifier
+        $service->loadAuthenticator('Authentication.Session');
+        
+        $service->loadAuthenticator('Authentication.Form', [
+            'fields' => [
+                'username' => 'username',
+                'password' => 'password',
+            ],
+            'loginUrl' => '/xserv-usuarios/login',
+        ]);
+
+        // Load the password identifier with ORM resolver
+        $passwordIdentifier = $service->identifiers()->load('Authentication.Password', [
             'fields' => [
                 'username' => 'username',
                 'password' => 'password',
@@ -145,16 +157,6 @@ class Application extends BaseApplication implements
                 'userModel' => 'XservUsuarios',
             ],
         ]);
-
-        $service->loadAuthenticator('Authentication.Form', [
-            'fields' => [
-                'username' => 'username',
-                'password' => 'password',
-            ],
-            'loginUrl' => '/xserv-usuarios/login',
-        ]);
-
-        $service->loadAuthenticator('Authentication.Session');
 
         return $service;
     }

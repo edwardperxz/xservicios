@@ -17,8 +17,17 @@ class XservServiciosController extends AppController
      */
     public function index()
     {
+        $this->Authorization->skipAuthorization();
+
         $query = $this->XservServicios->find();
         $xservServicios = $this->paginate($query);
+
+        if ($this->request->is('json') || $this->request->getHeader('X-Requested-With') === 'XMLHttpRequest') {
+            $this->response = $this->response->withType('application/json');
+            return $this->response->withStringBody(json_encode([
+                'xservServicios' => $xservServicios->toArray(),
+            ]));
+        }
 
         $this->set(compact('xservServicios'));
     }
@@ -32,6 +41,8 @@ class XservServiciosController extends AppController
      */
     public function view(?string $id = null)
     {
+        $this->Authorization->skipAuthorization();
+
         $xservServicio = $this->XservServicios->get($id, contain: []);
         $this->set(compact('xservServicio'));
     }

@@ -20,8 +20,16 @@ class XservReservasController extends AppController
         $this->Authorization->skipAuthorization();
         
         $query = $this->XservReservas->find()
-            ->contain(['Clientes', 'Servicios', 'Rutas']);
+            ->contain(['XservClientes', 'XservServicios', 'XservRutas', 'XservChoferes', 'XservVehiculos']);
         $xservReservas = $this->paginate($query);
+
+        // Si es una petición JSON/AJAX
+        if ($this->request->is('json') || $this->request->getHeader('X-Requested-With') === 'XMLHttpRequest') {
+            $this->response = $this->response->withType('application/json');
+            return $this->response->withStringBody(json_encode([
+                'xservReservas' => $xservReservas->toArray()
+            ]));
+        }
 
         $this->set(compact('xservReservas'));
     }

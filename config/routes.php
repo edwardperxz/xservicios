@@ -34,6 +34,10 @@ return function (RouteBuilder $routes): void {
         $builder->connect('/panel/operador', ['controller' => 'Dashboard', 'action' => 'operadorPanel']);
         $builder->connect('/panel/chofer', ['controller' => 'Dashboard', 'action' => 'choferPanel']);
 
+        //Ruta para crear las reservas
+        $builder->connect('/reservations', ['controller' => 'XservReservas', 'action' => 'reservations']);
+
+
         // ==============================
         // XservUsuarios
         // ==============================

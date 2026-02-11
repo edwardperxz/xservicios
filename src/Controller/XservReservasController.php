@@ -74,6 +74,33 @@ class XservReservasController extends AppController
         $this->set(compact('xservReserva', 'clientes', 'servicios', 'rutas'));
     }
 
+    public function reservations()
+    {
+        $this->Authorization->skipAuthorization();
+        $xservReserva = $this->XservReservas->newEmptyEntity();
+        if ($this->request->is('post')) {
+
+            $xservReserva = $this->XservReservas->patchEntity(
+                $xservReserva,
+                $this->request->getData()
+            );
+
+            if ($this->XservReservas->save($xservReserva)) {
+                $this->Flash->success('Reserva creada');
+                return $this->redirect(['action' => 'index']);
+            }
+
+            $this->Flash->error('Error al guardar');
+        }
+
+        $clientes = $this->XservReservas->Clientes->find('list');
+        $servicios = $this->XservReservas->Servicios->find('list');
+        $rutas = $this->XservReservas->Rutas->find('list');
+
+        $this->set(compact('xservReserva','clientes','servicios','rutas'));
+    }
+
+
     /**
      * Edit method
      *

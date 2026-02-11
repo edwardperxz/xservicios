@@ -1,0 +1,605 @@
+"use client";
+
+import { useState } from "react";
+
+interface Solicitud {
+  id: string;
+  cliente: {
+    nombre: string;
+    avatar: string;
+    telefono: string;
+    miembroDesde: string;
+  };
+  viaje: {
+    origen: string;
+    destino: string;
+    fecha: string;
+    hora: string;
+    bus: string;
+    placaBus: string;
+    monto: number;
+    tiempoEstimado: string;
+    pasajeros: number;
+    notas: string;
+  };
+}
+
+interface HistorialViaje {
+  id: string;
+  cliente: string;
+  avatarCliente: string;
+  origen: string;
+  destino: string;
+  fecha: string;
+  hora: string;
+  monto: number;
+  estado: "completado" | "cancelado";
+  duracionReal: string;
+}
+
+interface Valoracion {
+  id: string;
+  cliente: string;
+  avatarCliente: string;
+  viaje: string;
+  fecha: string;
+  estrellas: number;
+  comentario: string;
+  tipo: "chofer" | "bus" | "servicio";
+}
+
+export default function HomeChoferPage() {
+  const [seccionActiva, setSeccionActiva] = useState<"solicitudes" | "historial" | "valoraciones">("solicitudes");
+  const [solicitudExpandida, setSolicitudExpandida] = useState<string | null>(null);
+  const [historialExpandido, setHistorialExpandido] = useState<string | null>(null);
+
+  const [solicitudes, setSolicitudes] = useState<Solicitud[]>([
+    {
+      id: "sol1",
+      cliente: { nombre: "María González", avatar: "MG", telefono: "+507 6543-2100", miembroDesde: "Enero 2025" },
+      viaje: { origen: "David, Chiriquí", destino: "Bocas del Toro", fecha: "2026-02-20", hora: "07:00", bus: "Coaster Premium", placaBus: "CH-4521", monto: 85, tiempoEstimado: "4h 30min", pasajeros: 3, notas: "Llevaremos equipaje grande, por favor considerar espacio." },
+    },
+    {
+      id: "sol2",
+      cliente: { nombre: "Carlos Pérez", avatar: "CP", telefono: "+507 6789-1234", miembroDesde: "Marzo 2025" },
+      viaje: { origen: "Ciudad de Panamá", destino: "Islas de San Blas", fecha: "2026-02-22", hora: "06:30", bus: "Coaster Ejecutivo", placaBus: "PA-8877", monto: 120, tiempoEstimado: "3h 15min", pasajeros: 5, notas: "Grupo familiar con niños, necesitamos parada intermedia." },
+    },
+    {
+      id: "sol3",
+      cliente: { nombre: "Ana Rodríguez", avatar: "AR", telefono: "+507 6321-7890", miembroDesde: "Julio 2025" },
+      viaje: { origen: "Boquete", destino: "Los Cangilones de Gualaca", fecha: "2026-02-18", hora: "08:00", bus: "Coaster Premium", placaBus: "CH-4521", monto: 45, tiempoEstimado: "1h 20min", pasajeros: 2, notas: "" },
+    },
+    {
+      id: "sol4",
+      cliente: { nombre: "Roberto Díaz", avatar: "RD", telefono: "+507 6555-4433", miembroDesde: "Noviembre 2025" },
+      viaje: { origen: "David, Chiriquí", destino: "Playa Las Lajas", fecha: "2026-02-25", hora: "09:00", bus: "Coaster Turístico", placaBus: "CH-6633", monto: 55, tiempoEstimado: "1h 45min", pasajeros: 4, notas: "Necesitamos sillas para niños si es posible." },
+    },
+  ]);
+
+  const historialViajes: HistorialViaje[] = [
+    { id: "h1", cliente: "María González", avatarCliente: "MG", origen: "David, Chiriquí", destino: "Bocas del Toro", fecha: "2026-02-05", hora: "07:00", monto: 85, estado: "completado", duracionReal: "4h 20min" },
+    { id: "h2", cliente: "Luis Martínez", avatarCliente: "LM", origen: "Boquete", destino: "Volcán Barú", fecha: "2026-02-01", hora: "05:00", monto: 60, estado: "completado", duracionReal: "2h 10min" },
+    { id: "h3", cliente: "Sofía Chen", avatarCliente: "SC", origen: "Ciudad de Panamá", destino: "Playa Blanca, Coclé", fecha: "2026-01-28", hora: "08:30", monto: 95, estado: "completado", duracionReal: "1h 50min" },
+    { id: "h4", cliente: "Pedro Ruiz", avatarCliente: "PR", origen: "David, Chiriquí", destino: "Isla Bolaños", fecha: "2026-01-25", hora: "06:00", monto: 110, estado: "cancelado", duracionReal: "-" },
+    { id: "h5", cliente: "Carmen Vega", avatarCliente: "CV", origen: "Boquete", destino: "Sendero Los Quetzales", fecha: "2026-01-20", hora: "06:30", monto: 40, estado: "completado", duracionReal: "1h 05min" },
+  ];
+
+  const valoraciones: Valoracion[] = [
+    { id: "v1", cliente: "María González", avatarCliente: "MG", viaje: "David -> Bocas del Toro", fecha: "2026-02-06", estrellas: 5, comentario: "Excelente chofer, muy puntual y amable. Conoce muy bien las rutas y nos hizo sentir seguros durante todo el viaje.", tipo: "chofer" },
+    { id: "v2", cliente: "Sofía Chen", avatarCliente: "SC", viaje: "Panamá -> Playa Blanca", fecha: "2026-01-29", estrellas: 4, comentario: "Buen servicio, solo un poco de demora al inicio pero el viaje fue cómodo.", tipo: "chofer" },
+    { id: "v3", cliente: "Carmen Vega", avatarCliente: "CV", viaje: "Boquete -> Sendero Quetzales", fecha: "2026-01-21", estrellas: 5, comentario: "Increíble experiencia, el chofer nos dio recomendaciones del lugar. Volveremos sin duda.", tipo: "chofer" },
+    { id: "v4", cliente: "Luis Martínez", avatarCliente: "LM", viaje: "Boquete -> Volcán Barú", fecha: "2026-02-02", estrellas: 5, comentario: "", tipo: "chofer" },
+    { id: "v5", cliente: "Ana Torres", avatarCliente: "AT", viaje: "David -> Boca Chica", fecha: "2026-01-15", estrellas: 3, comentario: "El viaje estuvo bien, pero el aire acondicionado no funcionaba correctamente.", tipo: "bus" },
+  ];
+
+  const aceptarSolicitud = (id: string) => {
+    setSolicitudes(solicitudes.filter((s) => s.id !== id));
+    setSolicitudExpandida(null);
+  };
+
+  const rechazarSolicitud = (id: string) => {
+    setSolicitudes(solicitudes.filter((s) => s.id !== id));
+    setSolicitudExpandida(null);
+  };
+
+  const formatearFecha = (fecha: string) => {
+    const d = new Date(fecha + "T12:00:00");
+    return d.toLocaleDateString("es-PA", { weekday: "short", day: "numeric", month: "short", year: "numeric" });
+  };
+
+  const promedioEstrellas = () => {
+    const total = valoraciones.reduce((sum, v) => sum + v.estrellas, 0);
+    return (total / valoraciones.length).toFixed(1);
+  };
+
+  return (
+    <div
+      className="chofer-home-page"
+      style={{ fontFamily: "'Inter', sans-serif", backgroundColor: "#050505", color: "#ffffff", minHeight: "100vh" }}
+    >
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+        .chofer-home-page, .chofer-home-page * { box-sizing: border-box; }
+        .chofer-home-page { font-family: 'Inter', sans-serif; background-color: var(--dark-deep); color: var(--text-white); min-height: 100vh; }
+
+        .header { display: flex; align-items: center; padding: 1rem 2.5rem; background: linear-gradient(to bottom, rgba(10,10,10,0.98), rgba(5,5,5,0.95)); border-bottom: 1px solid rgba(201,169,98,0.3); position: sticky; top: 0; z-index: 100; }
+        .logo { display: flex; align-items: center; gap: 0; flex-shrink: 0; }
+        .logo-x { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: var(--gold); text-shadow: 0 0 10px rgba(201,169,98,0.5); }
+        .logo-text { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 600; color: var(--text-white); letter-spacing: 0.5px; }
+        .nav-menu { display: flex; align-items: center; gap: 2rem; margin-left: 4rem; margin-right: 4rem; }
+        .nav-item { display: flex; align-items: center; gap: 0.4rem; color: var(--text-gray); text-decoration: none; font-size: 0.85rem; transition: color 0.3s; white-space: nowrap; cursor: pointer; }
+        .nav-item:hover { color: var(--gold); }
+        .nav-icon { width: 16px; height: 16px; stroke: currentColor; fill: none; flex-shrink: 0; }
+        .user-actions { display: flex; align-items: center; gap: 1.25rem; margin-left: auto; }
+        .notification-icon { cursor: pointer; transition: color 0.3s; position: relative; }
+        .notification-icon svg { width: 18px; height: 18px; stroke: var(--text-gray); fill: none; }
+        .notification-icon:hover svg { stroke: var(--gold); }
+        .notification-badge { position: absolute; top: -4px; right: -4px; width: 16px; height: 16px; background: #e74c3c; border-radius: 50%; font-size: 0.6rem; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; }
+        .user-profile { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 0.4rem 0.75rem; background: rgba(201,169,98,0.1); border-radius: 25px; transition: background 0.3s; }
+        .user-profile:hover { background: rgba(201,169,98,0.2); }
+        .user-avatar-header { width: 28px; height: 28px; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 600; color: var(--dark-bg); }
+        .user-name { color: var(--text-white); font-size: 0.85rem; }
+        .driver-badge { background: var(--gold); color: var(--dark-bg); font-size: 0.6rem; font-weight: 700; padding: 2px 6px; border-radius: 10px; margin-left: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .dropdown-icon { width: 14px; height: 14px; stroke: var(--text-gray); fill: none; }
+
+        .sub-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 2.5rem; background: var(--dark-card); border-bottom: 1px solid var(--dark-lighter); }
+        .section-tabs { display: flex; align-items: center; gap: 0.5rem; flex: 1; }
+        .section-tab { display: flex; align-items: center; gap: 0.5rem; color: var(--text-gray); background: transparent; border: 1px solid transparent; padding: 0.6rem 1.25rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-family: 'Inter', sans-serif; transition: all 0.3s; }
+        .section-tab:hover { color: var(--gold); background: rgba(201,169,98,0.08); }
+        .section-tab.active { color: var(--gold); background: rgba(201,169,98,0.15); border-color: rgba(201,169,98,0.3); }
+        .section-tab svg { width: 16px; height: 16px; stroke: currentColor; fill: none; }
+        .tab-count { background: rgba(201,169,98,0.2); color: var(--gold); font-size: 0.7rem; font-weight: 700; padding: 2px 7px; border-radius: 10px; margin-left: 4px; }
+        .tab-count.red { background: rgba(231,76,60,0.2); color: #e74c3c; }
+
+        .stats-bar { display: flex; gap: 1.5rem; padding: 1rem 2.5rem; background: rgba(201,169,98,0.04); border-bottom: 1px solid rgba(201,169,98,0.08); }
+        .stat-item { display: flex; align-items: center; gap: 0.5rem; }
+        .stat-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .stat-icon svg { width: 16px; height: 16px; fill: none; }
+        .stat-icon.gold { background: rgba(201,169,98,0.15); }
+        .stat-icon.gold svg { stroke: var(--gold); }
+        .stat-icon.green { background: rgba(45,122,95,0.15); }
+        .stat-icon.green svg { stroke: var(--green); }
+        .stat-icon.blue { background: rgba(52,152,219,0.15); }
+        .stat-icon.blue svg { stroke: #3498db; }
+        .stat-label { font-size: 0.7rem; color: var(--text-gray); }
+        .stat-value { font-size: 0.95rem; font-weight: 600; color: var(--text-white); }
+
+        .main-content { padding: 1.5rem 2.5rem; }
+
+        /* Solicitud Card */
+        .solicitud-card { background: var(--dark-card); border: 1px solid var(--dark-lighter); border-radius: 12px; margin-bottom: 1rem; overflow: hidden; transition: all 0.3s; }
+        .solicitud-card:hover { border-color: rgba(201,169,98,0.3); }
+        .solicitud-row { display: flex; align-items: center; padding: 1rem 1.25rem; cursor: pointer; gap: 1rem; }
+        .cliente-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 700; color: var(--dark-bg); flex-shrink: 0; border: 2px solid rgba(201,169,98,0.3); }
+        .cliente-info { display: flex; flex-direction: column; min-width: 130px; }
+        .cliente-nombre { font-size: 0.9rem; font-weight: 600; color: var(--text-white); }
+        .cliente-miembro { font-size: 0.7rem; color: var(--text-gray); margin-top: 2px; }
+        .viaje-preview { display: flex; align-items: center; gap: 0.75rem; flex: 1; justify-content: center; }
+        .viaje-lugar { font-size: 0.85rem; color: var(--text-white); font-weight: 500; text-align: center; max-width: 150px; }
+        .viaje-flecha { display: flex; align-items: center; gap: 0.3rem; color: var(--gold); flex-shrink: 0; }
+        .viaje-flecha-line { width: 40px; height: 2px; background: linear-gradient(to right, var(--gold-dark), var(--gold)); border-radius: 2px; }
+        .viaje-flecha svg { width: 18px; height: 18px; stroke: var(--gold); fill: none; }
+        .viaje-fecha-mini { font-size: 0.75rem; color: var(--text-gray); text-align: center; margin-top: 2px; }
+        .solicitud-acciones { display: flex; gap: 0.5rem; flex-shrink: 0; }
+        .btn-aceptar { background: var(--green); color: white; border: none; padding: 0.5rem 1.25rem; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 600; font-family: 'Inter', sans-serif; transition: all 0.3s; display: flex; align-items: center; gap: 0.35rem; }
+        .btn-aceptar:hover { background: var(--green-hover); transform: translateY(-1px); }
+        .btn-aceptar svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+        .btn-rechazar { background: transparent; color: #e74c3c; border: 1px solid rgba(231,76,60,0.4); padding: 0.5rem 1.25rem; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 600; font-family: 'Inter', sans-serif; transition: all 0.3s; display: flex; align-items: center; gap: 0.35rem; }
+        .btn-rechazar:hover { background: rgba(231,76,60,0.1); border-color: #e74c3c; }
+        .btn-rechazar svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+        .expand-icon { color: var(--text-gray); transition: transform 0.3s, color 0.3s; display: flex; align-items: center; margin-left: 0.5rem; }
+        .expand-icon svg { width: 18px; height: 18px; stroke: currentColor; fill: none; }
+        .expand-icon.open { transform: rotate(180deg); color: var(--gold); }
+
+        /* Detalle Solicitud Expandida */
+        .solicitud-detalle { background: rgba(201,169,98,0.03); border-top: 1px solid var(--dark-lighter); padding: 1.5rem; animation: slideDown 0.3s ease; }
+        @keyframes slideDown { from { opacity: 0; max-height: 0; } to { opacity: 1; max-height: 800px; } }
+        .detalle-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(201,169,98,0.15); }
+        .detalle-header svg { width: 20px; height: 20px; stroke: var(--gold); fill: none; }
+        .detalle-header h3 { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--gold); font-weight: 600; }
+        .detalle-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .detalle-item { display: flex; flex-direction: column; gap: 0.25rem; padding: 0.75rem; background: rgba(0,0,0,0.2); border-radius: 8px; border: 1px solid rgba(201,169,98,0.08); }
+        .detalle-item.full-width { grid-column: 1 / -1; }
+        .detalle-label { font-size: 0.7rem; color: var(--text-gray); text-transform: uppercase; letter-spacing: 0.5px; }
+        .detalle-value { font-size: 0.9rem; color: var(--text-white); font-weight: 500; }
+        .detalle-value.gold { color: var(--gold); }
+        .detalle-value.big { font-size: 1.3rem; font-weight: 700; color: var(--gold); }
+        .detalle-ruta { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(201,169,98,0.06); border-radius: 10px; border: 1px solid rgba(201,169,98,0.12); grid-column: 1 / -1; margin-bottom: 0.25rem; }
+        .ruta-punto { display: flex; flex-direction: column; align-items: center; gap: 0.15rem; }
+        .ruta-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--gold); }
+        .ruta-dot.origen { background: var(--gold); }
+        .ruta-dot.destino { background: transparent; }
+        .ruta-nombre { font-size: 0.9rem; font-weight: 600; color: var(--text-white); }
+        .ruta-tipo { font-size: 0.65rem; color: var(--text-gray); text-transform: uppercase; letter-spacing: 0.5px; }
+        .ruta-linea { flex: 1; height: 2px; background: linear-gradient(to right, var(--gold), rgba(201,169,98,0.3), var(--gold)); position: relative; }
+        .ruta-linea::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 0; height: 0; border-left: 6px solid var(--gold); border-top: 4px solid transparent; border-bottom: 4px solid transparent; }
+        .detalle-notas { padding: 0.75rem; background: rgba(201,169,98,0.06); border-radius: 8px; border-left: 3px solid var(--gold); font-size: 0.85rem; color: var(--text-gray); font-style: italic; grid-column: 1 / -1; line-height: 1.5; }
+        .detalle-acciones { display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1rem; grid-column: 1 / -1; }
+        .btn-accion-lg { padding: 0.65rem 2rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600; font-family: 'Inter', sans-serif; transition: all 0.3s; display: flex; align-items: center; gap: 0.4rem; border: none; }
+        .btn-accion-lg svg { width: 16px; height: 16px; stroke: currentColor; fill: none; }
+        .btn-accion-lg.aceptar { background: var(--green); color: white; }
+        .btn-accion-lg.aceptar:hover { background: var(--green-hover); transform: translateY(-1px); box-shadow: 0 4px 15px rgba(45,122,95,0.3); }
+        .btn-accion-lg.rechazar { background: transparent; color: #e74c3c; border: 1px solid rgba(231,76,60,0.4); }
+        .btn-accion-lg.rechazar:hover { background: rgba(231,76,60,0.1); }
+
+        /* Historial */
+        .historial-card { background: var(--dark-card); border: 1px solid var(--dark-lighter); border-radius: 12px; margin-bottom: 0.75rem; overflow: hidden; transition: all 0.3s; }
+        .historial-card:hover { border-color: rgba(201,169,98,0.2); }
+        .historial-row { display: flex; align-items: center; padding: 1rem 1.25rem; gap: 1rem; cursor: pointer; }
+        .historial-estado { padding: 0.3rem 0.75rem; border-radius: 20px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; flex-shrink: 0; }
+        .historial-estado.completado { background: rgba(45,122,95,0.15); color: var(--green); }
+        .historial-estado.cancelado { background: rgba(231,76,60,0.15); color: #e74c3c; }
+        .historial-monto { font-size: 1rem; font-weight: 700; color: var(--gold); flex-shrink: 0; min-width: 70px; text-align: right; }
+        .historial-detalle { padding: 1rem 1.25rem; border-top: 1px solid var(--dark-lighter); background: rgba(0,0,0,0.15); display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; animation: slideDown 0.3s ease; }
+        .historial-info-item { display: flex; flex-direction: column; gap: 0.15rem; }
+        .historial-info-label { font-size: 0.65rem; color: var(--text-gray); text-transform: uppercase; letter-spacing: 0.5px; }
+        .historial-info-value { font-size: 0.85rem; color: var(--text-white); font-weight: 500; }
+
+        /* Valoraciones */
+        .valoracion-card { background: var(--dark-card); border: 1px solid var(--dark-lighter); border-radius: 12px; padding: 1.25rem; margin-bottom: 0.75rem; transition: all 0.3s; }
+        .valoracion-card:hover { border-color: rgba(201,169,98,0.2); }
+        .valoracion-top { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem; }
+        .valoracion-tipo-badge { padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+        .valoracion-tipo-badge.chofer { background: rgba(45,122,95,0.15); color: var(--green); }
+        .valoracion-tipo-badge.bus { background: rgba(52,152,219,0.15); color: #3498db; }
+        .valoracion-tipo-badge.servicio { background: rgba(201,169,98,0.15); color: var(--gold); }
+        .valoracion-estrellas { display: flex; gap: 3px; }
+        .valoracion-estrella { font-size: 1rem; }
+        .valoracion-fecha { font-size: 0.75rem; color: var(--text-gray); margin-left: auto; }
+        .valoracion-comentario { font-size: 0.85rem; color: var(--text-gray); line-height: 1.6; padding: 0.75rem; background: rgba(0,0,0,0.2); border-radius: 8px; border-left: 3px solid rgba(201,169,98,0.3); font-style: italic; }
+        .valoracion-viaje { font-size: 0.75rem; color: var(--text-gray); margin-top: 0.5rem; display: flex; align-items: center; gap: 0.35rem; }
+        .valoracion-viaje svg { width: 12px; height: 12px; stroke: var(--text-gray); fill: none; }
+
+        .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4rem 2rem; color: var(--text-gray); }
+        .empty-state svg { width: 60px; height: 60px; stroke: var(--dark-lighter); fill: none; margin-bottom: 1rem; }
+        .empty-state h3 { font-size: 1.1rem; color: var(--text-white); margin-bottom: 0.35rem; }
+        .empty-state p { font-size: 0.85rem; }
+
+        .promedio-box { display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.5rem; background: rgba(201,169,98,0.06); border: 1px solid rgba(201,169,98,0.15); border-radius: 12px; margin-bottom: 1.5rem; }
+        .promedio-numero { font-size: 2rem; font-weight: 700; color: var(--gold); font-family: 'Playfair Display', serif; }
+        .promedio-estrellas { display: flex; gap: 2px; font-size: 1.2rem; }
+        .promedio-label { font-size: 0.75rem; color: var(--text-gray); }
+        .promedio-total { font-size: 0.8rem; color: var(--text-gray); margin-left: auto; }
+      `,
+        }}
+      />
+
+      {/* Header */}
+      <header className="header">
+        <div className="logo">
+          <span className="logo-x">X</span>
+          <span className="logo-text">servicios</span>
+        </div>
+
+        <nav className="nav-menu">
+          <a className="nav-item" href="/home-chofer">
+            <svg className="nav-icon" viewBox="0 0 24 24" strokeWidth="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
+            Inicio
+          </a>
+          <a className="nav-item" href="/ver-flota">
+            <svg className="nav-icon" viewBox="0 0 24 24" strokeWidth="1.5"><rect x="1" y="3" width="15" height="13" rx="2" /><polyline points="16 8 20 8 23 11 23 16 16 16 16 3" /><circle cx="5.5" cy="18.5" r="2.5" /><circle cx="18.5" cy="18.5" r="2.5" /></svg>
+            Mi Flota
+          </a>
+          <a className="nav-item" href="#">
+            <svg className="nav-icon" viewBox="0 0 24 24" strokeWidth="1.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" /></svg>
+            Mensajes
+          </a>
+        </nav>
+
+        <div className="user-actions">
+          <div className="notification-icon">
+            <svg viewBox="0 0 24 24" strokeWidth="1.5"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 01-3.46 0" /></svg>
+            {solicitudes.length > 0 && <span className="notification-badge">{solicitudes.length}</span>}
+          </div>
+          <div className="user-profile">
+            <div className="user-avatar-header">RM</div>
+            <span className="user-name">Ricardo M.</span>
+            <span className="driver-badge">Chofer</span>
+            <svg className="dropdown-icon" viewBox="0 0 24 24" strokeWidth="2"><polyline points="6 9 12 15 18 9" /></svg>
+          </div>
+        </div>
+      </header>
+
+      {/* Sub Header con Tabs */}
+      <div className="sub-header">
+        <div className="section-tabs">
+          <button className={`section-tab ${seccionActiva === "solicitudes" ? "active" : ""}`} onClick={() => setSeccionActiva("solicitudes")}>
+            <svg viewBox="0 0 24 24" strokeWidth="1.5"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2" /><circle cx="8.5" cy="7" r="4" /><polyline points="17 11 19 13 23 9" /></svg>
+            Solicitudes
+            {solicitudes.length > 0 && <span className="tab-count red">{solicitudes.length}</span>}
+          </button>
+          <button className={`section-tab ${seccionActiva === "historial" ? "active" : ""}`} onClick={() => setSeccionActiva("historial")}>
+            <svg viewBox="0 0 24 24" strokeWidth="1.5"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+            Historial
+            <span className="tab-count">{historialViajes.length}</span>
+          </button>
+          <button className={`section-tab ${seccionActiva === "valoraciones" ? "active" : ""}`} onClick={() => setSeccionActiva("valoraciones")}>
+            <svg viewBox="0 0 24 24" strokeWidth="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
+            Valoraciones
+            <span className="tab-count">{valoraciones.length}</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Stats Bar */}
+      <div className="stats-bar">
+        <div className="stat-item">
+          <div className="stat-icon gold">
+            <svg viewBox="0 0 24 24" strokeWidth="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2" /></svg>
+          </div>
+          <div>
+            <div className="stat-label">Viajes este mes</div>
+            <div className="stat-value">12</div>
+          </div>
+        </div>
+        <div className="stat-item">
+          <div className="stat-icon green">
+            <svg viewBox="0 0 24 24" strokeWidth="1.5"><line x1="12" y1="1" x2="12" y2="23" /><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" /></svg>
+          </div>
+          <div>
+            <div className="stat-label">Ganancias del mes</div>
+            <div className="stat-value">$1,240.00</div>
+          </div>
+        </div>
+        <div className="stat-item">
+          <div className="stat-icon blue">
+            <svg viewBox="0 0 24 24" strokeWidth="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
+          </div>
+          <div>
+            <div className="stat-label">Rating promedio</div>
+            <div className="stat-value">{promedioEstrellas()} / 5.0</div>
+          </div>
+        </div>
+        <div className="stat-item">
+          <div className="stat-icon gold">
+            <svg viewBox="0 0 24 24" strokeWidth="1.5"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2" /><circle cx="8.5" cy="7" r="4" /><polyline points="17 11 19 13 23 9" /></svg>
+          </div>
+          <div>
+            <div className="stat-label">Solicitudes pendientes</div>
+            <div className="stat-value">{solicitudes.length}</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Contenido Principal */}
+      <div className="main-content">
+
+        {/* SOLICITUDES */}
+        {seccionActiva === "solicitudes" && (
+          <>
+            {solicitudes.length === 0 ? (
+              <div className="empty-state">
+                <svg viewBox="0 0 24 24" strokeWidth="1"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2" /><circle cx="8.5" cy="7" r="4" /><polyline points="17 11 19 13 23 9" /></svg>
+                <h3>No hay solicitudes pendientes</h3>
+                <p>Las nuevas solicitudes de viaje aparecerán aquí.</p>
+              </div>
+            ) : (
+              solicitudes.map((sol) => (
+                <div key={sol.id} className="solicitud-card">
+                  <div className="solicitud-row" onClick={() => setSolicitudExpandida(solicitudExpandida === sol.id ? null : sol.id)}>
+                    <div className="cliente-avatar">{sol.cliente.avatar}</div>
+                    <div className="cliente-info">
+                      <span className="cliente-nombre">{sol.cliente.nombre}</span>
+                      <span className="cliente-miembro">Miembro desde {sol.cliente.miembroDesde}</span>
+                    </div>
+                    <div className="viaje-preview">
+                      <div>
+                        <div className="viaje-lugar">{sol.viaje.origen}</div>
+                        <div className="viaje-fecha-mini">{formatearFecha(sol.viaje.fecha)}</div>
+                      </div>
+                      <div className="viaje-flecha">
+                        <div className="viaje-flecha-line" />
+                        <svg viewBox="0 0 24 24" strokeWidth="2"><polyline points="9 18 15 12 9 6" /></svg>
+                      </div>
+                      <div>
+                        <div className="viaje-lugar">{sol.viaje.destino}</div>
+                        <div className="viaje-fecha-mini">{sol.viaje.hora}</div>
+                      </div>
+                    </div>
+                    <div className="solicitud-acciones" onClick={(e) => e.stopPropagation()}>
+                      <button className="btn-aceptar" onClick={() => aceptarSolicitud(sol.id)}>
+                        <svg viewBox="0 0 24 24" strokeWidth="2"><polyline points="20 6 9 17 4 12" /></svg>
+                        Aceptar
+                      </button>
+                      <button className="btn-rechazar" onClick={() => rechazarSolicitud(sol.id)}>
+                        <svg viewBox="0 0 24 24" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                        Rechazar
+                      </button>
+                    </div>
+                    <div className={`expand-icon ${solicitudExpandida === sol.id ? "open" : ""}`}>
+                      <svg viewBox="0 0 24 24" strokeWidth="2"><polyline points="6 9 12 15 18 9" /></svg>
+                    </div>
+                  </div>
+
+                  {solicitudExpandida === sol.id && (
+                    <div className="solicitud-detalle">
+                      <div className="detalle-header">
+                        <svg viewBox="0 0 24 24" strokeWidth="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" /></svg>
+                        <h3>Detalle de la Solicitud</h3>
+                      </div>
+
+                      <div className="detalle-grid">
+                        <div className="detalle-ruta">
+                          <div className="ruta-punto">
+                            <div className="ruta-dot origen" />
+                            <span className="ruta-tipo">Origen</span>
+                            <span className="ruta-nombre">{sol.viaje.origen}</span>
+                          </div>
+                          <div className="ruta-linea" />
+                          <div className="ruta-punto">
+                            <div className="ruta-dot destino" />
+                            <span className="ruta-tipo">Destino</span>
+                            <span className="ruta-nombre">{sol.viaje.destino}</span>
+                          </div>
+                        </div>
+
+                        <div className="detalle-item">
+                          <span className="detalle-label">Fecha</span>
+                          <span className="detalle-value">{formatearFecha(sol.viaje.fecha)}</span>
+                        </div>
+                        <div className="detalle-item">
+                          <span className="detalle-label">Hora de recogida</span>
+                          <span className="detalle-value">{sol.viaje.hora}</span>
+                        </div>
+                        <div className="detalle-item">
+                          <span className="detalle-label">Bus asignado</span>
+                          <span className="detalle-value">{sol.viaje.bus}</span>
+                        </div>
+                        <div className="detalle-item">
+                          <span className="detalle-label">Placa</span>
+                          <span className="detalle-value gold">{sol.viaje.placaBus}</span>
+                        </div>
+                        <div className="detalle-item">
+                          <span className="detalle-label">Pasajeros</span>
+                          <span className="detalle-value">{sol.viaje.pasajeros} personas</span>
+                        </div>
+                        <div className="detalle-item">
+                          <span className="detalle-label">Tiempo estimado</span>
+                          <span className="detalle-value">{sol.viaje.tiempoEstimado}</span>
+                        </div>
+                        <div className="detalle-item">
+                          <span className="detalle-label">Monto total</span>
+                          <span className="detalle-value big">${sol.viaje.monto.toFixed(2)}</span>
+                        </div>
+                        <div className="detalle-item">
+                          <span className="detalle-label">Contacto cliente</span>
+                          <span className="detalle-value">{sol.cliente.telefono}</span>
+                        </div>
+
+                        {sol.viaje.notas && (
+                          <div className="detalle-notas">
+                            <strong style={{ color: "var(--gold)", fontStyle: "normal" }}>Notas del cliente: </strong>
+                            {sol.viaje.notas}
+                          </div>
+                        )}
+
+                        <div className="detalle-acciones">
+                          <button className="btn-accion-lg rechazar" onClick={() => rechazarSolicitud(sol.id)}>
+                            <svg viewBox="0 0 24 24" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                            Rechazar Solicitud
+                          </button>
+                          <button className="btn-accion-lg aceptar" onClick={() => aceptarSolicitud(sol.id)}>
+                            <svg viewBox="0 0 24 24" strokeWidth="2"><polyline points="20 6 9 17 4 12" /></svg>
+                            Aceptar Solicitud
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
+          </>
+        )}
+
+        {/* HISTORIAL */}
+        {seccionActiva === "historial" && (
+          <>
+            {historialViajes.map((viaje) => (
+              <div key={viaje.id} className="historial-card">
+                <div className="historial-row" onClick={() => setHistorialExpandido(historialExpandido === viaje.id ? null : viaje.id)}>
+                  <div className="cliente-avatar" style={{ width: 38, height: 38, fontSize: "0.75rem" }}>{viaje.avatarCliente}</div>
+                  <div className="cliente-info">
+                    <span className="cliente-nombre">{viaje.cliente}</span>
+                    <span className="cliente-miembro">{formatearFecha(viaje.fecha)}</span>
+                  </div>
+                  <div className="viaje-preview">
+                    <div className="viaje-lugar">{viaje.origen}</div>
+                    <div className="viaje-flecha">
+                      <div className="viaje-flecha-line" />
+                      <svg viewBox="0 0 24 24" strokeWidth="2" style={{ width: 16, height: 16 }}><polyline points="9 18 15 12 9 6" /></svg>
+                    </div>
+                    <div className="viaje-lugar">{viaje.destino}</div>
+                  </div>
+                  <span className={`historial-estado ${viaje.estado}`}>{viaje.estado}</span>
+                  <span className="historial-monto">${viaje.monto.toFixed(2)}</span>
+                  <div className={`expand-icon ${historialExpandido === viaje.id ? "open" : ""}`}>
+                    <svg viewBox="0 0 24 24" strokeWidth="2"><polyline points="6 9 12 15 18 9" /></svg>
+                  </div>
+                </div>
+                {historialExpandido === viaje.id && (
+                  <div className="historial-detalle">
+                    <div className="historial-info-item">
+                      <span className="historial-info-label">Hora de salida</span>
+                      <span className="historial-info-value">{viaje.hora}</span>
+                    </div>
+                    <div className="historial-info-item">
+                      <span className="historial-info-label">Duración real</span>
+                      <span className="historial-info-value">{viaje.duracionReal}</span>
+                    </div>
+                    <div className="historial-info-item">
+                      <span className="historial-info-label">Monto cobrado</span>
+                      <span className="historial-info-value" style={{ color: "var(--gold)", fontWeight: 700 }}>${viaje.monto.toFixed(2)}</span>
+                    </div>
+                    <div className="historial-info-item">
+                      <span className="historial-info-label">Origen</span>
+                      <span className="historial-info-value">{viaje.origen}</span>
+                    </div>
+                    <div className="historial-info-item">
+                      <span className="historial-info-label">Destino</span>
+                      <span className="historial-info-value">{viaje.destino}</span>
+                    </div>
+                    <div className="historial-info-item">
+                      <span className="historial-info-label">Estado</span>
+                      <span className="historial-info-value" style={{ color: viaje.estado === "completado" ? "var(--green)" : "#e74c3c", textTransform: "capitalize" }}>{viaje.estado}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </>
+        )}
+
+        {/* VALORACIONES */}
+        {seccionActiva === "valoraciones" && (
+          <>
+            <div className="promedio-box">
+              <span className="promedio-numero">{promedioEstrellas()}</span>
+              <div>
+                <div className="promedio-estrellas">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <span key={i} className="valoracion-estrella" style={{ color: i <= Math.round(Number(promedioEstrellas())) ? "#c9a962" : "#2a2a2a" }}>
+                      &#9733;
+                    </span>
+                  ))}
+                </div>
+                <span className="promedio-label">Promedio general</span>
+              </div>
+              <span className="promedio-total">{valoraciones.length} valoraciones recibidas</span>
+            </div>
+
+            {valoraciones.map((val) => (
+              <div key={val.id} className="valoracion-card">
+                <div className="valoracion-top">
+                  <div className="cliente-avatar" style={{ width: 36, height: 36, fontSize: "0.7rem" }}>{val.avatarCliente}</div>
+                  <div className="cliente-info">
+                    <span className="cliente-nombre" style={{ fontSize: "0.85rem" }}>{val.cliente}</span>
+                  </div>
+                  <span className={`valoracion-tipo-badge ${val.tipo}`}>{val.tipo}</span>
+                  <div className="valoracion-estrellas">
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <span key={i} className="valoracion-estrella" style={{ color: i <= val.estrellas ? "#c9a962" : "#2a2a2a" }}>
+                        &#9733;
+                      </span>
+                    ))}
+                  </div>
+                  <span className="valoracion-fecha">{formatearFecha(val.fecha)}</span>
+                </div>
+
+                {val.comentario && <div className="valoracion-comentario">{val.comentario}</div>}
+
+                <div className="valoracion-viaje">
+                  <svg viewBox="0 0 24 24" strokeWidth="1.5"><circle cx="12" cy="12" r="10" /><polygon points="10 8 16 12 10 16 10 8" /></svg>
+                  {val.viaje}
+                </div>
+              </div>
+            ))}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}

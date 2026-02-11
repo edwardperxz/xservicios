@@ -40,6 +40,13 @@ class XservUsuariosTable extends Table
         $this->setTable('xserv_usuarios');
         $this->setDisplayField('username');
         $this->setPrimaryKey('id');
+
+        // Asociación con choferes
+        $this->hasOne('XservChoferes', [
+            'foreignKey' => 'usuario_id',
+            'dependent' => false,
+            'className' => 'XservChoferes'
+        ]);
     }
 
     /**

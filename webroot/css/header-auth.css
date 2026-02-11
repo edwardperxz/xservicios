@@ -1,0 +1,134 @@
+:root {
+  --header-gold: #c9a962;
+  --header-gold-dark: #a88b4a;
+  --header-text-white: #ffffff;
+  --header-text-gray: #a0a0a0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2.5rem;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+  color: var(--header-text-white);
+}
+
+.logo-x {
+  color: var(--header-gold);
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--header-text-gray);
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.3s;
+}
+
+.nav-item:hover,
+.nav-item.active {
+  color: var(--header-gold);
+}
+
+.nav-icon {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.lang-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--header-text-gray);
+  font-size: 0.875rem;
+}
+
+.lang-selector span.active {
+  color: var(--header-text-white);
+}
+
+.header-icon {
+  width: 20px;
+  height: 20px;
+  stroke: var(--header-gold);
+  fill: none;
+  cursor: pointer;
+}
+
+.auth-button {
+  padding: 0.5rem 1.1rem;
+  border: 1px solid var(--header-gold);
+  border-radius: 20px;
+  color: var(--header-gold);
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+
+.auth-button:hover {
+  background: rgba(201, 169, 98, 0.15);
+}
+
+.is-hidden {
+  display: none !important;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--header-gold), var(--header-gold-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #0d0d0d;
+}
+
+.user-name {
+  font-size: 0.875rem;
+  color: var(--header-text-white);
+}

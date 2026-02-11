@@ -9,7 +9,7 @@ INSERT INTO xserv_usuarios (username, password, rol, estado) VALUES
 ('chofer_juan', 'hash_secure_456', 'chofer', 'activo');
 
 INSERT INTO xserv_choferes (usuario_id, nombre, identificacion, telefono, correo, fecha_ingreso) VALUES
-(2, 'Juan Pérez', '4-777-888', '+507 6666-0000', 'juan@xservicios.com', '2024-01-15');
+(2, 'Juan Pérez', '4-777-888', '+507 6666-0000', 'juan@xservicios.com', '2026-01-15');
 
 -- 3. Vehículos (La flota de 4 que mencionó el cliente)
 INSERT INTO xserv_vehiculos (nombre_unidad, tipo, capacidad_max, placa, estado_operativo) VALUES

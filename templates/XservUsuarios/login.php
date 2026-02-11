@@ -23,6 +23,7 @@ $this->layout = 'login';
                     'label' => false,
                     'placeholder' => 'Nombre de Usuario',
                     'required' => true,
+                    'autocomplete' => 'username',
                     'templates' => ['inputContainer' => '{{content}}']
                 ]) ?>
             </div>
@@ -35,6 +36,7 @@ $this->layout = 'login';
                     'label' => false,
                     'placeholder' => 'Contraseña',
                     'required' => true,
+                    'autocomplete' => 'current-password',
                     'templates' => ['inputContainer' => '{{content}}']
                 ]) ?>
             </div>
@@ -44,6 +46,13 @@ $this->layout = 'login';
             </div>
             
             <?= $this->Form->button('Iniciar Sesión', ['class' => 'submit-btn']) ?>
+            <div class="forgot-password register-link">
+                <a href="<?= $this->Url->build(['controller' => 'xserv-usuarios', 'action' => 'register']) ?>">
+                    ¿No tienes una cuenta? Regístrate
+                </a>
+            </div>
+
+
             
         <?= $this->Form->end() ?>
     </div>

@@ -20,6 +20,7 @@
             <fieldset>
                 <legend><?= __('Add Xserv Reserva') ?></legend>
                 <?php
+                    echo $this->Form->control('codigo_reserva');
                     echo $this->Form->control('cliente_id', ['options' => $clientes]);
                     echo $this->Form->control('servicio_id', ['options' => $servicios]);
                     echo $this->Form->control('ruta_id', ['options' => $rutas, 'empty' => true]);
@@ -27,9 +28,14 @@
                     echo $this->Form->control('hora');
                     echo $this->Form->control('pasajeros');
                     echo $this->Form->control('precio_pactado');
+                    echo $this->Form->control('itbms_pactado');
                     echo $this->Form->control('punto_recogida');
                     echo $this->Form->control('punto_destino');
                     echo $this->Form->control('observaciones');
+                    echo $this->Form->control('estado');
+                    echo $this->Form->control('estado_pago');
+                    echo $this->Form->control('created_at');
+                    echo $this->Form->control('updated_at');
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>

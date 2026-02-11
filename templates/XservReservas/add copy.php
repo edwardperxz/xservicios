@@ -20,6 +20,7 @@
             <fieldset>
                 <legend><?= __('Add Xserv Reserva') ?></legend>
                 <?php
+                    echo $this->Form->control('codigo_reserva');
                     echo $this->Form->control('cliente_id', ['options' => $clientes]);
                     echo $this->Form->control('servicio_id', ['options' => $servicios]);
                     echo $this->Form->control('ruta_id', ['options' => $rutas, 'empty' => true]);

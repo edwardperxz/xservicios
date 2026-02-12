@@ -2,12 +2,8 @@
 <html lang="es">
 <head>
   <?= $this->Html->charset() ?>
-  <?= $this->fetch('meta') ?>
-  <?= $this->fetch('css') ?>
-  <?= $this->fetch('script') ?>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nueva Reserva - Xservicios</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><?= $this->fetch('title') ?></title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     * {
@@ -767,16 +763,9 @@
 <body>
   <!-- Header Principal -->
   <header class="header"></header>
+  <?= $this->fetch('content') ?>
 
   <!-- Sub Header -->
-  <div class="sub-header">
-    <button class="back-btn" onclick="window.history.back()">
-      <svg viewBox="0 0 24 24" stroke-width="2">
-        <path d="M19 12H5" />
-        <polyline points="12 19 5 12 12 5" />
-      </svg>
-      Volver
-    </button>
 
     <nav class="sub-nav">
       <a href="/newreservation" class="sub-nav-item active" style="color: var(--gold);">
@@ -807,103 +796,6 @@
       </a>
     </nav>
   </div>
-
-  <!-- Main Content -->
-  <main class="main-content">
-    <!-- Map Section -->
-    <div class="map-section">
-      <div class="map-placeholder">
-        <div class="map-overlay" />
-        <div class="map-content">
-          <svg class="map-icon" viewBox="0 0 24 24" stroke-width="1.5">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-            <circle cx="12" cy="10" r="3" />
-          </svg>
-          <p class="map-text">Mapa Interactivo</p>
-          <p class="map-subtext">Haz clic para marcar tu destino en el mapa</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Two Columns -->
-    <div class="columns-container">
-      <!-- Left Column - Fichas -->
-      <div class="left-column">
-        <!-- Ficha Bus -->
-        <div class="ficha-placeholder" id="bus-placeholder" onclick="toggleBusFicha()">
-          <div class="ficha-plus">
-            <svg viewBox="0 0 24 24" stroke-width="2">
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-          </div>
-          <span class="ficha-label">Seleccionar Bus</span>
-        </div>
-
-        <div id="bus-ficha" style="display: none;">
-          <div class="ficha-card">
-            <button class="ficha-close" onclick="toggleBusFicha()">
-              <svg viewBox="0 0 24 24" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            </button>
-            <div class="ficha-header">
-              <span class="ficha-title">FICHA DE UNIDAD</span>
-              <span class="ficha-badge">COASTER</span>
-            </div>
-            <div class="ficha-content">
-              <img src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=150&h=150&fit=crop" alt="Bus" class="ficha-image" />
-              <div class="ficha-info">
-                <p class="ficha-name">Coaster Toyota 2006</p>
-                <p class="ficha-detail">Capacidad: <span>30 pasajeros</span></p>
-                <p class="ficha-detail">Color: <span>Blanco</span></p>
-                <p class="ficha-detail">Placa: <span>AB-1234</span></p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Ficha Chofer -->
-        <div class="ficha-placeholder" id="chofer-placeholder" onclick="toggleChoferFicha()">
-          <div class="ficha-plus">
-            <svg viewBox="0 0 24 24" stroke-width="2">
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-          </div>
-          <span class="ficha-label">Seleccionar Chofer</span>
-        </div>
-
-        <div id="chofer-ficha" style="display: none;">
-          <div class="ficha-card">
-            <button class="ficha-close" onclick="toggleChoferFicha()">
-              <svg viewBox="0 0 24 24" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            </button>
-            <div class="ficha-header">
-              <span class="ficha-title">FICHA DE CHOFER</span>
-              <span class="ficha-badge">SENIOR</span>
-            </div>
-            <div class="ficha-content">
-              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face" alt="Chofer" class="ficha-image" style="border-radius: 50%;" />
-              <div class="ficha-info">
-                <p class="ficha-name">Roberto Méndez</p>
-                <p class="ficha-detail">Experiencia: <span>12 años</span></p>
-                <p class="ficha-detail">Viajes: <span>1,450+</span></p>
-                <p class="ficha-detail">Rating: <span style="color: #c9a962;">★★★★★ 4.9</span></p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right Column - Booking Details -->
-     <?= $this->fetch('content') ?>
-    </div>
-  </main>
 
   <script src="/js/header-auth.js"></script>
   <script>
@@ -977,6 +869,5 @@
     }
   </script>
   <script src="/js/header-template.js"></script>
-  <script src="/js/header-auth.js"></script>
 </body>
 </html>

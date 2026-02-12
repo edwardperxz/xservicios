@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <?= $this->Html->charset() ?>
+  <?= $this->fetch('meta') ?>
+  <?= $this->fetch('css') ?>
+  <?= $this->fetch('script') ?>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nueva Reserva - Xservicios</title>
@@ -897,110 +901,7 @@
       </div>
 
       <!-- Right Column - Booking Details -->
-      <div class="right-column">
-        <!-- Location Inputs -->
-        <div class="location-row">
-          <div class="location-input">
-            <div class="location-label">
-              <svg viewBox="0 0 24 24" stroke-width="2">
-                <circle cx="12" cy="12" r="3" />
-                <path d="M12 2v4M12 18v4M2 12h4M18 12h4" />
-              </svg>
-              Ubicación de recogida
-            </div>
-            <input type="text" id="origen" value="David, Chiriquí" placeholder="Ingresa ubicación de origen" />
-          </div>
-          <div class="location-input">
-            <div class="location-label">
-              <svg viewBox="0 0 24 24" stroke-width="2">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
-              Ubicación de destino
-            </div>
-            <input type="text" id="destino" value="Isla Bolaños" placeholder="Ingresa ubicación de destino" />
-          </div>
-        </div>
-
-        <!-- Date Input -->
-        <div class="time-input">
-          <div class="location-label">
-            <svg viewBox="0 0 24 24" stroke-width="2">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-              <line x1="16" y1="2" x2="16" y2="6" />
-              <line x1="8" y1="2" x2="8" y2="6" />
-              <line x1="3" y1="10" x2="21" y2="10" />
-            </svg>
-            Fecha de la reserva
-          </div>
-          <input type="date" id="fecha" />
-        </div>
-
-        <!-- Duration and Time -->
-        <div class="info-row">
-          <div class="info-box">
-            <p class="info-label">Duración estimada del recorrido</p>
-            <p class="info-value" id="duracion-total">3h 25min</p>
-          </div>
-          <div class="time-input">
-            <div class="location-label">
-              <svg viewBox="0 0 24 24" stroke-width="2">
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="12 6 12 12 16 14" />
-              </svg>
-              Hora de recogida
-            </div>
-            <input type="time" id="hora" value="07:00" />
-          </div>
-        </div>
-
-        <!-- Transport Tags -->
-        <div class="transport-section">
-          <p class="transport-label">Medios de transporte incluidos</p>
-          <div class="transport-tags" id="transport-list">
-            <div class="transport-tag" data-id="1">
-              <div class="transport-tag-info">
-                <span class="transport-tag-name">Coaster</span>
-                <span class="transport-tag-price">$85 - 120min</span>
-              </div>
-              <button class="transport-tag-remove" onclick="removeTransport(1)">
-                <svg viewBox="0 0 24 24" stroke-width="2">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-              </button>
-            </div>
-            <div class="transport-tag" data-id="2">
-              <div class="transport-tag-info">
-                <span class="transport-tag-name">Taxi Acuático</span>
-                <span class="transport-tag-price">$35 - 45min</span>
-              </div>
-              <button class="transport-tag-remove" onclick="removeTransport(2)">
-                <svg viewBox="0 0 24 24" stroke-width="2">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Price -->
-        <div class="price-section">
-          <p class="price-label">Precio Total</p>
-          <p class="price-value" id="precio-total">$120.00</p>
-          <p class="price-breakdown" id="precio-desglose">Coaster + Taxi Acuático incluidos</p>
-        </div>
-
-        <!-- Agendar Button -->
-        <button class="agendar-btn" onclick="agendarReserva()">
-          <svg viewBox="0 0 24 24" stroke-width="2">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-            <polyline points="22 4 12 14.01 9 11.01" />
-          </svg>
-          Agendar Reserva
-        </button>
-      </div>
+     <?= $this->fetch('content') ?>
     </div>
   </main>
 

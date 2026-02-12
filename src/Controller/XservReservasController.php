@@ -76,6 +76,7 @@ class XservReservasController extends AppController
 
     public function reservations()
     {
+        $this->viewBuilder()->setLayout('reservations');
         $this->Authorization->skipAuthorization();
         $xservReserva = $this->XservReservas->newEmptyEntity();
         if ($this->request->is('post')) {

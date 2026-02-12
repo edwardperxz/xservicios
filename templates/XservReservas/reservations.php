@@ -14,26 +14,87 @@
             <?= $this->Html->link(__('List Xserv Reservas'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
         </div>
     </aside>
+
     <div class="column column-80">
-        <div class="xservReservas form content">
-            <?= $this->Form->create($xservReserva) ?>
-            <fieldset>
-                <legend><?= __('Add Xserv Reserva') ?></legend>
-                <?php
-                    //echo $this->Form->control('cliente_id', ['options' => $clientes]);
-                    //echo $this->Form->control('servicio_id', ['options' => $servicios]);
-                    echo $this->Form->control('ruta_id', ['options' => $rutas, 'empty' => true]);
-                    echo $this->Form->control('fecha');
-                    echo $this->Form->control('hora');
-                    echo $this->Form->control('pasajeros');
-                    echo $this->Form->control('precio_pactado');
-                    echo $this->Form->control('punto_recogida');
-                    echo $this->Form->control('punto_destino');
-                    echo $this->Form->control('observaciones');
-                ?>
-            </fieldset>
-            <?= $this->Form->button(__('Submit')) ?>
-            <?= $this->Form->end() ?>
-        </div>
+        <!-- Quote Form Section -->
+        <section class="quote-section">
+            <div class="quote-container">
+
+                <h2 class="quote-title">Solicita tu Reserva</h2>
+                <p class="quote-subtitle">Completa el formulario y espera nuestra aprobación</p>
+
+                <?= $this->Form->create($xservReserva, ['class' => 'quote-form']) ?>
+
+                <div class="form-group">
+                    <?= $this->Form->control('ruta_id', [
+                        'options' => $rutas,
+                        'empty' => true,
+                        'label' => false,
+                        'class' => 'form-control',
+                        'placeholder' => 'Selecciona la ruta'
+                    ]) ?>
+                </div>
+
+                <div class="form-group">
+                    <?= $this->Form->control('fecha', [
+                        'label' => false,
+                        'class' => 'form-control',
+                        'type' => 'date'
+                    ]) ?>
+                </div>
+
+                <div class="form-group">
+                    <?= $this->Form->control('hora', [
+                        'label' => false,
+                        'class' => 'form-control',
+                        'type' => 'time'
+                    ]) ?>
+                </div>
+
+                <div class="form-group">
+                    <?= $this->Form->control('pasajeros', [
+                        'label' => false,
+                        'class' => 'form-control',
+                        'placeholder' => 'Número de pasajeros'
+                    ]) ?>
+                </div>
+
+                <div class="form-group">
+                    <?= $this->Form->control('precio_pactado', [
+                        'label' => false,
+                        'class' => 'form-control',
+                        'placeholder' => 'Precio pactado'
+                    ]) ?>
+                </div>
+
+                <div class="form-group">
+                    <?= $this->Form->control('punto_recogida', [
+                        'label' => false,
+                        'class' => 'form-control',
+                        'placeholder' => 'Punto de recogida'
+                    ]) ?>
+                </div>
+
+                <div class="form-group">
+                    <?= $this->Form->control('punto_destino', [
+                        'label' => false,
+                        'class' => 'form-control',
+                        'placeholder' => 'Destino'
+                    ]) ?>
+                </div>
+
+                <div class="form-group">
+                    <?= $this->Form->control('observaciones', [
+                        'label' => false,
+                        'class' => 'form-control',
+                        'placeholder' => 'Observaciones'
+                    ]) ?>
+                </div>
+
+                <?= $this->Form->button(__('Solicitar Reserva'), ['class' => 'btn-primary']) ?>
+                <?= $this->Form->end() ?>
+
+            </div>
+        </section>
     </div>
 </div>

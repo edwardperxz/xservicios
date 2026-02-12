@@ -80,15 +80,11 @@ class XservReservasController extends AppController
         $this->Authorization->skipAuthorization();
         $xservReserva = $this->XservReservas->newEmptyEntity();
         if ($this->request->is('post')) {
-
-            $xservReserva = $this->XservReservas->patchEntity(
-                $xservReserva,
-                $this->request->getData()
-            );
+            $xservReserva = $this->XservReservas->patchEntity($xservReserva, $this->request->getData());
 
             if ($this->XservReservas->save($xservReserva)) {
                 $this->Flash->success('Reserva creada');
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'home']);
             }
 
             $this->Flash->error('Error al guardar');

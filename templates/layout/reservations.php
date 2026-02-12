@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
   <?= $this->Html->charset() ?>
+  <?= $this->Html->css('style') ?>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?= $this->fetch('title') ?></title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -763,8 +764,7 @@
 <body>
   <!-- Header Principal -->
   <header class="header"></header>
-  <?= $this->fetch('content') ?>
-
+  
   <!-- Sub Header -->
 
     <nav class="sub-nav">
@@ -796,6 +796,14 @@
       </a>
     </nav>
   </div>
+
+  <main class="main-content">
+      <div class="content-wrapper" style="display:flex; justify-content:center; align-items:center; min-height:80vh;">
+          <?= $this->fetch('content') ?>
+      </div>
+  </main>
+
+
 
   <script src="/js/header-auth.js"></script>
   <script>

@@ -17,6 +17,7 @@ class XservVehiculosController extends AppController
      */
     public function index()
     {
+        $this->Authorization->skipAuthorization();
         $query = $this->XservVehiculos->find();
         $xservVehiculos = $this->paginate($query);
 

@@ -87,72 +87,63 @@ class XservReservasController extends AppController
     public function reservations()
     {
         $this->Authorization->skipAuthorization();
-        $user = $this->Authentication->getIdentity();
+
+        $user = $this->Authentication->getIdentity()->getOriginalData();
         if (!$user) {
             $this->Flash->error(__('Debes iniciar sesión para reservar.'));
             return $this->redirect(['controller' => 'Users', 'action' => 'login']);
         }
 
-        $reserva = $this->XservReservas->newEmptyEntity();
+        $xservReserva = $this->XservReservas->newEmptyEntity();
 
         if ($this->request->is('post')) {
 
-            $reserva = $this->XservReservas->patchEntity($reserva, $this->request->getData());
+            $xservReserva = $this->XservReservas->patchEntity(
+                $xservReserva,
+                $this->request->getData()
+            );
 
-            $reserva->cliente_id = $user->cliente_id;
+            // validación pasajeros
+            if ($xservReserva->pasajeros > 30) {
+                $this->Flash->error('El máximo permitido es 30 pasajeros.');
+                return;
+            }
 
-            $ruta = $this->XservRutas->get($reserva->ruta_id);
-            $servicio = $this->XservServicios->get($reserva->servicio_id);
+            // datos automáticos
+            $xservReserva->cliente_id = $user->id;
+            $xservReserva->estado = 'pendiente';
+            $xservReserva->estado_pago = 'pendiente';
 
-            $reserva->precio_pactado = $ruta->precio_base + $servicio->precio_base;
-            $reserva->itbms_pactado = $reserva->precio_pactado * 0.07;
+            // cálculo precio
+            $ruta = $this->XservRutas->get($xservReserva->ruta_id);
+            $servicio = $this->XservServicios->get($xservReserva->servicio_id);
 
-            $reserva->estado = 'pendiente';
-            $reserva->estado_pago = 'pendiente';
+            $xservReserva->precio_pactado =
+                $ruta->precio_base + $servicio->precio_base;
 
-            if ($this->XservReservas->save($reserva)) {
+            $xservReserva->itbms_pactado =
+                $xservReserva->precio_pactado * 0.07;
 
-                $reserva->codigo_reserva = 'XSERV-' . str_pad($reserva->id, 4, '0', STR_PAD_LEFT);
-                $this->XservReservas->save($reserva);
 
-                $this->asignarChoferVehiculo($reserva);
-
+            $xservReserva->codigo_reserva =
+                'XSERV-' . strtoupper(substr(uniqid(), -6));
+                //debug($user);
+             // guardar reserva
+            if ($this->XservReservas->save($xservReserva)) {
+                $this->asignarChoferVehiculo($xservReserva);
                 $this->Flash->success(__('Tu reserva ha sido creada correctamente.'));
                 return $this->redirect(['action' => 'index']);
-            } else {
-                $this->Flash->error(__('No se pudo guardar la reserva. Por favor, intenta nuevamente.'));
             }
+
+            //debug($xservReserva->getErrors());
+                        $this->Flash->error(__('No se pudo guardar la reserva.'));
         }
 
-        $servicios = $this->XservServicios->find('list', ['limit' => 200])->toArray();
-        $rutas = $this->XservRutas->find('list', ['limit' => 200, 'valueField' => 'id'])->toArray();
+        $servicios = $this->XservServicios->find('list')->toArray();
+        $rutas = $this->XservRutas->find('list')->toArray();
 
-        $this->set(compact('reserva', 'servicios', 'rutas'));
+        $this->set(compact('xservReserva', 'servicios', 'rutas'));
     }
-
-    /**
-     * Método privado para asignar automáticamente chofer y vehículo disponible
-     */
-    private function asignarChoferVehiculo($reserva)
-    {
-        $choferesDisponibles = $this->XservAsignaciones->buscarChoferesDisponibles($reserva->fecha, $reserva->hora);
-        $vehiculosDisponibles = $this->XservAsignaciones->buscarVehiculosDisponibles($reserva->fecha, $reserva->hora, $reserva->pasajeros);
-
-        if (!empty($choferesDisponibles) && !empty($vehiculosDisponibles)) {
-            $asignacion = $this->XservAsignaciones->newEmptyEntity();
-            $asignacion->reserva_id = $reserva->id;
-            $asignacion->chofer_id = $choferesDisponibles[0]; // toma el primero disponible
-            $asignacion->vehiculo_id = $vehiculosDisponibles[0]; // toma el primero disponible
-            $asignacion->asignado_por_id = $this->Authentication->getIdentity()->id;
-            $asignacion->fecha_inicio_pactada = $reserva->fecha . ' ' . $reserva->hora;
-            $asignacion->fecha_fin_pactada = date('Y-m-d H:i:s', strtotime($reserva->fecha . ' ' . $reserva->hora . ' +2 hours')); // ejemplo 2 horas
-            $asignacion->estado_asignacion = 'programada';
-
-            $this->XservAsignaciones->save($asignacion);
-        }
-        // Si no hay recursos, se deja para asignación manual por operador
-    }
-
 
 
 

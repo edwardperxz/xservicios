@@ -16,7 +16,6 @@
 
                 <?= $this->Form->create($xservReserva, ['class' => 'quote-form']) ?>
 
-                <!-- Servicio -->
                 <div class="form-group">
                     <?= $this->Form->control('servicio_id', [
                         'options' => $servicios,
@@ -26,7 +25,6 @@
                     ]) ?>
                 </div>
 
-                <!-- Ruta -->
                 <div class="form-group">
                     <?= $this->Form->control('ruta_id', [
                         'options' => $rutas,
@@ -36,7 +34,6 @@
                     ]) ?>
                 </div>
 
-                <!-- Fecha y Hora -->
                 <div class="form-group">
                     <?= $this->Form->control('fecha', [
                         'type' => 'date',
@@ -53,17 +50,18 @@
                     ]) ?>
                 </div>
 
-                <!-- Cantidad de pasajeros -->
                 <div class="form-group">
-                    <?= $this->Form->control('pasajeros', [
-                        'type' => 'number',
-                        'label' => 'Número de pasajeros',
-                        'class' => 'form-control',
-                        'min' => 1
-                    ]) ?>
+                <?= $this->Form->control('pasajeros', [
+                    'type' => 'number',
+                    'label' => 'Número de pasajeros (máximo 30)',
+                    'class' => 'form-control',
+                    'min' => 1,
+                    'max' => 30,
+                    'required' => true
+                ]) ?>
                 </div>
 
-                <!-- Punto de Recogida y Destino -->
+
                 <div class="form-group">
                     <?= $this->Form->control('punto_recogida', [
                         'label' => 'Punto de recogida',
@@ -80,7 +78,6 @@
                     ]) ?>
                 </div>
 
-                <!-- Observaciones -->
                 <div class="form-group">
                     <?= $this->Form->control('observaciones', [
                         'type' => 'textarea',

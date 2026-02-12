@@ -15,6 +15,16 @@ class XservReservasController extends AppController
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->XservServicios = $this->getTableLocator()->get('XservServicios');
+        $this->XservRutas = $this->getTableLocator()->get('XservRutas');
+        $this->XservAsignaciones = $this->getTableLocator()->get('XservAsignaciones');
+
+
+    }
+
     public function index()
     {
         $this->Authorization->skipAuthorization();
@@ -76,26 +86,74 @@ class XservReservasController extends AppController
 
     public function reservations()
     {
-        $this->viewBuilder()->setLayout('reservations');
         $this->Authorization->skipAuthorization();
-        $xservReserva = $this->XservReservas->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $xservReserva = $this->XservReservas->patchEntity($xservReserva, $this->request->getData());
-
-            if ($this->XservReservas->save($xservReserva)) {
-                $this->Flash->success('Reserva creada');
-                return $this->redirect(['action' => 'home']);
-            }
-
-            $this->Flash->error('Error al guardar');
+        $user = $this->Authentication->getIdentity();
+        if (!$user) {
+            $this->Flash->error(__('Debes iniciar sesión para reservar.'));
+            return $this->redirect(['controller' => 'Users', 'action' => 'login']);
         }
 
-        $clientes = $this->XservReservas->Clientes->find('list');
-        $servicios = $this->XservReservas->Servicios->find('list');
-        $rutas = $this->XservReservas->Rutas->find('list');
+        $reserva = $this->XservReservas->newEmptyEntity();
 
-        $this->set(compact('xservReserva','clientes','servicios','rutas'));
+        if ($this->request->is('post')) {
+
+            $reserva = $this->XservReservas->patchEntity($reserva, $this->request->getData());
+
+            $reserva->cliente_id = $user->cliente_id;
+
+            $ruta = $this->XservRutas->get($reserva->ruta_id);
+            $servicio = $this->XservServicios->get($reserva->servicio_id);
+
+            $reserva->precio_pactado = $ruta->precio_base + $servicio->precio_base;
+            $reserva->itbms_pactado = $reserva->precio_pactado * 0.07;
+
+            $reserva->estado = 'pendiente';
+            $reserva->estado_pago = 'pendiente';
+
+            if ($this->XservReservas->save($reserva)) {
+
+                $reserva->codigo_reserva = 'XSERV-' . str_pad($reserva->id, 4, '0', STR_PAD_LEFT);
+                $this->XservReservas->save($reserva);
+
+                $this->asignarChoferVehiculo($reserva);
+
+                $this->Flash->success(__('Tu reserva ha sido creada correctamente.'));
+                return $this->redirect(['action' => 'index']);
+            } else {
+                $this->Flash->error(__('No se pudo guardar la reserva. Por favor, intenta nuevamente.'));
+            }
+        }
+
+        $servicios = $this->XservServicios->find('list', ['limit' => 200])->toArray();
+        $rutas = $this->XservRutas->find('list', ['limit' => 200, 'valueField' => 'id'])->toArray();
+
+        $this->set(compact('reserva', 'servicios', 'rutas'));
     }
+
+    /**
+     * Método privado para asignar automáticamente chofer y vehículo disponible
+     */
+    private function asignarChoferVehiculo($reserva)
+    {
+        $choferesDisponibles = $this->XservAsignaciones->buscarChoferesDisponibles($reserva->fecha, $reserva->hora);
+        $vehiculosDisponibles = $this->XservAsignaciones->buscarVehiculosDisponibles($reserva->fecha, $reserva->hora, $reserva->pasajeros);
+
+        if (!empty($choferesDisponibles) && !empty($vehiculosDisponibles)) {
+            $asignacion = $this->XservAsignaciones->newEmptyEntity();
+            $asignacion->reserva_id = $reserva->id;
+            $asignacion->chofer_id = $choferesDisponibles[0]; // toma el primero disponible
+            $asignacion->vehiculo_id = $vehiculosDisponibles[0]; // toma el primero disponible
+            $asignacion->asignado_por_id = $this->Authentication->getIdentity()->id;
+            $asignacion->fecha_inicio_pactada = $reserva->fecha . ' ' . $reserva->hora;
+            $asignacion->fecha_fin_pactada = date('Y-m-d H:i:s', strtotime($reserva->fecha . ' ' . $reserva->hora . ' +2 hours')); // ejemplo 2 horas
+            $asignacion->estado_asignacion = 'programada';
+
+            $this->XservAsignaciones->save($asignacion);
+        }
+        // Si no hay recursos, se deja para asignación manual por operador
+    }
+
+
 
 
     /**

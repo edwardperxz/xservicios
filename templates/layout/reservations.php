@@ -803,8 +803,6 @@
       </div>
   </main>
 
-
-
   <script src="/js/header-auth.js"></script>
   <script>
     let busFichaVisible = false;

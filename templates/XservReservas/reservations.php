@@ -2,21 +2,12 @@
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\XservReserva $xservReserva
- * @var \Cake\Collection\CollectionInterface|string[] $clientes
  * @var \Cake\Collection\CollectionInterface|string[] $servicios
  * @var \Cake\Collection\CollectionInterface|string[] $rutas
  */
 ?>
 <div class="row">
-    <aside class="column">
-        <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('List Xserv Reservas'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
-        </div>
-    </aside>
-
     <div class="column column-80">
-        <!-- Quote Form Section -->
         <section class="quote-section">
             <div class="quote-container">
 
@@ -25,69 +16,77 @@
 
                 <?= $this->Form->create($xservReserva, ['class' => 'quote-form']) ?>
 
+                <!-- Servicio -->
                 <div class="form-group">
-                    <?= $this->Form->control('ruta_id', [
-                        'options' => $rutas,
-                        'empty' => true,
-                        'label' => false,
-                        'class' => 'form-control',
-                        'placeholder' => 'Selecciona la ruta'
+                    <?= $this->Form->control('servicio_id', [
+                        'options' => $servicios,
+                        'empty' => 'Selecciona el servicio',
+                        'label' => 'Servicio',
+                        'class' => 'form-control'
                     ]) ?>
                 </div>
 
+                <!-- Ruta -->
+                <div class="form-group">
+                    <?= $this->Form->control('ruta_id', [
+                        'options' => $rutas,
+                        'empty' => 'Selecciona la ruta',
+                        'label' => 'Ruta',
+                        'class' => 'form-control'
+                    ]) ?>
+                </div>
+
+                <!-- Fecha y Hora -->
                 <div class="form-group">
                     <?= $this->Form->control('fecha', [
-                        'label' => false,
-                        'class' => 'form-control',
-                        'type' => 'date'
+                        'type' => 'date',
+                        'label' => 'Fecha de la reserva',
+                        'class' => 'form-control'
                     ]) ?>
                 </div>
 
                 <div class="form-group">
                     <?= $this->Form->control('hora', [
-                        'label' => false,
-                        'class' => 'form-control',
-                        'type' => 'time'
+                        'type' => 'time',
+                        'label' => 'Hora de la reserva',
+                        'class' => 'form-control'
                     ]) ?>
                 </div>
 
+                <!-- Cantidad de pasajeros -->
                 <div class="form-group">
                     <?= $this->Form->control('pasajeros', [
-                        'label' => false,
+                        'type' => 'number',
+                        'label' => 'Número de pasajeros',
                         'class' => 'form-control',
-                        'placeholder' => 'Número de pasajeros'
+                        'min' => 1
                     ]) ?>
                 </div>
 
-                <div class="form-group">
-                    <?= $this->Form->control('precio_pactado', [
-                        'label' => false,
-                        'class' => 'form-control',
-                        'placeholder' => 'Precio pactado'
-                    ]) ?>
-                </div>
-
+                <!-- Punto de Recogida y Destino -->
                 <div class="form-group">
                     <?= $this->Form->control('punto_recogida', [
-                        'label' => false,
+                        'label' => 'Punto de recogida',
                         'class' => 'form-control',
-                        'placeholder' => 'Punto de recogida'
+                        'placeholder' => 'Ej: Aeropuerto PTY'
                     ]) ?>
                 </div>
 
                 <div class="form-group">
                     <?= $this->Form->control('punto_destino', [
-                        'label' => false,
+                        'label' => 'Destino',
                         'class' => 'form-control',
-                        'placeholder' => 'Destino'
+                        'placeholder' => 'Ej: Hotel Central'
                     ]) ?>
                 </div>
 
+                <!-- Observaciones -->
                 <div class="form-group">
                     <?= $this->Form->control('observaciones', [
-                        'label' => false,
+                        'type' => 'textarea',
+                        'label' => 'Observaciones',
                         'class' => 'form-control',
-                        'placeholder' => 'Observaciones'
+                        'placeholder' => 'Comentarios importantes...'
                     ]) ?>
                 </div>
 

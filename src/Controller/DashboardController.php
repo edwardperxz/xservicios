@@ -39,26 +39,38 @@ class DashboardController extends AppController
 
     public function operadorPanel()
     {
-        $this->Authorization->skipAuthorization();
         $user = $this->request->getAttribute('identity');
-        if (!$user) {
-            return $this->redirect(['controller' => 'XservUsuarios', 'action' => 'login']);
+        $this->Authorization->skipAuthorization();
+
+        if (!$user || $user->rol !== 'operador') {
+            return $this->redirect(['controller' => 'XservUsuarios', 'action' => 'profile']);
         }
 
-        $this->set('isAuthenticated', true);
-        $this->set('user', $user);
-        return $this->render('/Home/home_login');
+        $this->set(compact('user'));
+
+        $this->render('/XservUsuarios/profile');
     }
+
 
     public function choferPanel()
     {
-        $this->Authorization->skipAuthorization();
         $user = $this->request->getAttribute('identity');
-        if (!$user) {
-            return $this->redirect(['controller' => 'XservUsuarios', 'action' => 'login']);
+        $this->Authorization->skipAuthorization();
+
+        if (!$user || $user->rol !== 'chofer') {
+            return $this->redirect(['controller' => 'XservUsuarios', 'action' => 'profile']);
         }
 
-        $this->set('user', $user);
-        return $this->render('/Dashboard/chofer_panel');
+        $choferesTable = $this->fetchTable('XservChoferes');
+
+        $chofer = $choferesTable
+            ->find()
+            ->where(['usuario_id' => $user->id])
+            ->first();
+
+        $this->set(compact('user', 'chofer'));
+
+        $this->render('/XservUsuarios/profile');
     }
+
 }

@@ -23,15 +23,19 @@ class DashboardController extends AppController
 
     public function adminPanel()
     {
-        $this->Authorization->skipAuthorization();
         $user = $this->request->getAttribute('identity');
-        if (!$user) {
-            return $this->redirect(['controller' => 'XservUsuarios', 'action' => 'login']);
+        $this->Authorization->skipAuthorization();
+
+        if (!$user || $user->rol !== 'admin') {
+            return $this->redirect(['controller' => 'XservUsuarios', 'action' => 'profile']);
         }
 
-        $this->set('user', $user);
-        return $this->render('/Dashboard/admin_panel');
+        $this->set(compact('user'));
+
+        // Usa la vista de profile
+        $this->render('/XservUsuarios/profile');
     }
+
 
     public function operadorPanel()
     {

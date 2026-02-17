@@ -17,6 +17,7 @@ class XservAsignacionesController extends AppController
      */
     public function index()
     {
+        $this->Authorization->skipAuthorization();
         $query = $this->XservAsignaciones->find()
             ->contain(['Reservas', 'Chofers', 'Vehiculos', 'AsignadoPors']);
         $xservAsignaciones = $this->paginate($query);
@@ -33,6 +34,7 @@ class XservAsignacionesController extends AppController
      */
     public function view(?string $id = null)
     {
+        $this->Authorization->skipAuthorization();
         $xservAsignacione = $this->XservAsignaciones->get($id, contain: ['Reservas', 'Chofers', 'Vehiculos', 'AsignadoPors']);
         $this->set(compact('xservAsignacione'));
     }
@@ -44,6 +46,7 @@ class XservAsignacionesController extends AppController
      */
     public function add()
     {
+        $this->Authorization->skipAuthorization();
         $xservAsignacione = $this->XservAsignaciones->newEmptyEntity();
         if ($this->request->is('post')) {
             $xservAsignacione = $this->XservAsignaciones->patchEntity($xservAsignacione, $this->request->getData());
@@ -70,6 +73,7 @@ class XservAsignacionesController extends AppController
      */
     public function edit(?string $id = null)
     {
+        $this->Authorization->skipAuthorization();
         $xservAsignacione = $this->XservAsignaciones->get($id, contain: []);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $xservAsignacione = $this->XservAsignaciones->patchEntity($xservAsignacione, $this->request->getData());
@@ -96,6 +100,7 @@ class XservAsignacionesController extends AppController
      */
     public function delete(?string $id = null)
     {
+        $this->Authorization->skipAuthorization();
         $this->request->allowMethod(['post', 'delete']);
         $xservAsignacione = $this->XservAsignaciones->get($id);
         if ($this->XservAsignaciones->delete($xservAsignacione)) {

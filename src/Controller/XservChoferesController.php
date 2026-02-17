@@ -17,6 +17,7 @@ class XservChoferesController extends AppController
      */
     public function index()
     {
+        $this->Authorization->skipAuthorization();
         $query = $this->XservChoferes->find()
             ->contain(['Usuarios']);
         $xservChoferes = $this->paginate($query);
@@ -45,6 +46,7 @@ class XservChoferesController extends AppController
      */
     public function add()
     {
+        $this->Authorization->skipAuthorization();
         $xservChofere = $this->XservChoferes->newEmptyEntity();
         if ($this->request->is('post')) {
             $xservChofere = $this->XservChoferes->patchEntity($xservChofere, $this->request->getData());
@@ -68,6 +70,7 @@ class XservChoferesController extends AppController
      */
     public function edit(?string $id = null)
     {
+        $this->Authorization->skipAuthorization();
         $xservChofere = $this->XservChoferes->get($id, contain: []);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $xservChofere = $this->XservChoferes->patchEntity($xservChofere, $this->request->getData());
@@ -91,6 +94,7 @@ class XservChoferesController extends AppController
      */
     public function delete(?string $id = null)
     {
+        $this->Authorization->skipAuthorization();
         $this->request->allowMethod(['post', 'delete']);
         $xservChofere = $this->XservChoferes->get($id);
         if ($this->XservChoferes->delete($xservChofere)) {

@@ -33,6 +33,7 @@ class XservVehiculosController extends AppController
      */
     public function view(?string $id = null)
     {
+        $this->Authorization->skipAuthorization();
         $xservVehiculo = $this->XservVehiculos->get($id, contain: []);
         $this->set(compact('xservVehiculo'));
     }
@@ -44,6 +45,7 @@ class XservVehiculosController extends AppController
      */
     public function add()
     {
+        $this->Authorization->skipAuthorization();
         $xservVehiculo = $this->XservVehiculos->newEmptyEntity();
         if ($this->request->is('post')) {
             $xservVehiculo = $this->XservVehiculos->patchEntity($xservVehiculo, $this->request->getData());
@@ -66,6 +68,7 @@ class XservVehiculosController extends AppController
      */
     public function edit(?string $id = null)
     {
+        $this->Authorization->skipAuthorization();
         $xservVehiculo = $this->XservVehiculos->get($id, contain: []);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $xservVehiculo = $this->XservVehiculos->patchEntity($xservVehiculo, $this->request->getData());
@@ -88,6 +91,7 @@ class XservVehiculosController extends AppController
      */
     public function delete(?string $id = null)
     {
+        $this->Authorization->skipAuthorization();
         $this->request->allowMethod(['post', 'delete']);
         $xservVehiculo = $this->XservVehiculos->get($id);
         if ($this->XservVehiculos->delete($xservVehiculo)) {

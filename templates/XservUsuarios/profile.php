@@ -5,12 +5,46 @@
 
 <?php if ($user->rol === 'admin'): ?>
     <h2>Acciones de Administrador</h2>
+
     <div class="actions">
-        <?= $this->Html->link('Gestionar Usuarios', ['controller' => 'XservUsuarios', 'action' => 'index'], ['class' => 'button']) ?>
-        <?= $this->Html->link('Gestionar Reservas', ['controller' => 'XservReservas', 'action' => 'index'], ['class' => 'button']) ?>
-        <?= $this->Html->link('Reportes', ['controller' => 'Reportes', 'action' => 'index'], ['class' => 'button']) ?>
+        <?= $this->Html->link('Gestionar Usuarios', 
+            ['controller' => 'XservUsuarios', 'action' => 'index'], 
+            ['class' => 'button']) ?>
+
+        <?= $this->Html->link('Gestionar Reservas', 
+            ['controller' => 'XservReservas', 'action' => 'index'], 
+            ['class' => 'button']) ?>
+
+        <?= $this->Html->link('Gestionar Choferes', 
+            ['controller' => 'XservChoferes', 'action' => 'index'], 
+            ['class' => 'button']) ?>
+
+        <?= $this->Html->link('Gestionar Vehículos', 
+            ['controller' => 'XservVehiculos', 'action' => 'index'], 
+            ['class' => 'button']) ?>
+
+        <?= $this->Html->link('Gestionar Asignaciones', 
+            ['controller' => 'XservAsignaciones', 'action' => 'index'], 
+            ['class' => 'button']) ?>
+
+        <?= $this->Html->link('Incidencias de Viaje', 
+            ['controller' => 'XservIncidenciasViaje', 'action' => 'index'], 
+            ['class' => 'button']) ?>
+
+        <?= $this->Html->link('Notificaciones', 
+            ['controller' => 'XservNotificaciones', 'action' => 'index'], 
+            ['class' => 'button']) ?>
+
+        <?= $this->Html->link('Configuraciones del Sistema', 
+            ['controller' => 'XservConfiguraciones', 'action' => 'index'], 
+            ['class' => 'button']) ?>
+
+        <?= $this->Html->link('Reportes', 
+            ['controller' => 'Reportes', 'action' => 'index'], 
+            ['class' => 'button']) ?>
     </div>
 <?php endif; ?>
+
 
 <?php if ($user->rol === 'operador'): ?>
     <h2>Acciones de Operador</h2>

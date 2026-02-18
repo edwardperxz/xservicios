@@ -69,11 +69,6 @@ class XservAsignacionesTable extends Table
         'className' => 'XservChoferes',
         'joinType' => 'INNER',
         ]);
-        $this->belongsTo('Vehiculos', [
-            'foreignKey' => 'vehiculo_id',
-            'className' => 'XservVehiculos',
-            'joinType' => 'INNER',
-        ]);
     }
 
     /**

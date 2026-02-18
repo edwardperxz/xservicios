@@ -30,7 +30,7 @@ class XservReservasController extends AppController
         $this->Authorization->skipAuthorization();
         
         $query = $this->XservReservas->find()
-            ->contain(['XservClientes', 'XservServicios', 'XservRutas', 'XservChoferes', 'XservVehiculos']);
+            ->contain(['Clientes', 'Servicios', 'Rutas', 'XservChoferes', 'XservVehiculos']);
         $xservReservas = $this->paginate($query);
 
         // Si es una petición JSON/AJAX

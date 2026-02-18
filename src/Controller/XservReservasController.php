@@ -30,7 +30,15 @@ class XservReservasController extends AppController
         $this->Authorization->skipAuthorization();
         
         $query = $this->XservReservas->find()
-            ->contain(['Clientes', 'Servicios', 'Rutas', 'XservChoferes', 'XservVehiculos']);
+            ->contain([
+                'Clientes',
+                'Servicios',
+                'Rutas',
+                'Asignaciones' => [
+                    'Choferes',
+                    'Vehiculos'
+                ]
+            ]);
         $xservReservas = $this->paginate($query);
 
         // Si es una petición JSON/AJAX
@@ -67,118 +75,51 @@ class XservReservasController extends AppController
     public function add()
     {
         $this->Authorization->skipAuthorization();
-        
-        $xservReserva = $this->XservReservas->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $xservReserva = $this->XservReservas->patchEntity($xservReserva, $this->request->getData());
-            if ($this->XservReservas->save($xservReserva)) {
-                $this->Flash->success(__('The xserv reserva has been saved.'));
+        $reserva = $this->XservReservas->newEmptyEntity();
 
+        if ($this->request->is('post')) {
+
+            $data = $this->request->getData();
+
+            // Extraemos los datos operativos
+            $choferId = $data['chofer_id'];
+            $vehiculoId = $data['vehiculo_id'];
+
+            // Quitamos esos campos antes de guardar reserva
+            unset($data['chofer_id'], $data['vehiculo_id']);
+
+            $reserva = $this->XservReservas->patchEntity($reserva, $data);
+
+            if ($this->XservReservas->save($reserva)) {
+
+                // Ahora creamos la asignación
+                $asignacion = $this->XservReservas->Asignaciones->newEmptyEntity();
+
+                $asignacion->reserva_id = $reserva->id;
+                $asignacion->chofer_id = $choferId;
+                $asignacion->vehiculo_id = $vehiculoId;
+                $asignacion->asignado_por_id = $this->Authentication->getIdentity()->id;
+                $asignacion->fecha_inicio_pactada = $reserva->fecha . ' ' . $reserva->hora;
+                $asignacion->fecha_fin_pactada = date('Y-m-d H:i:s', strtotime('+2 hours', strtotime($asignacion->fecha_inicio_pactada)));
+
+                $this->XservReservas->Asignaciones->save($asignacion);
+
+                $this->Flash->success('Reserva creada correctamente.');
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The xserv reserva could not be saved. Please, try again.'));
+
+            $this->Flash->error('Error al guardar la reserva.');
         }
-        $clientes = $this->XservReservas->Clientes->find('list', limit: 200)->all();
-        $servicios = $this->XservReservas->Servicios->find('list', limit: 200)->all();
-        $rutas = $this->XservReservas->Rutas->find('list', limit: 200)->all();
-        $this->set(compact('xservReserva', 'clientes', 'servicios', 'rutas'));
+
+        $choferes = $this->XservReservas->Asignaciones->Choferes->find('list')
+            ->where(['estado' => 'activo']);
+
+        $vehiculos = $this->XservReservas->Asignaciones->Vehiculos->find('list')
+            ->where(['estado_operativo' => 'disponible']);
+
+        $this->set(compact('reserva', 'choferes', 'vehiculos'));
     }
 
-    public function reservations()
-    {
-        $this->Authorization->skipAuthorization();
-
-        $user = $this->Authentication->getIdentity()->getOriginalData();
-        if (!$user) {
-            $this->Flash->error(__('Debes iniciar sesión para reservar.'));
-            return $this->redirect(['controller' => 'Users', 'action' => 'login']);
-        }
-
-        $xservReserva = $this->XservReservas->newEmptyEntity();
-
-        if ($this->request->is('post')) {
-
-            $xservReserva = $this->XservReservas->patchEntity(
-                $xservReserva,
-                $this->request->getData()
-            );
-
-            // validar pasajeros
-            if ($xservReserva->pasajeros > 30) {
-                $this->Flash->error('El máximo permitido es 30 pasajeros.');
-                return;
-            }
-
-            // 🔥 OBTENER CLIENTE REAL (ARREGLO PRINCIPAL)
-            $cliente = $this->fetchTable('XservClientes')
-                ->find()
-                ->where(['usuario_id' => $user->id])
-                ->first();
-
-            if (!$cliente) {
-                $this->Flash->error('No tienes perfil de cliente.');
-                return;
-            }
-
-            $xservReserva->cliente_id = $cliente->id;
-
-            // datos automáticos
-            $xservReserva->estado = 'pendiente';
-            $xservReserva->estado_pago = 'pendiente';
-
-            // validar datos necesarios
-            if (!$xservReserva->ruta_id || !$xservReserva->servicio_id) {
-                $this->Flash->error('Debes seleccionar ruta y servicio.');
-                return;
-            }
-
-            // cálculo precio
-            $ruta = $this->XservRutas->get($xservReserva->ruta_id);
-            $servicio = $this->XservServicios->get($xservReserva->servicio_id);
-
-            $xservReserva->precio_pactado =
-                $ruta->precio_base + $servicio->precio_base;
-
-            $xservReserva->itbms_pactado =
-                $xservReserva->precio_pactado * 0.07;
-
-            $xservReserva->codigo_reserva =
-                'XSERV-' . strtoupper(substr(uniqid(), -6));
-
-            if ($this->XservReservas->save($xservReserva)) {
-                $this->asignarChoferVehiculo($xservReserva);
-                $this->Flash->success(__('Tu reserva ha sido creada correctamente.'));
-                return $this->redirect(['action' => 'reservations']);
-            }
-
-            $this->Flash->error(__('No se pudo guardar la reserva.'));
-        }
-
-        $servicios = $this->XservServicios->find('list')->toArray();
-        $rutas = $this->XservRutas->find('list')->toArray();
-
-        $this->set(compact('xservReserva', 'servicios', 'rutas'));
-    }
-
-    private function asignarChoferVehiculo($reserva)
-    {
-        // ejemplo simple — luego mejoras la lógica
-        $chofer = $this->fetchTable('XservChoferes')
-            ->find()
-            ->first();
-
-        $vehiculo = $this->fetchTable('XservVehiculos')
-            ->find()
-            ->first();
-
-        if ($chofer && $vehiculo) {
-
-            $reserva->chofer_id = $chofer->id;
-            $reserva->vehiculo_id = $vehiculo->id;
-
-            $this->XservReservas->save($reserva);
-        }
-    }
 
 
 

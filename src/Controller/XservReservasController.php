@@ -26,31 +26,59 @@ class XservReservasController extends AppController
     }
 
     public function index()
-    {
-        $this->Authorization->skipAuthorization();
-        
-        $query = $this->XservReservas->find()
-            ->contain([
-                'Clientes',
-                'Servicios',
-                'Rutas',
-                'Asignaciones' => [
-                    'Choferes',
-                    'Vehiculos'
-                ]
-            ]);
-        $xservReservas = $this->paginate($query);
+{
+    $this->Authorization->skipAuthorization();
 
-        // Si es una petición JSON/AJAX
-        if ($this->request->is('json') || $this->request->getHeader('X-Requested-With') === 'XMLHttpRequest') {
-            $this->response = $this->response->withType('application/json');
-            return $this->response->withStringBody(json_encode([
-                'xservReservas' => $xservReservas->toArray()
-            ]));
-        }
+    // --- CONSULTA PRINCIPAL ---
+    $query = $this->XservReservas->find()
+        ->contain([
+            'Clientes',
+            'Servicios',
+            'Rutas',
+            'Asignaciones' => [
+                'Choferes',
+                'Vehiculos'
+            ]
+        ])
+        ->order(['XservReservas.created_at' => 'DESC']);
 
-        $this->set(compact('xservReservas'));
+    // --- FILTROS DESDE GET ---
+    $clienteId = $this->request->getQuery('cliente_id');
+    $estado = $this->request->getQuery('estado');
+
+    if ($clienteId) {
+        $query->where(['cliente_id' => $clienteId]);
     }
+
+    if ($estado) {
+        $query->where(['estado' => $estado]);
+    }
+
+    // --- PAGINAR ---
+    $xservReservas = $this->paginate($query);
+
+    // --- DATOS PARA EL PANEL DE FILTROS ---
+    $clientes = $this->XservReservas->Clientes->find('list')->toArray();
+    $estados = $this->XservReservas->find()
+        ->select(['estado'])
+        ->distinct(['estado'])
+        ->all()                 // obtener resultados
+        ->extract('estado')     // extraer solo la columna 'estado'
+        ->toList();             // convertir a array simple
+
+
+    // --- RESPUESTA JSON PARA AJAX ---
+    if ($this->request->is('json') || $this->request->getHeader('X-Requested-With') === 'XMLHttpRequest') {
+        $this->response = $this->response->withType('application/json');
+        return $this->response->withStringBody(json_encode([
+            'xservReservas' => $xservReservas->toArray()
+        ]));
+    }
+
+    // --- PASAR DATOS A LA VISTA ---
+    $this->set(compact('xservReservas', 'clientes', 'estados', 'clienteId', 'estado'));
+}
+
 
     /**
      * View method

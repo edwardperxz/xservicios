@@ -25,6 +25,24 @@ class XservChoferesController extends AppController
         $this->set(compact('xservChoferes'));
     }
 
+    public function chofers()
+    {
+        $this->Authorization->skipAuthorization();
+        $this->viewBuilder()->setLayout('chofers');
+
+        // Obtener todos los choferes con Usuarios
+        $query = $this->XservChoferes->find()->contain(['Usuarios'])->order(['nombre' => 'ASC']);
+
+        // Paginar
+        $xservChoferes = $this->paginate($query);
+        $this->set(compact('xservChoferes'));
+    }
+
+
+
+
+
+
     /**
      * View method
      *

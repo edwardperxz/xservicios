@@ -62,9 +62,10 @@ class XservReservasController extends AppController
     $estados = $this->XservReservas->find()
         ->select(['estado'])
         ->distinct(['estado'])
-        ->all()                 // obtener resultados
-        ->extract('estado')     // extraer solo la columna 'estado'
-        ->toList();             // convertir a array simple
+        ->all()
+        ->extract('estado')
+        ->toList();
+
 
 
     // --- RESPUESTA JSON PARA AJAX ---

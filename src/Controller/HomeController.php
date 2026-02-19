@@ -59,6 +59,7 @@ class HomeController extends AppController
 
     public function home_login()
     {
+        $this->viewBuilder()->setLayout('home_login');
         $this->Authorization->skipAuthorization();
         $user = $this->request->getAttribute('identity');
 

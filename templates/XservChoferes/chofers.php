@@ -39,14 +39,16 @@
 
     </div>
 
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
+    <div class="paginator-container">
+        <div class="paginator-buttons">
+            <?= $this->Paginator->prev('← Anterior', ['class' => 'btn']) ?>
+            <?= $this->Paginator->numbers(['class' => 'btn-number']) ?>
+            <?= $this->Paginator->next('Siguiente →', ['class' => 'btn']) ?>
+        </div>
+        <div class="paginator-info">
+            <?= $this->Paginator->counter(__('Página {{page}} de {{pages}}, mostrando {{current}} de {{count}} registros')) ?>
+        </div>
     </div>
+
+
 </div>

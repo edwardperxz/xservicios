@@ -526,6 +526,9 @@
   <link rel="stylesheet" href="/css/header-auth.css">
 </head>
 <body>
+  <!-- Header -->
+  <header class="header"></header>
+    </div>
 
     <nav class="nav-menu">
       <a href="/home" class="nav-item active">

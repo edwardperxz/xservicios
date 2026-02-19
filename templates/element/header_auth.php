@@ -1,3 +1,4 @@
+
 <script src="/js/header-auth.js"></script>
 <header class="header">
         <a href="<?= $this->Url->build('/') ?>" class="logo">

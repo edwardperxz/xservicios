@@ -1,3 +1,4 @@
+  <script src="/js/header-auth.js"></script>
   <header class="header">
     <div class="logo">
       <span class="logo-x">X</span>SERVICIOS

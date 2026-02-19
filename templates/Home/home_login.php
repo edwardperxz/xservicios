@@ -396,6 +396,8 @@
 </head>
 <body>
   <!-- Header -->
+  <?= $this->element('header_auth') ?>
+
 
   <!-- Hero Section -->
   <section class="hero">
@@ -463,7 +465,7 @@
   </section>
 
   <script>
-    /* Toggle user menu dropdown
+    // Toggle user menu dropdown
     function toggleUserMenu(event) {
       event.stopPropagation();
       const dropdown = document.getElementById('userDropdown');
@@ -472,7 +474,6 @@
       dropdown.classList.toggle('active');
       trigger.classList.toggle('active');
     }
-    */
 
     // Close dropdown when clicking outside
     document.addEventListener('click', function(event) {
@@ -499,7 +500,6 @@
     });
   </script>
 
-  <script src="/js/header-auth.js"></script>
   <script>
   const tabs = document.querySelectorAll('.tab-item');
   const contents = {

@@ -87,6 +87,6 @@ class HomeController extends AppController
         }
 
         $this->set(compact('user', 'reservas'));
-}
+    }
 
 }

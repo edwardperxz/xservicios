@@ -75,3 +75,11 @@
 .btn-primary:hover {
     background: #ffc85c;
 }
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}

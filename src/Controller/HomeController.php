@@ -66,6 +66,26 @@ class HomeController extends AppController
             return $this->redirect(['action' => 'index']);
         }
 
-        $this->set('user', $user);
-    }
+        // Buscar cliente asociado
+        $this->loadModel('XservReservas');
+
+        $cliente = $this->XservReservas->Clientes
+            ->find()
+            ->where(['usuario_id' => $user->id])
+            ->first();
+
+        $reservas = [];
+
+        if ($cliente) {
+            $reservas = $this->XservReservas
+                ->find()
+                ->where(['cliente_id' => $cliente->id])
+                ->contain(['Servicios', 'Rutas'])
+                ->orderDesc('created')
+                ->all();
+        }
+
+        $this->set(compact('user', 'reservas'));
+}
+
 }

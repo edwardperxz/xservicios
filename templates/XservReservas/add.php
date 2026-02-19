@@ -19,9 +19,7 @@
             <?= $this->Form->create($xservReserva) ?>
             <fieldset>
                 <legend><?= __('Add Xserv Reserva') ?></legend>
-                <?php
-                    
-                    echo $this->Form->control('cliente_id', ['options' => $clientes]);
+                <?php                    
                     echo $this->Form->control('servicio_id', ['options' => $servicios]);
                     echo $this->Form->control('ruta_id', ['options' => $rutas, 'empty' => true]);
                     echo $this->Form->control('fecha');

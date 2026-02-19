@@ -82,10 +82,45 @@ class XservReservasController extends AppController
 
             $data = $this->request->getData();
 
+            // =========================
+            // DATOS GENERADOS POR SISTEMA
+            // =========================
+
+            $usuario = $this->Authentication->getIdentity();
+            $cliente = $this->XservReservas->Clientes
+                ->find()
+                ->where(['usuario_id' => $usuario->id])
+                ->first();
+            if (!$cliente) {
+                $this->Flash->error('El usuario no tiene cliente asociado.');
+                return $this->redirect(['action' => 'index']);
+            }
+            $data['cliente_id'] = $cliente->id;
+
+
+            $data['codigo_reserva'] = 'RSV-' . date('Y') . '-' . 
+                str_pad((string) rand(1,9999), 4, '0', STR_PAD_LEFT);
+
+            $servicio = $this->XservReservas->Servicios->get($data['servicio_id']);
+            $data['precio_pactado'] = $servicio->precio_base;
+
+            $data['itbms_pactado'] = $data['precio_pactado'] * 0.07;
+
+            $data['estado'] = 'pendiente';
+            $data['estado_pago'] = 'pendiente';
+
+            // =========================
+            // DATOS OPERATIVOS
+            // =========================
+
             $choferId = $data['chofer_id'] ?? null;
             $vehiculoId = $data['vehiculo_id'] ?? null;
 
             unset($data['chofer_id'], $data['vehiculo_id']);
+
+            // =========================
+            // PATCH
+            // =========================
 
             $xservReserva = $this->XservReservas->patchEntity($xservReserva, $data);
 
@@ -98,9 +133,10 @@ class XservReservasController extends AppController
                     $asignacion->reserva_id = $xservReserva->id;
                     $asignacion->chofer_id = $choferId;
                     $asignacion->vehiculo_id = $vehiculoId;
-                    $asignacion->asignado_por_id = $this->Authentication->getIdentity()->id;
+                    $asignacion->asignado_por_id = $usuario->id;
 
-                    $fechaInicio = $xservReserva->fecha->format('Y-m-d') . ' ' . $xservReserva->hora->format('H:i:s');
+                    $fechaInicio = $xservReserva->fecha->format('Y-m-d') . ' ' .
+                                $xservReserva->hora->format('H:i:s');
 
                     $asignacion->fecha_inicio_pactada = $fechaInicio;
                     $asignacion->fecha_fin_pactada = date(
@@ -115,10 +151,12 @@ class XservReservasController extends AppController
                 return $this->redirect(['action' => 'index']);
             }
 
+            debug($xservReserva->getErrors());
+            die();
             $this->Flash->error('Error al guardar la reserva.');
         }
 
-        // 🔹 Listas necesarias para el formulario
+        // Listas para formulario
         $clientes = $this->XservReservas->Clientes->find('list')->all();
         $servicios = $this->XservReservas->Servicios->find('list')->all();
         $rutas = $this->XservReservas->Rutas->find('list')->all();
@@ -142,6 +180,7 @@ class XservReservasController extends AppController
             'vehiculos'
         ));
     }
+
 
 
 

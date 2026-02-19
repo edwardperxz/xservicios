@@ -59,7 +59,6 @@ class HomeController extends AppController
 
     public function home_login()
     {
-        $this->viewBuilder()->setLayout('home_login');
         $this->Authorization->skipAuthorization();
         $user = $this->request->getAttribute('identity');
 
@@ -67,26 +66,6 @@ class HomeController extends AppController
             return $this->redirect(['action' => 'index']);
         }
 
-        // Buscar cliente asociado
-        $this->loadModel('XservReservas');
-
-        $cliente = $this->XservReservas->Clientes
-            ->find()
-            ->where(['usuario_id' => $user->id])
-            ->first();
-
-        $reservas = [];
-
-        if ($cliente) {
-            $reservas = $this->XservReservas
-                ->find()
-                ->where(['cliente_id' => $cliente->id])
-                ->contain(['Servicios', 'Rutas'])
-                ->orderDesc('created')
-                ->all();
-        }
-
-        $this->set(compact('user', 'reservas'));
+        $this->set('user', $user);
     }
-
 }

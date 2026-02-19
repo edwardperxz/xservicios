@@ -444,21 +444,30 @@
 
     <!-- MIS RESERVAS -->
     <div class="tab-content" id="tab-reservas">
-      <h3 style="margin-bottom:1rem;">Mis Reservas</h3>
+    <h3 style="margin-bottom:1rem;">Mis Reservas</h3>
 
-      <?php if (!empty($reservas)) : ?>
-        <?php foreach ($reservas as $reserva) : ?>
-          <div style="background: var(--dark-lighter); padding:1rem; border-radius:8px; margin-bottom:1rem;">
-            <strong><?= h($reserva->codigo_reserva) ?></strong><br>
-            Servicio: <?= h($reserva->servicio->nombre ?? '') ?><br>
-            Fecha: <?= h($reserva->fecha) ?><br>
-            Estado: <span style="color: var(--gold);"><?= h($reserva->estado) ?></span>
-          </div>
-        <?php endforeach; ?>
-      <?php else : ?>
-        <p class="empty-message">No tienes reservas registradas.</p>
-      <?php endif; ?>
-    </div>
+    <?php if (!empty($reservasPorEstado)) : ?>
+    <?php foreach ($reservasPorEstado as $estado => $listaReservas) : ?>
+      <h4 style="margin-top:1rem; text-transform:capitalize; color:var(--gold);">
+        <?= h($estado) ?>
+      </h4>
+      <?php foreach ($listaReservas as $reserva) : ?>
+        <div style="background: var(--dark-lighter); padding:1rem; border-radius:8px; margin-bottom:1rem;">
+          <strong><?= h($reserva->codigo_reserva) ?></strong><br>
+          Servicio: <?= h($reserva->servicio->nombre ?? '') ?><br>
+          Fecha: <?= h($reserva->fecha) ?><br>
+          Hora: <?= h($reserva->hora) ?><br>
+          Pasajeros: <?= h($reserva->pasajeros) ?><br>
+          Estado: <span style="color: var(--gold);"><?= h($reserva->estado) ?></span>
+        </div>
+      <?php endforeach; ?>
+    <?php endforeach; ?>
+  <?php else : ?>
+    <p class="empty-message">No tienes reservas registradas.</p>
+  <?php endif; ?>
+
+  </div>
+
 
   </div>
 

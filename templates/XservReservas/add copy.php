@@ -36,6 +36,9 @@
                     echo $this->Form->control('estado_pago');
                     echo $this->Form->control('created_at');
                     echo $this->Form->control('updated_at');
+                    echo $this->Form->control('chofer_id', ['type' => 'select','options' => $choferes,'label' => 'Seleccione Chofer']);
+                    echo $this->Form->control('vehiculo_id', ['type' => 'select', 'options' => $vehiculos, 'label' => 'Seleccione Vehículo']);
+
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>

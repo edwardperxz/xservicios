@@ -75,34 +75,41 @@ class XservReservasController extends AppController
     public function add()
     {
         $this->Authorization->skipAuthorization();
-        $reserva = $this->XservReservas->newEmptyEntity();
+
+        $xservReserva = $this->XservReservas->newEmptyEntity();
 
         if ($this->request->is('post')) {
 
             $data = $this->request->getData();
 
-            // Extraemos los datos operativos
-            $choferId = $data['chofer_id'];
-            $vehiculoId = $data['vehiculo_id'];
+            $choferId = $data['chofer_id'] ?? null;
+            $vehiculoId = $data['vehiculo_id'] ?? null;
 
-            // Quitamos esos campos antes de guardar reserva
             unset($data['chofer_id'], $data['vehiculo_id']);
 
-            $reserva = $this->XservReservas->patchEntity($reserva, $data);
+            $xservReserva = $this->XservReservas->patchEntity($xservReserva, $data);
 
-            if ($this->XservReservas->save($reserva)) {
+            if ($this->XservReservas->save($xservReserva)) {
 
-                // Ahora creamos la asignación
-                $asignacion = $this->XservReservas->Asignaciones->newEmptyEntity();
+                if ($choferId && $vehiculoId) {
 
-                $asignacion->reserva_id = $reserva->id;
-                $asignacion->chofer_id = $choferId;
-                $asignacion->vehiculo_id = $vehiculoId;
-                $asignacion->asignado_por_id = $this->Authentication->getIdentity()->id;
-                $asignacion->fecha_inicio_pactada = $reserva->fecha . ' ' . $reserva->hora;
-                $asignacion->fecha_fin_pactada = date('Y-m-d H:i:s', strtotime('+2 hours', strtotime($asignacion->fecha_inicio_pactada)));
+                    $asignacion = $this->XservReservas->Asignaciones->newEmptyEntity();
 
-                $this->XservReservas->Asignaciones->save($asignacion);
+                    $asignacion->reserva_id = $xservReserva->id;
+                    $asignacion->chofer_id = $choferId;
+                    $asignacion->vehiculo_id = $vehiculoId;
+                    $asignacion->asignado_por_id = $this->Authentication->getIdentity()->id;
+
+                    $fechaInicio = $xservReserva->fecha->format('Y-m-d') . ' ' . $xservReserva->hora->format('H:i:s');
+
+                    $asignacion->fecha_inicio_pactada = $fechaInicio;
+                    $asignacion->fecha_fin_pactada = date(
+                        'Y-m-d H:i:s',
+                        strtotime('+2 hours', strtotime($fechaInicio))
+                    );
+
+                    $this->XservReservas->Asignaciones->save($asignacion);
+                }
 
                 $this->Flash->success('Reserva creada correctamente.');
                 return $this->redirect(['action' => 'index']);
@@ -111,14 +118,31 @@ class XservReservasController extends AppController
             $this->Flash->error('Error al guardar la reserva.');
         }
 
-        $choferes = $this->XservReservas->Asignaciones->Choferes->find('list')
-            ->where(['estado' => 'activo']);
+        // 🔹 Listas necesarias para el formulario
+        $clientes = $this->XservReservas->Clientes->find('list')->all();
+        $servicios = $this->XservReservas->Servicios->find('list')->all();
+        $rutas = $this->XservReservas->Rutas->find('list')->all();
 
-        $vehiculos = $this->XservReservas->Asignaciones->Vehiculos->find('list')
-            ->where(['estado_operativo' => 'disponible']);
+        $choferes = $this->XservReservas->Asignaciones->Choferes
+            ->find('list')
+            ->where(['estado' => 'activo'])
+            ->all();
 
-        $this->set(compact('reserva', 'choferes', 'vehiculos'));
+        $vehiculos = $this->XservReservas->Asignaciones->Vehiculos
+            ->find('list')
+            ->where(['estado_operativo' => 'disponible'])
+            ->all();
+
+        $this->set(compact(
+            'xservReserva',
+            'clientes',
+            'servicios',
+            'rutas',
+            'choferes',
+            'vehiculos'
+        ));
     }
+
 
 
 

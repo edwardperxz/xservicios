@@ -121,7 +121,7 @@ Nota: Si usas MySQL nativo, edita el php.ini que carga tu CLI (php --ini para ub
 ### 6. Ejecutar el Servidor de Desarrollo
 
 ```bash
-php bin/cake server
+php bin/cake.php server
 ```
 # Esquema de la base de datos
 

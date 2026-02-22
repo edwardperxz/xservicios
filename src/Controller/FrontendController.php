@@ -22,89 +22,89 @@ class FrontendController extends AppController
     }
 
     /**
-     * Fleet page (fleet.html)
+     * Fleet page (fleet.php)
      */
     public function fleet()
     {
         $this->response = $this->response->withType('text/html');
-        $content = file_get_contents(ROOT . '/webroot/frontend/fleet.html');
+        $content = file_get_contents(ROOT . '/webroot/frontend/user/fleet.php');
         $content = $this->injectCsrfToken($content);
         return $this->response->withStringBody($content);
     }
 
     /**
-     * Services page (services.html)
+     * Services page (services.php)
      */
     public function services()
     {
         $this->response = $this->response->withType('text/html');
-        $content = file_get_contents(ROOT . '/webroot/frontend/services.html');
+        $content = file_get_contents(ROOT . '/webroot/frontend/shared/services.php');
         $content = $this->injectCsrfToken($content);
         return $this->response->withStringBody($content);
     }
 
     /**
-     * About page (about.html)
+     * About page (about.php)
      */
     public function about()
     {
         $this->response = $this->response->withType('text/html');
-        $content = file_get_contents(ROOT . '/webroot/frontend/about.html');
+        $content = file_get_contents(ROOT . '/webroot/frontend/shared/about.php');
         $content = $this->injectCsrfToken($content);
         return $this->response->withStringBody($content);
     }
 
     /**
-     * New Reservation page (new-reservation.html)
+     * New Reservation page (new-reservation.php)
      */
     public function newreservation()
     {
         $this->response = $this->response->withType('text/html');
-        $content = file_get_contents(ROOT . '/webroot/frontend/new-reservation.html');
+        $content = file_get_contents(ROOT . '/webroot/frontend/user/new-reservation.php');
         $content = $this->injectCsrfToken($content);
         return $this->response->withStringBody($content);
     }
 
     /**
-     * My Reservations page (my-reservations.html)
+     * My Reservations page (my-reservations.php)
      */
     public function myreservations()
     {
         $this->response = $this->response->withType('text/html');
-        $content = file_get_contents(ROOT . '/webroot/frontend/my-reservations.html');
+        $content = file_get_contents(ROOT . '/webroot/frontend/user/my-reservations.php');
         $content = $this->injectCsrfToken($content);
         return $this->response->withStringBody($content);
     }
 
     /**
-     * Rate Service page (rate-service.html)
+     * Rate Service page (rate-service.php)
      */
     public function rateservice()
     {
         $this->response = $this->response->withType('text/html');
-        $content = file_get_contents(ROOT . '/webroot/frontend/rate-service.html');
+        $content = file_get_contents(ROOT . '/webroot/frontend/user/rate-service.php');
         $content = $this->injectCsrfToken($content);
         return $this->response->withStringBody($content);
     }
 
     /**
-     * Sign up page (signup.html)
+     * Sign up page (signup.php)
      */
     public function signup()
     {
         $this->response = $this->response->withType('text/html');
-        $content = file_get_contents(ROOT . '/webroot/frontend/signup.html');
+        $content = file_get_contents(ROOT . '/webroot/frontend/shared/signup.php');
         $content = $this->injectCsrfToken($content);
         return $this->response->withStringBody($content);
     }
 
     /**
-     * Login page (login.html)
+     * Login page (login.php)
      */
     public function login()
     {
         $this->response = $this->response->withType('text/html');
-        $content = file_get_contents(ROOT . '/webroot/frontend/login.html');
+        $content = file_get_contents(ROOT . '/webroot/frontend/shared/login.php');
         $content = $this->injectCsrfToken($content);
         return $this->response->withStringBody($content);
     }

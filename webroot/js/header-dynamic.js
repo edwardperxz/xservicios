@@ -9,23 +9,81 @@
   class HeaderAuthManager {
     constructor() {
       this.API_ME = '/xserv-usuarios/me';
-      this.API_LOGOUT = '/logout';
+      this.API_LOGOUT = '/xserv-usuarios/logout';
       this.userData = null;
       this.isAuthenticated = false;
+      this.maxRetries = 20;
+      this.retryDelay = 100;
+      this.initialized = false;
 
+      this.initializeElements();
+    }
+
+    /**
+     * Inicializa los elementos del DOM, esperando si es necesario
+     */
+    async initializeElements() {
+      // Primero intentar inmediatamente
+      if (this.findElements()) {
+        await this.init();
+        return;
+      }
+
+      // Si no están disponibles, esperar al evento headerLoaded
+      const headerLoadedHandler = async () => {
+        if (this.findElements()) {
+          await this.init();
+          document.removeEventListener('headerLoaded', headerLoadedHandler);
+        }
+      };
+      
+      document.addEventListener('headerLoaded', headerLoadedHandler);
+
+      // Fallback: si después de 3 segundos no se dispara el evento, intentar con polling
+      setTimeout(async () => {
+        if (this.initialized) return;
+        
+        let retries = 0;
+        while (retries < this.maxRetries && !this.initialized) {
+          if (this.findElements()) {
+            await this.init();
+            document.removeEventListener('headerLoaded', headerLoadedHandler);
+            return;
+          }
+          await new Promise(resolve => setTimeout(resolve, this.retryDelay));
+          retries++;
+        }
+
+        if (!this.initialized) {
+          console.warn('⚠️ Header elements not found after maximum retries. Auth functionality disabled.');
+        }
+      }, 3000);
+    }
+
+    /**
+     * Busca los elementos del header en el DOM
+     * @returns {boolean} true si encontró los elementos necesarios
+     */
+    findElements() {
       this.loginBtn = document.getElementById('xservLoginBtn');
       this.userProfile = document.getElementById('xservUserProfile');
       this.userAvatar = document.getElementById('xservUserAvatar');
       this.userName = document.getElementById('xservUserName');
       this.logoutBtn = document.getElementById('xservLogoutBtn');
 
-      this.init();
+      // Si encontramos al menos el botón de login O el perfil de usuario, podemos continuar
+      return !!(this.loginBtn || this.userProfile);
     }
 
     /**
      * Inicializa el manejador de autenticación
      */
     async init() {
+      if (this.initialized) return;
+      
+      this.initialized = true;
+      console.log('🔐 Inicializando HeaderAuthManager...');
+      
       // Verificar estado de autenticación
       await this.checkAuth();
 
@@ -34,6 +92,8 @@
 
       // Cerrar dropdown al hacer clic fuera
       this.setupOutsideClick();
+      
+      console.log('✅ HeaderAuthManager inicializado correctamente');
     }
 
     /**
@@ -58,11 +118,19 @@
         });
 
         if (response.ok) {
-          const data = await response.json();
-          if (data.usuario) {
-            this.handleAuthSuccess(data.usuario);
-            this.cacheUser(data.usuario);
+          // Verificar que la respuesta sea JSON
+          const contentType = response.headers.get('content-type');
+          if (contentType && contentType.includes('application/json')) {
+            const data = await response.json();
+            // El endpoint devuelve { success: true, user: {...} }
+            if (data.success && data.user) {
+              this.handleAuthSuccess(data.user);
+              this.cacheUser(data.user);
+            } else {
+              this.handleAuthFailure();
+            }
           } else {
+            // Si no es JSON, probablemente no está autenticado
             this.handleAuthFailure();
           }
         } else {
@@ -120,19 +188,18 @@
      * Actualiza la información visual del usuario
      */
     updateUserInfo(user) {
-      // Actualizar avatar con iniciales
-      if (this.userAvatar && user.nombre) {
-        const initials = this.getInitials(user.nombre, user.apellido);
+      // Actualizar avatar con iniciales (usar nombre o username)
+      if (this.userAvatar) {
+        const displayName = user.nombre || user.username || 'US';
+        const initials = this.getInitials(displayName);
         this.userAvatar.textContent = initials;
       }
 
       // Actualizar nombre de usuario
-      if (this.userName && user.nombre) {
-        const fullName = user.apellido 
-          ? `${user.nombre} ${user.apellido}` 
-          : user.nombre;
-        this.userName.textContent = fullName;
-        this.userName.setAttribute('title', fullName);
+      if (this.userName) {
+        const displayName = user.nombre || user.username || 'Usuario';
+        this.userName.textContent = displayName;
+        this.userName.setAttribute('title', displayName);
       }
     }
 
@@ -140,12 +207,26 @@
      * Obtiene las iniciales del nombre
      */
     getInitials(nombre, apellido = '') {
-      if (!nombre) return 'U';
+      if (!nombre) return 'US';
       
-      const firstInitial = nombre.charAt(0).toUpperCase();
-      const lastInitial = apellido ? apellido.charAt(0).toUpperCase() : '';
+      // Si se proporcionó nombre y apellido por separado
+      if (apellido) {
+        const firstInitial = nombre.charAt(0).toUpperCase();
+        const lastInitial = apellido.charAt(0).toUpperCase();
+        return `${firstInitial}${lastInitial}`;
+      }
       
-      return `${firstInitial}${lastInitial}`;
+      // Si es un nombre completo (puede tener espacios)
+      const parts = nombre.trim().split(/\s+/);
+      if (parts.length === 1) {
+        // Solo un nombre, tomar las primeras 2 letras
+        return parts[0].substring(0, 2).toUpperCase();
+      } else {
+        // Nombre y apellido(s), tomar primera letra de cada uno
+        const firstInitial = parts[0].charAt(0).toUpperCase();
+        const lastInitial = parts[parts.length - 1].charAt(0).toUpperCase();
+        return `${firstInitial}${lastInitial}`;
+      }
     }
 
     /**
@@ -211,34 +292,83 @@
     }
 
     /**
+     * Obtiene el token CSRF de meta tag o cookies
+     */
+    getCsrfToken() {
+      // Primero intentar obtener del meta tag (como header-auth.js)
+      const meta = document.querySelector('meta[name="csrfToken"], meta[name="csrf-token"]');
+      if (meta) {
+        const token = meta.getAttribute('content');
+        if (token) return token;
+      }
+
+      // Fallback: buscar en cookies
+      const name = 'csrfToken=';
+      const decodedCookie = decodeURIComponent(document.cookie);
+      const cookies = decodedCookie.split(';');
+      
+      for (let i = 0; i < cookies.length; i++) {
+        let cookie = cookies[i].trim();
+        if (cookie.indexOf(name) === 0) {
+          return cookie.substring(name.length, cookie.length);
+        }
+      }
+      return null;
+    }
+
+    /**
      * Realiza logout
      */
     async logout() {
       try {
+        console.log('🔐 Iniciando logout...');
+        
         // Mostrar indicador de carga (opcional)
         this.showLoadingState();
 
+        // Obtener token CSRF
+        const csrfToken = this.getCsrfToken();
+        console.log('🔑 CSRF Token obtenido:', csrfToken ? 'Sí' : 'No');
+
         // Llamar al endpoint de logout
+        const headers = {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Accept': 'application/json'
+        };
+
+        // Agregar token CSRF si existe
+        if (csrfToken) {
+          headers['X-CSRF-Token'] = csrfToken;
+        }
+
+        console.log('📤 Enviando petición a:', this.API_LOGOUT);
+        
         const response = await fetch(this.API_LOGOUT, {
           method: 'POST',
-          headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Accept': 'application/json'
-          },
+          headers: headers,
           credentials: 'same-origin'
         });
+
+        console.log('📥 Respuesta recibida:', response.status, response.ok ? 'OK' : 'ERROR');
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('✅ Logout exitoso:', data);
+        }
 
         // Limpiar datos locales independientemente de la respuesta
         this.clearCachedUser();
         this.handleAuthFailure();
 
+        console.log('🔄 Redirigiendo a /home...');
+        
         // Redirigir a home o login
         setTimeout(() => {
           window.location.href = '/home';
         }, 100);
 
       } catch (error) {
-        console.error('Error during logout:', error);
+        console.error('❌ Error durante logout:', error);
         // Aún así limpiar sesión local
         this.clearCachedUser();
         this.handleAuthFailure();

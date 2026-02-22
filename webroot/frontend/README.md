@@ -1,151 +1,288 @@
 # Frontend HTML Files - Xservicios
 
-## 📁 File Index
+## 📁 Estructura de Directorios (v2.0)
 
-This directory contains all static HTML pages for the Xservicios frontend application.
+La carpeta frontend ahora está organizada por roles de usuario para mejor mantenibilidad y escalabilidad.
 
-### Public Pages (No Authentication Required)
-
-| File | Description | Route |
-|------|-------------|-------|
-| `home.html` | Main landing page | `/` or `/frontend/home` |
-| `about.html` | About us / Company information | `/frontend/about` |
-| `services.html` | Available services catalog | `/frontend/services` |
-| `fleet.html` | Vehicle fleet gallery | `/frontend/fleet` |
-| `login.html` | User login page | `/frontend/login` |
-| `signup.html` | User registration page | `/frontend/signup` |
-
-### Authenticated Pages (Login Required)
-
-| File | Description | Route |
-|------|-------------|-------|
-| `dashboard.html` | User dashboard / Home authenticated | `/home` (when logged in) |
-| `new-reservation.html` | Create new reservation form | `/frontend/newreservation` |
-| `my-reservations.html` | User's reservation list | `/frontend/myreservations` |
-| `rate-service.html` | Service rating page | `/frontend/rateservice` |
-
-### Detail Pages
-
-| File | Description | Access |
-|------|-------------|--------|
-| `bus-details.html` | Vehicle technical specifications | Direct access |
-| `driver-details.html` | Driver profiles and information | Direct access |
-
----
-
-## 🎨 Features
-
-All pages include:
-- ✅ **Dynamic Header**: Auto-loaded with authentication state
-- ✅ **i18n Support**: Spanish/English language switcher
-- ✅ **Responsive Design**: Mobile-first approach
-- ✅ **CSRF Protection**: Token injection via FrontendController
-- ✅ **Consistent Styling**: Unified design system
+```
+frontend/
+├── shared/                      # 🔓 Acceso público (sin autenticación)
+│   ├── about.php               # Información de la empresa
+│   ├── home-templates-public.php # Landing page pública
+│   ├── login.php               # Formulario de inicio de sesión
+│   ├── services.php            # Catálogo de servicios
+│   └── signup.php              # Registro de usuarios
+│
+├── user/                        # 👥 Acceso de usuario autenticado
+│   ├── bus-details.php         # Ficha técnica del vehículo
+│   ├── dashboard.php           # Panel de control del usuario
+│   ├── driver-details.php      # Perfil del chofer
+│   ├── fleet.php               # Galería de flota
+│   ├── home-templates-login.php # Home autenticado
+│   ├── home-templates-pages.php # Home alternativo (CakePHP)
+│   ├── home-webroot.php        # Home con i18n
+│   ├── my-reservations.php     # Mis reservas
+│   ├── new-reservation.php     # Nueva reserva
+│   └── rate-service.php        # Valorar servicios
+│
+├── driver/                      # 🚗 Acceso de chofer (próximamente)
+│   └── (vacío - en desarrollo)
+│
+├── admin/                       # ⚙️ Acceso de administrador (próximamente)
+│   └── (vacío - en desarrollo)
+│
+└── README.md                    # Este archivo
+```
 
 ---
 
-## 🔧 Technical Implementation
+## 📄 Archivo Index por Carpeta
 
-### Required Scripts (Load Order Important!)
+### 🔓 **SHARED** - Páginas Públicas (Sin Autenticación Required)
+
+| Archivo | Descripción | Ruta |
+|---------|-------------|------|
+| `login.php` | Formulario de inicio de sesión | `/frontend/login` |
+| `signup.php` | Página de registro | `/frontend/signup` |
+| `about.php` | Información sobre la empresa | `/frontend/about` |
+| `services.php` | Catálogo de servicios disponibles | `/frontend/services` |
+| `home-templates-public.php` | Landing page para usuarios no autenticados | `/` (alternativa) |
+
+### 👥 **USER** - Páginas Autenticadas (Requiere Login)
+
+| Archivo | Descripción | Ruta |
+|---------|-------------|------|
+| `dashboard.php` | Panel principal del usuario | `/frontend/dashboard` |
+| `home-templates-login.php` | Home para usuarios autenticados | `/home` (primaria) |
+| `home-templates-pages.php` | Home CakePHP (componente) | `/home` (alternativa) |
+| `home-webroot.php` | Home con sistema i18n completo | `/frontend/home` |
+| `fleet.php` | Galería completa de vehículos | `/frontend/fleet` |
+| `new-reservation.php` | Formulario para crear reserva | `/frontend/newreservation` |
+| `my-reservations.php` | Lista de reservas del usuario | `/frontend/myreservations` |
+| `rate-service.php` | Panel de valoraciones | `/frontend/rateservice` |
+| `bus-details.php` | Ficha técnica del vehículo | Acceso directo |
+| `driver-details.php` | Perfiles de choferes | Acceso directo |
+
+### 🚗 **DRIVER** - Páginas de Chofer (Por Crear)
+
+Pendiente de desarrollo. Incluirá:
+- Dashboard de viajes asignados
+- Aceptar/Rechazar viajes
+- Historial de viajes
+- Perfil y calificaciones
+- Disponibilidad/Estado
+
+### ⚙️ **ADMIN** - Páginas de Administrador (Por Crear)
+
+Pendiente de desarrollo. Incluirá:
+- Gestión de vehículos
+- Gestión de choferes
+- Gestión de reservas
+- Reportes y analíticos
+- Configuraciones del sistema
+
+---
+
+## 🎨 Características Técnicas
+
+Todas las páginas incluyen:
+- ✅ **Header Dinámico**: Se carga automáticamente según estado de autenticación
+- ✅ **Soporte i18n**: Selector de idioma ES/EN con localStorage
+- ✅ **Diseño Responsivo**: Mobile-first, funciona en todos los dispositivos
+- ✅ **Protección CSRF**: Inyección de tokens via FrontendController
+- ✅ **Estilo Unificado**: Sistema de diseño coherente (gold, dark theme)
+- ✅ **Animaciones Suaves**: Transiciones y efectos consistentes
+
+### Scripts Requeridos (Orden Importante!)
+
+TODOS los archivos .php deben incluir al final de `<body>`:
 
 ```html
-<!-- At the end of <body> tag -->
-<script src="/js/header-loader.js"></script>    <!-- 1. Injects header HTML -->
-<script src="/js/header-dynamic.js"></script>   <!-- 2. Handles authentication -->
-<script src="/js/i18n.js"></script>             <!-- 3. Manages translations -->
+<!-- Header será cargado dinámicamente por header-loader.js -->
+<script src="/js/header-loader.js"></script>      <!-- 1. Inyecta header HTML -->
+<script src="/js/header-dynamic.js"></script>     <!-- 2. Maneja autenticación -->
+<script src="/js/i18n.js"></script>               <!-- 3. Gestiona traducciones -->
 </body>
 ```
 
-### Translation Attributes
+---
 
-Use `data-i18n` for translatable content:
+## 🛠️ Integración con FrontendController
 
-```html
-<h1 data-i18n="page.title">Spanish Text</h1>
-<input type="text" data-i18n-placeholder="form.name" placeholder="Nombre">
-```
+El archivo `FrontendController.php` se encarga de:
+
+1. **Leer archivos .php** de las subcarpetas
+2. **Inyectar token CSRF** en formularios
+3. **Servir contenido** con headers HTML correctos
+4. **Manejar autenticación** mediante configuración en `beforeFilter()`
+
+### Rutas Automáticas (No requieren acción manual)
+
+Cuando agregas un archivo a `shared/` o `user/`, la ruta se genera automáticamente:
+
+| Ubicación Archivo | Ruta de Acceso |
+|-------------------|----------------|
+| `shared/login.php` | `/frontend/login` |
+| `shared/about.php` | `/frontend/about` |
+| `user/fleet.php` | `/frontend/fleet` |
+| `user/new-reservation.php` | `/frontend/newreservation` |
 
 ---
 
-## 📝 Naming Conventions
+## 📝 Convenciones de Nombres
 
-All files follow international standards:
-- **Language**: English
-- **Case**: kebab-case (words-separated-by-hyphens)
-- **Format**: lowercase only
-- **Extension**: `.html`
+Todos los archivos siguen estándares internacionales:
+- **Idioma**: Inglés ✅
+- **Capitalización**: kebab-case (palabras-separadas-por-guiones)
+- **Mayúsculas**: minúsculas únicamente
+- **Extensión**: `.php` (no .html)
 
-### Examples
-- ✅ `my-reservations.html` 
-- ✅ `rate-service.html`
-- ❌ `MisReservas.html` (Spanish + CamelCase)
+### Ejemplos
+- ✅ `my-reservations.php` 
+- ✅ `rate-service.php`
+- ✅ `new-reservation.php`
+- ❌ `MisReservas.php` (Spanish + CamelCase)
 - ❌ `valorar_servicios.html` (Spanish + snake_case)
 
 ---
 
-## 🚀 Adding New Pages
+## 🆕 Agregar Nuevas Páginas
 
-1. **Create the HTML file**:
+### Para Usuario (Requiere Autenticación)
+
+1. **Crear archivo en `user/`**:
    ```bash
-   touch webroot/frontend/my-new-page.html
+   touch webroot/frontend/user/my-feature.php
    ```
 
-2. **Include header scripts**:
+2. **Incluir scripts requeridos** al final de `<body>`:
    ```html
+   <!-- Header será cargado dinámicamente por header-loader.js -->
    <script src="/js/header-loader.js"></script>
    <script src="/js/header-dynamic.js"></script>
    <script src="/js/i18n.js"></script>
+   </body>
    ```
 
-3. **Add route in FrontendController.php** (optional):
+3. **Añadir método en FrontendController.php**:
    ```php
-   public function myNewPage()
+   /**
+    * My Feature page (my-feature.php)
+    */
+   public function myfeature()
    {
        $this->response = $this->response->withType('text/html');
-       $content = file_get_contents(ROOT . '/webroot/frontend/my-new-page.html');
+       $content = file_get_contents(ROOT . '/webroot/frontend/user/my-feature.php');
        $content = $this->injectCsrfToken($content);
        return $this->response->withStringBody($content);
    }
    ```
 
-4. **Add translations** in `i18n.js` if needed
+4. **Añadir ruta en `beforeFilter()`** si necesita lógica especial:
+   ```php
+   $this->Authentication->addUnauthenticatedActions(['myfeature']);
+   ```
+
+### Para Público (Sin Autenticación)
+
+Sigue los mismos pasos pero guarda el archivo en `shared/` en lugar de `user/`.
 
 ---
 
-## 🌐 Internationalization
+## 🌐 Sistema de Traducciones (i18n)
 
-Language files are managed in `/js/i18n.js`:
-- Spanish (ES) - Default
-- English (EN)
+Las traducciones se gestionan en `/js/i18n.js`:
+- **Idioma por defecto**: Español (ES)
+- **Idioma alternativo**: Inglés (EN)
+- **Almacenamiento**: localStorage (persiste entre sesiones)
 
-Add new translations:
+### Cómo Usar Traducciones
+
+**En HTML:**
+```html
+<h1 data-i18n="page.title">Mis Reservas</h1>
+<input type="text" data-i18n-placeholder="form.name" placeholder="Nombre">
+```
+
+**En JavaScript:**
+```javascript
+const label = translations[currentLanguage]['page.title'];
+```
+
+### Agregar Nuevas Traducciones
+
+Edita `/js/i18n.js`:
 ```javascript
 const translations = {
-  es: { 'myKey': 'Mi Texto' },
-  en: { 'myKey': 'My Text' }
+  es: {
+    'myfeature.title': 'Mi Característica Especial',
+    'myfeature.description': 'Descripción aquí...'
+  },
+  en: {
+    'myfeature.title': 'My Special Feature',
+    'myfeature.description': 'Description here...'
+  }
 };
 ```
 
 ---
 
-## 🔐 Authentication Flow
+## 🔐 Flujo de Autenticación
 
-1. **Unauthenticated**: Shows "Login" button in header
-2. **Authenticated**: Shows user profile with dropdown:
-   - My Profile
-   - My Reservations
-   - Settings
-   - Logout
+El sistema automático maneja:
 
-Authentication is managed automatically by `header-dynamic.js` via:
-- API: `/xserv-usuarios/me`
-- Logout: `/logout`
+1. **No Autenticado**: Muestra botón "Login" en header
+2. **Autenticado**: Muestra perfil de usuario con menú dropdown:
+   - Mi Perfil
+   - Mis Reservas
+   - Valoraciones
+   - Cerrar Sesión
+
+El header dinámico verifica estado mediante:
+- **API**: `GET /xserv-usuarios/me` (obtiene usuario actual)
+- **Logout**: `POST /xserv-usuarios/logout` (cierra sesión)
 
 ---
 
-## 📦 Dependencies
+## 📦 Dependencias
 
-### External
+### Externas
+- Google Fonts (Playfair Display, Inter)
+- Unsplash Images (para demostraciones)
+
+### Internas
+- `/js/header-loader.js` - Inyector de header
+- `/js/header-dynamic.js` - Lógica de autenticación
+- `/js/i18n.js` - Sistema de traducciones
+- `/css/` - Estilos globales
+
+---
+
+## 🚀 Próximos Pasos
+
+1. **Desarrollar sección DRIVER**:
+   - Dashboard de viajes
+   - Gestión de disponibilidad
+   - Calificaciones y reviews
+
+2. **Desarrollar sección ADMIN**:
+   - Panel de control
+   - Gestión de vehículos
+   - Reportes y analíticos
+
+3. **Optimizaciones**:
+   - Separar CSS por página
+   - Minificación de JS
+   - Caché de assets
+
+---
+
+## 📞 Soporte
+
+Para preguntas sobre estructura o integración, revisa:
+- `src/Controller/FrontendController.php` - Rutas y lógica
+- `/js/i18n.js` - Sistema de traducciones
+- `/js/header-loader.js` - Carga de header
 - Google Fonts: Playfair Display, Inter
 - No external CSS frameworks (custom design)
 

@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Xservicios - Ficha Chofer</title>
+  <title data-i18n="page.title.driverDetails">Xservicios - Información del Conductor</title>
+  <script src="/js/i18n-preload.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * {
@@ -386,6 +387,8 @@
   </style>
 </head>
 <body>
+  <!-- Header será cargado dinámicamente por header-loader.js -->
+
   <!-- SVG Definitions for half star -->
   <svg width="0" height="0" style="position: absolute;">
     <defs>
@@ -752,9 +755,9 @@
     </div>
 
   </div>
+  <script src="/js/i18n.js"></script>
   <script src="/js/header-loader.js"></script>
   <script src="/js/header-dynamic.js"></script>
-  <script src="/js/i18n.js"></script>
 </body>
 </html>
 `

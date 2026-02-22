@@ -22,6 +22,8 @@ const translations = {
     'auth.signUpTitle': 'Crea una cuenta',
     'auth.signUpSubtitle': 'Regístrate para continuar',
     'auth.username': 'Nombre de Usuario',
+    'auth.noAccount': '¿No tienes una cuenta?',
+    'auth.haveAccount': '¿Ya tienes cuenta?',
     
     // Perfil de usuario
     'profile.myProfile': 'Mi Perfil',
@@ -115,6 +117,38 @@ const translations = {
     'form.edit': 'Editar',
     'form.delete': 'Eliminar',
     
+    // Password Requirements
+    'password.requirements': 'La contraseña debe contener:',
+    'password.minLength': 'Mínimo 8 caracteres',
+    'password.uppercase': 'Al menos una mayúscula',
+    'password.number': 'Al menos un número',
+    'password.special': 'Al menos un carácter especial (!@#$%^&*)',
+    'password.match': 'Las contraseñas coinciden',
+    'password.noMatch': 'Las contraseñas no coinciden',
+
+    // Errors
+    'errors.invalidCredentials': 'Usuario o contraseña incorrectos',
+    'errors.mustLoginProfile': 'Debe iniciar sesión para ver el perfil',
+    'errors.passwordMismatch': 'Las contraseñas no coinciden',
+    'errors.passwordMinLength': 'La contraseña debe tener al menos 8 caracteres',
+    'errors.passwordRequirements': 'La contraseña debe contener al menos una mayúscula y un número',
+    'errors.passwordInvalid': 'La contraseña no es válida',
+    'errors.usernameTaken': 'El nombre de usuario ya está en uso',
+    'errors.usernameInvalid': 'El nombre de usuario no es válido',
+    'errors.emailInvalid': 'Debe ingresar un correo electrónico válido',
+    'errors.emailTaken': 'Este correo electrónico ya está registrado',
+    'errors.emailRequired': 'El correo electrónico es requerido',
+    'errors.registerFailed': 'No se pudo crear la cuenta',
+    'errors.mustLoginChangePassword': 'Debe iniciar sesión para cambiar la contraseña.',
+    'errors.currentPasswordIncorrect': 'La contraseña actual es incorrecta.',
+    'errors.newPasswordMismatch': 'La nueva contraseña y la confirmación no coinciden.',
+    'errors.passwordUpdateFailed': 'No se pudo actualizar la contraseña, intente de nuevo.',
+
+    // Success
+    'success.login': 'Inicio de sesión exitoso',
+    'success.register': 'Cuenta creada correctamente',
+    'success.passwordUpdated': 'Contraseña actualizada con éxito.',
+    
     // Buttons
     'btn.reserve': 'Reservar',
     'btn.book': 'Reservar Ahora',
@@ -125,7 +159,22 @@ const translations = {
     'btn.confirm': 'Confirmar',
     
     // Footer
-    'footer.text': '© 2026 <span>Xservicios</span> - Transporte Turístico de Lujo. Todos los derechos reservados.'
+    'footer.text': '© 2026 <span>Xservicios</span> - Transporte Turístico de Lujo. Todos los derechos reservados.',
+    
+    // Page Titles
+    'page.title.home': 'Xservicios - Transporte Turístico de Lujo en Chiriquí',
+    'page.title.about': 'Xservicios - Quiénes Somos | Transporte Turístico de Lujo',
+    'page.title.fleet': 'Xservicios - Nuestra Flota | Vehículos de Lujo',
+    'page.title.services': 'Xservicios - Nuestros Servicios | Tours y Traslados',
+    'page.title.login': 'Xservicios - Iniciar Sesión',
+    'page.title.signup': 'Xservicios - Crear Cuenta',
+    'page.title.newReservation': 'Xservicios - Nueva Reserva',
+    'page.title.myReservations': 'Xservicios - Mis Reservas',
+    'page.title.profile': 'Xservicios - Mi Perfil',
+    'page.title.dashboard': 'Xservicios - Panel de Control',
+    'page.title.rateService': 'Xservicios - Valorar Servicio',
+    'page.title.busDetails': 'Xservicios - Detalles del Vehículo',
+    'page.title.driverDetails': 'Xservicios - Información del Conductor'
   },
   
   en: {
@@ -146,6 +195,8 @@ const translations = {
     'auth.signUpTitle': 'Create an account',
     'auth.signUpSubtitle': 'Sign up to continue',
     'auth.username': 'Username',
+    'auth.noAccount': "Don't have an account?",
+    'auth.haveAccount': 'Already have an account?',
     
     // User Profile
     'profile.myProfile': 'My Profile',
@@ -239,6 +290,38 @@ const translations = {
     'form.edit': 'Edit',
     'form.delete': 'Delete',
     
+    // Password Requirements
+    'password.requirements': 'The password must contain:',
+    'password.minLength': 'Minimum 8 characters',
+    'password.uppercase': 'At least one uppercase letter',
+    'password.number': 'At least one number',
+    'password.special': 'At least one special character (!@#$%^&*)',
+    'password.match': 'Passwords match',
+    'password.noMatch': 'Passwords do not match',
+
+    // Errors
+    'errors.invalidCredentials': 'Incorrect username or password',
+    'errors.mustLoginProfile': 'You must sign in to view your profile',
+    'errors.passwordMismatch': 'Passwords do not match',
+    'errors.passwordMinLength': 'Password must be at least 8 characters',
+    'errors.passwordRequirements': 'Password must contain at least one uppercase letter and one number',
+    'errors.passwordInvalid': 'Password is not valid',
+    'errors.usernameTaken': 'Username is already in use',
+    'errors.usernameInvalid': 'Username is not valid',
+    'errors.emailInvalid': 'Please enter a valid email address',
+    'errors.emailTaken': 'This email address is already registered',
+    'errors.emailRequired': 'Email address is required',
+    'errors.registerFailed': 'Account could not be created',
+    'errors.mustLoginChangePassword': 'You must sign in to change your password.',
+    'errors.currentPasswordIncorrect': 'Current password is incorrect.',
+    'errors.newPasswordMismatch': 'New password and confirmation do not match.',
+    'errors.passwordUpdateFailed': 'Password could not be updated. Please try again.',
+
+    // Success
+    'success.login': 'Signed in successfully',
+    'success.register': 'Account created successfully',
+    'success.passwordUpdated': 'Password updated successfully.',
+    
     // Buttons
     'btn.reserve': 'Reserve',
     'btn.book': 'Book Now',
@@ -249,7 +332,22 @@ const translations = {
     'btn.confirm': 'Confirm',
     
     // Footer
-    'footer.text': '© 2026 <span>Xservicios</span> - Luxury Tourist Transportation. All rights reserved.'
+    'footer.text': '© 2026 <span>Xservicios</span> - Luxury Tourist Transportation. All rights reserved.',
+    
+    // Page Titles
+    'page.title.home': 'Xservicios - Luxury Tourist Transportation in Chiriquí',
+    'page.title.about': 'Xservicios - About Us | Luxury Tourist Transportation',
+    'page.title.fleet': 'Xservicios - Our Fleet | Luxury Vehicles',
+    'page.title.services': 'Xservicios - Our Services | Tours and Transfers',
+    'page.title.login': 'Xservicios - Log In',
+    'page.title.signup': 'Xservicios - Sign Up',
+    'page.title.newReservation': 'Xservicios - New Reservation',
+    'page.title.myReservations': 'Xservicios - My Reservations',
+    'page.title.profile': 'Xservicios - My Profile',
+    'page.title.dashboard': 'Xservicios - Dashboard',
+    'page.title.rateService': 'Xservicios - Rate Service',
+    'page.title.busDetails': 'Xservicios - Vehicle Details',
+    'page.title.driverDetails': 'Xservicios - Driver Information'
   }
 };
 
@@ -258,7 +356,8 @@ const translations = {
  */
 class I18n {
   constructor() {
-    this.currentLang = this.getStoredLanguage() || 'es';
+    // Prioridad: localStorage > preload > default
+    this.currentLang = this.getStoredLanguage() || window.__i18nPreloadLang || 'es';
     this.init();
   }
 
@@ -266,6 +365,8 @@ class I18n {
    * Inicializa el sistema de traducción
    */
   init() {
+    console.log(`🌐 Inicializando i18n con idioma: ${this.currentLang}`);
+    
     // Aplicar idioma actual
     this.setLanguage(this.currentLang, false);
     
@@ -274,13 +375,30 @@ class I18n {
     
     // Actualizar estado activo de los botones
     this.updateActiveLanguage();
+
+    // Mostrar contenido después de aplicar traducciones
+    if (document.body) {
+      document.body.classList.add('i18n-ready');
+      console.log('✅ i18n inicializado - contenido visible');
+      // Remover el estilo de preload después de un momento
+      setTimeout(() => {
+        const preloadStyle = document.getElementById('i18n-preload-style');
+        if (preloadStyle) {
+          preloadStyle.remove();
+        }
+      }, 300);
+    }
   }
 
   /**
    * Obtiene el idioma almacenado en localStorage
    */
   getStoredLanguage() {
-    return localStorage.getItem('preferredLanguage');
+    const lang = localStorage.getItem('preferredLanguage');
+    if (lang) {
+      console.log(`📖 Idioma leído de localStorage: ${lang}`);
+    }
+    return lang;
   }
 
   /**
@@ -288,6 +406,7 @@ class I18n {
    */
   setStoredLanguage(lang) {
     localStorage.setItem('preferredLanguage', lang);
+    console.log(`💾 Idioma guardado en localStorage: ${lang}`);
   }
 
   /**
@@ -322,6 +441,16 @@ class I18n {
    * Traduce todos los elementos de la página
    */
   translatePage() {
+    // Traducir el título de la página si tiene data-i18n
+    const titleElement = document.querySelector('title[data-i18n]');
+    if (titleElement) {
+      const key = titleElement.getAttribute('data-i18n');
+      const translation = translations[this.currentLang][key];
+      if (translation) {
+        document.title = translation;
+      }
+    }
+
     // Traducir elementos con data-i18n
     const elements = document.querySelectorAll('[data-i18n]');
     
@@ -360,11 +489,20 @@ class I18n {
    * Actualiza el estado activo de los botones de idioma
    */
   updateActiveLanguage() {
+    // Actualizar botón de idioma nuevo (único)
+    const langButton = document.getElementById('langToggle');
+    if (langButton) {
+      const langCodeSpan = langButton.querySelector('.lang-code');
+      if (langCodeSpan) {
+        // Mostrar el idioma actual (no el opuesto)
+        langCodeSpan.textContent = this.currentLang === 'es' ? 'ES' : 'EN';
+      }
+    }
+
+    // Mantener compatibilidad con botones antiguos (si existen)
     const langButtons = document.querySelectorAll('.lang-text');
-    
     langButtons.forEach(button => {
       const lang = button.getAttribute('data-lang');
-      
       if (lang === this.currentLang) {
         button.classList.add('active');
       } else {
@@ -377,8 +515,23 @@ class I18n {
    * Agrega eventos de clic a los botones de idioma
    */
   attachLanguageButtons() {
+    // Manejar botón único de idioma
+    const langToggle = document.getElementById('langToggle');
+    if (langToggle) {
+      langToggle.addEventListener('click', () => {
+        const newLang = this.currentLang === 'es' ? 'en' : 'es';
+        this.setLanguage(newLang);
+        
+        // Animación visual de feedback
+        langToggle.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          langToggle.style.transform = 'scale(1)';
+        }, 150);
+      });
+    }
+
+    // Mantener compatibilidad con botones antiguos (si existen)
     const langButtons = document.querySelectorAll('.lang-text');
-    
     langButtons.forEach(button => {
       button.addEventListener('click', (e) => {
         const lang = e.target.getAttribute('data-lang');

@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Xservicios - Transporte Turístico de Lujo</title>
+  <title data-i18n="page.title.about">Xservicios - Quiénes Somos | Transporte Turístico de Lujo</title>
+  <script src="/js/i18n-preload.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     * {
@@ -107,7 +108,9 @@
     .nav-item {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 0.4rem;
+      min-width: 90px;
       color: var(--text-gray);
       text-decoration: none;
       font-size: 0.85rem;
@@ -700,7 +703,7 @@
   <link rel="stylesheet" href="/css/header-auth.css">
 </head>
 <body>
-  <!-- Header se carga dinámicamente con header-loader.js -->
+  <!-- Header será cargado dinámicamente por header-loader.js -->
 
   <!-- Hero Section -->
   <section class="hero-section">
@@ -829,9 +832,9 @@
     <p class="footer-text" data-i18n="footer.text">© 2026 <span>Xservicios</span> - Transporte Turístico de Lujo. Todos los derechos reservados.</p>
   </footer>
   
-  <!-- Scripts: El orden es importante -->
+  <!-- Scripts: El orden es importante - i18n.js debe cargar primero -->
+  <script src="/js/i18n.js"></script>
   <script src="/js/header-loader.js"></script>
   <script src="/js/header-dynamic.js"></script>
-  <script src="/js/i18n.js"></script>
 </body>
 </html>

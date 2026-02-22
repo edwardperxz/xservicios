@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Xservicios - Ver Flota</title>
+  <title data-i18n="page.title.fleet">Xservicios - Nuestra Flota | Vehículos de Lujo</title>
+  <script src="/js/i18n-preload.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     * {
@@ -66,53 +67,51 @@
     .header {
       display: flex;
       align-items: center;
+      justify-content: center;
       padding: 1rem 2.5rem;
-      background: linear-gradient(to bottom, rgba(10, 10, 10, 0.98), rgba(5, 5, 5, 0.95));
-      border-bottom: 1px solid rgba(201, 169, 98, 0.3);
-      position: relative;
-      z-index: 10;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
     }
 
     .logo {
       display: flex;
       align-items: center;
-      gap: 0;
-      flex-shrink: 0;
+      gap: 0.25rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+      color: var(--text-white);
+      position: absolute;
+      left: 2.5rem;
     }
 
     .logo-x {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      font-weight: 700;
       color: var(--gold);
-      text-shadow: 0 0 10px rgba(201, 169, 98, 0.5);
-    }
-
-    .logo-text {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--text-white);
-      letter-spacing: 0.5px;
+      font-size: 1.8rem;
+      font-weight: 700;
     }
 
     .nav-menu {
       display: flex;
       align-items: center;
       gap: 2rem;
-      margin-left: 4rem;
-      margin-right: 4rem;
     }
 
     .nav-item {
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      justify-content: center;
+      gap: 0.5rem;
+      min-width: 90px;
       color: var(--text-gray);
       text-decoration: none;
-      font-size: 0.85rem;
+      font-size: 0.875rem;
       transition: color 0.3s;
-      white-space: nowrap;
     }
 
     .nav-item:hover,
@@ -120,80 +119,71 @@
       color: var(--gold);
     }
 
-    .nav-icon {
-      width: 16px;
-      height: 16px;
-      stroke: currentColor;
-      fill: none;
-      flex-shrink: 0;
-    }
-
     .user-actions {
       display: flex;
       align-items: center;
-      gap: 1.25rem;
-      margin-left: auto;
+      gap: 1.5rem;
+      position: absolute;
+      right: 2.5rem;
     }
 
-    .lang-selector {
+    .lang-button {
       display: flex;
       align-items: center;
-      gap: 0.4rem;
-      color: var(--text-gray);
-      font-size: 0.8rem;
-    }
-
-    .lang-icon {
-      width: 14px;
-      height: 14px;
-      stroke: var(--gold);
-      fill: none;
-    }
-
-    .lang-text {
-      color: var(--text-gray);
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      background: rgba(201, 169, 98, 0.1);
+      border: 1px solid rgba(201, 169, 98, 0.3);
+      border-radius: 6px;
+      color: var(--text-white);
+      font-size: 0.875rem;
+      font-weight: 600;
       cursor: pointer;
-      transition: color 0.3s;
-      font-size: 0.8rem;
+      transition: all 0.3s ease;
     }
 
-    .lang-text:hover {
-      color: var(--gold);
+    .lang-button:hover {
+      background: rgba(201, 169, 98, 0.2);
+      border-color: var(--gold);
+      transform: translateY(-2px);
     }
 
-    .lang-divider {
-      color: var(--dark-lighter);
-    }
-
-    .notification-icon {
-      cursor: pointer;
-      transition: color 0.3s;
-    }
-
-    .notification-icon svg {
+    .lang-button .lang-icon {
       width: 18px;
       height: 18px;
-      stroke: var(--text-gray);
+      stroke: var(--gold);
       fill: none;
     }
 
-    .notification-icon:hover svg {
-      stroke: var(--gold);
+    .lang-button .lang-code {
+      color: var(--gold);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .lang-selector .lang-separator {
+      color: var(--text-gray);
+      user-select: none;
     }
 
     .auth-button {
-      padding: 0.5rem 1.1rem;
-      border: 1px solid var(--gold);
-      border-radius: 20px;
-      color: var(--gold);
-      font-size: 0.8rem;
-      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.65rem 1.5rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--dark-bg);
+      font-weight: 600;
+      font-size: 0.9rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
       transition: all 0.3s;
-      white-space: nowrap;
+      text-decoration: none;
     }
 
     .auth-button:hover {
-      background: rgba(201, 169, 98, 0.15);
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      transform: translateY(-2px);
     }
 
     .is-hidden {
@@ -1363,8 +1353,6 @@
     <p class="footer-text">2026 <span>Xservicios</span>. Todos los derechos reservados.</p>
   </footer>
 
-  <script src="/js/header-template.js"></script>
-  <script src="/js/header-auth.js"></script>
   <script>
     let showingAll = false;
     
@@ -1388,9 +1376,9 @@
       }
     }
   </script>
+  <script src="/js/i18n.js"></script>
   <script src="/js/header-loader.js"></script>
   <script src="/js/header-dynamic.js"></script>
-  <script src="/js/i18n.js"></script>
 </body>
 </html>
 `,

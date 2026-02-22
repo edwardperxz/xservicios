@@ -68,10 +68,35 @@ class XservUsuariosTable extends Table
             ]);
 
         $validator
+            ->email('correo', true, 'Debe ingresar un correo electrónico válido')
+            ->requirePresence('correo', 'create')
+            ->notEmptyString('correo', 'El correo electrónico es requerido')
+            ->add('correo', 'unique', [
+                'rule' => 'validateUnique',
+                'provider' => 'table',
+                'message' => 'Este correo electrónico ya está registrado'
+            ]);
+
+        $validator
             ->scalar('password')
             ->maxLength('password', 255)
             ->requirePresence('password', 'create')
-            ->notEmptyString('password');
+            ->notEmptyString('password')
+            ->minLength('password', 8, 'La contraseña debe tener al menos 8 caracteres')
+            ->add('password', 'strongPassword', [
+                'rule' => function ($value, $context) {
+                    // Al menos una mayúscula
+                    if (!preg_match('/[A-Z]/', $value)) {
+                        return false;
+                    }
+                    // Al menos un número
+                    if (!preg_match('/[0-9]/', $value)) {
+                        return false;
+                    }
+                    return true;
+                },
+                'message' => 'La contraseña debe contener al menos una mayúscula y un número'
+            ]);
 
         $validator
             ->scalar('rol')
@@ -95,6 +120,7 @@ class XservUsuariosTable extends Table
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->isUnique(['username']), ['errorField' => 'username']);
+        $rules->add($rules->isUnique(['correo']), ['errorField' => 'correo']);
 
         return $rules;
     }

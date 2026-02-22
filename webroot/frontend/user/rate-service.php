@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Valorar Servicio - Xservicios</title>
+  <title data-i18n="page.title.rateService">Xservicios - Valorar Servicio</title>
+  <script src="/js/i18n-preload.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     * {
@@ -102,7 +103,9 @@
     .nav-item {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 0.4rem;
+      min-width: 90px;
       color: var(--text-gray);
       text-decoration: none;
       font-size: 0.85rem;
@@ -786,14 +789,14 @@
   <!-- Header será cargado dinámicamente por header-loader.js -->
 
     <nav class="nav-menu">
-      <a href="home.html" class="nav-item">
+      <a href="home.php" class="nav-item">
         <svg class="nav-icon" viewBox="0 0 24 24" stroke-width="2">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
           <polyline points="9 22 9 12 15 12 15 22" />
         </svg>
         <span>Inicio</span>
       </a>
-      <a href="fleet.html" class="nav-item">
+      <a href="fleet.php" class="nav-item">
         <svg class="nav-icon" viewBox="0 0 24 24" stroke-width="2">
           <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18 10l-1.9-4.6c-.3-.7-1-1.4-1.8-1.4H9.7c-.8 0-1.5.5-1.8 1.2L6 10l-2.5 1.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2" />
           <circle cx="7" cy="17" r="2" />
@@ -892,8 +895,6 @@
     </div>
   </div>
 
-  <script src="/js/header-template.js"></script>
-  <script src="/js/header-auth.js"></script>
   <script>
     // Variables globales
     let viajesSinValorar = [];
@@ -1316,8 +1317,8 @@
     // Inicializar
     cargarDatos();
   </script>
+  <script src="/js/i18n.js"></script>
   <script src="/js/header-loader.js"></script>
   <script src="/js/header-dynamic.js"></script>
-  <script src="/js/i18n.js"></script>
 </body>
 </html>

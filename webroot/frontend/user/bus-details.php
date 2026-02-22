@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ficha Técnica - Bus</title>
+  <title data-i18n="page.title.busDetails">Xservicios - Detalles del Vehículo</title>
+  <script src="/js/i18n-preload.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * {
@@ -297,6 +298,8 @@
   </style>
 </head>
 <body>
+  <!-- Header será cargado dinámicamente por header-loader.js -->
+
   <div class="ficha-container">
     <h2 class="ficha-title">Fichas Técnicas de Vehículos</h2>
 
@@ -633,9 +636,9 @@
     </div>
 
   </div>
+  <script src="/js/i18n.js"></script>
   <script src="/js/header-loader.js"></script>
   <script src="/js/header-dynamic.js"></script>
-  <script src="/js/i18n.js"></script>
 </body>
 </html>
 `,

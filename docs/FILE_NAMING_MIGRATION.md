@@ -15,18 +15,20 @@ Todos los archivos HTML del frontend han sido renombrados siguiendo convenciones
 
 | Nombre Anterior (Español) | Nombre Nuevo (Inglés) | Descripción |
 |---------------------------|----------------------|-------------|
-| `crear-cuenta.html` | `signup.html` | Página de registro/crear cuenta |
-| `inicio-sesion.html` | `login.html` | Página de inicio de sesión |
-| `Nosotros.html` | `about.html` | Página sobre nosotros/empresa |
-| `servicios.html` | `services.html` | Lista de servicios disponibles |
-| `ver-flota.html` | `fleet.html` | Galería de vehículos |
-| `mis-reservas.html` | `my-reservations.html` | Lista de reservas del usuario |
-| `nueva-reserva.html` | `new-reservation.html` | Formulario nueva reserva |
-| `valorar-servicios.html` | `rate-service.html` | Valoración de servicios |
-| `ficha-bus.html` | `bus-details.html` | Fichas técnicas de buses |
-| `ficha-chofer.html` | `driver-details.html` | Perfiles de choferes |
-| `home-login.html` | `dashboard.html` | Dashboard usuarios autenticados |
-| `home-public.html` | `home.html` | Página principal pública |
+| `crear-cuenta.html` | `signup.php` | Página de registro/crear cuenta |
+| `inicio-sesion.html` | `login.php` | Página de inicio de sesión |
+| `Nosotros.html` | `about.php` | Página sobre nosotros/empresa |
+| `servicios.html` | `services.php` | Lista de servicios disponibles |
+| `ver-flota.html` | `fleet.php` | Galería de vehículos |
+| `mis-reservas.html` | `my-reservations.php` | Lista de reservas del usuario |
+| `nueva-reserva.html` | `new-reservation.php` | Formulario nueva reserva |
+| `valorar-servicios.html` | `rate-service.php` | Valoración de servicios |
+| `ficha-bus.html` | `bus-details.php` | Fichas técnicas de buses |
+| `ficha-chofer.html` | `driver-details.php` | Perfiles de choferes |
+| `home-login.html` | `dashboard.php` | Dashboard usuarios autenticados |
+| `home-public.html` | `home.php` | Página principal pública |
+
+> **Nota**: Todos los archivos del frontend fueron convertidos de HTML a PHP para uniformidad y flexibilidad futura. El contenido y estructura se mantienen idénticos.
 
 ---
 
@@ -53,14 +55,14 @@ Las rutas de CakePHP se mantienen igual (no cambiaron):
 
 | Ruta | Archivo Servido |
 |------|----------------|
-| `/frontend/fleet` | `fleet.html` |
-| `/frontend/services` | `services.html` |
-| `/frontend/about` | `about.html` |
-| `/frontend/newreservation` | `new-reservation.html` |
-| `/frontend/myreservations` | `my-reservations.html` |
-| `/frontend/rateservice` | `rate-service.html` |
-| `/frontend/signup` | `signup.html` |
-| `/frontend/login` | `login.html` |
+| `/frontend/fleet` | `fleet.php` |
+| `/frontend/services` | `services.php` |
+| `/frontend/about` | `about.php` |
+| `/frontend/newreservation` | `new-reservation.php` |
+| `/frontend/myreservations` | `my-reservations.php` |
+| `/frontend/rateservice` | `rate-service.php` |
+| `/frontend/signup` | `signup.php` |
+| `/frontend/login` | `login.php` |
 
 ---
 
@@ -91,11 +93,12 @@ Las rutas de CakePHP se mantienen igual (no cambiaron):
 
 ## 👥 Próximos Pasos
 
-Si necesitas agregar nuevos archivos HTML al frontend:
+Si necesitas agregar nuevos archivos al frontend:
 
-1. **Nómbralos en inglés**: `my-new-page.html`
+1. **Nómbralos en inglés**: `my-new-page.php`
 2. **Usa kebab-case**: palabras separadas por guiones
-3. **Mantenlo descriptivo**: el nombre debe indicar qué hace
+3. **Extensión PHP**: todos los archivos frontend usan `.php`
+4. **Mantenlo descriptivo**: el nombre debe indicar qué hace
 4. **Todo en minúsculas**: nunca uses mayúsculas
 5. **Agrega al FrontendController**: si necesita una ruta CakePHP
 

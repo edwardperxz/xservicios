@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Xservicios - Iniciar Sesión</title>
+  <title data-i18n="page.title.signup">Xservicios - Crear Cuenta</title>
+  <script src="/js/i18n-preload.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * {
@@ -61,7 +62,9 @@
     .nav-item {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
+      min-width: 90px;
       color: #a0a0a0;
       text-decoration: none;
       font-size: 14px;
@@ -298,22 +301,6 @@
       color: #a0a0a0;
     }
 
-    .forgot-password {
-      text-align: right;
-      margin-top: -10px;
-    }
-
-    .forgot-password a {
-      color: #a0a0a0;
-      font-size: 13px;
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-
-    .forgot-password a:hover {
-      color: #c9a962;
-    }
-
     .submit-btn {
       background-color: #1a1512;
       border: 1px solid #4a7c59;
@@ -368,39 +355,37 @@
 
   <section class="hero-section">
     <div class="form-container">
-      <h1 class="form-title" data-i18n="auth.loginTitle">Inicia Sesión</h1>
-      <p class="form-subtitle" data-i18n="auth.loginSubtitle">Inicia sesión en cualquiera de tus cuentas existentes</p>
+      <h1 class="form-title" data-i18n="auth.signUpTitle">Crea una cuenta</h1>
+      <p class="form-subtitle" data-i18n="auth.signUpSubtitle">Regístrate para continuar</p>
       
-      <form class="register-form" id="loginForm" action="/xserv-usuarios/login" method="POST">
-        <input type="hidden" name="_csrfToken" id="csrfToken" value="">
+      <form class="register-form">
         <div class="input-group">
           <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
           </svg>
-          <input type="text" name="username" data-i18n-placeholder="auth.username" placeholder="Nombre de Usuario" autocomplete="username" required>
+          <input type="text" data-i18n-placeholder="auth.username" placeholder="Nombre de Usuario" required>
+        </div>
+        
+        <div class="input-group">
+          <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+          </svg>
+          <input type="email" data-i18n-placeholder="form.email" placeholder="Correo Electrónico" required>
         </div>
         
         <div class="input-group">
           <svg class="input-icon" fill="currentColor" viewBox="0 0 24 24">
             <path d="M12 2C9.243 2 7 4.243 7 7v3H6a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2v-8a2 2 0 00-2-2h-1V7c0-2.757-2.243-5-5-5zm0 2c1.654 0 3 1.346 3 3v3H9V7c0-1.654 1.346-3 3-3zm0 10a2 2 0 110 4 2 2 0 010-4z"></path>
           </svg>
-          <input type="password" name="password" data-i18n-placeholder="form.password" placeholder="Contraseña" autocomplete="current-password" required>
+          <input type="password" data-i18n-placeholder="form.password" placeholder="Contraseña" autocomplete="new-password" required>
         </div>
         
-        <div class="forgot-password">
-          <a href="#" data-i18n="auth.forgotPassword">¿Olvidaste tu contraseña?</a>
-        </div>
-        
-        <button type="submit" class="submit-btn" data-i18n="auth.login">Iniciar Sesión</button>
+        <button type="submit" class="submit-btn" data-i18n="auth.signUp">Crear Cuenta</button>
       </form>
     </div>
   </section>
-  <script>
-    // Redirigir al login de CakePHP que genera el token CSRF automáticamente
-    window.location.href = '/xserv-usuarios/login';
-  </script>
+  <script src="/js/i18n.js"></script>
   <script src="/js/header-loader.js"></script>
   <script src="/js/header-dynamic.js"></script>
-  <script src="/js/i18n.js"></script>
 </body>
 </html>

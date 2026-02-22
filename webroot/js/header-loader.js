@@ -12,7 +12,7 @@
     
     if (path.includes('nosotros') || path.includes('about')) return 'about';
     if (path.includes('flota') || path.includes('fleet')) return 'fleet';
-    if (path.includes('servicio')) return 'services';
+    if (path.includes('service')) return 'services';
     return 'home';
   }
 
@@ -23,65 +23,36 @@
     return `
       <header class="xserv-header">
         <a href="/home" class="xserv-logo">
-          <span class="xserv-logo-x">X</span><span class="xserv-logo-text">SERVICIOS</span>
+          <span class="xserv-logo-x">X</span>SERVICIOS
         </a>
         
         <nav class="xserv-nav-menu">
           <a href="/home" class="xserv-nav-item ${isActive('home')}">
-            <svg class="xserv-nav-icon" viewBox="0 0 24 24" strokeWidth="2">
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-              <polyline points="9 22 9 12 15 12 15 22"/>
-            </svg>
             <span data-i18n="nav.home">Inicio</span>
           </a>
           <a href="/fleet" class="xserv-nav-item ${isActive('fleet')}">
-            <svg class="xserv-nav-icon" viewBox="0 0 24 24" strokeWidth="2">
-              <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18 10l-1.9-4.6c-.3-.7-1-1.4-1.8-1.4H9.7c-.8 0-1.5.5-1.8 1.2L6 10l-2.5 1.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2"/>
-              <circle cx="7" cy="17" r="2"/>
-              <circle cx="17" cy="17" r="2"/>
-            </svg>
             <span data-i18n="nav.fleet">Ver flota</span>
           </a>
           <a href="/services" class="xserv-nav-item ${isActive('services')}">
-            <svg class="xserv-nav-icon" viewBox="0 0 24 24" strokeWidth="2">
-              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
-            </svg>
             <span data-i18n="nav.services">Servicios</span>
           </a>
           <a href="/about" class="xserv-nav-item ${isActive('about')}">
-            <svg class="xserv-nav-icon" viewBox="0 0 24 24" strokeWidth="2">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-              <circle cx="9" cy="7" r="4"/>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-            </svg>
             <span data-i18n="nav.about">Nosotros</span>
           </a>
         </nav>
 
         <div class="xserv-user-actions">
-          <!-- Language Selector -->
-          <div class="xserv-lang-selector">
-            <svg class="xserv-lang-icon" viewBox="0 0 24 24" strokeWidth="2">
+          <!-- Language Toggle Button -->
+          <button class="xserv-lang-button" id="langToggle" aria-label="Change language">
+            <svg class="lang-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="10"/>
-              <path d="M2 12h20"/>
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
             </svg>
-            <button class="xserv-lang-text active" data-lang="es">ES</button>
-            <span class="xserv-lang-divider">|</span>
-            <button class="xserv-lang-text" data-lang="en">EN</button>
-          </div>
-
-          <!-- Notification Icon -->
-          <div class="xserv-notification-icon">
-            <svg viewBox="0 0 24 24" strokeWidth="2">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-            </svg>
-          </div>
+            <span class="lang-code">EN</span>
+          </button>
 
           <!-- Login Button (shown when not authenticated) -->
-          <a class="xserv-auth-button" href="/login" id="xservLoginBtn" data-i18n="auth.login">Iniciar sesión</a>
+          <a class="xserv-auth-button" href="/login" id="xservLoginBtn" data-i18n="auth.login">Iniciar Sesión</a>
 
           <!-- User Profile (shown when authenticated) -->
           <div class="xserv-user-profile is-hidden" id="xservUserProfile">
@@ -139,69 +110,64 @@
         --gold: #c9a962;
         --gold-light: #d4b978;
         --gold-dark: #a88b4a;
-        --dark-bg: #0a0a0a;
-        --dark-deep: #050505;
+        --dark-bg: #0d0d0d;
         --dark-card: #1a1a1a;
         --dark-lighter: #2a2a2a;
         --text-white: #ffffff;
         --text-gray: #a0a0a0;
-        --text-dark: #1a1a1a;
+        --green: #4ade80;
+        --orange: #f59e0b;
       }
 
       .xserv-header {
         display: flex;
         align-items: center;
-        padding: 1rem 2.5rem;
-        background: linear-gradient(to bottom, rgba(10, 10, 10, 0.98), rgba(5, 5, 5, 0.95));
-        border-bottom: 1px solid rgba(201, 169, 98, 0.3);
-        position: sticky;
+        justify-content: center;
+        padding: 1.75rem 2.5rem 1rem 2.5rem;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+        position: absolute;
         top: 0;
-        z-index: 1000;
-        backdrop-filter: blur(10px);
+        left: 0;
+        right: 0;
+        z-index: 100;
       }
 
       .xserv-logo {
         display: flex;
         align-items: center;
-        gap: 0;
-        flex-shrink: 0;
+        gap: 0.25rem;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 1.5rem;
+        letter-spacing: 2px;
+        color: var(--text-white);
         text-decoration: none;
+        position: absolute;
+        left: 2.5rem;
       }
 
       .xserv-logo-x {
-        font-family: 'Playfair Display', serif;
-        font-size: 1.5rem;
-        font-weight: 700;
         color: var(--gold);
-        text-shadow: 0 0 10px rgba(201, 169, 98, 0.5);
-      }
-
-      .xserv-logo-text {
-        font-family: 'Playfair Display', serif;
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: var(--text-white);
-        letter-spacing: 0.5px;
+        font-size: 1.8rem;
+        font-weight: 700;
       }
 
       .xserv-nav-menu {
         display: flex;
         align-items: center;
         gap: 2rem;
-        margin-left: 4rem;
-        margin-right: 4rem;
       }
 
       .xserv-nav-item {
         display: flex;
         align-items: center;
-        gap: 0.4rem;
+        justify-content: center;
+        gap: 0.5rem;
+        min-width: 90px;
         color: var(--text-gray);
         text-decoration: none;
-        font-size: 0.85rem;
+        font-size: 0.875rem;
         transition: color 0.3s;
-        white-space: nowrap;
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       }
 
       .xserv-nav-item:hover,
@@ -209,99 +175,66 @@
         color: var(--gold);
       }
 
-      .xserv-nav-icon {
-        width: 16px;
-        height: 16px;
-        stroke: currentColor;
-        fill: none;
-        flex-shrink: 0;
-      }
-
       .xserv-user-actions {
         display: flex;
         align-items: center;
-        gap: 1.25rem;
-        margin-left: auto;
+        gap: 1.5rem;
+        position: absolute;
+        right: 2.5rem;
       }
 
-      .xserv-lang-selector {
+      .xserv-lang-button {
         display: flex;
         align-items: center;
-        gap: 0.4rem;
-        color: var(--text-gray);
-        font-size: 0.8rem;
-      }
-
-      .xserv-lang-icon {
-        width: 16px;
-        height: 16px;
-        stroke: var(--gold);
-        fill: none;
-      }
-
-      .xserv-lang-text {
-        color: var(--text-gray);
-        cursor: pointer;
-        transition: all 0.3s;
-        font-size: 0.8rem;
-        font-weight: 500;
-        padding: 0.3rem 0.6rem;
-        border-radius: 4px;
-        background: transparent;
-        font-family: 'Inter', sans-serif;
-        border: none;
-        outline: none;
-      }
-
-      .xserv-lang-text:hover {
-        color: var(--gold);
+        gap: 0.5rem;
+        padding: 0.5rem 0.75rem;
         background: rgba(201, 169, 98, 0.1);
-      }
-
-      .xserv-lang-text.active {
-        color: var(--gold);
-        background: rgba(201, 169, 98, 0.15);
+        border: 1px solid rgba(201, 169, 98, 0.3);
+        border-radius: 6px;
+        color: var(--text-white);
+        font-size: 0.875rem;
         font-weight: 600;
-      }
-
-      .xserv-lang-divider {
-        color: var(--dark-lighter);
-      }
-
-      .xserv-notification-icon {
         cursor: pointer;
-        transition: color 0.3s;
-        position: relative;
+        transition: all 0.3s ease;
       }
 
-      .xserv-notification-icon svg {
+      .xserv-lang-button:hover {
+        background: rgba(201, 169, 98, 0.2);
+        border-color: var(--gold);
+        transform: translateY(-2px);
+      }
+
+      .xserv-lang-button .lang-icon {
         width: 18px;
         height: 18px;
-        stroke: var(--text-gray);
-        fill: none;
+        stroke: var(--gold);
       }
 
-      .xserv-notification-icon:hover svg {
-        stroke: var(--gold);
+      .xserv-lang-button .lang-code {
+        color: var(--gold);
+        font-family: 'Inter', sans-serif;
       }
 
       .xserv-auth-button {
-        padding: 0.5rem 1.1rem;
-        border: 1px solid var(--gold);
-        border-radius: 20px;
-        color: var(--gold);
-        font-size: 0.8rem;
-        text-decoration: none;
-        transition: all 0.3s;
-        white-space: nowrap;
-        font-family: 'Inter', sans-serif;
-        background: transparent;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.65rem 1.5rem;
+        min-width: 130px;
+        background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+        color: var(--dark-bg);
+        font-weight: 600;
+        font-size: 0.9rem;
+        border: none;
+        border-radius: 4px;
         cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
       }
 
       .xserv-auth-button:hover {
-        background: rgba(201, 169, 98, 0.15);
-        transform: translateY(-1px);
+        background: linear-gradient(135deg, var(--gold-light), var(--gold));
+        transform: translateY(-2px);
       }
 
       .xserv-user-profile {
@@ -418,8 +351,6 @@
       @media (max-width: 1024px) {
         .xserv-nav-menu {
           gap: 1.5rem;
-          margin-left: 2rem;
-          margin-right: 2rem;
         }
       }
 
@@ -429,8 +360,6 @@
         }
 
         .xserv-nav-menu {
-          margin-left: 1.5rem;
-          margin-right: 1.5rem;
           gap: 1rem;
         }
 
@@ -473,6 +402,29 @@
       styles.id = 'xserv-header-styles';
       document.head.appendChild(styles);
     }
+
+    // Reinicializar el sistema i18n después de cargar el header
+    function initializeI18n() {
+      if (window.i18n) {
+        window.i18n.translatePage();
+        window.i18n.attachLanguageButtons();
+        window.i18n.updateActiveLanguage();
+        console.log('✅ Sistema i18n inicializado en header');
+        
+        // Emitir evento de que el header está completamente cargado
+        const event = new CustomEvent('headerLoaded', { 
+          detail: { timestamp: Date.now() } 
+        });
+        document.dispatchEvent(event);
+      } else {
+        // Si i18n aún no está disponible, esperar un poco más
+        console.log('⏳ Esperando i18n...');
+        setTimeout(initializeI18n, 50);
+      }
+    }
+    
+    // Iniciar después de un delay para asegurar que i18n esté cargado
+    setTimeout(initializeI18n, 100);
 
     console.log('✅ Header reutilizable cargado correctamente');
   }

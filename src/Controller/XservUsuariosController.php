@@ -43,11 +43,16 @@ class XservUsuariosController extends AppController
         $result = $this->Authentication->getResult();
 
         if ($result->isValid()) {
+            $this->Flash->success('Inicio de sesión exitoso', [
+                'params' => ['i18n' => 'success.login'],
+            ]);
             return $this->redirect(['controller' => 'Home', 'action' => 'index']);
         }
 
         if ($this->request->is('post') && !$result->isValid()) {
-            $this->Flash->error('Usuario o contraseña incorrectos');
+            $this->Flash->error('Usuario o contraseña incorrectos', [
+                'params' => ['i18n' => 'errors.invalidCredentials'],
+            ]);
         }
 
         return null;
@@ -64,6 +69,15 @@ class XservUsuariosController extends AppController
 
         $this->Authentication->logout();
 
+        // Si es una petición AJAX, devolver JSON
+        if ($this->request->is('json') || $this->request->getHeader('X-Requested-With') === 'XMLHttpRequest') {
+            $this->response = $this->response->withType('application/json');
+            return $this->response->withStringBody(json_encode([
+                'success' => true,
+                'message' => 'Sesión cerrada correctamente',
+            ]));
+        }
+
         return $this->redirect(['action' => 'login']);
     }
 
@@ -74,7 +88,9 @@ class XservUsuariosController extends AppController
 
         $user = $this->Authentication->getIdentity();
         if (!$user) {
-            $this->Flash->error('Debe iniciar sesión para ver el perfil');
+            $this->Flash->error('Debe iniciar sesión para ver el perfil', [
+                'params' => ['i18n' => 'errors.mustLoginProfile'],
+            ]);
             return $this->redirect(['action' => 'login']);
         }
 
@@ -103,9 +119,15 @@ class XservUsuariosController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
+        // Verificar si es una petición AJAX
+        $isAjax = $this->request->is('json') || 
+                  $this->request->getHeader('X-Requested-With') === 'XMLHttpRequest' ||
+                  ($this->request->hasHeader('X-Requested-With') && 
+                   $this->request->getHeaderLine('X-Requested-With') === 'XMLHttpRequest');
+
         $user = $this->Authentication->getIdentity();
         if (!$user) {
-            if ($this->request->is('json') || $this->request->getHeader('X-Requested-With') === 'XMLHttpRequest') {
+            if ($isAjax) {
                 $this->response = $this->response->withType('application/json')->withStatus(401);
                 return $this->response->withStringBody(json_encode([
                     'success' => false,
@@ -116,7 +138,7 @@ class XservUsuariosController extends AppController
             return $this->redirect(['action' => 'login']);
         }
 
-        if ($this->request->is('json') || $this->request->getHeader('X-Requested-With') === 'XMLHttpRequest') {
+        if ($isAjax) {
             $this->response = $this->response->withType('application/json');
             return $this->response->withStringBody(json_encode([
                 'success' => true,
@@ -263,6 +285,18 @@ class XservUsuariosController extends AppController
         if ($this->request->is('post')) {
             $data = $this->request->getData();
 
+            // Validar que las contraseñas coincidan
+            if (isset($data['password_confirm']) && $data['password'] !== $data['password_confirm']) {
+                $this->Flash->error('Las contraseñas no coinciden', [
+                    'params' => ['i18n' => 'errors.passwordMismatch'],
+                ]);
+                $this->set(compact('xservUsuario'));
+                return null;
+            }
+
+            // Remover el campo de confirmación antes de guardar
+            unset($data['password_confirm']);
+
             // valores por defecto obligatorios
             $data['rol'] = 'operador';
             $data['estado'] = 'activo';
@@ -270,14 +304,72 @@ class XservUsuariosController extends AppController
             $xservUsuario = $this->XservUsuarios->newEntity($data);
 
             if ($this->XservUsuarios->save($xservUsuario)) {
-                $this->Flash->success('Cuenta creada correctamente');
+                $this->Flash->success('Cuenta creada correctamente', [
+                    'params' => ['i18n' => 'success.register'],
+                ]);
 
                 return $this->redirect(['action' => 'login']);
             }
 
-            // DEBUG ÚTIL (déjalo mientras pruebas)
-            debug($xservUsuario->getErrors());
-            $this->Flash->error('No se pudo crear la cuenta');
+            // Mostrar errores de validación específicos
+            $errors = $xservUsuario->getErrors();
+            if (!empty($errors)) {
+                if (isset($errors['password'])) {
+                    foreach ($errors['password'] as $rule => $error) {
+                        if ($rule === 'minLength') {
+                            $this->Flash->error('La contraseña debe tener al menos 8 caracteres', [
+                                'params' => ['i18n' => 'errors.passwordMinLength'],
+                            ]);
+                        } elseif ($rule === 'strongPassword') {
+                            $this->Flash->error('La contraseña debe contener al menos una mayúscula y un número', [
+                                'params' => ['i18n' => 'errors.passwordRequirements'],
+                            ]);
+                        } else {
+                            $this->Flash->error($error, [
+                                'params' => ['i18n' => 'errors.passwordInvalid'],
+                            ]);
+                        }
+                    }
+                }
+                if (isset($errors['username'])) {
+                    foreach ($errors['username'] as $rule => $error) {
+                        if ($rule === 'unique') {
+                            $this->Flash->error('El nombre de usuario ya está en uso', [
+                                'params' => ['i18n' => 'errors.usernameTaken'],
+                            ]);
+                        } else {
+                            $this->Flash->error($error, [
+                                'params' => ['i18n' => 'errors.usernameInvalid'],
+                            ]);
+                        }
+                    }
+                }
+                if (isset($errors['correo'])) {
+                    foreach ($errors['correo'] as $rule => $error) {
+                        if ($rule === 'email') {
+                            $this->Flash->error('Debe ingresar un correo electrónico válido', [
+                                'params' => ['i18n' => 'errors.emailInvalid'],
+                            ]);
+                        } elseif ($rule === 'unique') {
+                            $this->Flash->error('Este correo electrónico ya está registrado', [
+                                'params' => ['i18n' => 'errors.emailTaken'],
+                            ]);
+                        } elseif ($rule === 'notEmptyString' || $rule === '_empty') {
+                            $this->Flash->error('El correo electrónico es requerido', [
+                                'params' => ['i18n' => 'errors.emailRequired'],
+                            ]);
+                        } else {
+                            $this->Flash->error($error, [
+                                'params' => ['i18n' => 'errors.emailInvalid'],
+                            ]);
+                        }
+                    }
+                }
+            } else {
+                $this->Flash->error('No se pudo crear la cuenta', [
+                    'params' => ['i18n' => 'errors.registerFailed'],
+                ]);
+            }
         }
 
         $this->set(compact('xservUsuario'));
@@ -291,7 +383,9 @@ class XservUsuariosController extends AppController
 
         $user = $this->Authentication->getIdentity();
         if (!$user) {
-            $this->Flash->error('Debe iniciar sesión para cambiar la contraseña.');
+            $this->Flash->error('Debe iniciar sesión para cambiar la contraseña.', [
+                'params' => ['i18n' => 'errors.mustLoginChangePassword'],
+            ]);
             return $this->redirect(['action' => 'login']);
         }
 
@@ -302,19 +396,27 @@ class XservUsuariosController extends AppController
 
             // Verificar contraseña actual
             if (!$hasher->check($data['current_password'], $user->password)) {
-                $this->Flash->error('La contraseña actual es incorrecta.');
+                $this->Flash->error('La contraseña actual es incorrecta.', [
+                    'params' => ['i18n' => 'errors.currentPasswordIncorrect'],
+                ]);
             } elseif ($data['new_password'] !== $data['confirm_password']) {
-                $this->Flash->error('La nueva contraseña y la confirmación no coinciden.');
+                $this->Flash->error('La nueva contraseña y la confirmación no coinciden.', [
+                    'params' => ['i18n' => 'errors.newPasswordMismatch'],
+                ]);
             } else {
                 // Guardar nueva contraseña
                 $userEntity = $this->XservUsuarios->get($user->id);
                 $userEntity->password = $hasher->hash($data['new_password']);
 
                 if ($this->XservUsuarios->save($userEntity)) {
-                    $this->Flash->success('Contraseña actualizada con éxito.');
+                    $this->Flash->success('Contraseña actualizada con éxito.', [
+                        'params' => ['i18n' => 'success.passwordUpdated'],
+                    ]);
                     return $this->redirect(['action' => 'profile']);
                 } else {
-                    $this->Flash->error('No se pudo actualizar la contraseña, intente de nuevo.');
+                    $this->Flash->error('No se pudo actualizar la contraseña, intente de nuevo.', [
+                        'params' => ['i18n' => 'errors.passwordUpdateFailed'],
+                    ]);
                 }
             }
         }

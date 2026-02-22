@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Xservicios - Nueva Reserva</title>
+  <title data-i18n="page.title.services">Xservicios - Nuestros Servicios | Tours y Traslados</title>
+  <script src="/js/i18n-preload.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     * {
@@ -107,7 +108,9 @@
     .nav-item {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 0.4rem;
+      min-width: 90px;
       color: var(--text-gray);
       text-decoration: none;
       font-size: 0.85rem;
@@ -614,8 +617,6 @@
     </div>
   </section>
 
-  <script src="/js/header-template.js"></script>
-  <script src="/js/header-auth.js"></script>
   <script>
     const API_SERVICIOS = '/xserv-servicios.json';
     const servicesGrid = document.getElementById('servicesGrid');
@@ -681,8 +682,8 @@
 
     cargarServicios();
   </script>
+  <script src="/js/i18n.js"></script>
   <script src="/js/header-loader.js"></script>
   <script src="/js/header-dynamic.js"></script>
-  <script src="/js/i18n.js"></script>
 </body>
 </html>

@@ -4,6 +4,10 @@
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= $this->fetch('title') ?></title>
+    
+    <!-- Pre-load language from localStorage to avoid flash -->
+    <script src="/js/i18n-preload.js"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     
     <style>
@@ -55,7 +59,9 @@
     .nav-item {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
+      min-width: 90px;
       color: #a0a0a0;
       text-decoration: none;
       font-size: 14px;
@@ -76,6 +82,36 @@
       display: flex;
       align-items: center;
       gap: 20px;
+    }
+
+    .lang-button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(201, 169, 98, 0.1);
+      border: 1px solid rgba(201, 169, 98, 0.3);
+      border-radius: 6px;
+      color: #c9a962;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .lang-button:hover {
+      background: rgba(201, 169, 98, 0.2);
+      border-color: #c9a962;
+      transform: translateY(-1px);
+    }
+
+    .lang-button svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .lang-button .lang-code {
+      font-size: 13px;
+      font-weight: 600;
     }
 
     .lang-selector {
@@ -233,6 +269,29 @@
       color: #a0a0a0;
     }
 
+    .toggle-password {
+      background: none;
+      border: none;
+      color: #a0a0a0;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.3s;
+      outline: none;
+      flex-shrink: 0;
+    }
+
+    .toggle-password:hover {
+      color: #c9a962;
+    }
+
+    .toggle-password svg {
+      width: 20px;
+      height: 20px;
+    }
+
     .forgot-password {
       text-align: right;
       margin-top: -10px;
@@ -268,6 +327,61 @@
       color: #ffffff;
     }
 
+    .flash-container {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      width: min(520px, calc(100% - 32px));
+      pointer-events: none;
+    }
+
+    .message {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(26, 26, 26, 0.95);
+      pointer-events: auto;
+    }
+
+    .message.success {
+      background-color: rgba(74, 124, 89, 0.2);
+      color: #4ade80;
+      border: 1px solid rgba(74, 124, 89, 0.45);
+    }
+
+    .message.error {
+      background-color: rgba(231, 76, 60, 0.18);
+      color: #f87171;
+      border: 1px solid rgba(231, 76, 60, 0.45);
+    }
+
+    .message.warning {
+      background-color: rgba(245, 158, 11, 0.18);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.45);
+    }
+
+    .message.info {
+      background-color: rgba(59, 130, 246, 0.18);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.45);
+    }
+
+    .message.hidden {
+      display: none;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .header {
@@ -299,7 +413,181 @@
     </style>
 </head>
 <body>
+  <div class="flash-container">
     <?= $this->Flash->render() ?>
+  </div>
     <?= $this->fetch('content') ?>
+    
+    <!-- i18n System -->
+    <script src="/js/i18n.js"></script>
+    
+    <!-- Toggle Password Visibility -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleButtons = document.querySelectorAll('.toggle-password');
+            
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const input = this.previousElementSibling;
+                    const eyeOpen = this.querySelector('.eye-open');
+                    const eyeClosed = this.querySelector('.eye-closed');
+                    
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        eyeOpen.style.display = 'block';
+                        eyeClosed.style.display = 'none';
+                    } else {
+                        input.type = 'password';
+                        eyeOpen.style.display = 'none';
+                        eyeClosed.style.display = 'block';
+                    }
+                });
+            });
+
+            // Validación de seguridad de contraseña en tiempo real
+            const passwordInput = document.getElementById('register-password');
+            const strengthIndicator = document.getElementById('password-strength');
+            
+            if (passwordInput && strengthIndicator) {
+                // Mostrar indicadores al enfocar el campo
+                passwordInput.addEventListener('focus', function() {
+                    strengthIndicator.style.display = 'block';
+                });
+
+                // Validar en tiempo real
+                passwordInput.addEventListener('input', function() {
+                    const password = this.value;
+                    
+                    // Mínimo 8 caracteres
+                    const lengthCheck = document.getElementById('length-check');
+                    if (password.length >= 8) {
+                        lengthCheck.style.color = '#4a7c59';
+                        lengthCheck.querySelector('.check-icon').textContent = '✓';
+                    } else {
+                        lengthCheck.style.color = '#e74c3c';
+                        lengthCheck.querySelector('.check-icon').textContent = '✗';
+                    }
+                    
+                    // Al menos una mayúscula
+                    const uppercaseCheck = document.getElementById('uppercase-check');
+                    if (/[A-Z]/.test(password)) {
+                        uppercaseCheck.style.color = '#4a7c59';
+                        uppercaseCheck.querySelector('.check-icon').textContent = '✓';
+                    } else {
+                        uppercaseCheck.style.color = '#e74c3c';
+                        uppercaseCheck.querySelector('.check-icon').textContent = '✗';
+                    }
+                    
+                    // Al menos un número
+                    const numberCheck = document.getElementById('number-check');
+                    if (/[0-9]/.test(password)) {
+                        numberCheck.style.color = '#4a7c59';
+                        numberCheck.querySelector('.check-icon').textContent = '✓';
+                    } else {
+                        numberCheck.style.color = '#e74c3c';
+                        numberCheck.querySelector('.check-icon').textContent = '✗';
+                    }
+                });
+
+                // Validación de coincidencia de contraseñas
+                const confirmPasswordInput = document.getElementById('confirm-password');
+                const matchIndicator = document.getElementById('password-match-indicator');
+                const matchIcon = document.getElementById('match-icon');
+                const matchText = document.getElementById('match-text');
+                
+                function validatePasswordMatch() {
+                    const password = passwordInput.value;
+                    const confirmPassword = confirmPasswordInput.value;
+                    
+                    if (password.length > 0 && confirmPassword.length > 0) {
+                        matchIndicator.style.display = 'flex';
+                        
+                        const lang = localStorage.getItem('language') || 'es';
+                        const translations = window.translations || {};
+                        const t = translations[lang] || translations['es'] || {};
+                        
+                        if (password === confirmPassword) {
+                            // Contraseñas coinciden
+                            matchIndicator.style.background = 'rgba(74, 124, 89, 0.2)';
+                            matchIndicator.style.border = '1px solid rgba(74, 124, 89, 0.4)';
+                            matchIndicator.style.color = '#4a7c59';
+                            matchIcon.textContent = '✓';
+                            matchText.textContent = t['password.match'] || 'Las contraseñas coinciden';
+                        } else {
+                            // Contraseñas no coinciden
+                            matchIndicator.style.background = 'rgba(231, 76, 60, 0.2)';
+                            matchIndicator.style.border = '1px solid rgba(231, 76, 60, 0.4)';
+                            matchIndicator.style.color = '#e74c3c';
+                            matchIcon.textContent = '✗';
+                            matchText.textContent = t['password.noMatch'] || 'Las contraseñas no coinciden';
+                        }
+                    } else {
+                        matchIndicator.style.display = 'none';
+                    }
+                }
+                
+                if (confirmPasswordInput) {
+                    confirmPasswordInput.addEventListener('input', validatePasswordMatch);
+                    passwordInput.addEventListener('input', validatePasswordMatch);
+                }
+
+                // Validar antes de enviar el formulario
+                const form = passwordInput.closest('form');
+                if (form) {
+                    form.addEventListener('submit', function(e) {
+                        const password = passwordInput.value;
+                        
+                        let isValid = true;
+                        const lang = localStorage.getItem('language') || 'es';
+                        const translations = window.translations || {};
+                        const t = translations[lang] || translations['es'];
+                        
+                        let errorMessages = [];
+                        
+                        if (password.length < 8) {
+                            isValid = false;
+                            errorMessages.push('- ' + (t['password.minLength'] || 'Mínimo 8 caracteres'));
+                        }
+                        if (!/[A-Z]/.test(password)) {
+                            isValid = false;
+                            errorMessages.push('- ' + (t['password.uppercase'] || 'Al menos una mayúscula'));
+                        }
+                        if (!/[0-9]/.test(password)) {
+                            isValid = false;
+                            errorMessages.push('- ' + (t['password.number'] || 'Al menos un número'));
+                        }
+                        
+                        // Validar que las contraseñas coincidan
+                        if (confirmPasswordInput) {
+                            const confirmPassword = confirmPasswordInput.value;
+                            if (password !== confirmPassword) {
+                                isValid = false;
+                                errorMessages.push('- ' + (t['password.noMatch'] || 'Las contraseñas no coinciden'));
+                            }
+                        }
+                        
+                        if (!isValid) {
+                            e.preventDefault();
+                            const errorTitle = t['password.requirements'] || 'La contraseña debe cumplir con los requisitos de seguridad:';
+                            alert(errorTitle + '\n' + errorMessages.join('\n'));
+                        }
+                    });
+                }
+            }
+
+                  const flashMessages = document.querySelectorAll('.message');
+                  if (flashMessages.length) {
+                    flashMessages.forEach(message => {
+                      setTimeout(() => {
+                        message.style.transition = 'opacity 0.3s ease';
+                        message.style.opacity = '0';
+                        setTimeout(() => {
+                          message.remove();
+                        }, 300);
+                      }, 5000);
+                    });
+                  }
+        });
+    </script>
 </body>
 </html>

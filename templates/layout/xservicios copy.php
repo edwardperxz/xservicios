@@ -74,7 +74,9 @@
         .nav-item {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 0.5rem;
+            min-width: 90px;
             color: var(--text-gray);
             text-decoration: none;
             font-size: 0.875rem;

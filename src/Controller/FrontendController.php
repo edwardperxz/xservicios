@@ -22,87 +22,89 @@ class FrontendController extends AppController
     }
 
     /**
-     * Fleet page (ver-flota.html)
+     * Fleet page (fleet.html)
      */
     public function fleet()
     {
         $this->response = $this->response->withType('text/html');
-        $content = file_get_contents(ROOT . '/webroot/frontend/ver-flota.html');
+        $content = file_get_contents(ROOT . '/webroot/frontend/fleet.html');
         $content = $this->injectCsrfToken($content);
         return $this->response->withStringBody($content);
     }
 
     /**
-     * Services page (servicios.html)
+     * Services page (services.html)
      */
     public function services()
     {
         $this->response = $this->response->withType('text/html');
-        $content = file_get_contents(ROOT . '/webroot/frontend/servicios.html');
+        $content = file_get_contents(ROOT . '/webroot/frontend/services.html');
         $content = $this->injectCsrfToken($content);
         return $this->response->withStringBody($content);
     }
 
     /**
-     * About page (Nosotros.html)
+     * About page (about.html)
      */
     public function about()
     {
         $this->response = $this->response->withType('text/html');
-        $content = file_get_contents(ROOT . '/webroot/frontend/Nosotros.html');
+        $content = file_get_contents(ROOT . '/webroot/frontend/about.html');
         $content = $this->injectCsrfToken($content);
         return $this->response->withStringBody($content);
     }
 
     /**
-     * New Reservation page (nueva-reserva.html)
+     * New Reservation page (new-reservation.html)
      */
     public function newreservation()
     {
         $this->response = $this->response->withType('text/html');
-        $content = file_get_contents(ROOT . '/webroot/frontend/nueva-reserva.html');
+        $content = file_get_contents(ROOT . '/webroot/frontend/new-reservation.html');
         $content = $this->injectCsrfToken($content);
         return $this->response->withStringBody($content);
     }
 
     /**
-     * My Reservations page (mis-reservas.html)
+     * My Reservations page (my-reservations.html)
      */
     public function myreservations()
     {
         $this->response = $this->response->withType('text/html');
+        $content = file_get_contents(ROOT . '/webroot/frontend/my-reservations.html');
         $content = $this->injectCsrfToken($content);
-        $content = file_get_contents(ROOT . '/webroot/frontend/mis-reservas.html');
         return $this->response->withStringBody($content);
     }
 
     /**
-     * Rate Service page (valorar-servicios.html)
+     * Rate Service page (rate-service.html)
      */
     public function rateservice()
     {
         $this->response = $this->response->withType('text/html');
+        $content = file_get_contents(ROOT . '/webroot/frontend/rate-service.html');
         $content = $this->injectCsrfToken($content);
-        $content = file_get_contents(ROOT . '/webroot/frontend/valorar-servicios.html');
         return $this->response->withStringBody($content);
     }
 
     /**
-     * Sign up page (crear-cuenta.html)
+     * Sign up page (signup.html)
      */
     public function signup()
     {
         $this->response = $this->response->withType('text/html');
-        $content = file_get_contents(ROOT . '/webroot/frontend/crear-cuenta.html');
+        $content = file_get_contents(ROOT . '/webroot/frontend/signup.html');
         $content = $this->injectCsrfToken($content);
         return $this->response->withStringBody($content);
     }
 
     /**
-     * Login page (inicio-sesion.html)
+     * Login page (login.html)
      */
     public function login()
     {
+        $this->response = $this->response->withType('text/html');
+        $content = file_get_contents(ROOT . '/webroot/frontend/login.html');
         $content = $this->injectCsrfToken($content);
         return $this->response->withStringBody($content);
     }

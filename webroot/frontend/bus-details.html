@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ficha Técnica - Bus</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --gold: #c9a962;
+      --gold-light: #d4b978;
+      --gold-dark: #a88b4a;
+      --chocolate: #3d2314;
+      --chocolate-light: #5c3a2a;
+      --pearl-white: #f8f6f2;
+      --pearl-light: #fdfcfa;
+      --dark-bg: #0a0a0a;
+      --text-dark: #1a1a1a;
+      --text-gray: #666;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--dark-bg);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .ficha-container {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .ficha-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--gold);
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    /* Ficha Bus - Estilo Carnet */
+    .ficha-bus {
+      width: 480px;
+      background: linear-gradient(145deg, var(--pearl-light), var(--pearl-white));
+      border-radius: 16px;
+      padding: 4px;
+      background: linear-gradient(135deg, var(--gold), var(--chocolate), var(--gold-dark), var(--chocolate-light), var(--gold));
+      box-shadow: 
+        0 10px 40px rgba(201, 169, 98, 0.3),
+        0 4px 20px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .ficha-inner {
+      background: linear-gradient(145deg, var(--pearl-light), var(--pearl-white));
+      border-radius: 12px;
+      padding: 1.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ficha-inner::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, transparent 50%, rgba(201, 169, 98, 0.1) 50%);
+      pointer-events: none;
+    }
+
+    .ficha-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--gold);
+    }
+
+    .ficha-logo {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .ficha-logo svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--chocolate);
+      fill: none;
+    }
+
+    .ficha-brand {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ficha-brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--chocolate);
+    }
+
+    .ficha-brand-name span {
+      color: var(--gold-dark);
+    }
+
+    .ficha-brand-sub {
+      font-size: 0.65rem;
+      color: var(--text-gray);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .ficha-body {
+      display: flex;
+      gap: 1.25rem;
+    }
+
+    .ficha-image {
+      width: 140px;
+      height: 105px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 3px solid var(--gold);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      flex-shrink: 0;
+    }
+
+    .ficha-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .ficha-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .ficha-nombre {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--chocolate);
+      margin-bottom: 0.25rem;
+    }
+
+    .ficha-dato {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+    }
+
+    .ficha-dato-label {
+      color: var(--text-gray);
+      min-width: 90px;
+    }
+
+    .ficha-dato-value {
+      color: var(--text-dark);
+      font-weight: 600;
+    }
+
+    .ficha-dato-value.highlight {
+      color: var(--gold-dark);
+    }
+
+    .ficha-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+      padding-top: 0.75rem;
+      border-top: 1px dashed var(--gold);
+    }
+
+    .ficha-status {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+    }
+
+    .status-dot.inactive {
+      background: #ef4444;
+      box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+    }
+
+    .status-text {
+      color: var(--text-gray);
+    }
+
+    .ficha-id {
+      font-size: 0.7rem;
+      color: var(--text-gray);
+      font-family: 'Courier New', monospace;
+      background: rgba(201, 169, 98, 0.15);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+    }
+
+    .ficha-qr {
+      width: 50px;
+      height: 50px;
+      background: var(--text-dark);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+    }
+
+    .ficha-qr svg {
+      width: 100%;
+      height: 100%;
+      fill: white;
+    }
+
+    /* Segunda ficha - variante */
+    .ficha-bus.variant-2 {
+      width: 480px;
+    }
+
+    .badge-tipo {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--chocolate);
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Responsive */
+    @media (max-width: 520px) {
+      .ficha-bus {
+        width: 100%;
+        max-width: 360px;
+      }
+
+      .ficha-body {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .ficha-image {
+        width: 120px;
+        height: 90px;
+      }
+
+      .ficha-dato {
+        justify-content: center;
+      }
+
+      .ficha-footer {
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="ficha-container">
+    <h2 class="ficha-title">Fichas Técnicas de Vehículos</h2>
+
+    <!-- Ficha Bus 1 - Coaster -->
+    <div class="ficha-bus">
+      <div class="ficha-inner">
+        <span class="badge-tipo">Coaster</span>
+        
+        <div class="ficha-header">
+          <div class="ficha-logo">
+            <svg viewBox="0 0 24 24" strokeWidth="2">
+              <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18 10l-1.9-4.6c-.3-.7-1-1.4-1.8-1.4H9.7c-.8 0-1.5.5-1.8 1.2L6 10l-2.5 1.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2"/>
+              <circle cx="7" cy="17" r="2"/>
+              <circle cx="17" cy="17" r="2"/>
+            </svg>
+          </div>
+          <div class="ficha-brand">
+            <span class="ficha-brand-name"><span>X</span>SERVICIOS</span>
+            <span class="ficha-brand-sub">Ficha Técnica de Unidad</span>
+          </div>
+        </div>
+
+        <div class="ficha-body">
+          <div class="ficha-image">
+            <img src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=300&h=200&fit=crop" alt="Coaster Toyota">
+          </div>
+          
+          <div class="ficha-info">
+            <h3 class="ficha-nombre">Coaster Toyota 2006</h3>
+            
+            <div class="ficha-dato">
+              <span class="ficha-dato-label">Capacidad:</span>
+              <span class="ficha-dato-value highlight">30 pasajeros</span>
+            </div>
+            
+            <div class="ficha-dato">
+              <span class="ficha-dato-label">Color:</span>
+              <span class="ficha-dato-value">Blanco / Gris</span>
+            </div>
+            
+            <div class="ficha-dato">
+              <span class="ficha-dato-label">Placa:</span>
+              <span class="ficha-dato-value">AB-1234</span>
+            </div>
+            
+            <div class="ficha-dato">
+              <span class="ficha-dato-label">Chofer:</span>
+              <span class="ficha-dato-value highlight">Carlos Mendoza</span>
+            </div>
+
+            <div class="ficha-dato">
+              <span class="ficha-dato-label">Año:</span>
+              <span class="ficha-dato-value">2006</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ficha-footer">
+          <div class="ficha-status">
+            <span class="status-dot"></span>
+            <span class="status-text">Activo - Disponible</span>
+          </div>
+          <span class="ficha-id">ID: XS-BUS-001</span>
+          <div class="ficha-qr">
+            <svg viewBox="0 0 100 100">
+              <rect x="10" y="10" width="20" height="20"/>
+              <rect x="40" y="10" width="10" height="10"/>
+              <rect x="60" y="10" width="10" height="10"/>
+              <rect x="70" y="10" width="20" height="20"/>
+              <rect x="10" y="40" width="10" height="10"/>
+              <rect x="30" y="40" width="10" height="10"/>
+              <rect x="50" y="40" width="10" height="10"/>
+              <rect x="70" y="40" width="10" height="10"/>
+              <rect x="10" y="60" width="10" height="10"/>
+              <rect x="40" y="60" width="20" height="10"/>
+              <rect x="80" y="60" width="10" height="10"/>
+              <rect x="10" y="70" width="20" height="20"/>
+              <rect x="40" y="70" width="10" height="10"/>
+              <rect x="60" y="80" width="10" height="10"/>
+              <rect x="80" y="70" width="10" height="20"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ficha Bus 2 - Bus 15 pasajeros -->
+    <div class="ficha-bus variant-2">
+      <div class="ficha-inner">
+        <span class="badge-tipo">Minibus</span>
+        
+        <div class="ficha-header">
+          <div class="ficha-logo">
+            <svg viewBox="0 0 24 24" strokeWidth="2">
+              <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18 10l-1.9-4.6c-.3-.7-1-1.4-1.8-1.4H9.7c-.8 0-1.5.5-1.8 1.2L6 10l-2.5 1.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2"/>
+              <circle cx="7" cy="17" r="2"/>
+              <circle cx="17" cy="17" r="2"/>
+            </svg>
+          </div>
+          <div class="ficha-brand">
+            <span class="ficha-brand-name"><span>X</span>SERVICIOS</span>
+            <span class="ficha-brand-sub">Ficha Técnica de Unidad</span>
+          </div>
+        </div>
+
+        <div class="ficha-body">
+          <div class="ficha-image">
+            <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=300&h=200&fit=crop" alt="Bus 15 pasajeros">
+          </div>
+          
+          <div class="ficha-info">
+            <h3 class="ficha-nombre">Hyundai H350 2018</h3>
+            
+            <div class="ficha-dato">
+              <span class="ficha-dato-label">Capacidad:</span>
+              <span class="ficha-dato-value highlight">15 pasajeros</span>
+            </div>
+            
+            <div class="ficha-dato">
+              <span class="ficha-dato-label">Color:</span>
+              <span class="ficha-dato-value">Gris Plata</span>
+            </div>
+            
+            <div class="ficha-dato">
+              <span class="ficha-dato-label">Placa:</span>
+              <span class="ficha-dato-value">CD-5678</span>
+            </div>
+            
+            <div class="ficha-dato">
+              <span class="ficha-dato-label">Chofer:</span>
+              <span class="ficha-dato-value highlight">Roberto García</span>
+            </div>
+
+            <div class="ficha-dato">
+              <span class="ficha-dato-label">Año:</span>
+              <span class="ficha-dato-value">2018</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ficha-footer">
+          <div class="ficha-status">
+            <span class="status-dot"></span>
+            <span class="status-text">Activo - En servicio</span>
+          </div>
+          <span class="ficha-id">ID: XS-BUS-002</span>
+          <div class="ficha-qr">
+            <svg viewBox="0 0 100 100">
+              <rect x="10" y="10" width="20" height="20"/>
+              <rect x="40" y="10" width="10" height="10"/>
+              <rect x="60" y="10" width="10" height="10"/>
+              <rect x="70" y="10" width="20" height="20"/>
+              <rect x="10" y="40" width="10" height="10"/>
+              <rect x="30" y="40" width="10" height="10"/>
+              <rect x="50" y="40" width="10" height="10"/>
+              <rect x="70" y="40" width="10" height="10"/>
+              <rect x="10" y="60" width="10" height="10"/>
+              <rect x="40" y="60" width="20" height="10"/>
+              <rect x="80" y="60" width="10" height="10"/>
+              <rect x="10" y="70" width="20" height="20"/>
+              <rect x="40" y="70" width="10" height="10"/>
+              <rect x="60" y="80" width="10" height="10"/>
+              <rect x="80" y="70" width="10" height="20"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ficha Bus 3 - Coaster 2 -->
+    <div class="ficha-bus">
+      <div class="ficha-inner">
+        <span class="badge-tipo">Coaster</span>
+        
+        <div class="ficha-header">
+          <div class="ficha-logo">
+            <svg viewBox="0 0 24 24" strokeWidth="2">
+              <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18 10l-1.9-4.6c-.3-.7-1-1.4-1.8-1.4H9.7c-.8 0-1.5.5-1.8 1.2L6 10l-2.5 1.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2"/>
+              <circle cx="7" cy="17" r="2"/>
+              <circle cx="17" cy="17" r="2"/>
+            </svg>
+          </div>
+          <div class="ficha-brand">
+            <span class="ficha-brand-name"><span>X</span>SERVICIOS</span>
+            <span class="ficha-brand-sub">Ficha Técnica de Unidad</span>
+          </div>
+        </div>
+
+        <div class="ficha-body">
+          <div class="ficha-image">
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop" alt="Coaster Toyota 2">
+          </div>
+          
+          <div class="ficha-info">
+            <h3 class="ficha-nombre">Coaster Toyota 2010</h3>
+            
+            <div class="ficha-dato">
+              <span class="ficha-dato-label">Capacidad:</span>
+              <span class="ficha-dato-value highlight">30 pasajeros</span>
+            </div>
+            
+            <div class="ficha-dato">
+              <span class="ficha-dato-label">Color:</span>
+              <span class="ficha-dato-value">Beige / Dorado</span>
+            </div>
+            
+            <div class="ficha-dato">
+              <span class="ficha-dato-label">Placa:</span>
+              <span class="ficha-dato-value">EF-9012</span>
+            </div>
+            
+            <div class="ficha-dato">
+              <span class="ficha-dato-label">Chofer:</span>
+              <span class="ficha-dato-value highlight">Miguel Ángel Torres</span>
+            </div>
+
+            <div class="ficha-dato">
+              <span class="ficha-dato-label">Año:</span>
+              <span class="ficha-dato-value">2010</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ficha-footer">
+          <div class="ficha-status">
+            <span class="status-dot inactive"></span>
+            <span class="status-text">En mantenimiento</span>
+          </div>
+          <span class="ficha-id">ID: XS-BUS-003</span>
+          <div class="ficha-qr">
+            <svg viewBox="0 0 100 100">
+              <rect x="10" y="10" width="20" height="20"/>
+              <rect x="40" y="10" width="10" height="10"/>
+              <rect x="60" y="10" width="10" height="10"/>
+              <rect x="70" y="10" width="20" height="20"/>
+              <rect x="10" y="40" width="10" height="10"/>
+              <rect x="30" y="40" width="10" height="10"/>
+              <rect x="50" y="40" width="10" height="10"/>
+              <rect x="70" y="40" width="10" height="10"/>
+              <rect x="10" y="60" width="10" height="10"/>
+              <rect x="40" y="60" width="20" height="10"/>
+              <rect x="80" y="60" width="10" height="10"/>
+              <rect x="10" y="70" width="20" height="20"/>
+              <rect x="40" y="70" width="10" height="10"/>
+              <rect x="60" y="80" width="10" height="10"/>
+              <rect x="80" y="70" width="10" height="20"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ficha Bus 4 - Minibus 2 -->
+    <div class="ficha-bus variant-2">
+      <div class="ficha-inner">
+        <span class="badge-tipo">Minibus</span>
+        
+        <div class="ficha-header">
+          <div class="ficha-logo">
+            <svg viewBox="0 0 24 24" strokeWidth="2">
+              <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18 10l-1.9-4.6c-.3-.7-1-1.4-1.8-1.4H9.7c-.8 0-1.5.5-1.8 1.2L6 10l-2.5 1.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2"/>
+              <circle cx="7" cy="17" r="2"/>
+              <circle cx="17" cy="17" r="2"/>
+            </svg>
+          </div>
+          <div class="ficha-brand">
+            <span class="ficha-brand-name"><span>X</span>SERVICIOS</span>
+            <span class="ficha-brand-sub">Ficha Técnica de Unidad</span>
+          </div>
+        </div>
+
+        <div class="ficha-body">
+          <div class="ficha-image">
+            <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=300&h=200&fit=crop" alt="Bus 15 pasajeros 2">
+          </div>
+          
+          <div class="ficha-info">
+            <h3 class="ficha-nombre">Mercedes Sprinter 2020</h3>
+            
+            <div class="ficha-dato">
+              <span class="ficha-dato-label">Capacidad:</span>
+              <span class="ficha-dato-value highlight">15 pasajeros</span>
+            </div>
+            
+            <div class="ficha-dato">
+              <span class="ficha-dato-label">Color:</span>
+              <span class="ficha-dato-value">Negro</span>
+            </div>
+            
+            <div class="ficha-dato">
+              <span class="ficha-dato-label">Placa:</span>
+              <span class="ficha-dato-value">GH-3456</span>
+            </div>
+            
+            <div class="ficha-dato">
+              <span class="ficha-dato-label">Chofer:</span>
+              <span class="ficha-dato-value highlight">José Luis Pérez</span>
+            </div>
+
+            <div class="ficha-dato">
+              <span class="ficha-dato-label">Año:</span>
+              <span class="ficha-dato-value">2020</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ficha-footer">
+          <div class="ficha-status">
+            <span class="status-dot"></span>
+            <span class="status-text">Activo - Disponible</span>
+          </div>
+          <span class="ficha-id">ID: XS-BUS-004</span>
+          <div class="ficha-qr">
+            <svg viewBox="0 0 100 100">
+              <rect x="10" y="10" width="20" height="20"/>
+              <rect x="40" y="10" width="10" height="10"/>
+              <rect x="60" y="10" width="10" height="10"/>
+              <rect x="70" y="10" width="20" height="20"/>
+              <rect x="10" y="40" width="10" height="10"/>
+              <rect x="30" y="40" width="10" height="10"/>
+              <rect x="50" y="40" width="10" height="10"/>
+              <rect x="70" y="40" width="10" height="10"/>
+              <rect x="10" y="60" width="10" height="10"/>
+              <rect x="40" y="60" width="20" height="10"/>
+              <rect x="80" y="60" width="10" height="10"/>
+              <rect x="10" y="70" width="20" height="20"/>
+              <rect x="40" y="70" width="10" height="10"/>
+              <rect x="60" y="80" width="10" height="10"/>
+              <rect x="80" y="70" width="10" height="20"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <script src="/js/header-loader.js"></script>
+  <script src="/js/header-dynamic.js"></script>
+  <script src="/js/i18n.js"></script>
+</body>
+</html>
+`,
+      }}
+    />
+  );
+}

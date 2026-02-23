@@ -711,7 +711,7 @@
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <h1 class="hero-title"><span data-i18n="hero.titlePart1">Transporte Turístico</span> <span data-i18n="hero.titlePart2">de Lujo</span></h1>
-      <a href="/newreservation" class="btn-primary" data-i18n="hero.bookNow">Reservar Ahora</a>
+      <a href="/services" class="btn-primary" data-i18n="hero.bookNow">Reservar Ahora</a>
     </div>
     <div class="hero-arrows">
       <div class="hero-arrow">

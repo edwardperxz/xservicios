@@ -377,6 +377,94 @@
       box-shadow: 0 6px 30px rgba(201, 169, 98, 0.5);
     }
 
+    /* Passengers Counter */
+    .form-group.passengers-group {
+      position: relative;
+    }
+
+    .passengers-container {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      width: 100%;
+    }
+
+    .passengers-input {
+      flex: 1;
+      padding: 0.875rem 1rem !important;
+      background: var(--dark-lighter) !important;
+      border: 1px solid rgba(201, 169, 98, 0.3) !important;
+      border-radius: 8px !important;
+      color: var(--text-white) !important;
+      font-size: 0.9rem !important;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    /* Hide native number input arrows */
+    .passengers-input::-webkit-outer-spin-button,
+    .passengers-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .passengers-input[type=number] {
+      -moz-appearance: textfield;
+    }
+
+    .passengers-input:focus {
+      outline: none !important;
+      border-color: var(--gold) !important;
+    }
+
+    .counter-button {
+      width: 44px;
+      height: 44px;
+      background: rgba(201, 169, 98, 0.2);
+      border: 1px solid rgba(201, 169, 98, 0.3);
+      color: var(--gold);
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .counter-button:hover {
+      background: rgba(201, 169, 98, 0.4);
+      border-color: var(--gold);
+    }
+
+    .counter-button:active {
+      background: var(--gold);
+      color: var(--dark-bg);
+    }
+
+    .counter-button.minus {
+      border-radius: 8px 0 0 8px;
+      border-right: none;
+    }
+
+    .counter-button.plus {
+      border-radius: 0 8px 8px 0;
+      border-left: none;
+    }
+
+    .passengers-error {
+      display: none;
+      color: #ff6b6b;
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+      padding-left: 1rem;
+    }
+
+    .passengers-error.show {
+      display: block;
+    }
+
     /* Features Section */
     .features-section {
       padding: 4rem 3rem;
@@ -852,8 +940,13 @@
         <div class="form-group">
           <input type="text" placeholder="Destino deseado" data-i18n-placeholder="fleet.quoteDestination">
         </div>
-        <div class="form-group">
-          <input type="number" placeholder="Número de pasajeros" data-i18n-placeholder="fleet.quotePassengers">
+        <div class="form-group passengers-group">
+          <div class="passengers-container">
+            <button type="button" class="counter-button minus" id="minusBtn" onclick="decrementPassengers(event)">−</button>
+            <input type="number" id="passengersInput" class="passengers-input" placeholder="0" data-i18n-placeholder="fleet.quotePassengers" min="1" max="99" value="1">
+            <button type="button" class="counter-button plus" id="plusBtn" onclick="incrementPassengers(event)">+</button>
+          </div>
+          <span class="passengers-error" id="passengersError" data-i18n="fleet.quotePassengersError">Mínimo 1 pasajero requerido</span>
         </div>
         <button type="submit" class="btn-primary" data-i18n="fleet.quoteSubmit">Solicitar Cotización</button>
       </form>
@@ -1354,6 +1447,75 @@
   </footer>
 
   <script>
+    // Passengers counter functionality
+    function incrementPassengers(e) {
+      e.preventDefault();
+      const input = document.getElementById('passengersInput');
+      const currentValue = parseInt(input.value) || 0;
+      if (currentValue < 99) {
+        input.value = currentValue + 1;
+        validatePassengers();
+      }
+    }
+
+    function decrementPassengers(e) {
+      e.preventDefault();
+      const input = document.getElementById('passengersInput');
+      const currentValue = parseInt(input.value) || 0;
+      if (currentValue > 1) {
+        input.value = currentValue - 1;
+        validatePassengers();
+      }
+    }
+
+    function validatePassengers() {
+      const input = document.getElementById('passengersInput');
+      const errorMsg = document.getElementById('passengersError');
+      const value = parseInt(input.value);
+
+      // Only accept positive integers >= 1
+      if (isNaN(value) || value < 1) {
+        input.value = 1;
+        errorMsg.classList.add('show');
+        return false;
+      } else {
+        errorMsg.classList.remove('show');
+        return true;
+      }
+    }
+
+    // Set initial value and validate on input
+    document.addEventListener('DOMContentLoaded', function() {
+      const input = document.getElementById('passengersInput');
+      
+      // Prevent negative numbers and zero
+      input.addEventListener('input', function(e) {
+        let value = e.target.value.trim();
+        
+        // Remove non-numeric characters
+        value = value.replace(/[^0-9]/g, '');
+        
+        // Ensure not empty and >= 1
+        if (value === '' || parseInt(value) < 1) {
+          e.target.value = '1';
+        } else if (parseInt(value) > 99) {
+          e.target.value = '99';
+        } else {
+          e.target.value = parseInt(value); // Remove leading zeros
+        }
+        
+        validatePassengers();
+      });
+
+      // Validate on blur
+      input.addEventListener('blur', function(e) {
+        validatePassengers();
+      });
+
+      // Initialize validation
+      validatePassengers();
+    });
+
     let showingAll = false;
     
     function toggleDrivers() {
@@ -1381,8 +1543,3 @@
   <script src="/js/header-dynamic.js"></script>
 </body>
 </html>
-`,
-      }}
-    />  
-  );
-}

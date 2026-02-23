@@ -91,77 +91,6 @@
       color: var(--text-white);
       letter-spacing: 0.5px;
     }
-
-    .nav-menu {
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-      margin-left: 4rem;
-      margin-right: 4rem;
-    }
-
-    .nav-item {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-      min-width: 90px;
-      color: var(--text-gray);
-      text-decoration: none;
-      font-size: 0.85rem;
-      transition: color 0.3s;
-      white-space: nowrap;
-    }
-
-    .nav-item:hover {
-      color: var(--gold);
-    }
-
-    .nav-icon {
-      width: 16px;
-      height: 16px;
-      stroke: currentColor;
-      fill: none;
-      flex-shrink: 0;
-    }
-
-    .user-actions {
-      display: flex;
-      align-items: center;
-      gap: 1.25rem;
-      margin-left: auto;
-    }
-
-    .lang-selector {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      color: var(--text-gray);
-      font-size: 0.8rem;
-    }
-
-    .notification-icon {
-      cursor: pointer;
-    }
-
-    .notification-icon svg {
-      width: 18px;
-      height: 18px;
-      stroke: var(--text-gray);
-      fill: none;
-    }
-
-    .notification-icon:hover svg {
-      stroke: var(--gold);
-    }
-
-    .auth-button {
-      padding: 0.5rem 1.1rem;
-      border: 1px solid var(--gold);
-      border-radius: 20px;
-      color: var(--gold);
-      font-size: 0.8rem;
-      text-decoration: none;
       transition: all 0.3s;
       white-space: nowrap;
     }
@@ -222,6 +151,7 @@
       padding: 1rem 2.5rem;
       background: rgba(26, 26, 26, 0.8);
       border-bottom: 1px solid rgba(201, 169, 98, 0.2);
+      margin-top: 80px;
     }
 
     .back-btn {
@@ -758,7 +688,7 @@
     }
 
     @media (max-width: 768px) {
-      .header, .sub-header {
+      .header {
         padding-left: 1rem;
         padding-right: 1rem;
       }
@@ -788,98 +718,21 @@
 
   <!-- Header será cargado dinámicamente por header-loader.js -->
 
-    <nav class="nav-menu">
-      <a href="home.php" class="nav-item">
-        <svg class="nav-icon" viewBox="0 0 24 24" stroke-width="2">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-          <polyline points="9 22 9 12 15 12 15 22" />
-        </svg>
-        <span>Inicio</span>
-      </a>
-      <a href="fleet.php" class="nav-item">
-        <svg class="nav-icon" viewBox="0 0 24 24" stroke-width="2">
-          <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18 10l-1.9-4.6c-.3-.7-1-1.4-1.8-1.4H9.7c-.8 0-1.5.5-1.8 1.2L6 10l-2.5 1.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2" />
-          <circle cx="7" cy="17" r="2" />
-          <circle cx="17" cy="17" r="2" />
-        </svg>
-        <span>Ver flota</span>
-      </a>
-      <a href="/services" class="nav-item">
-        <svg class="nav-icon" viewBox="0 0 24 24" stroke-width="2">
-          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-        </svg>
-        <span>Servicios</span>
-      </a>
-      <a href="/about" class="nav-item">
-        <svg class="nav-icon" viewBox="0 0 24 24" stroke-width="2">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-          <circle cx="9" cy="7" r="4" />
-          <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-        </svg>
-        <span>Nosotros</span>
-      </a>
-    </nav>
-
-    <div class="user-actions">
-      <div class="lang-selector">
-        <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; stroke: var(--gold); fill: none; stroke-width: 2;">
-          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-        </svg>
-        <span class="lang-text">ES</span>
-        <span style="color: var(--dark-lighter);">|</span>
-        <span class="lang-text">EN</span>
-      </div>
-      <div class="notification-icon">
-        <svg viewBox="0 0 24 24" stroke-width="2">
-          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-          <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-        </svg>
-      </div>
-      <a class="auth-button" href="/login">Iniciar sesion</a>
-      <div class="user-profile is-hidden">
-        <div class="user-avatar" id="userAvatar">US</div>
-        <span class="user-name" id="userName">Usuario</span>
-        <svg class="dropdown-icon" viewBox="0 0 24 24" stroke-width="2">
-          <polyline points="6 9 12 15 18 9" />
-        </svg>
-      </div>
-    </div>
-
-
-  <!-- Sub-Header -->
-  <div class="sub-header">
-    <button class="back-btn" onclick="window.history.back()">
-      <svg viewBox="0 0 24 24" stroke-width="2">
-        <path d="M19 12H5" />
-        <polyline points="12 19 5 12 12 5" />
-      </svg>
-      Volver
-    </button>
-
-    <nav class="sub-nav">
-      <a href="/newreservation" class="sub-nav-item">Nueva Reserva</a>
-      <a href="/myreservations" class="sub-nav-item">Mis Reservas</a>
-      <a href="/rateservice" class="sub-nav-item active" style="color: var(--gold);">Valorar Servicio</a>
-    </nav>
-  </div>
-
   <!-- Main Content -->
   <div class="main-container">
     <!-- Columna Izquierda -->
     <div class="left-column">
       <div class="column-header">
-        <h2 class="column-title">Valorar Servicio</h2>
+        <h2 class="column-title" data-i18n="rate.title">Valorar Servicio</h2>
         <div class="filter-buttons">
-          <button class="filter-btn active" onclick="setFiltro('todos')">Todos</button>
-          <button class="filter-btn" onclick="setFiltro('chofer')">Choferes</button>
-          <button class="filter-btn" onclick="setFiltro('bus')">Buses</button>
-          <button class="filter-btn" onclick="setFiltro('servicio')">Servicio</button>
+          <button class="filter-btn active" data-filter="todos" onclick="setFiltro('todos')" data-i18n="rate.filterAll">Todos</button>
+          <button class="filter-btn" data-filter="chofer" onclick="setFiltro('chofer')" data-i18n="rate.filterDrivers">Choferes</button>
+          <button class="filter-btn" data-filter="bus" onclick="setFiltro('bus')" data-i18n="rate.filterBuses">Buses</button>
+          <button class="filter-btn" data-filter="servicio" onclick="setFiltro('servicio')" data-i18n="rate.filterService">Servicio</button>
         </div>
       </div>
 
-      <p class="viajes-pending" id="viajes-count">3 viaje(s) pendientes de valorar</p>
+      <p class="viajes-pending" id="viajes-count" data-i18n="rate.pendingTrips">0</p>
 
       <div class="viajes-list scrollbar-custom" id="viajes-list"></div>
     </div>
@@ -887,8 +740,8 @@
     <!-- Columna Derecha -->
     <div class="right-column">
       <div class="column-header">
-        <h2 class="column-title">Valoraciones Pasadas</h2>
-        <span style="padding: 0.4rem 0.75rem; background: rgba(201, 169, 98, 0.2); color: var(--gold); border-radius: 20px; font-size: 0.8rem;" id="valoraciones-count">4 valoraciones</span>
+        <h2 class="column-title" data-i18n="rate.pastRatings">Valoraciones Pasadas</h2>
+        <span style="padding: 0.4rem 0.75rem; background: rgba(201, 169, 98, 0.2); color: var(--gold); border-radius: 20px; font-size: 0.8rem;" id="valoraciones-count" data-i18n="rate.ratingsCount">0</span>
       </div>
 
       <div class="valoraciones-list scrollbar-custom" id="valoraciones-list"></div>
@@ -999,13 +852,20 @@
 
     function formatearFecha(fecha) {
       const [year, month, day] = fecha.split('-');
-      const meses = ["", "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
-      return { dia: day, mes: meses[parseInt(month)] };
+      const lang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'es';
+      const meses = {
+        es: ["", "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+        en: ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+      };
+      const lista = meses[lang] || meses.es;
+      return { dia: day, mes: lista[parseInt(month)] };
     }
 
     function formatearFechaCompleta(fecha) {
       const date = new Date(fecha);
-      return date.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      const lang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'es';
+      const locale = lang === 'en' ? 'en-US' : 'es-ES';
+      return date.toLocaleDateString(locale, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     }
 
     function renderStar(rating, position, onChange) {
@@ -1016,6 +876,7 @@
     }
 
     function renderViajesSinValorar() {
+      const t = window.translate ? window.translate : (key) => key;
       const html = viajesSinValorar.map((viaje, idx) => {
         const fecha = formatearFecha(viaje.fecha);
         const isExpanded = viajeSeleccionado === idx;
@@ -1031,7 +892,7 @@
                   </svg>
                   <span>${viaje.destino}</span>
                 </div>
-                <p class="viaje-detalles">Chofer: ${viaje.chofer} | Bus: ${viaje.bus}</p>
+                <p class="viaje-detalles">${t('rate.driver')}: ${viaje.chofer} | ${t('rate.bus')}: ${viaje.bus}</p>
               </div>
               <div class="viaje-fecha">
                 <div class="viaje-dia">${fecha.dia}</div>
@@ -1047,51 +908,52 @@
           </div>
         `;
       }).join('');
-      document.getElementById('viajes-list').innerHTML = html || '<div class="empty-state"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01" /></svg><p>No tienes viajes pendientes de valorar</p></div>';
-      document.getElementById('viajes-count').textContent = `${viajesSinValorar.length} viaje(s) pendientes de valorar`;
+      document.getElementById('viajes-list').innerHTML = html || `<div class="empty-state"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01" /></svg><p>${t('rate.emptyPending')}</p></div>`;
+      document.getElementById('viajes-count').textContent = t('rate.pendingTrips').replace('{count}', viajesSinValorar.length);
     }
 
     function renderValoracionPanel(viaje, idx) {
+      const t = window.translate ? window.translate : (key) => key;
       return `
         <div class="valoracion-panel">
           <div class="panel-header">
-            <h3 class="panel-title">Gracias por preferirnos</h3>
-            <p class="panel-subtitle">Tu opinión nos ayuda a mejorar</p>
+            <h3 class="panel-title">${t('rate.thanks')}</h3>
+            <p class="panel-subtitle">${t('rate.opinionHelp')}</p>
           </div>
           <div class="valoracion-item" style="border-color: rgba(74, 222, 128, 0.2);">
             <div class="valoracion-item-header">
               <div class="valoracion-item-label">
                 <div class="valoracion-item-label-dot" style="background: #4ade80;"></div>
-                Valorar Chofer (${viaje.chofer})
+                ${t('rate.rateDriver')} (${viaje.chofer})
               </div>
               <div class="stars-container" id="stars-chofer-${idx}"></div>
             </div>
-            <textarea class="comentario-textarea" id="comentario-chofer-${idx}" placeholder="Escribe tu comentario sobre el chofer (opcional)..."></textarea>
-            <button class="enviar-btn" style="background: #4ade80;" onclick="enviarValoracion(${idx}, 'chofer')">Enviar valoración del chofer</button>
+            <textarea class="comentario-textarea" id="comentario-chofer-${idx}" placeholder="Escribe tu comentario sobre el chofer (opcional)..." data-i18n-placeholder="rate.commentDriver"></textarea>
+            <button class="enviar-btn" style="background: #4ade80;" onclick="enviarValoracion(${idx}, 'chofer')">${t('rate.sendDriver')}</button>
           </div>
           <div class="valoracion-item" style="border-color: rgba(96, 165, 250, 0.2);">
             <div class="valoracion-item-header">
               <div class="valoracion-item-label">
                 <div class="valoracion-item-label-dot" style="background: #60a5fa;"></div>
-                Valorar Bus (${viaje.bus})
+                ${t('rate.rateBus')} (${viaje.bus})
               </div>
               <div class="stars-container" id="stars-bus-${idx}"></div>
             </div>
-            <textarea class="comentario-textarea" id="comentario-bus-${idx}" placeholder="Escribe tu comentario sobre el bus (opcional)..."></textarea>
-            <button class="enviar-btn" style="background: #60a5fa;" onclick="enviarValoracion(${idx}, 'bus')">Enviar valoración del bus</button>
+            <textarea class="comentario-textarea" id="comentario-bus-${idx}" placeholder="Escribe tu comentario sobre el bus (opcional)..." data-i18n-placeholder="rate.commentBus"></textarea>
+            <button class="enviar-btn" style="background: #60a5fa;" onclick="enviarValoracion(${idx}, 'bus')">${t('rate.sendBus')}</button>
           </div>
           <div class="valoracion-item" style="border-color: rgba(201, 169, 98, 0.2);">
             <div class="valoracion-item-header">
               <div class="valoracion-item-label">
                 <div class="valoracion-item-label-dot" style="background: var(--gold);"></div>
-                Valorar Servicio General
+                ${t('rate.rateService')}
               </div>
               <div class="stars-container" id="stars-servicio-${idx}"></div>
             </div>
-            <textarea class="comentario-textarea" id="comentario-servicio-${idx}" placeholder="Escribe tu comentario sobre el servicio (opcional)..."></textarea>
-            <button class="enviar-btn" style="background: var(--gold); color: #050505;" onclick="enviarValoracion(${idx}, 'servicio')">Enviar valoración del servicio</button>
+            <textarea class="comentario-textarea" id="comentario-servicio-${idx}" placeholder="Escribe tu comentario sobre el servicio (opcional)..." data-i18n-placeholder="rate.commentService"></textarea>
+            <button class="enviar-btn" style="background: var(--gold); color: #050505;" onclick="enviarValoracion(${idx}, 'servicio')">${t('rate.sendService')}</button>
           </div>
-          <button class="finalizar-btn" onclick="finalizarValoracion(${idx})">Finalizar valoración de este viaje</button>
+          <button class="finalizar-btn" onclick="finalizarValoracion(${idx})">${t('rate.finishTrip')}</button>
         </div>
       `;
     }
@@ -1123,11 +985,12 @@
     }
 
     function enviarValoracion(idx, tipo) {
+      const t = window.translate ? window.translate : (key) => key;
       const rating = ratings[tipo];
       const comentario = document.getElementById(`comentario-${tipo}-${idx}`).value;
       
       if (rating === 0) {
-        alert('Por favor selecciona una calificación antes de enviar');
+        alert(t('rate.selectRating'));
         return;
       }
       
@@ -1143,7 +1006,7 @@
       const button = event.target;
       const buttonText = button.textContent;
       button.disabled = true;
-      button.textContent = 'Enviando...';
+      button.textContent = t('rate.sending');
       
       fetch(API_ADD_VALORACION, {
         method: 'POST',
@@ -1154,11 +1017,11 @@
         credentials: 'same-origin'
       })
       .then(response => {
-        if (!response.ok) throw new Error('Error al guardar valoración');
+        if (!response.ok) throw new Error(t('rate.saveError'));
         return response.json();
       })
       .then(data => {
-        button.textContent = '✓ Enviada';
+        button.textContent = t('rate.sent');
         setTimeout(() => {
           ratings[tipo] = 0;
           document.getElementById(`comentario-${tipo}-${idx}`).value = '';
@@ -1168,18 +1031,19 @@
       })
       .catch(error => {
         console.error('Error:', error);
-        alert('Error al enviar la valoración. Intenta de nuevo.');
+        alert(t('rate.sendError'));
         button.disabled = false;
         button.textContent = buttonText;
       });
     }
 
     async function finalizarValoracion(idx) {
+      const t = window.translate ? window.translate : (key) => key;
       const viaje = viajesSinValorar[idx];
       
       // Verificar que al menos una valoración fue enviada
       if (!viajesConValoraciones.has(viaje.id)) {
-        alert('Por favor envía al menos una valoración antes de finalizar');
+        alert(t('rate.sendOneBeforeFinish'));
         return;
       }
       
@@ -1227,11 +1091,16 @@
 
     function renderValoracionesPasadas() {
       const filtered = filtro === 'todos' ? valoracionesPasadas : valoracionesPasadas.filter(v => v.tipo === filtro);
+      const t = window.translate ? window.translate : (key) => key;
       
       const html = filtered.map((val, idx) => {
         const isExpanded = valoracionExpandida === idx;
         const tiposColor = { chofer: '#4ade80', bus: '#60a5fa', servicio: 'var(--gold)' };
-        const tiposLabel = { chofer: 'Chofer', bus: 'Bus', servicio: 'Servicio' };
+        const tiposLabel = {
+          chofer: t('rate.driver'),
+          bus: t('rate.bus'),
+          servicio: t('rate.service'),
+        };
         return `
           <div>
             <div class="valoracion-card ${isExpanded ? 'expanded' : ''}" onclick="toggleValoracion(${idx})">
@@ -1262,8 +1131,8 @@
               <div class="valoracion-detalle">
                 <div class="detalle-header">
                   <div class="detalle-info">
-                    <div class="detalle-tipo">Valoración de ${tiposLabel[val.tipo]}</div>
-                    <p class="detalle-fecha">Valorado el ${formatearFechaCompleta(val.fechaValoracion)}</p>
+                    <div class="detalle-tipo">${t('rate.ratingOf')} ${tiposLabel[val.tipo]}</div>
+                    <p class="detalle-fecha">${t('rate.ratedOn')} ${formatearFechaCompleta(val.fechaValoracion)}</p>
                   </div>
                   <div class="detalle-stars">
                     ${[1,2,3,4,5].map(i => `<svg class="mini-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" style="fill: ${i <= val.estrellas ? tiposColor[val.tipo] : 'transparent'}; stroke: ${tiposColor[val.tipo]};"/></svg>`).join('')}
@@ -1271,7 +1140,7 @@
                   </div>
                 </div>
                 <div style="margin-bottom: 1rem;">
-                  <p class="detalle-fecha">Viaje:</p>
+                  <p class="detalle-fecha">${t('rate.tripLabel')}</p>
                   <div style="display: flex; align-items: center; gap: 0.75rem;">
                     <span style="color: var(--text-white); font-size: 0.9rem;">${val.origen}</span>
                     <div style="flex: 1; height: 2px; background: linear-gradient(to right, transparent, var(--gold), transparent);"></div>
@@ -1280,13 +1149,13 @@
                 </div>
                 ${val.comentario ? `
                   <div class="comentario-box">
-                    <p class="comentario-label">Comentario:</p>
+                    <p class="comentario-label">${t('rate.commentLabel')}</p>
                     <p class="comentario-text">"${val.comentario}"</p>
                   </div>
                 ` : `
                   <div class="comentario-box">
-                    <p class="comentario-label">Comentario:</p>
-                    <p class="comentario-empty">Sin comentario</p>
+                    <p class="comentario-label">${t('rate.commentLabel')}</p>
+                    <p class="comentario-empty">${t('rate.noComment')}</p>
                   </div>
                 `}
               </div>
@@ -1295,8 +1164,8 @@
         `;
       }).join('');
       
-      document.getElementById('valoraciones-list').innerHTML = html || '<div class="empty-state"><svg viewBox="0 0 24 24" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg><p>No hay valoraciones para mostrar</p></div>';
-      document.getElementById('valoraciones-count').textContent = `${filtered.length} valoraciones`;
+      document.getElementById('valoraciones-list').innerHTML = html || `<div class="empty-state"><svg viewBox="0 0 24 24" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg><p>${t('rate.emptyRatings')}</p></div>`;
+      document.getElementById('valoraciones-count').textContent = t('rate.ratingsCount').replace('{count}', filtered.length);
     }
 
     function toggleValoracion(idx) {
@@ -1308,7 +1177,7 @@
     function setFiltro(f) {
       filtro = f;
       document.querySelectorAll('.filter-btn').forEach((btn, i) => {
-        btn.classList.toggle('active', btn.textContent.toLowerCase().includes(f === 'todos' ? 'todos' : f));
+        btn.classList.toggle('active', btn.dataset.filter === f);
       });
       valoracionExpandida = null;
       renderValoracionesPasadas();
@@ -1316,6 +1185,11 @@
 
     // Inicializar
     cargarDatos();
+
+    window.addEventListener('languageChanged', () => {
+      renderViajesSinValorar();
+      renderValoracionesPasadas();
+    });
   </script>
   <script src="/js/i18n.js"></script>
   <script src="/js/header-loader.js"></script>

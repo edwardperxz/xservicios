@@ -191,74 +191,255 @@
       fill: none;
     }
 
-    /* Sub Header */
-    .sub-header {
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-      padding: 1rem 2.5rem;
-      background: var(--dark-card);
-      border-bottom: 1px solid var(--dark-lighter);
-    }
-
-    .back-btn {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: transparent;
-      border: 1px solid var(--gold);
-      color: var(--gold);
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      transition: all 0.3s;
-    }
-
-    .back-btn:hover {
-      background: var(--gold);
-      color: var(--dark-bg);
-    }
-
-    .back-btn svg {
-      width: 16px;
-      height: 16px;
-      stroke: currentColor;
-      fill: none;
-    }
-
-    .sub-nav {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-    }
-
-    .sub-nav-item {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      color: var(--text-gray);
-      text-decoration: none;
-      font-size: 0.9rem;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      transition: all 0.3s;
-    }
-
-    .sub-nav-item:hover {
-      color: var(--gold);
-      background: rgba(201, 169, 98, 0.1);
-    }
-
-    .sub-nav-item.active {
-      color: var(--gold);
-      background: rgba(201, 169, 98, 0.15);
-      border: 1px solid rgba(201, 169, 98, 0.3);
-    }
-
     /* Main Content */
     .main-content {
       padding: 1.5rem 2.5rem;
+    }
+
+    .title-section {
+      padding: 1rem 0 0;
+    }
+
+    .main-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--text-white);
+      margin-bottom: 0.5rem;
+    }
+
+    .main-subtitle {
+      color: var(--text-gray);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .services-section {
+      padding-bottom: 2.5rem;
+    }
+
+    .service-detail {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 1.75rem;
+      background: rgba(26, 26, 26, 0.9);
+      border: 1px solid rgba(201, 169, 98, 0.2);
+      border-radius: 16px;
+      padding: 1.75rem;
+    }
+
+    .service-detail-media {
+      display: flex;
+      align-items: stretch;
+    }
+
+    .service-detail-image {
+      width: 100%;
+      height: 100%;
+      min-height: 280px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid rgba(201, 169, 98, 0.25);
+    }
+
+    .service-detail-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .service-detail-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .service-detail-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--text-white);
+    }
+
+    .service-detail-status {
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border: 1px solid transparent;
+    }
+
+    .service-detail-status.is-active {
+      color: #1f6b49;
+      background: rgba(45, 122, 95, 0.18);
+      border-color: rgba(45, 122, 95, 0.4);
+    }
+
+    .service-detail-status.is-inactive {
+      color: #b16464;
+      background: rgba(177, 100, 100, 0.2);
+      border-color: rgba(177, 100, 100, 0.45);
+    }
+
+    .service-detail-description {
+      color: var(--text-gray);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .service-detail-price {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      color: var(--gold);
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+
+    .service-detail-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(201, 169, 98, 0.15);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+    }
+
+    .meta-label {
+      color: var(--text-gray);
+      font-size: 0.8rem;
+      letter-spacing: 0.02em;
+    }
+
+    .meta-value {
+      color: var(--text-white);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .service-detail-variants {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(201, 169, 98, 0.12);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+    }
+
+    .variant-list {
+      margin: 0.5rem 0 0;
+      padding-left: 1.1rem;
+      color: var(--text-white);
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .variant-empty {
+      margin-top: 0.5rem;
+      color: var(--text-gray);
+      font-size: 0.85rem;
+    }
+
+    .service-detail-actions {
+      margin-top: auto;
+    }
+
+    .service-detail-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(26, 26, 26, 0.8);
+      border-radius: 16px;
+      border: 1px dashed rgba(201, 169, 98, 0.3);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      color: var(--text-gray);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: rgba(26, 26, 26, 0.85);
+      border: 1px solid rgba(201, 169, 98, 0.2);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 28px rgba(0, 0, 0, 0.35);
+    }
+
+    .service-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .service-content {
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .service-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      color: var(--text-white);
+    }
+
+    .service-description {
+      color: var(--text-gray);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      min-height: 3.6em;
+    }
+
+    .service-price {
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .price-amount {
+      font-size: 1.1rem;
+    }
+
+    .price-label {
+      font-size: 0.75rem;
+      color: var(--text-gray);
+      font-weight: 400;
+    }
+
+    .btn-reservar {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0.65rem 1.2rem;
+      border-radius: 8px;
+      background: var(--gold);
+      color: var(--dark-bg);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn-reservar:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
     }
 
     /* Map Section */
@@ -733,6 +914,14 @@
         grid-template-columns: 1fr;
       }
 
+      .service-detail {
+        grid-template-columns: 1fr;
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
       .left-column {
         flex-direction: row;
       }
@@ -743,7 +932,7 @@
     }
 
     @media (max-width: 768px) {
-      .header, .sub-header, .main-content {
+      .header, .main-content {
         padding-left: 1rem;
         padding-right: 1rem;
       }
@@ -759,6 +948,10 @@
       .location-row, .info-row {
         grid-template-columns: 1fr;
       }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
     <link rel="stylesheet" href="/css/header-auth.css">
@@ -766,317 +959,158 @@
 <body>
   <!-- Header será cargado dinámicamente por header-loader.js -->
 
-  <!-- Sub Header -->
-  <div class="sub-header">
-    <button class="back-btn" onclick="window.history.back()">
-      <svg viewBox="0 0 24 24" stroke-width="2">
-        <path d="M19 12H5" />
-        <polyline points="12 19 5 12 12 5" />
-      </svg>
-      Volver
-    </button>
-
-    <nav class="sub-nav">
-      <a href="/newreservation" class="sub-nav-item active" style="color: var(--gold);">
-        <svg viewBox="0 0 24 24" stroke-width="2">
-          <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-          <line x1="16" y1="2" x2="16" y2="6" />
-          <line x1="8" y1="2" x2="8" y2="6" />
-          <line x1="3" y1="10" x2="21" y2="10" />
-          <line x1="12" y1="14" x2="12" y2="18" />
-          <line x1="10" y1="16" x2="14" y2="16" />
-        </svg>
-        Nueva Reserva
-      </a>
-      <a href="/myreservations" class="sub-nav-item">
-        <svg viewBox="0 0 24 24" stroke-width="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-          <polyline points="14 2 14 8 20 8" />
-          <line x1="16" y1="13" x2="8" y2="13" />
-          <line x1="16" y1="17" x2="8" y2="17" />
-        </svg>
-        Mis Reservas
-      </a>
-      <a href="/rateservice" class="sub-nav-item">
-        <svg viewBox="0 0 24 24" stroke-width="2">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-        </svg>
-        Valorar Servicio
-      </a>
-    </nav>
-  </div>
-
   <!-- Main Content -->
-  <main class="main-content">
-    <!-- Map Section -->
-    <div class="map-section">
-      <div class="map-placeholder">
-        <div class="map-overlay" />
-        <div class="map-content">
-          <svg class="map-icon" viewBox="0 0 24 24" stroke-width="1.5">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-            <circle cx="12" cy="10" r="3" />
-          </svg>
-          <p class="map-text">Mapa Interactivo</p>
-          <p class="map-subtext">Haz clic para marcar tu destino en el mapa</p>
-        </div>
-      </div>
-    </div>
+  <main class="main-content" style="margin-top: 2rem;">
+    <section class="title-section">
+      <h1 class="main-title" data-i18n="newReservation.detailTitle">Detalle del servicio</h1>
+      <p class="main-subtitle" data-i18n="newReservation.detailSubtitle">Revisa la informacion completa antes de reservar.</p>
+    </section>
 
-    <!-- Two Columns -->
-    <div class="columns-container">
-      <!-- Left Column - Fichas -->
-      <div class="left-column">
-        <!-- Ficha Bus -->
-        <div class="ficha-placeholder" id="bus-placeholder" onclick="toggleBusFicha()">
-          <div class="ficha-plus">
-            <svg viewBox="0 0 24 24" stroke-width="2">
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-          </div>
-          <span class="ficha-label">Seleccionar Bus</span>
-        </div>
-
-        <div id="bus-ficha" style="display: none;">
-          <div class="ficha-card">
-            <button class="ficha-close" onclick="toggleBusFicha()">
-              <svg viewBox="0 0 24 24" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            </button>
-            <div class="ficha-header">
-              <span class="ficha-title">FICHA DE UNIDAD</span>
-              <span class="ficha-badge">COASTER</span>
-            </div>
-            <div class="ficha-content">
-              <img src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=150&h=150&fit=crop" alt="Bus" class="ficha-image" />
-              <div class="ficha-info">
-                <p class="ficha-name">Coaster Toyota 2006</p>
-                <p class="ficha-detail">Capacidad: <span>30 pasajeros</span></p>
-                <p class="ficha-detail">Color: <span>Blanco</span></p>
-                <p class="ficha-detail">Placa: <span>AB-1234</span></p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Ficha Chofer -->
-        <div class="ficha-placeholder" id="chofer-placeholder" onclick="toggleChoferFicha()">
-          <div class="ficha-plus">
-            <svg viewBox="0 0 24 24" stroke-width="2">
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-          </div>
-          <span class="ficha-label">Seleccionar Chofer</span>
-        </div>
-
-        <div id="chofer-ficha" style="display: none;">
-          <div class="ficha-card">
-            <button class="ficha-close" onclick="toggleChoferFicha()">
-              <svg viewBox="0 0 24 24" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            </button>
-            <div class="ficha-header">
-              <span class="ficha-title">FICHA DE CHOFER</span>
-              <span class="ficha-badge">SENIOR</span>
-            </div>
-            <div class="ficha-content">
-              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face" alt="Chofer" class="ficha-image" style="border-radius: 50%;" />
-              <div class="ficha-info">
-                <p class="ficha-name">Roberto Méndez</p>
-                <p class="ficha-detail">Experiencia: <span>12 años</span></p>
-                <p class="ficha-detail">Viajes: <span>1,450+</span></p>
-                <p class="ficha-detail">Rating: <span style="color: #c9a962;">★★★★★ 4.9</span></p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right Column - Booking Details -->
-      <div class="right-column">
-        <!-- Location Inputs -->
-        <div class="location-row">
-          <div class="location-input">
-            <div class="location-label">
-              <svg viewBox="0 0 24 24" stroke-width="2">
-                <circle cx="12" cy="12" r="3" />
-                <path d="M12 2v4M12 18v4M2 12h4M18 12h4" />
-              </svg>
-              Ubicación de recogida
-            </div>
-            <input type="text" id="origen" value="David, Chiriquí" placeholder="Ingresa ubicación de origen" />
-          </div>
-          <div class="location-input">
-            <div class="location-label">
-              <svg viewBox="0 0 24 24" stroke-width="2">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
-              Ubicación de destino
-            </div>
-            <input type="text" id="destino" value="Isla Bolaños" placeholder="Ingresa ubicación de destino" />
-          </div>
-        </div>
-
-        <!-- Date Input -->
-        <div class="time-input">
-          <div class="location-label">
-            <svg viewBox="0 0 24 24" stroke-width="2">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-              <line x1="16" y1="2" x2="16" y2="6" />
-              <line x1="8" y1="2" x2="8" y2="6" />
-              <line x1="3" y1="10" x2="21" y2="10" />
-            </svg>
-            Fecha de la reserva
-          </div>
-          <input type="date" id="fecha" />
-        </div>
-
-        <!-- Duration and Time -->
-        <div class="info-row">
-          <div class="info-box">
-            <p class="info-label">Duración estimada del recorrido</p>
-            <p class="info-value" id="duracion-total">3h 25min</p>
-          </div>
-          <div class="time-input">
-            <div class="location-label">
-              <svg viewBox="0 0 24 24" stroke-width="2">
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="12 6 12 12 16 14" />
-              </svg>
-              Hora de recogida
-            </div>
-            <input type="time" id="hora" value="07:00" />
-          </div>
-        </div>
-
-        <!-- Transport Tags -->
-        <div class="transport-section">
-          <p class="transport-label">Medios de transporte incluidos</p>
-          <div class="transport-tags" id="transport-list">
-            <div class="transport-tag" data-id="1">
-              <div class="transport-tag-info">
-                <span class="transport-tag-name">Coaster</span>
-                <span class="transport-tag-price">$85 - 120min</span>
-              </div>
-              <button class="transport-tag-remove" onclick="removeTransport(1)">
-                <svg viewBox="0 0 24 24" stroke-width="2">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-              </button>
-            </div>
-            <div class="transport-tag" data-id="2">
-              <div class="transport-tag-info">
-                <span class="transport-tag-name">Taxi Acuático</span>
-                <span class="transport-tag-price">$35 - 45min</span>
-              </div>
-              <button class="transport-tag-remove" onclick="removeTransport(2)">
-                <svg viewBox="0 0 24 24" stroke-width="2">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Price -->
-        <div class="price-section">
-          <p class="price-label">Precio Total</p>
-          <p class="price-value" id="precio-total">$120.00</p>
-          <p class="price-breakdown" id="precio-desglose">Coaster + Taxi Acuático incluidos</p>
-        </div>
-
-        <!-- Agendar Button -->
-        <button class="agendar-btn" onclick="agendarReserva()">
-          <svg viewBox="0 0 24 24" stroke-width="2">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-            <polyline points="22 4 12 14.01 9 11.01" />
-          </svg>
-          Agendar Reserva
-        </button>
-      </div>
-    </div>
+    <section class="service-detail" id="serviceDetail"></section>
+    <section class="service-detail-empty" id="serviceDetailEmpty" style="display: none;">
+      <h2 data-i18n="newReservation.noServiceTitle">Servicio no disponible</h2>
+      <p data-i18n="newReservation.noServiceDesc">Selecciona un servicio para ver sus detalles.</p>
+      <a href="/services" class="btn-reservar" data-i18n="newReservation.goToServices">Ver servicios</a>
+    </section>
   </main>
 
+  <script src="/js/i18n.js"></script>
   <script>
-    let busFichaVisible = false;
-    let choferFichaVisible = false;
-    let transportes = [
-      { id: 1, nombre: "Coaster", precio: 85, tiempo: 120 },
-      { id: 2, nombre: "Taxi Acuático", precio: 35, tiempo: 45 },
+    const API_SERVICIOS = '/xserv-servicios.json';
+    const serviceDetail = document.getElementById('serviceDetail');
+    const serviceDetailEmpty = document.getElementById('serviceDetailEmpty');
+    let servicioActual = null;
+
+    const imagenesServicios = [
+      'https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=900&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=900&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=900&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1563720223185-11003d516935?w=900&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1519741497674-611481863552?w=900&h=600&fit=crop',
     ];
 
-    function toggleBusFicha() {
-      busFichaVisible = !busFichaVisible;
-      document.getElementById('bus-ficha').style.display = busFichaVisible ? 'block' : 'none';
-      document.getElementById('bus-placeholder').classList.toggle('active', busFichaVisible);
-    }
+    const getImagenServicio = (servicio, index) => {
+      return servicio.imagen || servicio.image || imagenesServicios[index % imagenesServicios.length];
+    };
 
-    function toggleChoferFicha() {
-      choferFichaVisible = !choferFichaVisible;
-      document.getElementById('chofer-ficha').style.display = choferFichaVisible ? 'block' : 'none';
-      document.getElementById('chofer-placeholder').classList.toggle('active', choferFichaVisible);
-    }
+    const getDescripcion = (servicio, lang) => {
+      if (lang === 'en') {
+        return servicio.descripcion_en || servicio.descripcion_es || servicio.descripcion || servicio.detalle || '';
+      }
+      return servicio.descripcion_es || servicio.descripcion_en || servicio.descripcion || servicio.detalle || '';
+    };
 
-    function removeTransport(id) {
-      transportes = transportes.filter(t => t.id !== id);
-      renderTransports();
-      updatePrice();
-    }
+    const formatPrice = (precio) => {
+      const value = Number(precio);
+      if (!Number.isFinite(value) || value <= 0) return null;
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+      }).format(value);
+    };
 
-    function renderTransports() {
-      const html = transportes.map(t => `
-        <div class="transport-tag" data-id="${t.id}">
-          <div class="transport-tag-info">
-            <span class="transport-tag-name">${t.nombre}</span>
-            <span class="transport-tag-price">$${t.precio} - ${t.tiempo}min</span>
-          </div>
-          <button class="transport-tag-remove" onclick="removeTransport(${t.id})">
-            <svg viewBox="0 0 24 24" stroke-width="2">
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
-        </div>
-      `).join('');
-      document.getElementById('transport-list').innerHTML = html;
-    }
+    const normalizeVariants = (variantes) => {
+      if (!variantes) return [];
+      if (Array.isArray(variantes)) return variantes;
+      if (typeof variantes === 'object') return Object.entries(variantes).map(([key, value]) => `${key}: ${value}`);
+      if (typeof variantes === 'string') {
+        try {
+          const parsed = JSON.parse(variantes);
+          return normalizeVariants(parsed);
+        } catch (error) {
+          return [variantes];
+        }
+      }
+      return [];
+    };
 
-    function updatePrice() {
-      const precioTotal = transportes.reduce((sum, t) => sum + t.precio, 0);
-      const tiempoTotal = transportes.reduce((sum, t) => sum + t.tiempo, 0);
-      const horas = Math.floor(tiempoTotal / 60);
-      const mins = tiempoTotal % 60;
-      const duracion = horas > 0 ? `${horas}h ${mins}min` : `${mins}min`;
-      
-      document.getElementById('precio-total').textContent = `$${precioTotal}.00`;
-      document.getElementById('duracion-total').textContent = duracion;
-      document.getElementById('precio-desglose').textContent = transportes.map(t => t.nombre).join(' + ') + ' incluidos';
-    }
+    const renderServicio = () => {
+      if (!serviceDetail || !serviceDetailEmpty) return;
+      const t = window.translate ? window.translate : (key) => key;
+      const lang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'es';
 
-    function agendarReserva() {
-      const origen = document.getElementById('origen').value;
-      const destino = document.getElementById('destino').value;
-      const fecha = document.getElementById('fecha').value;
-      const hora = document.getElementById('hora').value;
-      
-      if (!fecha) {
-        alert('Por favor selecciona una fecha');
+      if (!servicioActual) {
+        serviceDetail.style.display = 'none';
+        serviceDetailEmpty.style.display = 'flex';
         return;
       }
-      
-      alert(`Reserva agendada:\n${origen} → ${destino}\nFecha: ${fecha} a las ${hora}`);
-    }
+
+      const nombre = servicioActual.nombre || servicioActual.titulo || t('services.defaultName');
+      const descripcion = getDescripcion(servicioActual, lang) || t('services.defaultDesc');
+      const precio = formatPrice(servicioActual.precio_base ?? servicioActual.precio ?? servicioActual.costo);
+      const variantes = normalizeVariants(servicioActual.variantes);
+      const estadoActivo = String(servicioActual.estado ?? '1') !== '0';
+      const href = servicioActual.id ? `/newreservation?service_id=${servicioActual.id}` : '/newreservation';
+      const index = servicioActual.__index ?? 0;
+
+      serviceDetail.innerHTML = `
+        <div class="service-detail-media">
+          <img src="${getImagenServicio(servicioActual, index)}" alt="${nombre}" class="service-detail-image">
+        </div>
+        <div class="service-detail-content">
+          <div class="service-detail-header">
+            <h2 class="service-detail-title">${nombre}</h2>
+            <span class="service-detail-status ${estadoActivo ? 'is-active' : 'is-inactive'}">
+              ${estadoActivo ? t('newReservation.statusActive') : t('newReservation.statusInactive')}
+            </span>
+          </div>
+          <p class="service-detail-description">${descripcion}</p>
+          <div class="service-detail-price">
+            <span class="price-amount">${precio || t('services.consult')}</span>
+            ${precio ? `<span class="price-label">${t('services.from')}</span>` : ''}
+          </div>
+          <div class="service-detail-meta">
+            <span class="meta-label">${t('newReservation.priceBaseLabel')}</span>
+            <span class="meta-value">${precio || t('services.consult')}</span>
+          </div>
+          <div class="service-detail-variants">
+            <span class="meta-label">${t('newReservation.variantsLabel')}</span>
+            ${variantes.length ? `<ul class="variant-list">${variantes.map(item => `<li>${item}</li>`).join('')}</ul>` : `<p class="variant-empty">${t('newReservation.variantsEmpty')}</p>`}
+          </div>
+          <div class="service-detail-actions">
+            <a href="${href}" class="btn-reservar">${t('newReservation.reserveNow')}</a>
+          </div>
+        </div>
+      `;
+
+      serviceDetail.style.display = 'grid';
+      serviceDetailEmpty.style.display = 'none';
+    };
+
+    const cargarServicio = async () => {
+      if (!serviceDetail || !serviceDetailEmpty) return;
+      const params = new URLSearchParams(window.location.search);
+      const serviceId = params.get('service_id');
+
+      try {
+        const res = await fetch(API_SERVICIOS, {
+          headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        });
+        if (!res.ok) {
+          renderServicio();
+          return;
+        }
+        const data = await res.json();
+        const servicios = Array.isArray(data.xservServicios) ? data.xservServicios : [];
+        const activos = servicios.filter((servicio) => String(servicio.estado ?? '1') !== '0');
+        const indexed = activos.map((servicio, index) => ({ ...servicio, __index: index }));
+        if (serviceId) {
+          servicioActual = indexed.find((servicio) => String(servicio.id) === String(serviceId)) || null;
+        } else {
+          servicioActual = indexed[0] || null;
+        }
+        renderServicio();
+      } catch (error) {
+        console.error('Error cargando servicio:', error);
+        renderServicio();
+      }
+    };
+
+    cargarServicio();
+    window.addEventListener('languageChanged', renderServicio);
   </script>
-  <script src="/js/i18n.js"></script>
   <script src="/js/header-loader.js"></script>
   <script src="/js/header-dynamic.js"></script>
 </body>

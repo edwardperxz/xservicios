@@ -831,31 +831,31 @@
     <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1600&h=900&fit=crop" alt="Transporte de pasajeros" class="hero-bg">
     <div class="hero-overlay"></div>
     <div class="hero-content">
-      <span class="hero-subtitle">Transporte Premium</span>
-      <h1 class="hero-title">Nuestra Flota</h1>
-      <p class="hero-description">Unidades modernas, cuidadosamente mantenidas para garantizar comodidad y seguridad en cada viaje.</p>
+      <span class="hero-subtitle" data-i18n="fleet.heroSubtitle">Transporte Premium</span>
+      <h1 class="hero-title" data-i18n="fleet.heroTitle">Nuestra Flota</h1>
+      <p class="hero-description" data-i18n="fleet.heroDesc">Unidades modernas, cuidadosamente mantenidas para garantizar comodidad y seguridad en cada viaje.</p>
     </div>
   </section>
 
   <!-- Quote Form Section -->
   <section class="quote-section">
     <div class="quote-container">
-      <h2 class="quote-title">Solicita tu Cotización</h2>
-      <p class="quote-subtitle">Completa el formulario y te contactaremos pronto</p>
+      <h2 class="quote-title" data-i18n="fleet.quoteTitle">Solicita tu Cotización</h2>
+      <p class="quote-subtitle" data-i18n="fleet.quoteSubtitle">Completa el formulario y te contactaremos pronto</p>
       <form>
         <div class="form-group">
-          <input type="text" placeholder="Tu nombre completo">
+          <input type="text" placeholder="Tu nombre completo" data-i18n-placeholder="fleet.quoteName">
         </div>
         <div class="form-group">
-          <input type="email" placeholder="Correo electrónico">
+          <input type="email" placeholder="Correo electrónico" data-i18n-placeholder="fleet.quoteEmail">
         </div>
         <div class="form-group">
-          <input type="text" placeholder="Destino deseado">
+          <input type="text" placeholder="Destino deseado" data-i18n-placeholder="fleet.quoteDestination">
         </div>
         <div class="form-group">
-          <input type="number" placeholder="Número de pasajeros">
+          <input type="number" placeholder="Número de pasajeros" data-i18n-placeholder="fleet.quotePassengers">
         </div>
-        <button type="submit" class="btn-primary">Solicitar Cotización</button>
+        <button type="submit" class="btn-primary" data-i18n="fleet.quoteSubmit">Solicitar Cotización</button>
       </form>
     </div>
   </section>
@@ -866,10 +866,10 @@
       <div class="feature-card">
         <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&h=350&fit=crop" alt="Cobertura amplia" class="feature-image">
         <div class="feature-content">
-          <h3 class="feature-title">Cobertura Regional</h3>
-          <p class="feature-text">Ofrecemos servicios de transporte desde traslados privados hasta viajes grupales a cualquier destino en la región de Chiriquí.</p>
+          <h3 class="feature-title" data-i18n="fleet.feature1Title">Cobertura Regional</h3>
+          <p class="feature-text" data-i18n="fleet.feature1Desc">Ofrecemos servicios de transporte desde traslados privados hasta viajes grupales a cualquier destino en la región de Chiriquí.</p>
           <a href="#" class="feature-link">
-            Más información
+            <span data-i18n="fleet.moreInfo">Más información</span>
             <svg viewBox="0 0 24 24" strokeWidth="2">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
@@ -879,10 +879,10 @@
       <div class="feature-card">
         <img src="https://images.unsplash.com/photo-1494515843206-f3117d3f51b7?w=500&h=350&fit=crop" alt="Entrega segura" class="feature-image">
         <div class="feature-content">
-          <h3 class="feature-title">100% Seguro</h3>
-          <p class="feature-text">Nuestras unidades cuentan con todas las medidas de seguridad y nuestros choferes están capacitados profesionalmente.</p>
+          <h3 class="feature-title" data-i18n="fleet.feature2Title">100% Seguro</h3>
+          <p class="feature-text" data-i18n="fleet.feature2Desc">Nuestras unidades cuentan con todas las medidas de seguridad y nuestros choferes están capacitados profesionalmente.</p>
           <a href="#" class="feature-link">
-            Más información
+            <span data-i18n="fleet.moreInfo">Más información</span>
             <svg viewBox="0 0 24 24" strokeWidth="2">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
@@ -892,10 +892,10 @@
       <div class="feature-card">
         <img src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=500&h=350&fit=crop" alt="Flota moderna" class="feature-image">
         <div class="feature-content">
-          <h3 class="feature-title">Flota Moderna</h3>
-          <p class="feature-text">Contamos con buses tipo Coaster y unidades de 15 pasajeros equipados con aire acondicionado y asientos reclinables.</p>
+          <h3 class="feature-title" data-i18n="fleet.feature3Title">Flota Moderna</h3>
+          <p class="feature-text" data-i18n="fleet.feature3Desc">Contamos con buses tipo Coaster y unidades de 15 pasajeros equipados con aire acondicionado y asientos reclinables.</p>
           <a href="#" class="feature-link">
-            Más información
+            <span data-i18n="fleet.moreInfo">Más información</span>
             <svg viewBox="0 0 24 24" strokeWidth="2">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
@@ -908,7 +908,7 @@
   <!-- Vehicle Park Section -->
   <section class="vehicle-section">
     <div class="section-header">
-      <h2 class="section-title">Parque <span>Vehicular</span></h2>
+      <h2 class="section-title"><span data-i18n="fleet.vehicleTitle">Parque <span>Vehicular</span></span></h2>
       <div class="nav-arrows">
         <div class="nav-arrow">
           <svg viewBox="0 0 24 24" strokeWidth="2">
@@ -945,8 +945,8 @@
   <!-- Drivers Section -->
   <section class="drivers-section">
     <div class="drivers-header">
-      <h2 class="drivers-title">Nuestros <span>Choferes</span></h2>
-      <p class="drivers-subtitle">Profesionales responsables, transparentes y comprometidos con brindar el mejor servicio</p>
+      <h2 class="drivers-title"><span data-i18n="fleet.driversTitle">Nuestros <span>Choferes</span></span></h2>
+      <p class="drivers-subtitle" data-i18n="fleet.driversSubtitle">Profesionales responsables, transparentes y comprometidos con brindar el mejor servicio</p>
     </div>
     <div class="drivers-grid" id="driversGrid">
       <!-- Row 1 -->

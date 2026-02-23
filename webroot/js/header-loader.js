@@ -71,7 +71,7 @@
                 </svg>
                 <span data-i18n="profile.myProfile">Mi Perfil</span>
               </a>
-              <a href="/my-reservations" class="xserv-dropdown-item">
+              <a href="/myreservations" class="xserv-dropdown-item">
                 <svg viewBox="0 0 24 24" strokeWidth="2">
                   <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
                   <line x1="16" y1="2" x2="16" y2="6"/>

@@ -210,72 +210,6 @@
       fill: none;
     }
 
-    /* Sub Header */
-    .sub-header {
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-      padding: 1rem 2.5rem;
-      background: var(--dark-card);
-      border-bottom: 1px solid var(--dark-lighter);
-    }
-
-    .back-btn {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      color: var(--text-gray);
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: color 0.3s;
-    }
-
-    .back-btn:hover {
-      color: var(--gold);
-    }
-
-    .back-btn svg {
-      width: 18px;
-      height: 18px;
-      stroke: currentColor;
-      fill: none;
-    }
-
-    .sub-nav {
-      display: flex;
-      gap: 2rem;
-    }
-
-    .sub-nav-item {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      color: var(--text-gray);
-      text-decoration: none;
-      font-size: 0.9rem;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      transition: all 0.3s;
-    }
-
-    .sub-nav-item:hover {
-      color: var(--gold);
-    }
-
-    .sub-nav-item.active {
-      color: var(--gold);
-      background: rgba(201, 169, 98, 0.15);
-    }
-
-    .sub-nav-item svg {
-      width: 16px;
-      height: 16px;
-      stroke: currentColor;
-      fill: none;
-    }
-
     /* Content */
     .content {
       padding: 2rem 2.5rem;
@@ -690,21 +624,21 @@
 
   <div class="page-container">
     <!-- Content -->
-    <main class="content">
-      <h1 class="page-title">Mis <span>Reservas</span></h1>
+    <main class="content" style="margin-top: 2rem;">
+      <h1 class="page-title" data-i18n="reservations.pageTitle">Mis <span>Reservas</span></h1>
 
       <!-- Sub-secciones tabs -->
       <div class="sub-tabs">
         <button class="sub-tab active" data-section="actuales">
-          Reservas Actuales
+          <span data-i18n="reservations.current">Reservas Actuales</span>
           <span class="count" id="count-actuales">2</span>
         </button>
         <button class="sub-tab" data-section="futuras">
-          Futuras Reservas
+          <span data-i18n="reservations.future">Futuras Reservas</span>
           <span class="count" id="count-futuras">2</span>
         </button>
         <button class="sub-tab" data-section="historial">
-          Historial de Reservas
+          <span data-i18n="reservations.history">Historial de Reservas</span>
           <span class="count" id="count-historial">4</span>
         </button>
       </div>
@@ -833,8 +767,13 @@
 
     function formatearFecha(fecha) {
       const [year, month, day] = fecha.split('-');
-      const meses = ["", "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
-      return { dia: day, mes: meses[parseInt(month)] };
+      const lang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'es';
+      const meses = {
+        es: ["", "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+        en: ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+      };
+      const lista = meses[lang] || meses.es;
+      return { dia: day, mes: lista[parseInt(month)] };
     }
 
     function renderEstrellas(rating) {
@@ -855,6 +794,7 @@
 
     function renderReservas(seccion) {
       const reservas = reservasData[seccion] || [];
+      const t = window.translate ? window.translate : (key) => key;
       let html = '';
 
       if (reservas.length === 0) {
@@ -865,7 +805,7 @@
             <line x1="8" y1="2" x2="8" y2="6" />
             <line x1="3" y1="10" x2="21" y2="10" />
           </svg>
-          <p>No hay reservas en esta sección</p>
+          <p>${t('reservations.empty')}</p>
         </div>`;
       } else {
         html = reservas.map(r => {
@@ -877,7 +817,7 @@
                 <img src="${r.imagenDestino}" alt="${r.destino}" class="reserva-imagen" />
                 <div class="reserva-ruta">
                   <div class="ruta-punto">
-                    <span class="ruta-label">Origen</span>
+                    <span class="ruta-label">${t('reservations.origin')}</span>
                     <span class="ruta-nombre">${r.origen}</span>
                   </div>
                   <div class="ruta-flecha">
@@ -887,7 +827,7 @@
                     </svg>
                   </div>
                   <div class="ruta-punto">
-                    <span class="ruta-label">Destino</span>
+                    <span class="ruta-label">${t('reservations.destination')}</span>
                     <span class="ruta-nombre">${r.destino}</span>
                   </div>
                 </div>
@@ -902,32 +842,32 @@
               ${isExpanded ? `
                 <div class="reserva-detalle">
                   <div class="receipt-header">
-                    <h3 class="receipt-title">Comprobante de Reserva</h3>
+                    <h3 class="receipt-title">${t('reservations.receiptTitle')}</h3>
                     <p class="receipt-id">${r.id}</p>
                   </div>
                   <div class="receipt-content">
                     <div>
                       <div class="receipt-section">
-                        <h4 class="receipt-section-title">Detalles del Viaje</h4>
+                        <h4 class="receipt-section-title">${t('reservations.tripDetails')}</h4>
                         <div class="receipt-row">
-                          <span class="receipt-label">Origen:</span>
+                          <span class="receipt-label">${t('reservations.origin')}:</span>
                           <span class="receipt-value">${r.origen}</span>
                         </div>
                         <div class="receipt-row">
-                          <span class="receipt-label">Destino:</span>
+                          <span class="receipt-label">${t('reservations.destination')}:</span>
                           <span class="receipt-value">${r.destino}</span>
                         </div>
                         <div class="receipt-row">
-                          <span class="receipt-label">Hora de recogida:</span>
+                          <span class="receipt-label">${t('reservations.pickupTime')}:</span>
                           <span class="receipt-value">${r.hora}</span>
                         </div>
                         <div class="receipt-row">
-                          <span class="receipt-label">Duración:</span>
+                          <span class="receipt-label">${t('reservations.duration')}:</span>
                           <span class="receipt-value">${r.duracion}</span>
                         </div>
                       </div>
                       <div class="receipt-section">
-                        <h4 class="receipt-section-title">Transportes Utilizados</h4>
+                        <h4 class="receipt-section-title">${t('reservations.transports')}</h4>
                         <div class="transportes-list">
                           ${r.transportes.map(t => `<span class="transporte-tag">${t}</span>`).join('')}
                         </div>
@@ -935,15 +875,15 @@
                     </div>
                     <div>
                       <div class="receipt-section">
-                        <h4 class="receipt-section-title">Unidad y Conductor</h4>
+                        <h4 class="receipt-section-title">${t('reservations.unitDriver')}</h4>
                         <div class="fichas-container">
                           <div class="ficha-mini">
                             <img src="${r.bus.imagen}" alt="${r.bus.nombre}" class="ficha-mini-img" />
                             <div class="ficha-mini-info">
                               <p class="ficha-mini-title">${r.bus.nombre}</p>
-                              <p class="ficha-mini-detail">Placa: ${r.bus.placa}</p>
-                              <p class="ficha-mini-detail">Capacidad: ${r.bus.capacidad} pasajeros</p>
-                              <p class="ficha-mini-detail">Color: ${r.bus.color}</p>
+                              <p class="ficha-mini-detail">${t('reservations.plate')}: ${r.bus.placa}</p>
+                              <p class="ficha-mini-detail">${t('reservations.capacity')}: ${r.bus.capacidad} ${t('reservations.passengers')}</p>
+                              <p class="ficha-mini-detail">${t('reservations.color')}: ${r.bus.color}</p>
                             </div>
                           </div>
                         </div>
@@ -952,8 +892,8 @@
                             <img src="${r.chofer.imagen}" alt="${r.chofer.nombre}" class="ficha-mini-img chofer" />
                             <div class="ficha-mini-info">
                               <p class="ficha-mini-title">${r.chofer.nombre}</p>
-                              <p class="ficha-mini-detail">Experiencia: ${r.chofer.experiencia}</p>
-                              <p class="ficha-mini-detail">Viajes: ${r.chofer.viajes}</p>
+                              <p class="ficha-mini-detail">${t('reservations.experience')}: ${r.chofer.experiencia}</p>
+                              <p class="ficha-mini-detail">${t('reservations.trips')}: ${r.chofer.viajes}</p>
                               <div class="ficha-mini-rating">
                                 ${renderEstrellas(r.chofer.rating)}
                                 <span class="rating-number">${r.chofer.rating}</span>
@@ -965,7 +905,7 @@
                     </div>
                   </div>
                   <div class="receipt-total">
-                    <span class="total-label">Monto Total</span>
+                    <span class="total-label">${t('reservations.totalAmount')}</span>
                     <span class="total-amount">$${r.monto}.00</span>
                   </div>
                 </div>
@@ -994,6 +934,10 @@
     });
 
     renderReservas('actuales');
+
+    window.addEventListener('languageChanged', () => {
+      renderReservas(seccionActual);
+    });
   </script>
   <script src="/js/i18n.js"></script>
   <script src="/js/header-loader.js"></script>

@@ -488,7 +488,7 @@
         <circle cx="17" cy="17" r="2"/>
       </svg>
     </div>
-    <h1 class="main-title">
+    <h1 class="main-title" data-i18n="services.title">
       Servicios exclusivos
       <span>de transporte turístico</span>
     </h1>
@@ -501,13 +501,13 @@
       <div class="service-card">
         <img src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=400&h=300&fit=crop" alt="Traslados Privados" class="service-image">
         <div class="service-content">
-          <h3 class="service-title">Traslados Privados</h3>
-          <p class="service-description">Recogidas y traslados privados a cualquier hotel resort o destino turístico. Comodidad y puntualidad aseguradas.</p>
+          <h3 class="service-title" data-i18n="services.card1Title">Traslados Privados</h3>
+          <p class="service-description" data-i18n="services.card1Desc">Recogidas y traslados privados a cualquier hotel resort o destino turístico. Comodidad y puntualidad aseguradas.</p>
           <div class="service-price">
             <span class="price-amount">$80</span>
-            <span class="price-label">desde</span>
+            <span class="price-label" data-i18n="services.from">desde</span>
           </div>
-          <a href="/newreservation" class="btn-reservar">Reservar</a>
+          <a href="/newreservation" class="btn-reservar" data-i18n="btn.reserve">Reservar</a>
         </div>
       </div>
 
@@ -515,13 +515,13 @@
       <div class="service-card">
         <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=400&h=300&fit=crop" alt="Traslados Aeropuerto" class="service-image">
         <div class="service-content">
-          <h3 class="service-title">Traslados desde y hacia el Aeropuerto</h3>
-          <p class="service-description">Traslados puntuales y seguros predilados, y hacia el aeropuerto, puerta a puerta y sin esperas.</p>
+          <h3 class="service-title" data-i18n="services.card2Title">Traslados desde y hacia el Aeropuerto</h3>
+          <p class="service-description" data-i18n="services.card2Desc">Traslados puntuales y seguros predilados, y hacia el aeropuerto, puerta a puerta y sin esperas.</p>
           <div class="service-price">
             <span class="price-amount">$100</span>
-            <span class="price-label">desde</span>
+            <span class="price-label" data-i18n="services.from">desde</span>
           </div>
-          <a href="/newreservation" class="btn-reservar">Reservar</a>
+          <a href="/newreservation" class="btn-reservar" data-i18n="btn.reserve">Reservar</a>
         </div>
       </div>
 
@@ -529,13 +529,13 @@
       <div class="service-card">
         <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=400&h=300&fit=crop" alt="Tours por la Ciudad" class="service-image">
         <div class="service-content">
-          <h3 class="service-title">Tours por la Ciudad</h3>
-          <p class="service-description">Explora Chiriquí con nuestros tours personalizables. Conoce los mejores lugares turísticos con estilo.</p>
+          <h3 class="service-title" data-i18n="services.card3Title">Tours por la Ciudad</h3>
+          <p class="service-description" data-i18n="services.card3Desc">Explora Chiriquí con nuestros tours personalizables. Conoce los mejores lugares turísticos con estilo.</p>
           <div class="service-price">
             <span class="price-amount">$120</span>
-            <span class="price-label">desde</span>
+            <span class="price-label" data-i18n="services.from">desde</span>
           </div>
-          <a href="/newreservation" class="btn-reservar">Reservar</a>
+          <a href="/newreservation" class="btn-reservar" data-i18n="btn.reserve">Reservar</a>
         </div>
       </div>
 
@@ -543,13 +543,13 @@
       <div class="service-card">
         <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop" alt="Excursiones" class="service-image">
         <div class="service-content">
-          <h3 class="service-title">Excursiones</h3>
-          <p class="service-description">Descubre playas paradisíacas, montañas y cascadas con nuestros choferes expertos.</p>
+          <h3 class="service-title" data-i18n="services.card4Title">Excursiones</h3>
+          <p class="service-description" data-i18n="services.card4Desc">Descubre playas paradisíacas, montañas y cascadas con nuestros choferes expertos.</p>
           <div class="service-price">
             <span class="price-amount">$150</span>
-            <span class="price-label">desde</span>
+            <span class="price-label" data-i18n="services.from">desde</span>
           </div>
-          <a href="/newreservation" class="btn-reservar">Reservar</a>
+          <a href="/newreservation" class="btn-reservar" data-i18n="btn.reserve">Reservar</a>
         </div>
       </div>
 
@@ -557,13 +557,13 @@
       <div class="service-card">
         <img src="https://images.unsplash.com/photo-1563720223185-11003d516935?w=400&h=300&fit=crop" alt="Servicio por Hora" class="service-image">
         <div class="service-content">
-          <h3 class="service-title">Servicio por Hora</h3>
-          <p class="service-description">Disposición por horas para negocios, eventos o recorridos personalizados a tu ritmo.</p>
+          <h3 class="service-title" data-i18n="services.card5Title">Servicio por Hora</h3>
+          <p class="service-description" data-i18n="services.card5Desc">Disposición por horas para negocios, eventos o recorridos personalizados a tu ritmo.</p>
           <div class="service-price">
             <span class="price-amount">$80</span>
-            <span class="price-label">desde</span>
+            <span class="price-label" data-i18n="services.from">desde</span>
           </div>
-          <a href="/newreservation" class="btn-reservar">Reservar</a>
+          <a href="/newreservation" class="btn-reservar" data-i18n="btn.reserve">Reservar</a>
         </div>
       </div>
 
@@ -571,13 +571,13 @@
       <div class="service-card">
         <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=400&h=300&fit=crop" alt="Eventos Especiales" class="service-image">
         <div class="service-content">
-          <h3 class="service-title">Eventos Especiales</h3>
-          <p class="service-description">Traslados elegantes para bodas, cenas, reuniones o cualquier evento especial.</p>
+          <h3 class="service-title" data-i18n="services.card6Title">Eventos Especiales</h3>
+          <p class="service-description" data-i18n="services.card6Desc">Traslados elegantes para bodas, cenas, reuniones o cualquier evento especial.</p>
           <div class="service-price">
             <span class="price-amount">$120</span>
-            <span class="price-label">desde</span>
+            <span class="price-label" data-i18n="services.from">desde</span>
           </div>
-          <a href="/newreservation" class="btn-reservar">Reservar</a>
+          <a href="/newreservation" class="btn-reservar" data-i18n="btn.reserve">Reservar</a>
         </div>
       </div>
     </div>
@@ -592,34 +592,36 @@
           <path d="M2 17l10 5 10-5"/>
           <path d="M2 12l10 5 10-5"/>
         </svg>
-        <span class="feature-text">Servicio de lujo</span>
+        <span class="feature-text" data-i18n="features.premium">Servicio de lujo</span>
       </div>
       <div class="feature-item">
         <svg class="feature-icon" viewBox="0 0 24 24" strokeWidth="2">
           <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
         </svg>
-        <span class="feature-text">Clientes satisfechos</span>
+        <span class="feature-text" data-i18n="features.satisfied">Clientes satisfechos</span>
       </div>
       <div class="feature-item">
         <svg class="feature-icon" viewBox="0 0 24 24" strokeWidth="2">
           <circle cx="12" cy="12" r="10"/>
           <polyline points="12 6 12 12 16 14"/>
         </svg>
-        <span class="feature-text">Siempre puntuales</span>
+        <span class="feature-text" data-i18n="features.punctual">Siempre puntuales</span>
       </div>
       <div class="feature-item">
         <svg class="feature-icon" viewBox="0 0 24 24" strokeWidth="2">
           <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
           <polyline points="22 4 12 14.01 9 11.01"/>
         </svg>
-        <span class="feature-text">Lujo y confort</span>
+        <span class="feature-text" data-i18n="features.luxury">Lujo y confort</span>
       </div>
     </div>
   </section>
 
+  <script src="/js/i18n.js"></script>
   <script>
     const API_SERVICIOS = '/xserv-servicios.json';
     const servicesGrid = document.getElementById('servicesGrid');
+    let serviciosCache = [];
 
     const imagenesServicios = [
       'https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=400&h=300&fit=crop',
@@ -634,11 +636,30 @@
       return servicio.imagen || servicio.image || imagenesServicios[index % imagenesServicios.length];
     };
 
-    const buildServiceCard = (servicio, index) => {
-      const nombre = servicio.nombre || servicio.titulo || 'Servicio';
-      const descripcion = servicio.descripcion || servicio.detalle || 'Servicio disponible.';
-      const precio = servicio.precio || servicio.costo || '';
-      const precioTexto = precio ? `$${precio}` : 'Consultar';
+    const getDescripcion = (servicio, lang) => {
+      if (lang === 'en') {
+        return servicio.descripcion_en || servicio.descripcion_es || servicio.descripcion || servicio.detalle || '';
+      }
+      return servicio.descripcion_es || servicio.descripcion_en || servicio.descripcion || servicio.detalle || '';
+    };
+
+    const formatPrice = (precio) => {
+      const value = Number(precio);
+      if (!Number.isFinite(value) || value <= 0) return null;
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+      }).format(value);
+    };
+
+    const buildServiceCard = (servicio, index, lang) => {
+      const t = window.translate ? window.translate : (key) => key;
+      const nombre = servicio.nombre || servicio.titulo || t('services.defaultName');
+      const descripcion = getDescripcion(servicio, lang) || t('services.defaultDesc');
+      const precio = formatPrice(servicio.precio_base ?? servicio.precio ?? servicio.costo);
+      const precioTexto = precio || t('services.consult');
+      const showFrom = Boolean(precio);
       const href = servicio.id ? `/newreservation?service_id=${servicio.id}` : '/newreservation';
 
       return `
@@ -649,12 +670,25 @@
             <p class="service-description">${descripcion}</p>
             <div class="service-price">
               <span class="price-amount">${precioTexto}</span>
-              <span class="price-label">desde</span>
+              ${showFrom ? `<span class="price-label">${t('services.from')}</span>` : ''}
             </div>
-            <a href="${href}" class="btn-reservar">Reservar</a>
+            <a href="${href}" class="btn-reservar">${t('btn.reserve')}</a>
           </div>
         </div>
       `;
+    };
+
+    const renderServicios = () => {
+      if (!servicesGrid) return;
+      const t = window.translate ? window.translate : (key) => key;
+      const lang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'es';
+
+      if (!serviciosCache.length) {
+        servicesGrid.innerHTML = `<p style="color: var(--text-gray);">${t('services.none')}</p>`;
+        return;
+      }
+
+      servicesGrid.innerHTML = serviciosCache.map((servicio, index) => buildServiceCard(servicio, index, lang)).join('');
     };
 
     const cargarServicios = async () => {
@@ -665,24 +699,22 @@
           headers: { 'X-Requested-With': 'XMLHttpRequest' },
         });
         if (!res.ok) {
+          renderServicios();
           return;
         }
         const data = await res.json();
         const servicios = Array.isArray(data.xservServicios) ? data.xservServicios : [];
-        if (!servicios.length) {
-          servicesGrid.innerHTML = '<p style="color: var(--text-gray);">No hay servicios disponibles.</p>';
-          return;
-        }
-
-        servicesGrid.innerHTML = servicios.map(buildServiceCard).join('');
+        serviciosCache = servicios.filter((servicio) => String(servicio.estado ?? '1') !== '0');
+        renderServicios();
       } catch (error) {
         console.error('Error cargando servicios:', error);
+        renderServicios();
       }
     };
 
     cargarServicios();
+    window.addEventListener('languageChanged', renderServicios);
   </script>
-  <script src="/js/i18n.js"></script>
   <script src="/js/header-loader.js"></script>
   <script src="/js/header-dynamic.js"></script>
 </body>

@@ -516,11 +516,11 @@
   <!-- Hero Section -->
   <section class="hero">
     <div class="hero-content">
-      <h1 class="hero-title">Transporte turístico de lujo en Chiriquí</h1>
-      <p class="hero-description">Reserva un traslado seguro, puntual y de alta calidad con Xservicios.</p>
+      <h1 class="hero-title" data-i18n="homePublic.heroTitle">Transporte turístico de lujo en Chiriquí</h1>
+      <p class="hero-description" data-i18n="homePublic.heroDesc">Reserva un traslado seguro, puntual y de alta calidad con Xservicios.</p>
       <div class="hero-actions">
-        <?= $this->Html->link('Nueva Reserva', '/newreservation', ['class' => 'btn-primary']) ?>
-        <?= $this->Html->link('Conocer Más', '#features', ['class' => 'btn-secondary']) ?>
+        <?= $this->Html->link('Nueva Reserva', '/newreservation', ['class' => 'btn-primary', 'data-i18n' => 'homePublic.newReservation']) ?>
+        <?= $this->Html->link('Conocer Más', '#features', ['class' => 'btn-secondary', 'data-i18n' => 'homePublic.learnMore']) ?>
       </div>
     </div>
   </section>
@@ -532,8 +532,8 @@
         <circle cx="12" cy="12" r="10"></circle>
         <polyline points="12 6 12 12 16 14"></polyline>
       </svg>
-      <h3 class="feature-title">Disponibles 24/7</h3>
-      <p class="feature-description">Servicio disponible todo el día, todos los días. Contáctanos cuando nos necesites.</p>
+      <h3 class="feature-title" data-i18n="homePublic.feature1Title">Disponibles 24/7</h3>
+      <p class="feature-description" data-i18n="homePublic.feature1Desc">Servicio disponible todo el día, todos los días. Contáctanos cuando nos necesites.</p>
     </div>
 
     <div class="feature-card">
@@ -541,8 +541,8 @@
         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"></path>
         <polyline points="12 6 12 12 16 14"></polyline>
       </svg>
-      <h3 class="feature-title">Puntual y Seguro</h3>
-      <p class="feature-description">Llegamos a tiempo con conductores profesionales y vehículos impecables.</p>
+      <h3 class="feature-title" data-i18n="homePublic.feature2Title">Puntual y Seguro</h3>
+      <p class="feature-description" data-i18n="homePublic.feature2Desc">Llegamos a tiempo con conductores profesionales y vehículos impecables.</p>
     </div>
 
     <div class="feature-card">
@@ -550,18 +550,18 @@
         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"></path>
         <polyline points="12 6 8 10 10 12 14 8"></polyline>
       </svg>
-      <h3 class="feature-title">Calidad Garantizada</h3>
-      <p class="feature-description">Vehículos de lujo mantenidos en excelentes condiciones.</p>
+      <h3 class="feature-title" data-i18n="homePublic.feature3Title">Calidad Garantizada</h3>
+      <p class="feature-description" data-i18n="homePublic.feature3Desc">Vehículos de lujo mantenidos en excelentes condiciones.</p>
     </div>
   </section>
 
   <!-- CTA Section -->
   <section class="cta-section">
-    <h2 class="cta-title">¿Listo para tu próximo viaje?</h2>
-    <p class="cta-description">Reserva ahora y disfruta del transporte turístico más elegante de Chiriquí.</p>
+    <h2 class="cta-title" data-i18n="homePublic.ctaTitle">¿Listo para tu próximo viaje?</h2>
+    <p class="cta-description" data-i18n="homePublic.ctaDesc">Reserva ahora y disfruta del transporte turístico más elegante de Chiriquí.</p>
     <div class="hero-actions" style="justify-content: center;">
-      <?= $this->Html->link('Reservar Ahora', '/newreservation', ['class' => 'btn-primary']) ?>
-      <?= $this->Html->link('Hablar con Soporte', 'https://wa.me/507XXXXXXXXXXXX', ['class' => 'btn-secondary', 'target' => '_blank']) ?>
+      <?= $this->Html->link('Reservar Ahora', '/newreservation', ['class' => 'btn-primary', 'data-i18n' => 'homePublic.bookNow']) ?>
+      <?= $this->Html->link('Hablar con Soporte', 'https://wa.me/507XXXXXXXXXXXX', ['class' => 'btn-secondary', 'target' => '_blank', 'data-i18n' => 'homePublic.support']) ?>
     </div>
   </section>
 

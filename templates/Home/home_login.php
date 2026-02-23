@@ -560,11 +560,11 @@
       </div>
 
       <div class="service-list" id="serviceList">
-        <p class="empty-message">No hay reservas recientes.</p>
+        <p class="empty-message" data-i18n="homeLogin.emptyRecent">No hay reservas recientes.</p>
       </div>
 
       <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
-        <a href="/myreservations" style="padding: 0.75rem 1.5rem; background: transparent; color: var(--text-white); border: 1px solid var(--dark-lighter); border-radius: 8px; font-size: 0.875rem; text-decoration: none; transition: all 0.3s;">Ver Más</a>
+        <a href="/myreservations" style="padding: 0.75rem 1.5rem; background: transparent; color: var(--text-white); border: 1px solid var(--dark-lighter); border-radius: 8px; font-size: 0.875rem; text-decoration: none; transition: all 0.3s;" data-i18n="homeLogin.seeMore">Ver Más</a>
       </div>
     </div>
   </section>

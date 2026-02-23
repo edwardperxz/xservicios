@@ -27,6 +27,11 @@
       --green-hover: #236349;
     }
 
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
     body {
       font-family: 'Inter', sans-serif;
       background-color: var(--dark-deep);
@@ -208,8 +213,9 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 2rem;
-      padding: 2rem 2.5rem;
-      min-height: calc(100vh - 140px);
+      padding: calc(2rem + 80px) 2.5rem 2rem;
+      height: 100vh;
+      overflow: hidden;
     }
 
     /* Columna Izquierda - Valorar Servicio */
@@ -268,7 +274,6 @@
 
     .viajes-list {
       flex: 1;
-      overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 1rem;
@@ -529,10 +534,31 @@
 
     .valoraciones-list {
       flex: 1;
-      overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 1rem;
+    }
+
+    .pagination-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1rem;
+    }
+
+    .pagination-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      border: 1px solid rgba(201, 169, 98, 0.3);
+      background: rgba(201, 169, 98, 0.15);
+      color: var(--gold);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .pagination-btn:hover {
+      background: var(--gold);
+      color: var(--dark-bg);
     }
 
     .valoracion-card {
@@ -734,7 +760,8 @@
 
       <p class="viajes-pending" id="viajes-count" data-i18n="rate.pendingTrips">0</p>
 
-      <div class="viajes-list scrollbar-custom" id="viajes-list"></div>
+      <div class="viajes-list" id="viajes-list"></div>
+      <div class="pagination-actions" id="viajes-pagination"></div>
     </div>
 
     <!-- Columna Derecha -->
@@ -744,7 +771,8 @@
         <span style="padding: 0.4rem 0.75rem; background: rgba(201, 169, 98, 0.2); color: var(--gold); border-radius: 20px; font-size: 0.8rem;" id="valoraciones-count" data-i18n="rate.ratingsCount">0</span>
       </div>
 
-      <div class="valoraciones-list scrollbar-custom" id="valoraciones-list"></div>
+      <div class="valoraciones-list" id="valoraciones-list"></div>
+      <div class="pagination-actions" id="valoraciones-pagination"></div>
     </div>
   </div>
 
@@ -755,6 +783,9 @@
     let viajeSeleccionado = null;
     let valoracionExpandida = null;
     let filtro = 'todos';
+    const PAGE_SIZE = 5;
+    let pageViajes = 0;
+    let pageValoraciones = 0;
     let ratings = { chofer: 0, bus: 0, servicio: 0 };
     let comentarios = { chofer: '', bus: '', servicio: '' };
     let viajesConValoraciones = new Set(); // Para rastrear qué reservas ya tienen valoraciones
@@ -877,12 +908,19 @@
 
     function renderViajesSinValorar() {
       const t = window.translate ? window.translate : (key) => key;
-      const html = viajesSinValorar.map((viaje, idx) => {
+      const totalPages = Math.ceil(viajesSinValorar.length / PAGE_SIZE);
+      if (pageViajes >= totalPages) pageViajes = 0;
+
+      const start = pageViajes * PAGE_SIZE;
+      const visibleViajes = viajesSinValorar.slice(start, start + PAGE_SIZE);
+
+      const html = visibleViajes.map((viaje, idx) => {
+        const originalIndex = start + idx;
         const fecha = formatearFecha(viaje.fecha);
-        const isExpanded = viajeSeleccionado === idx;
+        const isExpanded = viajeSeleccionado === originalIndex;
         return `
           <div>
-            <div class="viaje-card ${isExpanded ? 'expanded' : ''}" onclick="toggleViaje(${idx})">
+            <div class="viaje-card ${isExpanded ? 'expanded' : ''}" onclick="toggleViaje(${originalIndex})">
               <img src="${viaje.imagen}" alt="${viaje.destino}" class="viaje-imagen" />
               <div class="viaje-info">
                 <div class="viaje-ruta">
@@ -904,12 +942,21 @@
                 </svg>
               </button>
             </div>
-            ${isExpanded ? renderValoracionPanel(viaje, idx) : ''}
+            ${isExpanded ? renderValoracionPanel(viaje, originalIndex) : ''}
           </div>
         `;
       }).join('');
       document.getElementById('viajes-list').innerHTML = html || `<div class="empty-state"><svg viewBox="0 0 24 24" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01" /></svg><p>${t('rate.emptyPending')}</p></div>`;
       document.getElementById('viajes-count').textContent = t('rate.pendingTrips').replace('{count}', viajesSinValorar.length);
+
+      const pagination = document.getElementById('viajes-pagination');
+      if (pagination) {
+        if (viajesSinValorar.length > PAGE_SIZE) {
+          pagination.innerHTML = `<button class="pagination-btn" onclick="nextViajesPage()">${t('rate.nextPage')}</button>`;
+        } else {
+          pagination.innerHTML = '';
+        }
+      }
     }
 
     function renderValoracionPanel(viaje, idx) {
@@ -1092,8 +1139,14 @@
     function renderValoracionesPasadas() {
       const filtered = filtro === 'todos' ? valoracionesPasadas : valoracionesPasadas.filter(v => v.tipo === filtro);
       const t = window.translate ? window.translate : (key) => key;
-      
-      const html = filtered.map((val, idx) => {
+
+      const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+      if (pageValoraciones >= totalPages) pageValoraciones = 0;
+      const start = pageValoraciones * PAGE_SIZE;
+      const visibleValoraciones = filtered.slice(start, start + PAGE_SIZE);
+
+      const html = visibleValoraciones.map((val, idx) => {
+        const originalIndex = start + idx;
         const isExpanded = valoracionExpandida === idx;
         const tiposColor = { chofer: '#4ade80', bus: '#60a5fa', servicio: 'var(--gold)' };
         const tiposLabel = {
@@ -1103,7 +1156,7 @@
         };
         return `
           <div>
-            <div class="valoracion-card ${isExpanded ? 'expanded' : ''}" onclick="toggleValoracion(${idx})">
+            <div class="valoracion-card ${isExpanded ? 'expanded' : ''}" onclick="toggleValoracion(${originalIndex})">
               <img src="${val.imagen}" alt="${val.destino}" class="valoracion-imagen" />
               <div class="viaje-info">
                 <div class="valoracion-ruta">
@@ -1166,6 +1219,15 @@
       
       document.getElementById('valoraciones-list').innerHTML = html || `<div class="empty-state"><svg viewBox="0 0 24 24" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg><p>${t('rate.emptyRatings')}</p></div>`;
       document.getElementById('valoraciones-count').textContent = t('rate.ratingsCount').replace('{count}', filtered.length);
+
+      const pagination = document.getElementById('valoraciones-pagination');
+      if (pagination) {
+        if (filtered.length > PAGE_SIZE) {
+          pagination.innerHTML = `<button class="pagination-btn" onclick="nextValoracionesPage()">${t('rate.nextPage')}</button>`;
+        } else {
+          pagination.innerHTML = '';
+        }
+      }
     }
 
     function toggleValoracion(idx) {
@@ -1176,10 +1238,26 @@
 
     function setFiltro(f) {
       filtro = f;
+      pageValoraciones = 0;
       document.querySelectorAll('.filter-btn').forEach((btn, i) => {
         btn.classList.toggle('active', btn.dataset.filter === f);
       });
       valoracionExpandida = null;
+      renderValoracionesPasadas();
+    }
+
+    function nextViajesPage() {
+      const totalPages = Math.ceil(viajesSinValorar.length / PAGE_SIZE);
+      if (totalPages <= 1) return;
+      pageViajes = (pageViajes + 1) % totalPages;
+      renderViajesSinValorar();
+    }
+
+    function nextValoracionesPage() {
+      const filtered = filtro === 'todos' ? valoracionesPasadas : valoracionesPasadas.filter(v => v.tipo === filtro);
+      const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+      if (totalPages <= 1) return;
+      pageValoraciones = (pageValoraciones + 1) % totalPages;
       renderValoracionesPasadas();
     }
 

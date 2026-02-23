@@ -191,6 +191,7 @@ const translations = {
     'rate.tripLabel': 'Viaje:',
     'rate.commentLabel': 'Comentario:',
     'rate.noComment': 'Sin comentario',
+    'rate.nextPage': 'Siguiente',
 
     // Fleet (Full Page)
     'fleet.heroSubtitle': 'Transporte Premium',
@@ -512,6 +513,7 @@ const translations = {
     'rate.tripLabel': 'Trip:',
     'rate.commentLabel': 'Comment:',
     'rate.noComment': 'No comment',
+    'rate.nextPage': 'Next',
 
     // Fleet (Full Page)
     'fleet.heroSubtitle': 'Premium Transport',

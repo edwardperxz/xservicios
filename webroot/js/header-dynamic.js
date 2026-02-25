@@ -304,12 +304,8 @@
         });
       });
 
-      // Cerrar botón de idioma en mobile
-      const langBtnMobile = document.getElementById('langToggleMobile');
-      langBtnMobile?.addEventListener('click', (e) => {
-        e.stopPropagation();
-        setTimeout(closeSidebar, 100);
-      });
+      // Nota: El botón de idioma en mobile es manejado por i18n.js
+      // que cierra el sidebar después de cambiar el idioma
 
       // Cerrar botón de login en mobile
       const loginBtnMobile = document.getElementById('xservLoginBtnMobile');

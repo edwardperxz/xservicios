@@ -399,9 +399,9 @@ $user = $user ?? null;
   <?php endif; ?>
 
   <!-- Scripts -->
-  <script src="/js/i18n-preload.js"></script>
-  <script src="/js/header-loader.js"></script>
+  <!-- i18n-preload.js ya está cargado en el <head> -->
   <script src="/js/i18n.js"></script>
+  <script src="/js/header-loader.js"></script>
   <script src="/js/header-dynamic.js"></script>
 </body>
 </html>

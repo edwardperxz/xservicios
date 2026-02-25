@@ -752,6 +752,13 @@ class I18n {
   constructor() {
     // Prioridad: localStorage > preload > default
     this.currentLang = this.getStoredLanguage() || window.__i18nPreloadLang || 'es';
+    
+    // Almacenar referencias a los handlers para poder removerlos
+    this.handlers = {
+      langToggle: null,
+      langToggleMobile: null
+    };
+    
     this.init();
   }
 
@@ -922,7 +929,13 @@ class I18n {
     // Manejar botón de idioma del header (desktop)
     const langToggle = document.getElementById('langToggle');
     if (langToggle) {
-      langToggle.addEventListener('click', () => {
+      // Remover listener anterior si existe
+      if (this.handlers.langToggle) {
+        langToggle.removeEventListener('click', this.handlers.langToggle);
+      }
+      
+      // Crear y almacenar el nuevo handler
+      this.handlers.langToggle = () => {
         const newLang = this.currentLang === 'es' ? 'en' : 'es';
         this.setLanguage(newLang);
         
@@ -931,13 +944,22 @@ class I18n {
         setTimeout(() => {
           langToggle.style.transform = 'scale(1)';
         }, 150);
-      });
+      };
+      
+      langToggle.addEventListener('click', this.handlers.langToggle);
     }
 
     // Manejar botón de idioma del sidebar mobile
     const langToggleMobile = document.getElementById('langToggleMobile');
     if (langToggleMobile) {
-      langToggleMobile.addEventListener('click', () => {
+      // Remover listener anterior si existe
+      if (this.handlers.langToggleMobile) {
+        langToggleMobile.removeEventListener('click', this.handlers.langToggleMobile);
+      }
+      
+      // Crear y almacenar el nuevo handler
+      this.handlers.langToggleMobile = (e) => {
+        e.stopPropagation();
         const newLang = this.currentLang === 'es' ? 'en' : 'es';
         this.setLanguage(newLang);
         
@@ -945,8 +967,19 @@ class I18n {
         langToggleMobile.style.transform = 'scale(0.95)';
         setTimeout(() => {
           langToggleMobile.style.transform = 'scale(1)';
-        }, 150);
-      });
+          
+          // Cerrar el sidebar después del cambio de idioma en mobile
+          const navSidebar = document.getElementById('navSidebar');
+          const sidebarOverlay = document.getElementById('sidebarOverlay');
+          if (navSidebar && window.innerWidth <= 768) {
+            navSidebar.classList.remove('open');
+            sidebarOverlay?.classList.remove('active');
+            document.body.style.overflow = '';
+          }
+        }, 200);
+      };
+      
+      langToggleMobile.addEventListener('click', this.handlers.langToggleMobile);
     }
 
     // Mantener compatibilidad con botones antiguos (si existen)

@@ -873,8 +873,11 @@
     // Reinicializar el sistema i18n después de cargar el header
     function initializeI18n() {
       if (window.i18n) {
+        // Traducir el contenido del header
         window.i18n.translatePage();
+        // Re-adjuntar event listeners del header (importante hacerlo después del DOM)
         window.i18n.attachLanguageButtons();
+        // Actualizar estado visual de los botones
         window.i18n.updateActiveLanguage();
         console.log('✅ Sistema i18n inicializado en header');
         
@@ -890,8 +893,12 @@
       }
     }
     
-    // Iniciar después de un delay para asegurar que i18n esté cargado
-    setTimeout(initializeI18n, 100);
+    // Iniciar inmediatamente si i18n ya está listo, sino esperar
+    if (window.i18n) {
+      initializeI18n();
+    } else {
+      setTimeout(initializeI18n, 100);
+    }
 
     console.log('✅ Header reutilizable cargado correctamente');
   }

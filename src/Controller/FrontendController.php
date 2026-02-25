@@ -16,9 +16,9 @@ class FrontendController extends AppController
     {
         parent::beforeFilter($event);
         // Permitir acceso sin autenticación para todas las acciones públicas
-        $this->Authentication->addUnauthenticatedActions(['fleet', 'services', 'about', 'newreservation', 'myreservations', 'rateservice', 'signup', 'login']);
+        $this->Authentication->addUnauthenticatedActions(['fleet', 'services', 'service', 'about', 'newreservation', 'rateservice', 'signup', 'login']);
         // Saltar verificación de autorización para acciones públicas
-        $this->Authorization->skipAuthorization(['fleet', 'services', 'about', 'newreservation', 'myreservations', 'rateservice', 'signup', 'login']);
+        $this->Authorization->skipAuthorization(['fleet', 'services', 'service', 'about', 'newreservation', 'rateservice', 'signup', 'login']);
     }
 
     /**
@@ -39,6 +39,24 @@ class FrontendController extends AppController
     {
         $this->response = $this->response->withType('text/html');
         $content = file_get_contents(ROOT . '/webroot/frontend/shared/services.php');
+        $content = $this->injectCsrfToken($content);
+        return $this->response->withStringBody($content);
+    }
+
+    /**
+     * Service detail page (service-detail.php)
+     */
+    public function service(...$pass)
+    {
+        // Extraer el ID del primer elemento del array de parámetros
+        $id = $pass[0] ?? null;
+        
+        if (!$id) {
+            return $this->redirect('/services');
+        }
+        
+        $this->response = $this->response->withType('text/html');
+        $content = file_get_contents(ROOT . '/webroot/frontend/shared/service-detail.php');
         $content = $this->injectCsrfToken($content);
         return $this->response->withStringBody($content);
     }

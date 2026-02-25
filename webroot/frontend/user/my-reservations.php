@@ -25,6 +25,8 @@
       --text-gray: #a0a0a0;
       --green: #2d7a5f;
       --green-hover: #236349;
+      --red: #c94a4a;
+      --orange: #d97706;
     }
 
     body {
@@ -34,253 +36,127 @@
       min-height: 100vh;
     }
 
-    /* Header */
-    .header {
-      display: flex;
-      align-items: center;
-      padding: 1rem 2.5rem;
-      background: linear-gradient(to bottom, rgba(10, 10, 10, 0.98), rgba(5, 5, 5, 0.95));
-      border-bottom: 1px solid rgba(201, 169, 98, 0.3);
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 0;
-      flex-shrink: 0;
-    }
-
-    .logo-x {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--gold);
-      text-shadow: 0 0 10px rgba(201, 169, 98, 0.5);
-    }
-
-    .logo-text {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--text-white);
-      letter-spacing: 0.5px;
-    }
-
-    .nav-menu {
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-      margin-left: 4rem;
-      margin-right: 4rem;
-    }
-
-    .nav-item {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-      min-width: 90px;
-      color: var(--text-gray);
-      text-decoration: none;
-      font-size: 0.85rem;
-      transition: color 0.3s;
-      white-space: nowrap;
-    }
-
-    .nav-item:hover {
-      color: var(--gold);
-    }
-
-    .nav-icon {
-      width: 16px;
-      height: 16px;
-      stroke: currentColor;
-      fill: none;
-      flex-shrink: 0;
-    }
-
-    .user-actions {
-      display: flex;
-      align-items: center;
-      gap: 1.25rem;
-      margin-left: auto;
-    }
-
-    .lang-selector {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      color: var(--text-gray);
-      font-size: 0.8rem;
-    }
-
-    .lang-icon {
-      width: 14px;
-      height: 14px;
-      stroke: var(--gold);
-      fill: none;
-    }
-
-    .lang-text {
-      color: var(--text-gray);
-      cursor: pointer;
-      transition: color 0.3s;
-      font-size: 0.8rem;
-    }
-
-    .lang-text:hover {
-      color: var(--gold);
-    }
-
-    .lang-divider {
-      color: var(--dark-lighter);
-    }
-
-    .notification-icon {
-      cursor: pointer;
-    }
-
-    .notification-icon svg {
-      width: 18px;
-      height: 18px;
-      stroke: var(--text-gray);
-      fill: none;
-    }
-
-    .notification-icon:hover svg {
-      stroke: var(--gold);
-    }
-
-    .auth-button {
-      padding: 0.5rem 1.1rem;
-      border: 1px solid var(--gold);
-      border-radius: 20px;
-      color: var(--gold);
-      font-size: 0.8rem;
-      text-decoration: none;
-      transition: all 0.3s;
-      white-space: nowrap;
-    }
-
-    .auth-button:hover {
-      background: rgba(201, 169, 98, 0.15);
-    }
-
-    .is-hidden {
-      display: none !important;
-    }
-
-    .user-profile {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      cursor: pointer;
-      padding: 0.4rem 0.75rem;
-      background: rgba(201, 169, 98, 0.1);
-      border-radius: 25px;
-      transition: background 0.3s;
-    }
-
-    .user-profile:hover {
-      background: rgba(201, 169, 98, 0.2);
-    }
-
-    .user-avatar {
-      width: 28px;
-      height: 28px;
-      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.7rem;
-      font-weight: 600;
-      color: var(--dark-bg);
-    }
-
-    .user-name {
-      color: var(--text-white);
-      font-size: 0.85rem;
-    }
-
-    .dropdown-icon {
-      width: 14px;
-      height: 14px;
-      stroke: var(--text-gray);
-      fill: none;
-    }
-
-    /* Content */
     .content {
       padding: 2rem 2.5rem;
+      max-width: 1400px;
+      margin: 0 auto;
     }
 
     .page-title {
       font-family: 'Playfair Display', serif;
       font-size: 2rem;
       color: var(--text-white);
-      margin-bottom: 2rem;
+      margin-bottom: 0.5rem;
     }
 
     .page-title span {
       color: var(--gold);
     }
 
-    /* Sub-secciones tabs */
-    .sub-tabs {
-      display: flex;
-      gap: 1rem;
+    .page-subtitle {
+      color: var(--text-gray);
+      font-size: 0.9rem;
       margin-bottom: 2rem;
-      border-bottom: 1px solid var(--dark-lighter);
-      padding-bottom: 1rem;
     }
 
-    .sub-tab {
+    /* Tabs/Categorías */
+    .category-tabs {
       display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+      border-bottom: 2px solid var(--dark-lighter);
+      padding-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .category-tab {
       padding: 0.75rem 1.5rem;
-      background: var(--dark-card);
-      border: 1px solid var(--dark-lighter);
-      border-radius: 8px;
+      background: transparent;
+      border: 2px solid var(--dark-lighter);
+      border-bottom: none;
+      border-radius: 8px 8px 0 0;
       color: var(--text-gray);
       font-size: 0.9rem;
       cursor: pointer;
       transition: all 0.3s;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      position: relative;
     }
 
-    .sub-tab:hover {
+    .category-tab:hover {
       border-color: var(--gold);
       color: var(--gold);
     }
 
-    .sub-tab.active {
-      background: rgba(201, 169, 98, 0.15);
+    .category-tab.active {
+      background: linear-gradient(to bottom, rgba(201, 169, 98, 0.1), transparent);
       border-color: var(--gold);
       color: var(--gold);
+      border-bottom-color: var(--dark-deep);
     }
 
-    .sub-tab .count {
-      background: var(--dark-lighter);
-      padding: 0.2rem 0.5rem;
+    .category-count {
+      background: rgba(201, 169, 98, 0.2);
+      padding: 0.2rem 0.6rem;
       border-radius: 10px;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
     }
 
-    .sub-tab.active .count {
+    .category-tab.active .category-count {
       background: var(--gold);
       color: var(--dark-bg);
     }
 
-    /* Reservas List */
-    .reservas-list {
+    /* Estado Badge styles */
+    .estado-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.35rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      gap: 0.4rem;
+    }
+
+    .estado-badge.pendiente {
+      background: rgba(217, 119, 6, 0.2);
+      color: var(--orange);
+      border: 1px solid var(--orange);
+    }
+
+    .estado-badge.confirmada {
+      background: rgba(45, 122, 95, 0.2);
+      color: var(--green);
+      border: 1px solid var(--green);
+    }
+
+    .estado-badge.completada {
+      background: rgba(45, 122, 95, 0.2);
+      color: var(--green);
+      border: 1px solid var(--green);
+    }
+
+    .estado-badge.cancelada {
+      background: rgba(201, 74, 74, 0.2);
+      color: var(--red);
+      border: 1px solid var(--red);
+    }
+
+    /* Reservations List */
+    .reservations-container {
       display: flex;
       flex-direction: column;
       gap: 1rem;
     }
 
-    .reserva-card {
-      background: var(--dark-card);
+    .reservation-card {
+      background: linear-gradient(135deg, var(--dark-card) 0%, rgba(26, 26, 26, 0.8) 100%);
       border: 1px solid var(--dark-lighter);
       border-radius: 12px;
       overflow: hidden;
@@ -288,174 +164,150 @@
       cursor: pointer;
     }
 
-    .reserva-card:hover {
+    .reservation-card:hover {
       border-color: var(--gold);
-      box-shadow: 0 4px 20px rgba(201, 169, 98, 0.1);
+      box-shadow: 0 8px 32px rgba(201, 169, 98, 0.15);
+      transform: translateY(-2px);
     }
 
-    .reserva-card.expanded {
+    .reservation-card.expanded {
       border-color: var(--gold);
     }
 
-    .reserva-summary {
+    /* Reservation Header */
+    .reservation-header {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      padding: 1.5rem;
+      justify-content: space-between;
+    }
+
+    .reservation-route {
       display: flex;
       align-items: center;
       gap: 1.5rem;
-      padding: 1rem;
-    }
-
-    .reserva-imagen {
-      width: 120px;
-      height: 80px;
-      border-radius: 8px;
-      object-fit: cover;
-      border: 2px solid var(--gold);
-    }
-
-    .reserva-ruta {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
       flex: 1;
     }
 
-    .ruta-punto {
+    .route-segment {
       display: flex;
       flex-direction: column;
       gap: 0.25rem;
     }
 
-    .ruta-label {
+    .route-label {
       font-size: 0.7rem;
       color: var(--text-gray);
       text-transform: uppercase;
       letter-spacing: 1px;
     }
 
-    .ruta-nombre {
-      font-size: 1rem;
+    .route-location {
+      font-size: 1.1rem;
+      font-weight: 600;
       color: var(--text-white);
-      font-weight: 500;
     }
 
-    .ruta-flecha {
-      display: flex;
-      align-items: center;
+    .route-arrow {
       color: var(--gold);
+      font-size: 1.5rem;
     }
 
-    .ruta-flecha svg {
-      width: 32px;
-      height: 32px;
-      stroke: var(--gold);
-      fill: none;
-    }
-
-    .reserva-fecha {
+    .reservation-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.5rem;
       text-align: right;
-      padding-right: 1rem;
     }
 
-    .fecha-dia {
-      font-size: 1.25rem;
+    .reservation-date {
+      font-size: 1.2rem;
       font-weight: 600;
       color: var(--gold);
     }
 
-    .fecha-mes {
-      font-size: 0.8rem;
+    .reservation-time {
+      font-size: 0.85rem;
       color: var(--text-gray);
     }
 
-    .expand-icon {
-      width: 24px;
-      height: 24px;
-      stroke: var(--text-gray);
-      fill: none;
-      transition: transform 0.3s;
+    .reservation-code {
+      font-size: 0.8rem;
+      color: var(--text-gray);
+      font-family: 'Courier New', monospace;
     }
 
-    .reserva-card.expanded .expand-icon {
+    .expand-arrow {
+      width: 24px;
+      height: 24px;
+      color: var(--text-gray);
+      transition: transform 0.3s;
+      flex-shrink: 0;
+    }
+
+    .reservation-card.expanded .expand-arrow {
       transform: rotate(180deg);
     }
 
-    /* Detalle expandido */
-    .reserva-detalle {
-      border-top: 1px dashed var(--dark-lighter);
-      padding: 1.5rem;
-      background: linear-gradient(to bottom, var(--dark-card), rgba(5, 5, 5, 0.5));
+    /* Expanded Details */
+    .reservation-details {
       display: none;
+      border-top: 1px dashed var(--dark-lighter);
+      padding: 2rem;
+      background: linear-gradient(to bottom, rgba(10, 10, 10, 0.3), transparent);
     }
 
-    .reserva-card.expanded .reserva-detalle {
-      display: block;
-    }
-
-    .receipt-header {
-      text-align: center;
-      padding-bottom: 1rem;
-      border-bottom: 1px dashed var(--dark-lighter);
-      margin-bottom: 1.5rem;
-    }
-
-    .receipt-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.25rem;
-      color: var(--gold);
-      margin-bottom: 0.25rem;
-    }
-
-    .receipt-id {
-      font-size: 0.8rem;
-      color: var(--text-gray);
-    }
-
-    .receipt-content {
+    .reservation-card.expanded .reservation-details {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 2rem;
+      gap: 3rem;
     }
 
-    .receipt-section {
-      margin-bottom: 1.5rem;
+    .detail-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
     }
 
-    .receipt-section-title {
+    .detail-section-title {
       font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 1px;
       color: var(--gold);
-      margin-bottom: 0.75rem;
-      padding-bottom: 0.5rem;
+      padding-bottom: 0.75rem;
       border-bottom: 1px solid var(--dark-lighter);
+      font-weight: 600;
     }
 
-    .receipt-row {
+    .detail-row {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 0.5rem;
+      align-items: center;
+      padding: 0.5rem 0;
       font-size: 0.9rem;
     }
 
-    .receipt-label {
+    .detail-label {
       color: var(--text-gray);
     }
 
-    .receipt-value {
+    .detail-value {
       color: var(--text-white);
       font-weight: 500;
     }
 
-    /* Fichas en el detalle */
-    .fichas-container {
-      display: flex;
-      gap: 1.5rem;
+    /* Unit & Driver Cards */
+    .unit-driver-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
       margin-top: 1rem;
     }
 
-    .ficha-mini {
-      flex: 1;
-      background: linear-gradient(135deg, #1f1f1f, #151515);
+    .card-mini {
+      background: linear-gradient(135deg, rgba(31, 31, 31, 0.8), rgba(21, 21, 21, 0.6));
       border: 2px solid var(--gold);
       border-radius: 10px;
       padding: 1rem;
@@ -463,74 +315,64 @@
       gap: 1rem;
     }
 
-    .ficha-mini-img {
-      width: 60px;
-      height: 60px;
+    .card-mini-image {
+      width: 70px;
+      height: 70px;
       border-radius: 8px;
       object-fit: cover;
       border: 1px solid var(--gold);
     }
 
-    .ficha-mini-img.chofer {
+    .card-mini-image.driver {
       border-radius: 50%;
     }
 
-    .ficha-mini-info {
+    .card-mini-info {
       flex: 1;
     }
 
-    .ficha-mini-title {
+    .card-mini-title {
       font-size: 0.85rem;
       color: var(--gold);
       font-weight: 600;
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.4rem;
     }
 
-    .ficha-mini-detail {
+    .card-mini-detail {
       font-size: 0.75rem;
       color: var(--text-gray);
-      margin-bottom: 0.15rem;
+      margin-bottom: 0.2rem;
     }
 
-    .ficha-mini-rating {
+    .card-mini-rating {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      margin-top: 0.25rem;
+      gap: 0.4rem;
+      margin-top: 0.4rem;
+      font-size: 0.75rem;
     }
 
-    .star {
-      font-size: 0.8rem;
-    }
-
-    .star.full {
+    .stars {
+      display: flex;
+      gap: 0.1rem;
       color: var(--gold);
     }
 
-    .star.half {
-      color: var(--gold);
-      opacity: 0.5;
-    }
-
-    .star.empty {
-      color: var(--dark-lighter);
-    }
-
-    .rating-number {
-      font-size: 0.8rem;
+    .rating-value {
       color: var(--gold);
       font-weight: 600;
+      font-size: 0.8rem;
     }
 
-    /* Transportes */
-    .transportes-list {
+    /* Transports List */
+    .transports-list {
       display: flex;
       gap: 0.5rem;
       flex-wrap: wrap;
       margin-top: 0.5rem;
     }
 
-    .transporte-tag {
+    .transport-tag {
       background: rgba(201, 169, 98, 0.15);
       border: 1px solid var(--gold);
       padding: 0.35rem 0.75rem;
@@ -539,81 +381,137 @@
       color: var(--gold);
     }
 
-    /* Total */
-    .receipt-total {
-      margin-top: 1.5rem;
-      padding-top: 1rem;
-      border-top: 2px dashed var(--gold);
+    /* Total Amount */
+    .reservation-total {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 2px dashed var(--gold);
     }
 
     .total-label {
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: var(--text-white);
       font-weight: 600;
     }
 
     .total-amount {
-      font-size: 1.5rem;
+      font-size: 1.75rem;
       color: var(--gold);
       font-weight: 700;
+      font-family: 'Playfair Display', serif;
     }
 
-    /* Empty state */
+    /* Empty State */
     .empty-state {
       text-align: center;
-      padding: 3rem;
+      padding: 4rem 2rem;
       color: var(--text-gray);
     }
 
     .empty-state svg {
-      width: 64px;
-      height: 64px;
+      width: 80px;
+      height: 80px;
       stroke: var(--dark-lighter);
       fill: none;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      opacity: 0.5;
     }
 
     .empty-state p {
-      font-size: 1rem;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
     }
 
+    .empty-state small {
+      font-size: 0.85rem;
+      color: var(--text-gray);
+      opacity: 0.7;
+    }
+
+    /* Loading State */
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem;
+      color: var(--text-gray);
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--dark-lighter);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
     @media (max-width: 1024px) {
-      .receipt-content {
+      .reservation-details {
         grid-template-columns: 1fr;
       }
 
-      .fichas-container {
-        flex-direction: column;
+      .unit-driver-cards {
+        grid-template-columns: 1fr;
       }
     }
 
     @media (max-width: 768px) {
-      .header {
-        flex-wrap: wrap;
-        padding: 1rem;
+      .content {
+        padding: 1.5rem;
       }
 
-      .nav-menu {
-        order: 3;
+      .reservation-header {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .reservation-route {
         width: 100%;
-        margin: 1rem 0 0 0;
-        justify-content: center;
+        flex-direction: column;
+        gap: 0.75rem;
       }
 
-      .reserva-summary {
-        flex-wrap: wrap;
-      }
-
-      .reserva-imagen {
+      .reservation-meta {
         width: 100%;
-        height: 150px;
+        align-items: flex-start;
+        text-align: left;
       }
 
-      .sub-tabs {
-        flex-wrap: wrap;
+      .route-arrow {
+        display: none;
+      }
+
+      .category-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 0.5rem;
+      }
+
+      .category-tab {
+        white-space: nowrap;
+        padding: 0.5rem 1rem;
+      }
+
+      .page-title {
+        font-size: 1.5rem;
+      }
+
+      .reservation-details {
+        padding: 1.5rem;
+      }
+
+      .card-mini-image {
+        width: 60px;
+        height: 60px;
       }
     }
   </style>
@@ -626,318 +524,270 @@
     <!-- Content -->
     <main class="content" style="margin-top: 2rem;">
       <h1 class="page-title" data-i18n="reservations.pageTitle">Mis <span>Reservas</span></h1>
+      <p class="page-subtitle" data-i18n="reservations.subtitle">Gestiona y visualiza tus reservas de transporte</p>
 
-      <!-- Sub-secciones tabs -->
-      <div class="sub-tabs">
-        <button class="sub-tab active" data-section="actuales">
-          <span data-i18n="reservations.current">Reservas Actuales</span>
-          <span class="count" id="count-actuales">2</span>
+      <!-- Categorías -->
+      <div class="category-tabs">
+        <button class="category-tab active" data-category="proximos">
+          <span data-i18n="reservations.upcoming">Próximos Viajes</span>
+          <span class="category-count" id="count-proximos">0</span>
         </button>
-        <button class="sub-tab" data-section="futuras">
-          <span data-i18n="reservations.future">Futuras Reservas</span>
-          <span class="count" id="count-futuras">2</span>
+        <button class="category-tab" data-category="completadas">
+          <span data-i18n="reservations.completed">Completadas</span>
+          <span class="category-count" id="count-completadas">0</span>
         </button>
-        <button class="sub-tab" data-section="historial">
-          <span data-i18n="reservations.history">Historial de Reservas</span>
-          <span class="count" id="count-historial">4</span>
+        <button class="category-tab" data-category="canceladas">
+          <span data-i18n="reservations.cancelled">Canceladas</span>
+          <span class="category-count" id="count-canceladas">0</span>
         </button>
       </div>
 
-      <!-- Lista de reservas -->
-      <div class="reservas-list" id="reservas-list"></div>
+      <!-- Reservations List -->
+      <div class="reservations-container" id="reservations-container">
+        <div class="loading">
+          <div class="spinner"></div>
+        </div>
+      </div>
     </main>
   </div>
 
   <script>
-    const reservasData = {
-      futuras: [
-        {
-          id: "RES-2026-001",
-          imagenDestino: "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=400&h=300&fit=crop",
-          origen: "David, Chiriquí",
-          destino: "Bocas del Toro",
-          fecha: "2026-02-20",
-          hora: "07:00",
-          duracion: "3h 30min",
-          monto: 185,
-          bus: { nombre: "Coaster Toyota 2022", placa: "AB-1234", capacidad: 25, color: "Blanco", imagen: "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=200&h=150&fit=crop" },
-          chofer: { nombre: "Carlos Mendoza", experiencia: "8 años", rating: 4.9, viajes: 1250, imagen: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop" },
-          transportes: ["Coaster", "Taxi Acuático"],
-        },
-        {
-          id: "RES-2026-002",
-          imagenDestino: "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=400&h=300&fit=crop",
-          origen: "Ciudad de Panamá",
-          destino: "San Blas",
-          fecha: "2026-02-25",
-          hora: "06:00",
-          duracion: "4h 00min",
-          monto: 220,
-          bus: { nombre: "Minibus Hyundai 2021", placa: "CD-5678", capacidad: 15, color: "Gris", imagen: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=200&h=150&fit=crop" },
-          chofer: { nombre: "Roberto Sánchez", experiencia: "12 años", rating: 5.0, viajes: 2100, imagen: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop" },
-          transportes: ["Minibus", "Lancha"],
-        },
-      ],
-      actuales: [
-        {
-          id: "RES-2026-003",
-          imagenDestino: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
-          origen: "David, Chiriquí",
-          destino: "Volcán Barú",
-          fecha: "2026-02-06",
-          hora: "05:00",
-          duracion: "1h 45min",
-          monto: 95,
-          bus: { nombre: "Coaster Toyota 2020", placa: "EF-9012", capacidad: 25, color: "Azul", imagen: "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=200&h=150&fit=crop" },
-          chofer: { nombre: "Miguel Torres", experiencia: "5 años", rating: 4.7, viajes: 890, imagen: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop" },
-          transportes: ["Coaster"],
-        },
-        {
-          id: "RES-2026-004",
-          imagenDestino: "https://images.unsplash.com/photo-1551918120-9739cb430c6d?w=400&h=300&fit=crop",
-          origen: "Boquete",
-          destino: "Cangilones de Gualaca",
-          fecha: "2026-02-08",
-          hora: "08:00",
-          duracion: "45min",
-          monto: 65,
-          bus: { nombre: "Minibus Hyundai 2023", placa: "GH-3456", capacidad: 15, color: "Negro", imagen: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=200&h=150&fit=crop" },
-          chofer: { nombre: "José Rodríguez", experiencia: "3 años", rating: 4.5, viajes: 450, imagen: "https://images.unsplash.com/photo-1599566150163-29194dcabd36?w=100&h=100&fit=crop" },
-          transportes: ["Minibus"],
-        },
-      ],
-      historial: [
-        {
-          id: "RES-2026-005",
-          imagenDestino: "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=400&h=300&fit=crop",
-          origen: "David, Chiriquí",
-          destino: "Isla Bolaños",
-          fecha: "2026-01-15",
-          hora: "07:00",
-          duracion: "2h 30min",
-          monto: 145,
-          bus: { nombre: "Coaster Toyota 2022", placa: "AB-1234", capacidad: 25, color: "Blanco", imagen: "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=200&h=150&fit=crop" },
-          chofer: { nombre: "Carlos Mendoza", experiencia: "8 años", rating: 4.9, viajes: 1250, imagen: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop" },
-          transportes: ["Coaster", "Taxi Acuático"],
-        },
-        {
-          id: "RES-2026-006",
-          imagenDestino: "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=400&h=300&fit=crop",
-          origen: "Ciudad de Panamá",
-          destino: "Playa Blanca",
-          fecha: "2026-01-10",
-          hora: "09:00",
-          duracion: "1h 30min",
-          monto: 85,
-          bus: { nombre: "Minibus Hyundai 2021", placa: "CD-5678", capacidad: 15, color: "Gris", imagen: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=200&h=150&fit=crop" },
-          chofer: { nombre: "Roberto Sánchez", experiencia: "12 años", rating: 5.0, viajes: 2100, imagen: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop" },
-          transportes: ["Minibus"],
-        },
-        {
-          id: "RES-2026-007",
-          imagenDestino: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
-          origen: "Boquete",
-          destino: "Sendero Los Quetzales",
-          fecha: "2025-12-28",
-          hora: "06:30",
-          duracion: "2h 00min",
-          monto: 110,
-          bus: { nombre: "Coaster Toyota 2020", placa: "EF-9012", capacidad: 25, color: "Azul", imagen: "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=200&h=150&fit=crop" },
-          chofer: { nombre: "Miguel Torres", experiencia: "5 años", rating: 4.7, viajes: 890, imagen: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop" },
-          transportes: ["Coaster"],
-        },
-        {
-          id: "RES-2026-008",
-          imagenDestino: "https://images.unsplash.com/photo-1551918120-9739cb430c6d?w=400&h=300&fit=crop",
-          origen: "David, Chiriquí",
-          destino: "Playa Las Lajas",
-          fecha: "2025-12-20",
-          hora: "10:00",
-          duracion: "1h 15min",
-          monto: 75,
-          bus: { nombre: "Minibus Hyundai 2023", placa: "GH-3456", capacidad: 15, color: "Negro", imagen: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=200&h=150&fit=crop" },
-          chofer: { nombre: "José Rodríguez", experiencia: "3 años", rating: 4.5, viajes: 450, imagen: "https://images.unsplash.com/photo-1599566150163-29194dcabd36?w=100&h=100&fit=crop" },
-          transportes: ["Minibus"],
-        },
-      ]
+    let currentCategory = 'proximos';
+    let expandedReservation = null;
+    let reservationsData = {
+      proximos: [],
+      completadas: [],
+      canceladas: []
     };
 
-    let seccionActual = 'actuales';
-    let reservaExpandida = null;
+    // Cargar reservas del servidor
+    async function loadReservations() {
+      try {
+        const response = await fetch('/xserv-reservas/my-reservations.json', {
+          headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        });
 
-    function formatearFecha(fecha) {
-      const [year, month, day] = fecha.split('-');
-      const lang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'es';
-      const meses = {
-        es: ["", "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-        en: ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-      };
-      const lista = meses[lang] || meses.es;
-      return { dia: day, mes: lista[parseInt(month)] };
-    }
-
-    function renderEstrellas(rating) {
-      let html = '';
-      const enteras = Math.floor(rating);
-      const decimal = rating - enteras;
-      for (let i = 0; i < 5; i++) {
-        if (i < enteras) {
-          html += `<span class="star full">★</span>`;
-        } else if (i === enteras && decimal >= 0.5) {
-          html += `<span class="star half">★</span>`;
-        } else {
-          html += `<span class="star empty">★</span>`;
+        if (!response.ok) {
+          if (response.status === 401) {
+            window.location.href = '/login';
+            return;
+          }
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
+
+        const data = await response.json();
+        
+        if (data.success && data.reservations) {
+          reservationsData = data.reservations;
+          updateCounts();
+          renderReservations(currentCategory);
+        }
+      } catch (error) {
+        console.error('Error loading reservations:', error);
+        document.getElementById('reservations-container').innerHTML = `
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <p data-i18n="reservations.error">Error al cargar las reservas</p>
+            <small data-i18n="reservations.errorMessage">Intenta nuevamente en unos momentos</small>
+          </div>
+        `;
       }
-      return html;
     }
 
-    function renderReservas(seccion) {
-      const reservas = reservasData[seccion] || [];
+    // Actualizar contadores
+    function updateCounts() {
+      document.getElementById('count-proximos').textContent = reservationsData.proximos.length;
+      document.getElementById('count-completadas').textContent = reservationsData.completadas.length;
+      document.getElementById('count-canceladas').textContent = reservationsData.canceladas.length;
+    }
+
+    // Formatear fecha
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      const lang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'es';
+      const options = {
+        weekday: 'short',
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+      };
+      return date.toLocaleDateString(lang === 'es' ? 'es-ES' : 'en-US', options);
+    }
+
+    // Renderizar reservas
+    function renderReservations(category) {
+      const reservations = reservationsData[category] || [];
+      const container = document.getElementById('reservations-container');
       const t = window.translate ? window.translate : (key) => key;
-      let html = '';
 
-      if (reservas.length === 0) {
-        html = `<div class="empty-state">
-          <svg viewBox="0 0 24 24" stroke-width="2">
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-            <line x1="16" y1="2" x2="16" y2="6" />
-            <line x1="8" y1="2" x2="8" y2="6" />
-            <line x1="3" y1="10" x2="21" y2="10" />
-          </svg>
-          <p>${t('reservations.empty')}</p>
-        </div>`;
-      } else {
-        html = reservas.map(r => {
-          const fechaFormato = formatearFecha(r.fecha);
-          const isExpanded = reservaExpandida === r.id;
-          return `
-            <div class="reserva-card ${isExpanded ? 'expanded' : ''}" onclick="toggleReserva('${r.id}')">
-              <div class="reserva-summary">
-                <img src="${r.imagenDestino}" alt="${r.destino}" class="reserva-imagen" />
-                <div class="reserva-ruta">
-                  <div class="ruta-punto">
-                    <span class="ruta-label">${t('reservations.origin')}</span>
-                    <span class="ruta-nombre">${r.origen}</span>
-                  </div>
-                  <div class="ruta-flecha">
-                    <svg viewBox="0 0 24 24" stroke-width="2">
-                      <line x1="5" y1="12" x2="19" y2="12" />
-                      <polyline points="12 5 19 12 12 19" />
-                    </svg>
-                  </div>
-                  <div class="ruta-punto">
-                    <span class="ruta-label">${t('reservations.destination')}</span>
-                    <span class="ruta-nombre">${r.destino}</span>
-                  </div>
-                </div>
-                <div class="reserva-fecha">
-                  <div class="fecha-dia">${fechaFormato.dia}</div>
-                  <div class="fecha-mes">${fechaFormato.mes}</div>
-                </div>
-                <svg class="expand-icon" viewBox="0 0 24 24" stroke-width="2">
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
-              </div>
-              ${isExpanded ? `
-                <div class="reserva-detalle">
-                  <div class="receipt-header">
-                    <h3 class="receipt-title">${t('reservations.receiptTitle')}</h3>
-                    <p class="receipt-id">${r.id}</p>
-                  </div>
-                  <div class="receipt-content">
-                    <div>
-                      <div class="receipt-section">
-                        <h4 class="receipt-section-title">${t('reservations.tripDetails')}</h4>
-                        <div class="receipt-row">
-                          <span class="receipt-label">${t('reservations.origin')}:</span>
-                          <span class="receipt-value">${r.origen}</span>
-                        </div>
-                        <div class="receipt-row">
-                          <span class="receipt-label">${t('reservations.destination')}:</span>
-                          <span class="receipt-value">${r.destino}</span>
-                        </div>
-                        <div class="receipt-row">
-                          <span class="receipt-label">${t('reservations.pickupTime')}:</span>
-                          <span class="receipt-value">${r.hora}</span>
-                        </div>
-                        <div class="receipt-row">
-                          <span class="receipt-label">${t('reservations.duration')}:</span>
-                          <span class="receipt-value">${r.duracion}</span>
-                        </div>
-                      </div>
-                      <div class="receipt-section">
-                        <h4 class="receipt-section-title">${t('reservations.transports')}</h4>
-                        <div class="transportes-list">
-                          ${r.transportes.map(t => `<span class="transporte-tag">${t}</span>`).join('')}
-                        </div>
-                      </div>
-                    </div>
-                    <div>
-                      <div class="receipt-section">
-                        <h4 class="receipt-section-title">${t('reservations.unitDriver')}</h4>
-                        <div class="fichas-container">
-                          <div class="ficha-mini">
-                            <img src="${r.bus.imagen}" alt="${r.bus.nombre}" class="ficha-mini-img" />
-                            <div class="ficha-mini-info">
-                              <p class="ficha-mini-title">${r.bus.nombre}</p>
-                              <p class="ficha-mini-detail">${t('reservations.plate')}: ${r.bus.placa}</p>
-                              <p class="ficha-mini-detail">${t('reservations.capacity')}: ${r.bus.capacidad} ${t('reservations.passengers')}</p>
-                              <p class="ficha-mini-detail">${t('reservations.color')}: ${r.bus.color}</p>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="fichas-container" style="margin-top: 1rem;">
-                          <div class="ficha-mini">
-                            <img src="${r.chofer.imagen}" alt="${r.chofer.nombre}" class="ficha-mini-img chofer" />
-                            <div class="ficha-mini-info">
-                              <p class="ficha-mini-title">${r.chofer.nombre}</p>
-                              <p class="ficha-mini-detail">${t('reservations.experience')}: ${r.chofer.experiencia}</p>
-                              <p class="ficha-mini-detail">${t('reservations.trips')}: ${r.chofer.viajes}</p>
-                              <div class="ficha-mini-rating">
-                                ${renderEstrellas(r.chofer.rating)}
-                                <span class="rating-number">${r.chofer.rating}</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="receipt-total">
-                    <span class="total-label">${t('reservations.totalAmount')}</span>
-                    <span class="total-amount">$${r.monto}.00</span>
-                  </div>
-                </div>
-              ` : ''}
-            </div>
-          `;
-        }).join('');
+      if (reservations.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            <p data-i18n="reservations.empty">No hay reservas en esta categoría</p>
+            <small data-i18n="reservations.bookNow">
+              ${category === 'proximos' ? 'Crea tu primera reserva' : ''}
+            </small>
+          </div>
+        `;
+        return;
       }
 
-      document.getElementById('reservas-list').innerHTML = html;
+      container.innerHTML = reservations.map(res => {
+        const isExpanded = expandedReservation === res.id;
+        const statusClass = res.estado.toLowerCase();
+        
+        return `
+          <div class="reservation-card ${isExpanded ? 'expanded' : ''}" data-id="${res.id}">
+            <div class="reservation-header" onclick="toggleExpand(${res.id})">
+              <div class="reservation-route">
+                <div class="route-segment">
+                  <span class="route-label">${t('reservations.origin')}</span>
+                  <span class="route-location">${res.punto_recogida || 'Origen'}</span>
+                </div>
+                <span class="route-arrow">→</span>
+                <div class="route-segment">
+                  <span class="route-label">${t('reservations.destination')}</span>
+                  <span class="route-location">${res.punto_destino || 'Destino'}</span>
+                </div>
+              </div>
+              
+              <div class="reservation-meta">
+                <div class="reservation-date">${formatDate(res.fecha)}</div>
+                <div class="reservation-time">${res.hora}</div>
+                <div class="reservation-code">${res.codigo_reserva}</div>
+              </div>
+
+              <svg class="expand-arrow" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M7 10l5 5 5-5z"/>
+              </svg>
+            </div>
+
+            ${isExpanded ? `
+              <div class="reservation-details">
+                <div class="detail-section">
+                  <div class="detail-section-title">${t('reservations.tripDetails')}</div>
+                  
+                  <div class="detail-row">
+                    <span class="detail-label">${t('reservations.origin')}</span>
+                    <span class="detail-value">${res.punto_recogida}</span>
+                  </div>
+                  
+                  <div class="detail-row">
+                    <span class="detail-label">${t('reservations.destination')}</span>
+                    <span class="detail-value">${res.punto_destino}</span>
+                  </div>
+                  
+                  <div class="detail-row">
+                    <span class="detail-label">${t('reservations.date')}</span>
+                    <span class="detail-value">${formatDate(res.fecha)}</span>
+                  </div>
+                  
+                  <div class="detail-row">
+                    <span class="detail-label">${t('reservations.time')}</span>
+                    <span class="detail-value">${res.hora}</span>
+                  </div>
+
+                  <div class="detail-row">
+                    <span class="detail-label">${t('reservations.passengers')}</span>
+                    <span class="detail-value">${res.pasajeros}</span>
+                  </div>
+
+                  <div class="detail-row">
+                    <span class="detail-label">${t('reservations.status')}</span>
+                    <span class="estado-badge ${statusClass}">
+                      <span>●</span>
+                      <span>${t('reservations.status.') + statusClass}</span>
+                    </span>
+                  </div>
+
+                  ${res.observaciones ? `
+                    <div class="detail-row" style="flex-direction: column; align-items: flex-start; gap: 0.5rem;">
+                      <span class="detail-label">${t('reservations.notes')}</span>
+                      <span class="detail-value" style="font-size: 0.85rem; line-height: 1.4;">${res.observaciones}</span>
+                    </div>
+                  ` : ''}
+                </div>
+
+                <div class="detail-section">
+                  <div class="detail-section-title">${t('reservations.serviceInfo')}</div>
+                  
+                  ${res.servicio && res.servicio.nombre ? `
+                    <div class="detail-row">
+                      <span class="detail-label">${t('reservations.service')}</span>
+                      <span class="detail-value">${res.servicio.nombre}</span>
+                    </div>
+                  ` : ''}
+
+                  <div class="detail-section-title" style="margin-top: 1.5rem;">${t('reservations.pricing')}</div>
+                  
+                  <div class="detail-row">
+                    <span class="detail-label">${t('reservations.basePrice')}</span>
+                    <span class="detail-value">$${parseFloat(res.precio_pactado).toFixed(2)}</span>
+                  </div>
+
+                  ${res.itbms_pactado ? `
+                    <div class="detail-row">
+                      <span class="detail-label">${t('reservations.itbms')}</span>
+                      <span class="detail-value">$${parseFloat(res.itbms_pactado).toFixed(2)}</span>
+                    </div>
+                  ` : ''}
+
+                  <div class="reservation-total">
+                    <span class="total-label">${t('reservations.total')}</span>
+                    <span class="total-amount">$${(parseFloat(res.precio_pactado) + (parseFloat(res.itbms_pactado) || 0)).toFixed(2)}</span>
+                  </div>
+
+                  <div class="detail-section-title" style="margin-top: 1.5rem;">${t('reservations.paymentStatus')}</div>
+                  
+                  <div class="detail-row">
+                    <span class="detail-label">${t('reservations.paymentStatus')}</span>
+                    <span class="detail-value">${res.estado_pago ? res.estado_pago.charAt(0).toUpperCase() + res.estado_pago.slice(1) : 'Pendiente'}</span>
+                  </div>
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
     }
 
-    function toggleReserva(id) {
-      reservaExpandida = reservaExpandida === id ? null : id;
-      renderReservas(seccionActual);
+    // Toggle expand
+    function toggleExpand(id) {
+      expandedReservation = expandedReservation === id ? null : id;
+      renderReservations(currentCategory);
     }
 
-    document.querySelectorAll('.sub-tab').forEach(tab => {
+    // Event listeners para tabs
+    document.querySelectorAll('.category-tab').forEach(tab => {
       tab.addEventListener('click', function() {
-        document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
         this.classList.add('active');
-        seccionActual = this.dataset.section;
-        reservaExpandida = null;
-        renderReservas(seccionActual);
+        currentCategory = this.dataset.category;
+        expandedReservation = null;
+        renderReservations(currentCategory);
       });
     });
 
-    renderReservas('actuales');
-
+    // Actualizar idioma
     window.addEventListener('languageChanged', () => {
-      renderReservas(seccionActual);
+      renderReservations(currentCategory);
     });
+
+    // Cargar reservas al iniciar
+    loadReservations();
   </script>
   <script src="/js/i18n.js"></script>
   <script src="/js/header-loader.js"></script>

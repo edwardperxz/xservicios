@@ -187,4 +187,85 @@ class XservReservasController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    /**
+     * Get user's reservations as JSON
+     * @return \Cake\Http\Response Returns JSON with user's reservations grouped by category
+     */
+    public function myReservations()
+    {
+        $this->Authorization->skipAuthorization();
+        $this->request->allowMethod(['get']);
+        
+        $user = $this->Authentication->getIdentity();
+        
+        // Si no hay usuario autenticado, retornar error
+        if (!$user) {
+            $this->response = $this->response->withStatus(401)->withType('application/json');
+            return $this->response->withStringBody(json_encode([
+                'success' => false,
+                'error' => 'Unauthorized'
+            ]));
+        }
+
+        try {
+            // Obtener todas las reservas del usuario
+            $query = $this->XservReservas->find()
+                ->contain(['Clientes', 'Servicios', 'Rutas'])
+                ->where(['XservReservas.cliente_id' => $user->id])
+                ->orderBy(['XservReservas.fecha' => 'DESC']);
+
+            $allReservas = $query->all();
+            
+            // Categorizar reservas
+            $categorized = [
+                'proximos' => [],      // Reservas futuras (no completada ni cancelada)
+                'completadas' => [],   // Reservas completadas
+                'canceladas' => []     // Reservas canceladas
+            ];
+
+            foreach ($allReservas as $reserva) {
+                $estado = strtolower($reserva->estado);
+                $reservaArray = [
+                    'id' => $reserva->id,
+                    'codigo_reserva' => $reserva->codigo_reserva,
+                    'fecha' => $reserva->fecha ? $reserva->fecha->format('Y-m-d') : null,
+                    'hora' => $reserva->hora ? (is_string($reserva->hora) ? $reserva->hora : $reserva->hora->format('H:i:s')) : null,
+                    'pasajeros' => $reserva->pasajeros,
+                    'precio_pactado' => $reserva->precio_pactado,
+                    'itbms_pactado' => $reserva->itbms_pactado,
+                    'punto_recogida' => $reserva->punto_recogida,
+                    'punto_destino' => $reserva->punto_destino,
+                    'observaciones' => $reserva->observaciones,
+                    'estado' => $reserva->estado,
+                    'estado_pago' => $reserva->estado_pago,
+                    'servicio' => $reserva->servicio ? [
+                        'id' => $reserva->servicio->id,
+                        'nombre' => $reserva->servicio->nombre
+                    ] : null
+                ];
+                
+                if ($estado === 'cancelada') {
+                    $categorized['canceladas'][] = $reservaArray;
+                } elseif ($estado === 'completada') {
+                    $categorized['completadas'][] = $reservaArray;
+                } else {
+                    $categorized['proximos'][] = $reservaArray;
+                }
+            }
+
+            $this->response = $this->response->withType('application/json');
+            return $this->response->withStringBody(json_encode([
+                'success' => true,
+                'reservations' => $categorized
+            ]));
+        } catch (\Exception $e) {
+            $this->response = $this->response->withStatus(500)->withType('application/json');
+            return $this->response->withStringBody(json_encode([
+                'success' => false,
+                'error' => 'Error loading reservations',
+                'message' => $e->getMessage()
+            ]));
+        }
+    }
 }

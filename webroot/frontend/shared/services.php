@@ -304,41 +304,46 @@
     }
 
     .service-card {
-      background: var(--cream);
-      border-radius: 12px;
+      background: linear-gradient(180deg, #f9f3ea 0%, #f1e8d9 100%);
+      border-radius: 14px;
       overflow: hidden;
-      transition: transform 0.3s, box-shadow 0.3s;
-      border: 2px solid var(--gold);
-      box-shadow: 0 4px 20px rgba(201, 169, 98, 0.15);
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+      border: 1px solid rgba(201, 169, 98, 0.6);
+      box-shadow: 0 6px 24px rgba(201, 169, 98, 0.18);
     }
 
     .service-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(201, 169, 98, 0.25);
+      transform: translateY(-6px);
+      box-shadow: 0 16px 44px rgba(201, 169, 98, 0.28);
       border-color: var(--gold-light);
     }
 
     .service-image {
       width: 100%;
-      height: 180px;
+      height: 190px;
       object-fit: cover;
+      transition: transform 0.35s ease;
+    }
+
+    .service-card:hover .service-image {
+      transform: scale(1.02);
     }
 
     .service-content {
-      padding: 1.25rem;
+      padding: 1.35rem 1.35rem 1.5rem;
     }
 
     .service-title {
-      font-size: 1.125rem;
+      font-size: 1.2rem;
       font-weight: 600;
       color: var(--text-dark);
       margin-bottom: 0.5rem;
     }
 
     .service-description {
-      font-size: 0.8rem;
-      color: #666;
-      line-height: 1.5;
+      font-size: 0.85rem;
+      color: #5d5d5d;
+      line-height: 1.55;
       margin-bottom: 1rem;
       min-height: 48px;
     }
@@ -359,24 +364,29 @@
       margin-left: 0.25rem;
     }
 
-    .btn-reservar {
+    .service-actions {
+      margin-top: 0.75rem;
+    }
+
+    .btn-more {
       display: block;
       width: 100%;
       padding: 0.875rem;
-      background: var(--green);
-      color: white;
+      background: var(--gold);
+      color: var(--text-dark);
       font-weight: 600;
       font-size: 0.9rem;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background 0.3s, transform 0.3s;
       text-align: center;
       text-decoration: none;
     }
 
-    .btn-reservar:hover {
-      background: var(--green-hover);
+    .btn-more:hover {
+      background: var(--gold-light);
+      transform: translateY(-1px);
     }
 
     /* Features Section */
@@ -497,88 +507,31 @@
   <!-- Services Grid -->
   <section class="services-section">
     <div class="services-grid" id="servicesGrid">
-      <!-- Card 1: Traslados Privados -->
-      <div class="service-card">
-        <img src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=400&h=300&fit=crop" alt="Traslados Privados" class="service-image">
-        <div class="service-content">
-          <h3 class="service-title" data-i18n="services.card1Title">Traslados Privados</h3>
-          <p class="service-description" data-i18n="services.card1Desc">Recogidas y traslados privados a cualquier hotel resort o destino turístico. Comodidad y puntualidad aseguradas.</p>
-          <div class="service-price">
-            <span class="price-amount">$80</span>
-            <span class="price-label" data-i18n="services.from">desde</span>
-          </div>
-          <a href="/newreservation" class="btn-reservar" data-i18n="btn.reserve">Reservar</a>
-        </div>
+      <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-gray);">
+        <p data-i18n="services.loading">Cargando servicios...</p>
       </div>
-
-      <!-- Card 2: Traslados Aeropuerto -->
-      <div class="service-card">
-        <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=400&h=300&fit=crop" alt="Traslados Aeropuerto" class="service-image">
-        <div class="service-content">
-          <h3 class="service-title" data-i18n="services.card2Title">Traslados desde y hacia el Aeropuerto</h3>
-          <p class="service-description" data-i18n="services.card2Desc">Traslados puntuales y seguros predilados, y hacia el aeropuerto, puerta a puerta y sin esperas.</p>
-          <div class="service-price">
-            <span class="price-amount">$100</span>
-            <span class="price-label" data-i18n="services.from">desde</span>
-          </div>
-          <a href="/newreservation" class="btn-reservar" data-i18n="btn.reserve">Reservar</a>
-        </div>
-      </div>
-
-      <!-- Card 3: Tours por la Ciudad -->
-      <div class="service-card">
-        <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=400&h=300&fit=crop" alt="Tours por la Ciudad" class="service-image">
-        <div class="service-content">
-          <h3 class="service-title" data-i18n="services.card3Title">Tours por la Ciudad</h3>
-          <p class="service-description" data-i18n="services.card3Desc">Explora Chiriquí con nuestros tours personalizables. Conoce los mejores lugares turísticos con estilo.</p>
-          <div class="service-price">
-            <span class="price-amount">$120</span>
-            <span class="price-label" data-i18n="services.from">desde</span>
-          </div>
-          <a href="/newreservation" class="btn-reservar" data-i18n="btn.reserve">Reservar</a>
-        </div>
-      </div>
-
-      <!-- Card 4: Excursiones -->
-      <div class="service-card">
-        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop" alt="Excursiones" class="service-image">
-        <div class="service-content">
-          <h3 class="service-title" data-i18n="services.card4Title">Excursiones</h3>
-          <p class="service-description" data-i18n="services.card4Desc">Descubre playas paradisíacas, montañas y cascadas con nuestros choferes expertos.</p>
-          <div class="service-price">
-            <span class="price-amount">$150</span>
-            <span class="price-label" data-i18n="services.from">desde</span>
-          </div>
-          <a href="/newreservation" class="btn-reservar" data-i18n="btn.reserve">Reservar</a>
-        </div>
-      </div>
-
-      <!-- Card 5: Servicio por Hora -->
-      <div class="service-card">
-        <img src="https://images.unsplash.com/photo-1563720223185-11003d516935?w=400&h=300&fit=crop" alt="Servicio por Hora" class="service-image">
-        <div class="service-content">
-          <h3 class="service-title" data-i18n="services.card5Title">Servicio por Hora</h3>
-          <p class="service-description" data-i18n="services.card5Desc">Disposición por horas para negocios, eventos o recorridos personalizados a tu ritmo.</p>
-          <div class="service-price">
-            <span class="price-amount">$80</span>
-            <span class="price-label" data-i18n="services.from">desde</span>
-          </div>
-          <a href="/newreservation" class="btn-reservar" data-i18n="btn.reserve">Reservar</a>
-        </div>
-      </div>
-
-      <!-- Card 6: Eventos Especiales -->
-      <div class="service-card">
-        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=400&h=300&fit=crop" alt="Eventos Especiales" class="service-image">
-        <div class="service-content">
-          <h3 class="service-title" data-i18n="services.card6Title">Eventos Especiales</h3>
-          <p class="service-description" data-i18n="services.card6Desc">Traslados elegantes para bodas, cenas, reuniones o cualquier evento especial.</p>
-          <div class="service-price">
-            <span class="price-amount">$120</span>
-            <span class="price-label" data-i18n="services.from">desde</span>
-          </div>
-          <a href="/newreservation" class="btn-reservar" data-i18n="btn.reserve">Reservar</a>
-        </div>
+    </div>
+    
+    <!-- Botón Cargar Más -->
+    <div id="loadMoreContainer" style="text-align: center; margin: 2rem 0; display: none;">
+      <button id="loadMoreBtn" style="
+        padding: 0.75rem 2rem;
+        background-color: var(--gold);
+        color: var(--dark-bg);
+        border: none;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+      " 
+      onmouseover="this.style.backgroundColor='var(--gold-light)'; this.style.transform='scale(1.05)'"
+      onmouseout="this.style.backgroundColor='var(--gold)'; this.style.transform='scale(1)'"
+      data-i18n="btn.loadMore">
+        Cargar más servicios
+      </button>
+      <div id="loadingSpinner" style="display: none; margin-top: 1rem; color: var(--gold);">
+        <p data-i18n="common.loading">Cargando...</p>
       </div>
     </div>
   </section>
@@ -621,7 +574,14 @@
   <script>
     const API_SERVICIOS = '/xserv-servicios.json';
     const servicesGrid = document.getElementById('servicesGrid');
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    const loadMoreContainer = document.getElementById('loadMoreContainer');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    
     let serviciosCache = [];
+    let currentPage = 1;
+    let totalPages = 1;
+    let isLoading = false;
 
     const imagenesServicios = [
       'https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=400&h=300&fit=crop',
@@ -660,7 +620,7 @@
       const precio = formatPrice(servicio.precio_base ?? servicio.precio ?? servicio.costo);
       const precioTexto = precio || t('services.consult');
       const showFrom = Boolean(precio);
-      const href = servicio.id ? `/newreservation?service_id=${servicio.id}` : '/newreservation';
+      const href = servicio.id ? `/services/${servicio.id}` : '/services';
 
       return `
         <div class="service-card">
@@ -672,47 +632,101 @@
               <span class="price-amount">${precioTexto}</span>
               ${showFrom ? `<span class="price-label">${t('services.from')}</span>` : ''}
             </div>
-            <a href="${href}" class="btn-reservar">${t('btn.reserve')}</a>
+            <div class="service-actions">
+              <a href="${href}" class="btn-more">${t('btn.viewMore')}</a>
+            </div>
           </div>
         </div>
       `;
     };
 
-    const renderServicios = () => {
+    const renderServicios = (append = false) => {
       if (!servicesGrid) return;
       const t = window.translate ? window.translate : (key) => key;
       const lang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'es';
 
       if (!serviciosCache.length) {
-        servicesGrid.innerHTML = `<p style="color: var(--text-gray);">${t('services.none')}</p>`;
+        if (!append) {
+          servicesGrid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; color: var(--text-gray);">${t('services.none')}</div>`;
+        }
         return;
       }
 
-      servicesGrid.innerHTML = serviciosCache.map((servicio, index) => buildServiceCard(servicio, index, lang)).join('');
-    };
-
-    const cargarServicios = async () => {
-      if (!servicesGrid) return;
-
-      try {
-        const res = await fetch(API_SERVICIOS, {
-          headers: { 'X-Requested-With': 'XMLHttpRequest' },
-        });
-        if (!res.ok) {
-          renderServicios();
-          return;
-        }
-        const data = await res.json();
-        const servicios = Array.isArray(data.xservServicios) ? data.xservServicios : [];
-        serviciosCache = servicios.filter((servicio) => String(servicio.estado ?? '1') !== '0');
-        renderServicios();
-      } catch (error) {
-        console.error('Error cargando servicios:', error);
-        renderServicios();
+      const html = serviciosCache.map((servicio, index) => buildServiceCard(servicio, index, lang)).join('');
+      
+      if (append) {
+        servicesGrid.innerHTML += html;
+      } else {
+        servicesGrid.innerHTML = html;
       }
     };
 
-    cargarServicios();
+    const updateLoadMoreButton = () => {
+      const hasMore = currentPage < totalPages;
+      loadMoreContainer.style.display = serviciosCache.length > 0 ? 'block' : 'none';
+      loadMoreBtn.style.display = hasMore ? 'block' : 'none';
+      loadingSpinner.style.display = 'none';
+    };
+
+    const cargarServicios = async (page = 1) => {
+      if (isLoading) return;
+      isLoading = true;
+      
+      if (page === 1) {
+        loadingSpinner.style.display = 'block';
+      }
+
+      try {
+        const url = new URL(API_SERVICIOS, window.location.origin);
+        url.searchParams.set('page', page);
+        
+        const res = await fetch(url.toString(), {
+          headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        });
+        
+        if (!res.ok) {
+          renderServicios();
+          updateLoadMoreButton();
+          isLoading = false;
+          return;
+        }
+        
+        const data = await res.json();
+        const servicios = Array.isArray(data.xservServicios) ? data.xservServicios : [];
+        const paginacion = data.pagination || {};
+        
+        totalPages = paginacion.pageCount || 1;
+        currentPage = paginacion.page || 1;
+        
+        const serviciosFiltrados = servicios.filter((servicio) => String(servicio.estado ?? '1') !== '0');
+        
+        if (page === 1) {
+          serviciosCache = serviciosFiltrados;
+          renderServicios(false);
+        } else {
+          serviciosCache = serviciosCache.concat(serviciosFiltrados);
+          renderServicios(true);
+        }
+        
+        updateLoadMoreButton();
+      } catch (error) {
+        console.error('Error cargando servicios:', error);
+        if (currentPage === 1) {
+          renderServicios();
+        }
+        updateLoadMoreButton();
+      } finally {
+        isLoading = false;
+      }
+    };
+
+    if (loadMoreBtn) {
+      loadMoreBtn.addEventListener('click', async () => {
+        await cargarServicios(currentPage + 1);
+      });
+    }
+
+    cargarServicios(1);
     window.addEventListener('languageChanged', renderServicios);
   </script>
   <script src="/js/header-loader.js"></script>

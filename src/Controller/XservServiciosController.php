@@ -13,6 +13,7 @@ class XservServiciosController extends AppController
     public function beforeFilter(\Cake\Event\EventInterface $event)
     {
         parent::beforeFilter($event);
+        $this->Authentication->addUnauthenticatedActions(['index', 'view']);
         $this->Authorization->skipAuthorization();
         
         // Usar layout admin si el usuario es admin
@@ -38,6 +39,11 @@ class XservServiciosController extends AppController
         
         $filters = $this->request->getQuery();
         
+        // Para frontend público: mostrar solo servicios activos por defecto
+        if (!$isAdmin) {
+            $query->where(['estado' => 'activo']);
+        }
+        
         if (!empty($filters['estado'])) {
             $query->where(['estado' => $filters['estado']]);
         }
@@ -46,12 +52,31 @@ class XservServiciosController extends AppController
             $query->where(['nombre LIKE' => '%' . $filters['nombre'] . '%']);
         }
         
+        // Configurar paginación: 12 items por página
+        $this->paginate = [
+            'limit' => 12,
+            'order' => ['XservServicios.created_at' => 'DESC']
+        ];
+        
         $xservServicios = $this->paginate($query);
 
         if ($this->request->is('json') || $this->request->getHeader('X-Requested-With') === 'XMLHttpRequest') {
             $this->response = $this->response->withType('application/json');
+            
+            // Obtener información de paginación
+            $paging = $this->request->getAttribute('paging');
+            $pagingInfo = $paging['XservServicios'] ?? [];
+            
             return $this->response->withStringBody(json_encode([
                 'xservServicios' => $xservServicios->toArray(),
+                'pagination' => [
+                    'page' => $pagingInfo['page'] ?? 1,
+                    'pageCount' => $pagingInfo['pageCount'] ?? 1,
+                    'total' => $pagingInfo['count'] ?? 0,
+                    'limit' => $pagingInfo['perPage'] ?? 12,
+                    'hasPrevious' => !empty($pagingInfo['prevPage']),
+                    'hasNext' => !empty($pagingInfo['nextPage']),
+                ]
             ]));
         }
 
@@ -74,6 +99,21 @@ class XservServiciosController extends AppController
         $this->Authorization->skipAuthorization();
 
         $xservServicio = $this->XservServicios->get($id, contain: []);
+        if ($this->request->is('json') || $this->request->getHeader('X-Requested-With') === 'XMLHttpRequest') {
+            $this->response = $this->response->withType('application/json');
+            return $this->response->withStringBody(json_encode([
+                'xservServicio' => [
+                    'id' => $xservServicio->id,
+                    'nombre' => $xservServicio->nombre,
+                    'estado' => $xservServicio->estado,
+                    'precio_base' => $xservServicio->precio_base,
+                    'descripcion_es' => $xservServicio->descripcion_es,
+                    'descripcion_en' => $xservServicio->descripcion_en,
+                    'variantes' => $xservServicio->variantes,
+                ],
+            ]));
+        }
+
         $this->set(compact('xservServicio'));
     }
 

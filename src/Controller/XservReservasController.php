@@ -122,21 +122,113 @@ class XservReservasController extends AppController
     public function add()
     {
         $this->Authorization->skipAuthorization();
-        
-        $xservReserva = $this->XservReservas->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $xservReserva = $this->XservReservas->patchEntity($xservReserva, $this->request->getData());
-            if ($this->XservReservas->save($xservReserva)) {
-                $this->Flash->success(__('The xserv reserva has been saved.'));
 
+        $xservReserva = $this->XservReservas->newEmptyEntity();
+
+        if ($this->request->is('post')) {
+
+            $data = $this->request->getData();
+
+            // =========================
+            // DATOS GENERADOS POR SISTEMA
+            // =========================
+
+            $usuario = $this->Authentication->getIdentity();
+
+            $cliente = $this->XservReservas->Clientes
+                ->find()
+                ->where(['usuario_id' => $usuario->id])
+                ->first();
+
+            if (!$cliente) {
+                $this->Flash->error('El usuario no tiene cliente asociado.');
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The xserv reserva could not be saved. Please, try again.'));
+
+            $data['cliente_id'] = $cliente->id;
+
+            $data['codigo_reserva'] = 'RSV-' . date('Y') . '-' .
+                str_pad((string) rand(1, 9999), 4, '0', STR_PAD_LEFT);
+
+            $servicio = $this->XservReservas->Servicios->get($data['servicio_id']);
+            $data['precio_pactado'] = $servicio->precio_base;
+            $data['itbms_pactado'] = $data['precio_pactado'] * 0.07;
+
+            $data['estado'] = 'pendiente';
+            $data['estado_pago'] = 'pendiente';
+
+            // =========================
+            // DATOS OPERATIVOS
+            // =========================
+
+            $choferId = $data['chofer_id'] ?? null;
+            $vehiculoId = $data['vehiculo_id'] ?? null;
+
+            unset($data['chofer_id'], $data['vehiculo_id']);
+
+            // =========================
+            // PATCH
+            // =========================
+
+            $xservReserva = $this->XservReservas->patchEntity($xservReserva, $data);
+
+            if ($this->XservReservas->save($xservReserva)) {
+
+                // Crear asignación si se enviaron chofer y vehículo
+                if ($choferId && $vehiculoId) {
+
+                    $asignacion = $this->XservReservas->Asignaciones->newEmptyEntity();
+
+                    $asignacion->reserva_id = $xservReserva->id;
+                    $asignacion->chofer_id = $choferId;
+                    $asignacion->vehiculo_id = $vehiculoId;
+                    $asignacion->asignado_por_id = $usuario->id;
+
+                    $fechaInicio = $xservReserva->fecha->format('Y-m-d') . ' ' .
+                                $xservReserva->hora->format('H:i:s');
+
+                    $asignacion->fecha_inicio_pactada = $fechaInicio;
+                    $asignacion->fecha_fin_pactada = date(
+                        'Y-m-d H:i:s',
+                        strtotime('+2 hours', strtotime($fechaInicio))
+                    );
+
+                    $this->XservReservas->Asignaciones->save($asignacion);
+                }
+
+                $this->Flash->success('Reserva creada correctamente.');
+                return $this->redirect(['action' => 'index']);
+            }
+
+            $this->Flash->error('La reserva no pudo guardarse. Intente nuevamente.');
         }
+
+        // =========================
+        // LISTAS PARA FORMULARIO
+        // =========================
+
         $clientes = $this->XservReservas->Clientes->find('list', limit: 200)->all();
         $servicios = $this->XservReservas->Servicios->find('list', limit: 200)->all();
         $rutas = $this->XservReservas->Rutas->find('list', limit: 200)->all();
-        $this->set(compact('xservReserva', 'clientes', 'servicios', 'rutas'));
+
+        $choferes = $this->XservReservas->Asignaciones->Choferes
+            ->find('list')
+            ->where(['estado' => 'activo'])
+            ->all();
+
+        $vehiculos = $this->XservReservas->Asignaciones->Vehiculos
+            ->find('list')
+            ->where(['estado_operativo' => 'disponible'])
+            ->all();
+
+        $this->set(compact(
+            'xservReserva',
+            'clientes',
+            'servicios',
+            'rutas',
+            'choferes',
+            'vehiculos'
+        ));
     }
 
     /**

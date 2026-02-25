@@ -6,7 +6,7 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * XservChofere Entity
+ * XservChofer Entity
  *
  * @property int $id
  * @property int|null $usuario_id
@@ -23,7 +23,7 @@ use Cake\ORM\Entity;
  *
  * @property \App\Model\Entity\Usuario $usuario
  */
-class XservChofere extends Entity
+class XservChofer extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().

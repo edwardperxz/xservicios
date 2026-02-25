@@ -69,8 +69,7 @@ class XservUsuariosTable extends Table
 
         $validator
             ->email('correo', true, 'Debe ingresar un correo electrónico válido')
-            ->requirePresence('correo', 'create')
-            ->notEmptyString('correo', 'El correo electrónico es requerido')
+            ->allowEmptyString('correo')
             ->add('correo', 'unique', [
                 'rule' => 'validateUnique',
                 'provider' => 'table',

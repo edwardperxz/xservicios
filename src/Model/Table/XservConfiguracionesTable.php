@@ -10,19 +10,19 @@ use Cake\Validation\Validator;
 /**
  * XservConfiguraciones Model
  *
- * @method \App\Model\Entity\XservConfiguracione newEmptyEntity()
- * @method \App\Model\Entity\XservConfiguracione newEntity(array $data, array $options = [])
- * @method array<\App\Model\Entity\XservConfiguracione> newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\XservConfiguracione get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
- * @method \App\Model\Entity\XservConfiguracione findOrCreate($search, ?callable $callback = null, array $options = [])
- * @method \App\Model\Entity\XservConfiguracione patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method array<\App\Model\Entity\XservConfiguracione> patchEntities(iterable $entities, array $data, array $options = [])
- * @method \App\Model\Entity\XservConfiguracione|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
- * @method \App\Model\Entity\XservConfiguracione saveOrFail(\Cake\Datasource\EntityInterface $entity, array $options = [])
- * @method iterable<\App\Model\Entity\XservConfiguracione>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservConfiguracione>|false saveMany(iterable $entities, array $options = [])
- * @method iterable<\App\Model\Entity\XservConfiguracione>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservConfiguracione> saveManyOrFail(iterable $entities, array $options = [])
- * @method iterable<\App\Model\Entity\XservConfiguracione>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservConfiguracione>|false deleteMany(iterable $entities, array $options = [])
- * @method iterable<\App\Model\Entity\XservConfiguracione>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservConfiguracione> deleteManyOrFail(iterable $entities, array $options = [])
+ * @method \App\Model\Entity\XservConfiguracion newEmptyEntity()
+ * @method \App\Model\Entity\XservConfiguracion newEntity(array $data, array $options = [])
+ * @method array<\App\Model\Entity\XservConfiguracion> newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\XservConfiguracion get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
+ * @method \App\Model\Entity\XservConfiguracion findOrCreate($search, ?callable $callback = null, array $options = [])
+ * @method \App\Model\Entity\XservConfiguracion patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method array<\App\Model\Entity\XservConfiguracion> patchEntities(iterable $entities, array $data, array $options = [])
+ * @method \App\Model\Entity\XservConfiguracion|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
+ * @method \App\Model\Entity\XservConfiguracion saveOrFail(\Cake\Datasource\EntityInterface $entity, array $options = [])
+ * @method iterable<\App\Model\Entity\XservConfiguracion>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservConfiguracion>|false saveMany(iterable $entities, array $options = [])
+ * @method iterable<\App\Model\Entity\XservConfiguracion>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservConfiguracion> saveManyOrFail(iterable $entities, array $options = [])
+ * @method iterable<\App\Model\Entity\XservConfiguracion>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservConfiguracion>|false deleteMany(iterable $entities, array $options = [])
+ * @method iterable<\App\Model\Entity\XservConfiguracion>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservConfiguracion> deleteManyOrFail(iterable $entities, array $options = [])
  */
 class XservConfiguracionesTable extends Table
 {
@@ -39,6 +39,7 @@ class XservConfiguracionesTable extends Table
         $this->setTable('xserv_configuraciones');
         $this->setDisplayField('clave');
         $this->setPrimaryKey('id');
+        $this->setEntityClass('App\\Model\\Entity\\XservConfiguracion');
     }
 
     /**

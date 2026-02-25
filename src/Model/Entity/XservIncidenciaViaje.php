@@ -6,7 +6,7 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * XservIncidenciasViaje Entity
+ * XservIncidenciaViaje Entity
  *
  * @property int $id
  * @property int $ejecucion_id
@@ -20,7 +20,7 @@ use Cake\ORM\Entity;
  *
  * @property \App\Model\Entity\XservEjecucionViaje $ejecucion
  */
-class XservIncidenciasViaje extends Entity
+class XservIncidenciaViaje extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().

@@ -10,6 +10,18 @@ namespace App\Controller;
  */
 class XservEjecucionViajesController extends AppController
 {
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+        $this->Authorization->skipAuthorization();
+        
+        // Usar layout admin si el usuario es admin
+        $user = $this->Authentication->getIdentity();
+        if ($user && $user->rol === 'admin') {
+            $this->viewBuilder()->setLayout('admin');
+        }
+    }
+
     /**
      * Index method
      *
@@ -17,11 +29,88 @@ class XservEjecucionViajesController extends AppController
      */
     public function index()
     {
+        $user = $this->Authentication->getIdentity();
+        $isAdmin = $user && $user->rol === 'admin';
+        $filters = $this->request->getQuery();
+
         $query = $this->XservEjecucionViajes->find()
             ->contain(['Asignacions']);
+
+        if (!empty($filters['estado_ejecucion'])) {
+            $query->where(['estado_ejecucion' => $filters['estado_ejecucion']]);
+        }
+
+        if (!empty($filters['asignacion_id'])) {
+            $query->where(['asignacion_id' => $filters['asignacion_id']]);
+        }
+
         $xservEjecucionViajes = $this->paginate($query);
 
-        $this->set(compact('xservEjecucionViajes'));
+        // Obtener valores distinctos para filtros
+        $estados = $this->XservEjecucionViajes->find()
+            ->select(['estado_ejecucion'])
+            ->distinct(['estado_ejecucion'])
+            ->where(['estado_ejecucion IS NOT' => null])
+            ->order(['estado_ejecucion' => 'ASC'])
+            ->all()
+            ->extract('estado_ejecucion')
+            ->toList();
+
+        $asignaciones = $this->XservEjecucionViajes->Asignacions->find('list', ['keyField' => 'id', 'valueField' => 'id'])
+            ->order(['id' => 'ASC'])
+            ->toArray();
+
+        $this->set(compact('xservEjecucionViajes', 'filters', 'estados', 'asignaciones'));
+
+        if ($isAdmin) {
+            $this->render('admin_index');
+        }
+    }
+
+    /**
+     * Admin index method
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function adminIndex()
+    {
+        $user = $this->Authentication->getIdentity();
+        if (!$user || $user->rol !== 'admin') {
+            return $this->redirect(['controller' => 'XservUsuarios', 'action' => 'profile']);
+        }
+
+        $this->viewBuilder()->setLayout('admin');
+        $filters = $this->request->getQuery();
+
+        $query = $this->XservEjecucionViajes->find()
+            ->contain(['Asignacions']);
+
+        if (!empty($filters['estado_ejecucion'])) {
+            $query->where(['estado_ejecucion' => $filters['estado_ejecucion']]);
+        }
+
+        if (!empty($filters['asignacion_id'])) {
+            $query->where(['asignacion_id' => $filters['asignacion_id']]);
+        }
+
+        $xservEjecucionViajes = $this->paginate($query);
+
+        // Obtener valores distinctos para filtros
+        $estados = $this->XservEjecucionViajes->find()
+            ->select(['estado_ejecucion'])
+            ->distinct(['estado_ejecucion'])
+            ->where(['estado_ejecucion IS NOT' => null])
+            ->order(['estado_ejecucion' => 'ASC'])
+            ->all()
+            ->extract('estado_ejecucion')
+            ->toList();
+
+        $asignaciones = $this->XservEjecucionViajes->Asignacions->find('list', ['keyField' => 'id', 'valueField' => 'id'])
+            ->order(['id' => 'ASC'])
+            ->toArray();
+
+        $this->set(compact('xservEjecucionViajes', 'filters', 'estados', 'asignaciones'));
+        $this->render('admin_index');
     }
 
     /**

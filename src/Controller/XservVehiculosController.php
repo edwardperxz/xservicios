@@ -10,6 +10,18 @@ namespace App\Controller;
  */
 class XservVehiculosController extends AppController
 {
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+        $this->Authorization->skipAuthorization();
+        
+        // Usar layout admin si el usuario es admin
+        $user = $this->Authentication->getIdentity();
+        if ($user && $user->rol === 'admin') {
+            $this->viewBuilder()->setLayout('admin');
+        }
+    }
+
     /**
      * Index method
      *
@@ -18,10 +30,77 @@ class XservVehiculosController extends AppController
     public function index()
     {
         $this->Authorization->skipAuthorization();
+        
+        $user = $this->Authentication->getIdentity();
+        $isAdmin = $user && $user->rol === 'admin';
+        
         $query = $this->XservVehiculos->find();
+        
+        $filters = $this->request->getQuery();
+        
+        if (!empty($filters['tipo'])) {
+            $query->where(['tipo' => $filters['tipo']]);
+        }
+        
+        if (!empty($filters['estado_operativo'])) {
+            $query->where(['estado_operativo' => $filters['estado_operativo']]);
+        }
+        
+        if (!empty($filters['placa'])) {
+            $query->where(['OR' => [
+                'placa LIKE' => '%' . $filters['placa'] . '%',
+                'nombre_unidad LIKE' => '%' . $filters['placa'] . '%'
+            ]]);
+        }
+        
+        $xservVehiculos = $this->paginate($query);
+        
+        $this->set(compact('xservVehiculos', 'filters'));
+        
+        if ($isAdmin) {
+            $this->render('admin_index');
+        }
+    }
+
+    /**
+     * Admin index method
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function adminIndex()
+    {
+        $this->Authorization->skipAuthorization();
+
+        $user = $this->Authentication->getIdentity();
+        if (!$user || $user->rol !== 'admin') {
+            return $this->redirect(['controller' => 'XservUsuarios', 'action' => 'profile']);
+        }
+
+        $this->viewBuilder()->setLayout('admin');
+
+        $query = $this->XservVehiculos->find();
+
+        $filters = $this->request->getQuery();
+
+        if (!empty($filters['tipo'])) {
+            $query->where(['tipo' => $filters['tipo']]);
+        }
+
+        if (!empty($filters['estado_operativo'])) {
+            $query->where(['estado_operativo' => $filters['estado_operativo']]);
+        }
+
+        if (!empty($filters['placa'])) {
+            $query->where(['OR' => [
+                'placa LIKE' => '%' . $filters['placa'] . '%',
+                'nombre_unidad LIKE' => '%' . $filters['placa'] . '%'
+            ]]);
+        }
+
         $xservVehiculos = $this->paginate($query);
 
-        $this->set(compact('xservVehiculos'));
+        $this->set(compact('xservVehiculos', 'filters'));
+        $this->render('admin_index');
     }
 
     /**

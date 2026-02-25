@@ -12,19 +12,19 @@ use Cake\Validation\Validator;
  *
  * @property \App\Model\Table\XservServiciosTable&\Cake\ORM\Association\BelongsTo $Servicios
  * @property \App\Model\Table\XservDestinosTable&\Cake\ORM\Association\BelongsTo $Destinos
- * @method \App\Model\Entity\XservServiciosDestino newEmptyEntity()
- * @method \App\Model\Entity\XservServiciosDestino newEntity(array $data, array $options = [])
- * @method array<\App\Model\Entity\XservServiciosDestino> newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\XservServiciosDestino get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
- * @method \App\Model\Entity\XservServiciosDestino findOrCreate($search, ?callable $callback = null, array $options = [])
- * @method \App\Model\Entity\XservServiciosDestino patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method array<\App\Model\Entity\XservServiciosDestino> patchEntities(iterable $entities, array $data, array $options = [])
- * @method \App\Model\Entity\XservServiciosDestino|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
- * @method \App\Model\Entity\XservServiciosDestino saveOrFail(\Cake\Datasource\EntityInterface $entity, array $options = [])
- * @method iterable<\App\Model\Entity\XservServiciosDestino>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservServiciosDestino>|false saveMany(iterable $entities, array $options = [])
- * @method iterable<\App\Model\Entity\XservServiciosDestino>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservServiciosDestino> saveManyOrFail(iterable $entities, array $options = [])
- * @method iterable<\App\Model\Entity\XservServiciosDestino>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservServiciosDestino>|false deleteMany(iterable $entities, array $options = [])
- * @method iterable<\App\Model\Entity\XservServiciosDestino>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservServiciosDestino> deleteManyOrFail(iterable $entities, array $options = [])
+ * @method \App\Model\Entity\XservServicioDestino newEmptyEntity()
+ * @method \App\Model\Entity\XservServicioDestino newEntity(array $data, array $options = [])
+ * @method array<\App\Model\Entity\XservServicioDestino> newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\XservServicioDestino get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
+ * @method \App\Model\Entity\XservServicioDestino findOrCreate($search, ?callable $callback = null, array $options = [])
+ * @method \App\Model\Entity\XservServicioDestino patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method array<\App\Model\Entity\XservServicioDestino> patchEntities(iterable $entities, array $data, array $options = [])
+ * @method \App\Model\Entity\XservServicioDestino|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
+ * @method \App\Model\Entity\XservServicioDestino saveOrFail(\Cake\Datasource\EntityInterface $entity, array $options = [])
+ * @method iterable<\App\Model\Entity\XservServicioDestino>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservServicioDestino>|false saveMany(iterable $entities, array $options = [])
+ * @method iterable<\App\Model\Entity\XservServicioDestino>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservServicioDestino> saveManyOrFail(iterable $entities, array $options = [])
+ * @method iterable<\App\Model\Entity\XservServicioDestino>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservServicioDestino>|false deleteMany(iterable $entities, array $options = [])
+ * @method iterable<\App\Model\Entity\XservServicioDestino>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservServicioDestino> deleteManyOrFail(iterable $entities, array $options = [])
  */
 class XservServiciosDestinosTable extends Table
 {
@@ -41,6 +41,7 @@ class XservServiciosDestinosTable extends Table
         $this->setTable('xserv_servicios_destinos');
         $this->setDisplayField(['servicio_id', 'destino_id']);
         $this->setPrimaryKey(['servicio_id', 'destino_id']);
+        $this->setEntityClass('App\\Model\\Entity\\XservServicioDestino');
 
         $this->belongsTo('Servicios', [
             'foreignKey' => 'servicio_id',

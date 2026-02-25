@@ -6,7 +6,7 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * XservNotificacione Entity
+ * XservNotificacion Entity
  *
  * @property int $id
  * @property int|null $usuario_id
@@ -25,7 +25,7 @@ use Cake\ORM\Entity;
  * @property \App\Model\Entity\XservCliente $cliente
  * @property \App\Model\Entity\Reserva $reserva
  */
-class XservNotificacione extends Entity
+class XservNotificacion extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().

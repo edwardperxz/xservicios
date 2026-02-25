@@ -11,19 +11,19 @@ use Cake\Validation\Validator;
  * XservIncidenciasViaje Model
  *
  * @property \App\Model\Table\XservEjecucionViajesTable&\Cake\ORM\Association\BelongsTo $Ejecucions
- * @method \App\Model\Entity\XservIncidenciasViaje newEmptyEntity()
- * @method \App\Model\Entity\XservIncidenciasViaje newEntity(array $data, array $options = [])
- * @method array<\App\Model\Entity\XservIncidenciasViaje> newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\XservIncidenciasViaje get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
- * @method \App\Model\Entity\XservIncidenciasViaje findOrCreate($search, ?callable $callback = null, array $options = [])
- * @method \App\Model\Entity\XservIncidenciasViaje patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method array<\App\Model\Entity\XservIncidenciasViaje> patchEntities(iterable $entities, array $data, array $options = [])
- * @method \App\Model\Entity\XservIncidenciasViaje|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
- * @method \App\Model\Entity\XservIncidenciasViaje saveOrFail(\Cake\Datasource\EntityInterface $entity, array $options = [])
- * @method iterable<\App\Model\Entity\XservIncidenciasViaje>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservIncidenciasViaje>|false saveMany(iterable $entities, array $options = [])
- * @method iterable<\App\Model\Entity\XservIncidenciasViaje>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservIncidenciasViaje> saveManyOrFail(iterable $entities, array $options = [])
- * @method iterable<\App\Model\Entity\XservIncidenciasViaje>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservIncidenciasViaje>|false deleteMany(iterable $entities, array $options = [])
- * @method iterable<\App\Model\Entity\XservIncidenciasViaje>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservIncidenciasViaje> deleteManyOrFail(iterable $entities, array $options = [])
+ * @method \App\Model\Entity\XservIncidenciaViaje newEmptyEntity()
+ * @method \App\Model\Entity\XservIncidenciaViaje newEntity(array $data, array $options = [])
+ * @method array<\App\Model\Entity\XservIncidenciaViaje> newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\XservIncidenciaViaje get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
+ * @method \App\Model\Entity\XservIncidenciaViaje findOrCreate($search, ?callable $callback = null, array $options = [])
+ * @method \App\Model\Entity\XservIncidenciaViaje patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method array<\App\Model\Entity\XservIncidenciaViaje> patchEntities(iterable $entities, array $data, array $options = [])
+ * @method \App\Model\Entity\XservIncidenciaViaje|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
+ * @method \App\Model\Entity\XservIncidenciaViaje saveOrFail(\Cake\Datasource\EntityInterface $entity, array $options = [])
+ * @method iterable<\App\Model\Entity\XservIncidenciaViaje>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservIncidenciaViaje>|false saveMany(iterable $entities, array $options = [])
+ * @method iterable<\App\Model\Entity\XservIncidenciaViaje>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservIncidenciaViaje> saveManyOrFail(iterable $entities, array $options = [])
+ * @method iterable<\App\Model\Entity\XservIncidenciaViaje>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservIncidenciaViaje>|false deleteMany(iterable $entities, array $options = [])
+ * @method iterable<\App\Model\Entity\XservIncidenciaViaje>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservIncidenciaViaje> deleteManyOrFail(iterable $entities, array $options = [])
  */
 class XservIncidenciasViajeTable extends Table
 {
@@ -40,6 +40,7 @@ class XservIncidenciasViajeTable extends Table
         $this->setTable('xserv_incidencias_viaje');
         $this->setDisplayField('tipo_incidencia');
         $this->setPrimaryKey('id');
+        $this->setEntityClass('App\\Model\\Entity\\XservIncidenciaViaje');
 
         $this->belongsTo('Ejecucions', [
             'foreignKey' => 'ejecucion_id',

@@ -6,7 +6,7 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * XservValoracione Entity
+ * XservValoracion Entity
  *
  * @property int $id
  * @property int $reserva_id
@@ -20,7 +20,7 @@ use Cake\ORM\Entity;
  *
  * @property \App\Model\Entity\XservReserva $xserv_reserva
  */
-class XservValoracione extends Entity
+class XservValoracion extends Entity
 {
     protected array $_accessible = [
         'reserva_id' => true,

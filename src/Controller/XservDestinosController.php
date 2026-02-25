@@ -10,6 +10,18 @@ namespace App\Controller;
  */
 class XservDestinosController extends AppController
 {
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+        $this->Authorization->skipAuthorization();
+        
+        // Usar layout admin si el usuario es admin
+        $user = $this->Authentication->getIdentity();
+        if ($user && $user->rol === 'admin') {
+            $this->viewBuilder()->setLayout('admin');
+        }
+    }
+
     /**
      * Index method
      *
@@ -17,11 +29,33 @@ class XservDestinosController extends AppController
      */
     public function index()
     {
+        $user = $this->Authentication->getIdentity();
+        $isAdmin = $user && $user->rol === 'admin';
+        $filters = $this->request->getQuery();
+
         $query = $this->XservDestinos->find()
             ->contain(['Ubicacions']);
+
+        if ($filters['es_popular'] ?? '' !== '') {
+            $query->where(['es_popular' => (int)$filters['es_popular']]);
+        }
+
+        if (!empty($filters['ubicacion_id'])) {
+            $query->where(['ubicacion_id' => $filters['ubicacion_id']]);
+        }
+
         $xservDestinos = $this->paginate($query);
 
-        $this->set(compact('xservDestinos'));
+        // Obtener valores distinctos para filtros
+        $ubicaciones = $this->XservDestinos->Ubicacions->find('list', ['keyField' => 'id', 'valueField' => 'nombre'])
+            ->order(['nombre' => 'ASC'])
+            ->toArray();
+
+        $this->set(compact('xservDestinos', 'filters', 'ubicaciones'));
+
+        if ($isAdmin) {
+            $this->render('admin_index');
+        }
     }
 
     /**

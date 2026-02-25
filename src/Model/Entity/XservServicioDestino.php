@@ -6,7 +6,7 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * XservServiciosDestino Entity
+ * XservServicioDestino Entity
  *
  * @property int $servicio_id
  * @property int $destino_id
@@ -15,7 +15,7 @@ use Cake\ORM\Entity;
  * @property \App\Model\Entity\XservServicio $servicio
  * @property \App\Model\Entity\XservDestino $destino
  */
-class XservServiciosDestino extends Entity
+class XservServicioDestino extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().

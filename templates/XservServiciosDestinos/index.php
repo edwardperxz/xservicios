@@ -1,11 +1,11 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var iterable<\App\Model\Entity\XservServiciosDestino> $xservServiciosDestinos
+ * @var iterable<\App\Model\Entity\XservServicioDestino> $xservServiciosDestinos
  */
 ?>
 <div class="xservServiciosDestinos index content">
-    <?= $this->Html->link(__('New Xserv Servicios Destino'), ['action' => 'add'], ['class' => 'button float-right']) ?>
+    <?= $this->Html->link(__('New Xserv Servicio Destino'), ['action' => 'add'], ['class' => 'button float-right']) ?>
     <h3><?= __('Xserv Servicios Destinos') ?></h3>
     <div class="table-responsive">
         <table>

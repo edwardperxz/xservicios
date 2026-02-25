@@ -10,6 +10,18 @@ namespace App\Controller;
  */
 class XservServiciosController extends AppController
 {
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+        $this->Authorization->skipAuthorization();
+        
+        // Usar layout admin si el usuario es admin
+        $user = $this->Authentication->getIdentity();
+        if ($user && $user->rol === 'admin') {
+            $this->viewBuilder()->setLayout('admin');
+        }
+    }
+
     /**
      * Index method
      *
@@ -18,8 +30,22 @@ class XservServiciosController extends AppController
     public function index()
     {
         $this->Authorization->skipAuthorization();
+        
+        $user = $this->Authentication->getIdentity();
+        $isAdmin = $user && $user->rol === 'admin';
 
         $query = $this->XservServicios->find();
+        
+        $filters = $this->request->getQuery();
+        
+        if (!empty($filters['estado'])) {
+            $query->where(['estado' => $filters['estado']]);
+        }
+        
+        if (!empty($filters['nombre'])) {
+            $query->where(['nombre LIKE' => '%' . $filters['nombre'] . '%']);
+        }
+        
         $xservServicios = $this->paginate($query);
 
         if ($this->request->is('json') || $this->request->getHeader('X-Requested-With') === 'XMLHttpRequest') {
@@ -29,7 +55,11 @@ class XservServiciosController extends AppController
             ]));
         }
 
-        $this->set(compact('xservServicios'));
+        $this->set(compact('xservServicios', 'filters'));
+        
+        if ($isAdmin) {
+            $this->render('admin_index');
+        }
     }
 
     /**

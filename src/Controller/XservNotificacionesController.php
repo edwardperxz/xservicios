@@ -10,6 +10,18 @@ namespace App\Controller;
  */
 class XservNotificacionesController extends AppController
 {
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+        $this->Authorization->skipAuthorization();
+        
+        // Usar layout admin si el usuario es admin
+        $user = $this->Authentication->getIdentity();
+        if ($user && $user->rol === 'admin') {
+            $this->viewBuilder()->setLayout('admin');
+        }
+    }
+
     /**
      * Index method
      *
@@ -17,17 +29,66 @@ class XservNotificacionesController extends AppController
      */
     public function index()
     {
+        $user = $this->Authentication->getIdentity();
+        $isAdmin = $user && $user->rol === 'admin';
+        $filters = $this->request->getQuery();
+
         $query = $this->XservNotificaciones->find()
             ->contain(['Usuarios', 'Clientes', 'Reservas']);
+
+        if (!empty($filters['estado_envio'])) {
+            $query->where(['estado_envio' => $filters['estado_envio']]);
+        }
+
+        if (!empty($filters['medio'])) {
+            $query->where(['medio' => $filters['medio']]);
+        }
+
+        if (!empty($filters['tipo_notificacion'])) {
+            $query->where(['tipo_notificacion' => $filters['tipo_notificacion']]);
+        }
+
         $xservNotificaciones = $this->paginate($query);
 
-        $this->set(compact('xservNotificaciones'));
+        // Obtener valores distinctos para filtros
+        $estadosEnvio = $this->XservNotificaciones->find()
+            ->select(['estado_envio'])
+            ->distinct(['estado_envio'])
+            ->where(['estado_envio IS NOT' => null])
+            ->order(['estado_envio' => 'ASC'])
+            ->all()
+            ->extract('estado_envio')
+            ->toList();
+
+        $medios = $this->XservNotificaciones->find()
+            ->select(['medio'])
+            ->distinct(['medio'])
+            ->where(['medio IS NOT' => null])
+            ->order(['medio' => 'ASC'])
+            ->all()
+            ->extract('medio')
+            ->toList();
+
+        $tiposNotificacion = $this->XservNotificaciones->find()
+            ->select(['tipo_notificacion'])
+            ->distinct(['tipo_notificacion'])
+            ->where(['tipo_notificacion IS NOT' => null])
+            ->order(['tipo_notificacion' => 'ASC'])
+            ->all()
+            ->extract('tipo_notificacion')
+            ->toList();
+
+        $this->set(compact('xservNotificaciones', 'filters', 'estadosEnvio', 'medios', 'tiposNotificacion'));
+
+        if ($isAdmin) {
+            $this->render('admin_index');
+        }
     }
 
     /**
      * View method
      *
-     * @param string|null $id Xserv Notificacione id.
+    * @param string|null $id Xserv Notificacion id.
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
@@ -48,11 +109,11 @@ class XservNotificacionesController extends AppController
         if ($this->request->is('post')) {
             $xservNotificacione = $this->XservNotificaciones->patchEntity($xservNotificacione, $this->request->getData());
             if ($this->XservNotificaciones->save($xservNotificacione)) {
-                $this->Flash->success(__('The xserv notificacione has been saved.'));
+                $this->Flash->success(__('The xserv notificacion has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The xserv notificacione could not be saved. Please, try again.'));
+            $this->Flash->error(__('The xserv notificacion could not be saved. Please, try again.'));
         }
         $usuarios = $this->XservNotificaciones->Usuarios->find('list', limit: 200)->all();
         $clientes = $this->XservNotificaciones->Clientes->find('list', limit: 200)->all();
@@ -63,7 +124,7 @@ class XservNotificacionesController extends AppController
     /**
      * Edit method
      *
-     * @param string|null $id Xserv Notificacione id.
+    * @param string|null $id Xserv Notificacion id.
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
@@ -73,11 +134,11 @@ class XservNotificacionesController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $xservNotificacione = $this->XservNotificaciones->patchEntity($xservNotificacione, $this->request->getData());
             if ($this->XservNotificaciones->save($xservNotificacione)) {
-                $this->Flash->success(__('The xserv notificacione has been saved.'));
+                $this->Flash->success(__('The xserv notificacion has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The xserv notificacione could not be saved. Please, try again.'));
+            $this->Flash->error(__('The xserv notificacion could not be saved. Please, try again.'));
         }
         $usuarios = $this->XservNotificaciones->Usuarios->find('list', limit: 200)->all();
         $clientes = $this->XservNotificaciones->Clientes->find('list', limit: 200)->all();
@@ -88,7 +149,7 @@ class XservNotificacionesController extends AppController
     /**
      * Delete method
      *
-     * @param string|null $id Xserv Notificacione id.
+    * @param string|null $id Xserv Notificacion id.
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
@@ -97,9 +158,9 @@ class XservNotificacionesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $xservNotificacione = $this->XservNotificaciones->get($id);
         if ($this->XservNotificaciones->delete($xservNotificacione)) {
-            $this->Flash->success(__('The xserv notificacione has been deleted.'));
+            $this->Flash->success(__('The xserv notificacion has been deleted.'));
         } else {
-            $this->Flash->error(__('The xserv notificacione could not be deleted. Please, try again.'));
+            $this->Flash->error(__('The xserv notificacion could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);

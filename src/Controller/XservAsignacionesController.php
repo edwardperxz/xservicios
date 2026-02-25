@@ -10,6 +10,18 @@ namespace App\Controller;
  */
 class XservAsignacionesController extends AppController
 {
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+        $this->Authorization->skipAuthorization();
+        
+        // Usar layout admin si el usuario es admin
+        $user = $this->Authentication->getIdentity();
+        if ($user && $user->rol === 'admin') {
+            $this->viewBuilder()->setLayout('admin');
+        }
+    }
+
     /**
      * Index method
      *
@@ -18,17 +30,32 @@ class XservAsignacionesController extends AppController
     public function index()
     {
         $this->Authorization->skipAuthorization();
+        
+        $user = $this->Authentication->getIdentity();
+        $isAdmin = $user && $user->rol === 'admin';
+        
         $query = $this->XservAsignaciones->find()
-            ->contain(['Reservas', 'Chofers', 'Vehiculos', 'AsignadoPors']);
+            ->contain(['Chofers', 'Vehiculos']);
+        
+        $filters = $this->request->getQuery();
+        
+        if (!empty($filters['estado_asignacion'])) {
+            $query->where(['estado_asignacion' => $filters['estado_asignacion']]);
+        }
+        
         $xservAsignaciones = $this->paginate($query);
 
-        $this->set(compact('xservAsignaciones'));
+        $this->set(compact('xservAsignaciones', 'filters'));
+        
+        if ($isAdmin) {
+            $this->render('admin_index');
+        }
     }
 
     /**
      * View method
      *
-     * @param string|null $id Xserv Asignacione id.
+    * @param string|null $id Xserv Asignacion id.
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
@@ -51,11 +78,11 @@ class XservAsignacionesController extends AppController
         if ($this->request->is('post')) {
             $xservAsignacione = $this->XservAsignaciones->patchEntity($xservAsignacione, $this->request->getData());
             if ($this->XservAsignaciones->save($xservAsignacione)) {
-                $this->Flash->success(__('The xserv asignacione has been saved.'));
+                $this->Flash->success(__('The xserv asignacion has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The xserv asignacione could not be saved. Please, try again.'));
+            $this->Flash->error(__('The xserv asignacion could not be saved. Please, try again.'));
         }
         $reservas = $this->XservAsignaciones->Reservas->find('list', limit: 200)->all();
         $chofers = $this->XservAsignaciones->Chofers->find('list', limit: 200)->all();
@@ -67,7 +94,7 @@ class XservAsignacionesController extends AppController
     /**
      * Edit method
      *
-     * @param string|null $id Xserv Asignacione id.
+    * @param string|null $id Xserv Asignacion id.
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
@@ -78,11 +105,11 @@ class XservAsignacionesController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $xservAsignacione = $this->XservAsignaciones->patchEntity($xservAsignacione, $this->request->getData());
             if ($this->XservAsignaciones->save($xservAsignacione)) {
-                $this->Flash->success(__('The xserv asignacione has been saved.'));
+                $this->Flash->success(__('The xserv asignacion has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The xserv asignacione could not be saved. Please, try again.'));
+            $this->Flash->error(__('The xserv asignacion could not be saved. Please, try again.'));
         }
         $reservas = $this->XservAsignaciones->Reservas->find('list', limit: 200)->all();
         $chofers = $this->XservAsignaciones->Chofers->find('list', limit: 200)->all();
@@ -94,7 +121,7 @@ class XservAsignacionesController extends AppController
     /**
      * Delete method
      *
-     * @param string|null $id Xserv Asignacione id.
+    * @param string|null $id Xserv Asignacion id.
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
@@ -104,9 +131,9 @@ class XservAsignacionesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $xservAsignacione = $this->XservAsignaciones->get($id);
         if ($this->XservAsignaciones->delete($xservAsignacione)) {
-            $this->Flash->success(__('The xserv asignacione has been deleted.'));
+            $this->Flash->success(__('The xserv asignacion has been deleted.'));
         } else {
-            $this->Flash->error(__('The xserv asignacione could not be deleted. Please, try again.'));
+            $this->Flash->error(__('The xserv asignacion could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);

@@ -10,6 +10,18 @@ namespace App\Controller;
  */
 class XservReservasController extends AppController
 {
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+        $this->Authorization->skipAuthorization();
+        
+        // Usar layout admin si el usuario es admin
+        $user = $this->Authentication->getIdentity();
+        if ($user && $user->rol === 'admin') {
+            $this->viewBuilder()->setLayout('admin');
+        }
+    }
+
     /**
      * Index method
      *
@@ -19,8 +31,22 @@ class XservReservasController extends AppController
     {
         $this->Authorization->skipAuthorization();
         
+        $user = $this->Authentication->getIdentity();
+        $isAdmin = $user && $user->rol === 'admin';
+        
         $query = $this->XservReservas->find()
-            ->contain(['XservClientes', 'XservServicios', 'XservRutas', 'XservChoferes', 'XservVehiculos']);
+            ->contain(['Clientes', 'Servicios', 'Rutas']);
+        
+        $filters = $this->request->getQuery();
+        
+        if (!empty($filters['estado'])) {
+            $query->where(['XservReservas.estado' => $filters['estado']]);
+        }
+        
+        if (!empty($filters['codigo'])) {
+            $query->where(['codigo_reserva LIKE' => '%' . $filters['codigo'] . '%']);
+        }
+        
         $xservReservas = $this->paginate($query);
 
         // Si es una petición JSON/AJAX
@@ -31,7 +57,46 @@ class XservReservasController extends AppController
             ]));
         }
 
-        $this->set(compact('xservReservas'));
+        $this->set(compact('xservReservas', 'filters'));
+        
+        if ($isAdmin) {
+            $this->render('admin_index');
+        }
+    }
+
+    /**
+     * Admin index method
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function adminIndex()
+    {
+        $this->Authorization->skipAuthorization();
+
+        $user = $this->Authentication->getIdentity();
+        if (!$user || $user->rol !== 'admin') {
+            return $this->redirect(['controller' => 'XservUsuarios', 'action' => 'profile']);
+        }
+
+        $this->viewBuilder()->setLayout('admin');
+
+        $query = $this->XservReservas->find()
+            ->contain(['Clientes', 'Servicios', 'Rutas']);
+
+        $filters = $this->request->getQuery();
+
+        if (!empty($filters['estado'])) {
+            $query->where(['XservReservas.estado' => $filters['estado']]);
+        }
+
+        if (!empty($filters['codigo'])) {
+            $query->where(['codigo_reserva LIKE' => '%' . $filters['codigo'] . '%']);
+        }
+
+        $xservReservas = $this->paginate($query);
+
+        $this->set(compact('xservReservas', 'filters'));
+        $this->render('admin_index');
     }
 
     /**

@@ -14,19 +14,19 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\XservChoferesTable&\Cake\ORM\Association\BelongsTo $Chofers
  * @property \App\Model\Table\XservVehiculosTable&\Cake\ORM\Association\BelongsTo $Vehiculos
  * @property \App\Model\Table\XservUsuariosTable&\Cake\ORM\Association\BelongsTo $AsignadoPors
- * @method \App\Model\Entity\XservAsignacione newEmptyEntity()
- * @method \App\Model\Entity\XservAsignacione newEntity(array $data, array $options = [])
- * @method array<\App\Model\Entity\XservAsignacione> newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\XservAsignacione get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
- * @method \App\Model\Entity\XservAsignacione findOrCreate($search, ?callable $callback = null, array $options = [])
- * @method \App\Model\Entity\XservAsignacione patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method array<\App\Model\Entity\XservAsignacione> patchEntities(iterable $entities, array $data, array $options = [])
- * @method \App\Model\Entity\XservAsignacione|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
- * @method \App\Model\Entity\XservAsignacione saveOrFail(\Cake\Datasource\EntityInterface $entity, array $options = [])
- * @method iterable<\App\Model\Entity\XservAsignacione>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservAsignacione>|false saveMany(iterable $entities, array $options = [])
- * @method iterable<\App\Model\Entity\XservAsignacione>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservAsignacione> saveManyOrFail(iterable $entities, array $options = [])
- * @method iterable<\App\Model\Entity\XservAsignacione>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservAsignacione>|false deleteMany(iterable $entities, array $options = [])
- * @method iterable<\App\Model\Entity\XservAsignacione>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservAsignacione> deleteManyOrFail(iterable $entities, array $options = [])
+ * @method \App\Model\Entity\XservAsignacion newEmptyEntity()
+ * @method \App\Model\Entity\XservAsignacion newEntity(array $data, array $options = [])
+ * @method array<\App\Model\Entity\XservAsignacion> newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\XservAsignacion get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
+ * @method \App\Model\Entity\XservAsignacion findOrCreate($search, ?callable $callback = null, array $options = [])
+ * @method \App\Model\Entity\XservAsignacion patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method array<\App\Model\Entity\XservAsignacion> patchEntities(iterable $entities, array $data, array $options = [])
+ * @method \App\Model\Entity\XservAsignacion|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
+ * @method \App\Model\Entity\XservAsignacion saveOrFail(\Cake\Datasource\EntityInterface $entity, array $options = [])
+ * @method iterable<\App\Model\Entity\XservAsignacion>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservAsignacion>|false saveMany(iterable $entities, array $options = [])
+ * @method iterable<\App\Model\Entity\XservAsignacion>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservAsignacion> saveManyOrFail(iterable $entities, array $options = [])
+ * @method iterable<\App\Model\Entity\XservAsignacion>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservAsignacion>|false deleteMany(iterable $entities, array $options = [])
+ * @method iterable<\App\Model\Entity\XservAsignacion>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservAsignacion> deleteManyOrFail(iterable $entities, array $options = [])
  */
 class XservAsignacionesTable extends Table
 {
@@ -43,6 +43,7 @@ class XservAsignacionesTable extends Table
         $this->setTable('xserv_asignaciones');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
+        $this->setEntityClass('App\\Model\\Entity\\XservAsignacion');
 
         $this->belongsTo('Reservas', [
             'foreignKey' => 'reserva_id',

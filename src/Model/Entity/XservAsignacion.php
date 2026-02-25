@@ -6,7 +6,7 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * XservAsignacione Entity
+ * XservAsignacion Entity
  *
  * @property int $id
  * @property int $reserva_id
@@ -25,7 +25,7 @@ use Cake\ORM\Entity;
  * @property \App\Model\Entity\Vehiculo $vehiculo
  * @property \App\Model\Entity\AsignadoPor $asignado_por
  */
-class XservAsignacione extends Entity
+class XservAsignacion extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().

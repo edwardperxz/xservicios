@@ -13,19 +13,19 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\XservUsuariosTable&\Cake\ORM\Association\BelongsTo $Usuarios
  * @property \App\Model\Table\XservClientesTable&\Cake\ORM\Association\BelongsTo $Clientes
  * @property \App\Model\Table\XservReservasTable&\Cake\ORM\Association\BelongsTo $Reservas
- * @method \App\Model\Entity\XservNotificacione newEmptyEntity()
- * @method \App\Model\Entity\XservNotificacione newEntity(array $data, array $options = [])
- * @method array<\App\Model\Entity\XservNotificacione> newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\XservNotificacione get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
- * @method \App\Model\Entity\XservNotificacione findOrCreate($search, ?callable $callback = null, array $options = [])
- * @method \App\Model\Entity\XservNotificacione patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method array<\App\Model\Entity\XservNotificacione> patchEntities(iterable $entities, array $data, array $options = [])
- * @method \App\Model\Entity\XservNotificacione|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
- * @method \App\Model\Entity\XservNotificacione saveOrFail(\Cake\Datasource\EntityInterface $entity, array $options = [])
- * @method iterable<\App\Model\Entity\XservNotificacione>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservNotificacione>|false saveMany(iterable $entities, array $options = [])
- * @method iterable<\App\Model\Entity\XservNotificacione>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservNotificacione> saveManyOrFail(iterable $entities, array $options = [])
- * @method iterable<\App\Model\Entity\XservNotificacione>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservNotificacione>|false deleteMany(iterable $entities, array $options = [])
- * @method iterable<\App\Model\Entity\XservNotificacione>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservNotificacione> deleteManyOrFail(iterable $entities, array $options = [])
+ * @method \App\Model\Entity\XservNotificacion newEmptyEntity()
+ * @method \App\Model\Entity\XservNotificacion newEntity(array $data, array $options = [])
+ * @method array<\App\Model\Entity\XservNotificacion> newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\XservNotificacion get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
+ * @method \App\Model\Entity\XservNotificacion findOrCreate($search, ?callable $callback = null, array $options = [])
+ * @method \App\Model\Entity\XservNotificacion patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method array<\App\Model\Entity\XservNotificacion> patchEntities(iterable $entities, array $data, array $options = [])
+ * @method \App\Model\Entity\XservNotificacion|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
+ * @method \App\Model\Entity\XservNotificacion saveOrFail(\Cake\Datasource\EntityInterface $entity, array $options = [])
+ * @method iterable<\App\Model\Entity\XservNotificacion>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservNotificacion>|false saveMany(iterable $entities, array $options = [])
+ * @method iterable<\App\Model\Entity\XservNotificacion>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservNotificacion> saveManyOrFail(iterable $entities, array $options = [])
+ * @method iterable<\App\Model\Entity\XservNotificacion>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservNotificacion>|false deleteMany(iterable $entities, array $options = [])
+ * @method iterable<\App\Model\Entity\XservNotificacion>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservNotificacion> deleteManyOrFail(iterable $entities, array $options = [])
  */
 class XservNotificacionesTable extends Table
 {
@@ -42,6 +42,7 @@ class XservNotificacionesTable extends Table
         $this->setTable('xserv_notificaciones');
         $this->setDisplayField('tipo_notificacion');
         $this->setPrimaryKey('id');
+        $this->setEntityClass('App\\Model\\Entity\\XservNotificacion');
 
         $this->belongsTo('Usuarios', [
             'foreignKey' => 'usuario_id',

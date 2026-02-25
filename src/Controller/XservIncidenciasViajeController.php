@@ -10,6 +10,18 @@ namespace App\Controller;
  */
 class XservIncidenciasViajeController extends AppController
 {
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+        $this->Authorization->skipAuthorization();
+        
+        // Usar layout admin si el usuario es admin
+        $user = $this->Authentication->getIdentity();
+        if ($user && $user->rol === 'admin') {
+            $this->viewBuilder()->setLayout('admin');
+        }
+    }
+
     /**
      * Index method
      *
@@ -17,11 +29,106 @@ class XservIncidenciasViajeController extends AppController
      */
     public function index()
     {
+        $user = $this->Authentication->getIdentity();
+        $isAdmin = $user && $user->rol === 'admin';
+        $filters = $this->request->getQuery();
+
         $query = $this->XservIncidenciasViaje->find()
             ->contain(['Ejecucions']);
+
+        if ($filters['resuelto'] ?? '' !== '') {
+            $query->where(['resuelto' => (int)$filters['resuelto']]);
+        }
+
+        if (!empty($filters['tipo_incidencia'])) {
+            $query->where(['tipo_incidencia' => $filters['tipo_incidencia']]);
+        }
+
+        if (!empty($filters['severidad'])) {
+            $query->where(['severidad' => $filters['severidad']]);
+        }
+
         $xservIncidenciasViaje = $this->paginate($query);
 
-        $this->set(compact('xservIncidenciasViaje'));
+        // Obtener valores distinctos para filtros
+        $tiposIncidencia = $this->XservIncidenciasViaje->find()
+            ->select(['tipo_incidencia'])
+            ->distinct(['tipo_incidencia'])
+            ->where(['tipo_incidencia IS NOT' => null])
+            ->order(['tipo_incidencia' => 'ASC'])
+            ->all()
+            ->extract('tipo_incidencia')
+            ->toList();
+
+        $severidades = $this->XservIncidenciasViaje->find()
+            ->select(['severidad'])
+            ->distinct(['severidad'])
+            ->where(['severidad IS NOT' => null])
+            ->order(['severidad' => 'ASC'])
+            ->all()
+            ->extract('severidad')
+            ->toList();
+
+        $this->set(compact('xservIncidenciasViaje', 'filters', 'tiposIncidencia', 'severidades'));
+
+        if ($isAdmin) {
+            $this->render('admin_index');
+        }
+    }
+
+    /**
+     * Admin index method
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function adminIndex()
+    {
+        $user = $this->Authentication->getIdentity();
+        if (!$user || $user->rol !== 'admin') {
+            return $this->redirect(['controller' => 'XservUsuarios', 'action' => 'profile']);
+        }
+
+        $this->viewBuilder()->setLayout('admin');
+        $filters = $this->request->getQuery();
+
+        $query = $this->XservIncidenciasViaje->find()
+            ->contain(['Ejecucions']);
+
+        if ($filters['resuelto'] ?? '' !== '') {
+            $query->where(['resuelto' => (int)$filters['resuelto']]);
+        }
+
+        if (!empty($filters['tipo_incidencia'])) {
+            $query->where(['tipo_incidencia' => $filters['tipo_incidencia']]);
+        }
+
+        if (!empty($filters['severidad'])) {
+            $query->where(['severidad' => $filters['severidad']]);
+        }
+
+        $xservIncidenciasViaje = $this->paginate($query);
+
+        // Obtener valores distinctos para filtros
+        $tiposIncidencia = $this->XservIncidenciasViaje->find()
+            ->select(['tipo_incidencia'])
+            ->distinct(['tipo_incidencia'])
+            ->where(['tipo_incidencia IS NOT' => null])
+            ->order(['tipo_incidencia' => 'ASC'])
+            ->all()
+            ->extract('tipo_incidencia')
+            ->toList();
+
+        $severidades = $this->XservIncidenciasViaje->find()
+            ->select(['severidad'])
+            ->distinct(['severidad'])
+            ->where(['severidad IS NOT' => null])
+            ->order(['severidad' => 'ASC'])
+            ->all()
+            ->extract('severidad')
+            ->toList();
+
+        $this->set(compact('xservIncidenciasViaje', 'filters', 'tiposIncidencia', 'severidades'));
+        $this->render('admin_index');
     }
 
     /**

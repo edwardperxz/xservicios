@@ -10,6 +10,18 @@ namespace App\Controller;
  */
 class XservClientesController extends AppController
 {
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+        $this->Authorization->skipAuthorization();
+        
+        // Usar layout admin si el usuario es admin
+        $user = $this->Authentication->getIdentity();
+        if ($user && $user->rol === 'admin') {
+            $this->viewBuilder()->setLayout('admin');
+        }
+    }
+
     /**
      * Index method
      *
@@ -17,10 +29,41 @@ class XservClientesController extends AppController
      */
     public function index()
     {
+        $user = $this->Authentication->getIdentity();
+        $isAdmin = $user && $user->rol === 'admin';
+        $filters = $this->request->getQuery();
+
         $query = $this->XservClientes->find();
+
+        if (!empty($filters['nombre'])) {
+            $query->where(['nombre LIKE' => '%' . $filters['nombre'] . '%']);
+        }
+
+        if (!empty($filters['correo'])) {
+            $query->where(['correo LIKE' => '%' . $filters['correo'] . '%']);
+        }
+
+        if (!empty($filters['idioma_preferido'])) {
+            $query->where(['idioma_preferido' => $filters['idioma_preferido']]);
+        }
+
         $xservClientes = $this->paginate($query);
 
-        $this->set(compact('xservClientes'));
+        // Obtener valores distinctos para filtros
+        $idiomas = $this->XservClientes->find()
+            ->select(['idioma_preferido'])
+            ->distinct(['idioma_preferido'])
+            ->where(['idioma_preferido IS NOT' => null])
+            ->order(['idioma_preferido' => 'ASC'])
+            ->all()
+            ->extract('idioma_preferido')
+            ->toList();
+
+        $this->set(compact('xservClientes', 'filters', 'idiomas'));
+
+        if ($isAdmin) {
+            $this->render('admin_index');
+        }
     }
 
     /**

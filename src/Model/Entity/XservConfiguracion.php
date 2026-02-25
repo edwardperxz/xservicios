@@ -6,15 +6,18 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * XservUbicacione Entity
+ * XservConfiguracion Entity
  *
  * @property int $id
- * @property string $nombre
- * @property string $EN_PROVINCIAS
- * @property string|null $direccion_gps
- * @property \Cake\I18n\DateTime|null $created_at
+ * @property string $clave
+ * @property string $valor
+ * @property string|null $tipo_dato
+ * @property string $grupo
+ * @property string|null $descripcion_parametro
+ * @property bool|null $editable_por_admin
+ * @property \Cake\I18n\DateTime|null $updated_at
  */
-class XservUbicacione extends Entity
+class XservConfiguracion extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -26,9 +29,12 @@ class XservUbicacione extends Entity
      * @var array<string, bool>
      */
     protected array $_accessible = [
-        'nombre' => true,
-        'EN_PROVINCIAS' => true,
-        'direccion_gps' => true,
-        'created_at' => true,
+        'clave' => true,
+        'valor' => true,
+        'tipo_dato' => true,
+        'grupo' => true,
+        'descripcion_parametro' => true,
+        'editable_por_admin' => true,
+        'updated_at' => true,
     ];
 }

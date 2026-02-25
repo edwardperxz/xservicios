@@ -707,25 +707,548 @@
       font-style: italic;
     }
 
+    /* Responsive for Tablet and below */
     @media (max-width: 1024px) {
       .main-container {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: calc(1.5rem + 80px) 1.5rem 1.5rem;
+      }
+
+      .left-column,
+      .right-column {
+        padding: 1.25rem;
+      }
+
+      .column-title {
+        font-size: 1.25rem;
+      }
+
+      .filter-buttons {
+        gap: 0.3rem;
+      }
+
+      .filter-btn {
+        padding: 0.35rem 0.6rem;
+        font-size: 0.7rem;
+      }
+
+      .viaje-card,
+      .valoracion-card {
+        padding: 0.75rem;
+        gap: 0.75rem;
+      }
+
+      .viaje-imagen,
+      .valoracion-imagen {
+        width: 60px;
+        height: 40px;
+      }
+
+      .panel-title {
+        font-size: 1.1rem;
+      }
+
+      .stars-container {
+        gap: 0.15rem;
+      }
+
+      .star {
+        width: 18px;
+        height: 18px;
       }
     }
 
+    /* Responsive for Tablet Portrait */
     @media (max-width: 768px) {
+      body {
+        padding-top: 70px;
+      }
+
       .header {
-        padding-left: 1rem;
-        padding-right: 1rem;
+        padding: 0.75rem 1rem;
+      }
+
+      .logo-x,
+      .logo-text {
+        font-size: 1.25rem;
+      }
+
+      .sub-header {
+        padding: 0.75rem 1rem;
+        gap: 1rem;
+        margin-top: 70px;
+      }
+
+      .back-btn {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.75rem;
+      }
+
+      .sub-nav {
+        gap: 1rem;
+      }
+
+      .sub-nav-item {
+        font-size: 0.8rem;
+      }
+
+      .main-container {
+        padding: calc(1rem + 70px) 1rem 1rem;
+        gap: 1.5rem;
+        height: auto;
+      }
+
+      .left-column,
+      .right-column {
+        padding: 1rem;
+        border-radius: 10px;
+      }
+
+      .column-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .column-title {
+        font-size: 1.1rem;
+      }
+
+      .filter-buttons {
+        gap: 0.25rem;
+        width: 100%;
+        flex-wrap: wrap;
+      }
+
+      .filter-btn {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.65rem;
+        flex: 1 1 45%;
+      }
+
+      .viaje-card,
+      .valoracion-card {
+        padding: 0.75rem;
+        gap: 0.75rem;
+        flex-direction: row;
+      }
+
+      .viaje-imagen,
+      .valoracion-imagen {
+        width: 50px;
+        height: 35px;
+        flex-shrink: 0;
+      }
+
+      .viaje-info {
+        flex: 1;
+      }
+
+      .viaje-fecha {
+        margin-left: auto;
+      }
+
+      .viaje-dia {
+        font-size: 1.1rem;
+      }
+
+      .viaje-mes {
+        font-size: 0.7rem;
+      }
+
+      .viaje-ruta span,
+      .valoracion-ruta span {
+        font-size: 0.8rem;
+      }
+
+      .viaje-detalles {
+        font-size: 0.7rem;
+      }
+
+      .viaje-expandbtn {
+        padding: 0.4rem;
+      }
+
+      .viaje-expandbtn svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      .valoracion-panel,
+      .valoracion-detalle {
+        padding: 1rem;
+        margin-top: 0.75rem;
+      }
+
+      .panel-title,
+      .detalle-tipo {
+        font-size: 1rem;
+      }
+
+      .panel-subtitle,
+      .detalle-fecha {
+        font-size: 0.75rem;
+      }
+
+      .valoracion-item {
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .stars-container {
+        gap: 0.15rem;
+      }
+
+      .star {
+        width: 16px;
+        height: 16px;
+      }
+
+      .mini-star {
+        width: 12px;
+        height: 12px;
+      }
+
+      .comentario-textarea {
+        padding: 0.6rem;
+        font-size: 0.8rem;
+        min-height: 50px;
+      }
+
+      .enviar-btn,
+      .pagination-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.75rem;
+      }
+
+      .finalizar-btn {
+        padding: 0.6rem;
+        font-size: 0.85rem;
+      }
+
+      .pagination-actions {
+        justify-content: center;
+        gap: 0.5rem;
+      }
+
+      .valorizaciones-list,
+      .viajes-list {
+        gap: 0.75rem;
+      }
+    }
+
+    /* Responsive for Mobile */
+    @media (max-width: 480px) {
+      body {
+        padding-top: 65px;
+      }
+
+      html, body {
+        overflow: auto;
+      }
+
+      .header {
+        padding: 0.5rem 0.75rem;
+        position: fixed;
+        z-index: 999;
+      }
+
+      .logo-x,
+      .logo-text {
+        font-size: 1rem;
       }
 
       .nav-menu {
         display: none;
       }
 
+      .user-actions {
+        gap: 0.5rem;
+      }
+
+      .sub-header {
+        padding: 0.5rem 0.75rem;
+        gap: 0.5rem;
+        margin-top: 65px;
+        flex-wrap: wrap;
+      }
+
+      .back-btn {
+        padding: 0.35rem 0.6rem;
+        font-size: 0.7rem;
+      }
+
+      .back-btn svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      .sub-nav {
+        gap: 0.5rem;
+        width: 100%;
+        flex-wrap: wrap;
+      }
+
+      .sub-nav-item {
+        font-size: 0.7rem;
+        padding: 0.3rem 0.5rem;
+      }
+
       .main-container {
-        padding-left: 1rem;
-        padding-right: 1rem;
+        padding: calc(0.75rem + 65px) 0.75rem 0.75rem;
+        gap: 1rem;
+        height: auto;
+      }
+
+      .left-column,
+      .right-column {
+        padding: 0.75rem;
+        border-radius: 8px;
+      }
+
+      .column-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .column-title {
+        font-size: 1rem;
+      }
+
+      .filter-buttons {
+        gap: 0.2rem;
+        width: 100%;
+      }
+
+      .filter-btn {
+        padding: 0.25rem 0.4rem;
+        font-size: 0.6rem;
+        flex: 1 1 22%;
+      }
+
+      .viaje-card,
+      .valoracion-card {
+        padding: 0.6rem;
+        gap: 0.6rem;
+      }
+
+      .viaje-imagen,
+      .valoracion-imagen {
+        width: 45px;
+        height: 32px;
+        flex-shrink: 0;
+      }
+
+      .viaje-ruta span,
+      .valoracion-ruta span {
+        font-size: 0.75rem;
+      }
+
+      .viaje-detalles {
+        font-size: 0.65rem;
+      }
+
+      .viaje-dia {
+        font-size: 1rem;
+      }
+
+      .viaje-mes {
+        font-size: 0.65rem;
+      }
+
+      .viaje-expandbtn {
+        padding: 0.3rem;
+      }
+
+      .viaje-expandbtn svg {
+        width: 12px;
+        height: 12px;
+      }
+
+      .viaje-fecha {
+        text-align: center;
+        min-width: 40px;
+      }
+
+      .viajes-pending,
+      .empty-state {
+        font-size: 0.75rem;
+        padding: 1.5rem;
+      }
+
+      .empty-state svg {
+        width: 40px;
+        height: 40px;
+      }
+
+      .valoracion-panel,
+      .valoracion-detalle {
+        padding: 0.75rem;
+        margin-top: 0.5rem;
+      }
+
+      .panel-title,
+      .panel-subtitle {
+        font-size: 0.9rem;
+      }
+
+      .panel-header {
+        margin-bottom: 1rem;
+      }
+
+      .valoracion-item {
+        padding: 0.6rem;
+        margin-bottom: 0.6rem;
+      }
+
+      .valoracion-item-label {
+        font-size: 0.8rem;
+        gap: 0.4rem;
+      }
+
+      .valoracion-item-label-dot {
+        width: 6px;
+        height: 6px;
+      }
+
+      .stars-container {
+        gap: 0.1rem;
+      }
+
+      .star {
+        width: 14px;
+        height: 14px;
+        stroke-width: 1.2;
+      }
+
+      .star:hover {
+        transform: scale(1.15);
+      }
+
+      .mini-star {
+        width: 10px;
+        height: 10px;
+      }
+
+      .comentario-textarea {
+        padding: 0.5rem;
+        font-size: 0.75rem;
+        min-height: 45px;
+        margin-bottom: 0.5rem;
+      }
+
+      .enviar-btn {
+        padding: 0.35rem 0.6rem;
+        font-size: 0.7rem;
+      }
+
+      .finalizar-btn {
+        padding: 0.5rem;
+        font-size: 0.8rem;
+        margin-top: 0.4rem;
+      }
+
+      .pagination-actions {
+        justify-content: center;
+        gap: 0.3rem;
+        margin-top: 0.75rem;
+      }
+
+      .pagination-btn {
+        padding: 0.35rem 0.6rem;
+        font-size: 0.65rem;
+      }
+
+      .detalle-header {
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.5rem;
+      }
+
+      .detalle-info {
+        flex: 1;
+      }
+
+      .detalle-tipo {
+        font-size: 0.9rem;
+      }
+
+      .detalle-fecha {
+        font-size: 0.65rem;
+      }
+
+      .detalle-stars {
+        gap: 0.3rem;
+      }
+
+      .comentario-box {
+        margin-top: 0.75rem;
+      }
+
+      .comentario-label {
+        font-size: 0.65rem;
+        margin-bottom: 0.4rem;
+      }
+
+      .comentario-text {
+        font-size: 0.8rem;
+        padding: 0.6rem;
+        border-left-width: 2px;
+      }
+
+      .comentario-empty {
+        font-size: 0.75rem;
+      }
+
+      .rating-value {
+        font-size: 0.75rem;
+      }
+
+      .valoracion-badge {
+        padding: 0.15rem 0.4rem;
+        font-size: 0.6rem;
+      }
+
+      .valoracion-badges {
+        gap: 0.3rem;
+      }
+
+      .valoracion-stars {
+        gap: 0.25rem;
+        margin-left: 0.3rem;
+      }
+    }
+
+    /* Extra small phones */
+    @media (max-width: 360px) {
+      .back-btn {
+        min-width: 60px;
+      }
+
+      .filter-btn {
+        flex: 1 1 48%;
+      }
+
+      .viaje-card .viaje-expandbtn,
+      .valoracion-card .viaje-expandbtn {
+        display: none;
+      }
+
+      .column-title {
+        font-size: 0.95rem;
+      }
+
+      .star {
+        width: 12px;
+        height: 12px;
+      }
+
+      .mini-star {
+        width: 8px;
+        height: 8px;
       }
     }
   </style>

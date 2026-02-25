@@ -182,7 +182,7 @@
     /* Hero Section with Background */
     .hero-section {
       min-height: 100vh;
-      background-image: url('<?= $this->Url->image('login-bg.jpeg') ?>');
+      background-image: url('<?= $this->Url->image('car-concept.jpeg') ?>');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;

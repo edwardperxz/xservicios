@@ -167,7 +167,7 @@
     .hero {
       position: relative;
       height: 480px;
-      background: url('/img/login-bg.jpeg') center/cover no-repeat;
+      background: url('/img/car-concept.jpeg') center/cover no-repeat;
       display: flex;
       align-items: center;
       padding: 0 3rem;

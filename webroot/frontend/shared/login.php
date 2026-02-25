@@ -214,7 +214,7 @@
     /* Hero Section with Background */
     .hero-section {
       min-height: 100vh;
-      background-image: url('/img/login-bg.jpeg');
+      background-image: url('/img/car-concept.jpeg');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;

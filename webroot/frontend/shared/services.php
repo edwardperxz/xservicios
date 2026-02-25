@@ -63,185 +63,6 @@
       z-index: 0;
     }
 
-    /* Header - Original Design */
-    .header {
-      display: flex;
-      align-items: center;
-      padding: 1rem 2.5rem;
-      background: linear-gradient(to bottom, rgba(10, 10, 10, 0.98), rgba(5, 5, 5, 0.95));
-      border-bottom: 1px solid rgba(201, 169, 98, 0.3);
-      position: relative;
-      z-index: 10;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 0;
-      flex-shrink: 0;
-    }
-
-    .logo-x {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--gold);
-      text-shadow: 0 0 10px rgba(201, 169, 98, 0.5);
-    }
-
-    .logo-text {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--text-white);
-      letter-spacing: 0.5px;
-    }
-
-    .nav-menu {
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-      margin-left: 4rem;
-      margin-right: 4rem;
-    }
-
-    .nav-item {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-      min-width: 90px;
-      color: var(--text-gray);
-      text-decoration: none;
-      font-size: 0.85rem;
-      transition: color 0.3s;
-      white-space: nowrap;
-    }
-
-    .nav-item:hover {
-      color: var(--gold);
-    }
-
-    .nav-icon {
-      width: 16px;
-      height: 16px;
-      stroke: currentColor;
-      fill: none;
-      flex-shrink: 0;
-    }
-
-    .user-actions {
-      display: flex;
-      align-items: center;
-      gap: 1.25rem;
-      margin-left: auto;
-    }
-
-    .lang-selector {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      color: var(--text-gray);
-      font-size: 0.8rem;
-    }
-
-    .lang-icon {
-      width: 14px;
-      height: 14px;
-      stroke: var(--gold);
-      fill: none;
-    }
-
-    .lang-text {
-      color: var(--text-gray);
-      cursor: pointer;
-      transition: color 0.3s;
-      font-size: 0.8rem;
-    }
-
-    .lang-text:hover {
-      color: var(--gold);
-    }
-
-    .lang-divider {
-      color: var(--dark-lighter);
-    }
-
-    .notification-icon {
-      cursor: pointer;
-      transition: color 0.3s;
-    }
-
-    .notification-icon svg {
-      width: 18px;
-      height: 18px;
-      stroke: var(--text-gray);
-      fill: none;
-    }
-
-    .notification-icon:hover svg {
-      stroke: var(--gold);
-    }
-
-    .auth-button {
-      padding: 0.5rem 1.1rem;
-      border: 1px solid var(--gold);
-      border-radius: 20px;
-      color: var(--gold);
-      font-size: 0.8rem;
-      text-decoration: none;
-      transition: all 0.3s;
-      white-space: nowrap;
-    }
-
-    .auth-button:hover {
-      background: rgba(201, 169, 98, 0.15);
-    }
-
-    .is-hidden {
-      display: none !important;
-    }
-
-    .user-profile {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      cursor: pointer;
-      padding: 0.4rem 0.75rem;
-      background: rgba(201, 169, 98, 0.1);
-      border-radius: 25px;
-      transition: background 0.3s;
-    }
-
-    .user-profile:hover {
-      background: rgba(201, 169, 98, 0.2);
-    }
-
-    .user-avatar {
-      width: 28px;
-      height: 28px;
-      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.7rem;
-      font-weight: 600;
-      color: var(--dark-bg);
-    }
-
-    .user-name {
-      color: var(--text-white);
-      font-size: 0.85rem;
-    }
-
-    .dropdown-icon {
-      width: 14px;
-      height: 14px;
-      stroke: var(--text-gray);
-      fill: none;
-    }
-
     /* Title Section */
     .title-section {
       text-align: center;
@@ -257,20 +78,6 @@
       justify-content: center;
       gap: 0.5rem;
       margin-bottom: 1.5rem;
-    }
-
-    .brand-icon {
-      width: 24px;
-      height: 24px;
-      stroke: var(--gold);
-      fill: none;
-    }
-
-    .brand-name {
-      font-size: 0.875rem;
-      letter-spacing: 3px;
-      color: var(--gold);
-      font-weight: 500;
     }
 
     .main-title {
@@ -435,29 +242,9 @@
       .features-grid {
         gap: 2rem;
       }
-
-      .header {
-        flex-wrap: wrap;
-        gap: 1rem;
-      }
-
-      .nav-menu {
-        order: 3;
-        width: 100%;
-        justify-content: center;
-        gap: 1.5rem;
-      }
     }
 
     @media (max-width: 768px) {
-      .nav-menu {
-        gap: 1rem;
-      }
-
-      .nav-item span {
-        display: none;
-      }
-
       .main-title {
         font-size: 2rem;
       }
@@ -478,10 +265,6 @@
       .feature-item {
         flex: 1 1 40%;
       }
-
-      .logo-text {
-        font-size: 1.25rem;
-      }
     }
   </style>
   <link rel="stylesheet" href="/css/header-auth.css">
@@ -491,13 +274,6 @@
 
   <!-- Title Section -->
   <section class="title-section">
-    <div class="brand-logo">
-      <svg class="brand-icon" viewBox="0 0 24 24" strokeWidth="2">
-        <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18 10l-1.9-4.6c-.3-.7-1-1.4-1.8-1.4H9.7c-.8 0-1.5.5-1.8 1.2L6 10l-2.5 1.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2"/>
-        <circle cx="7" cy="17" r="2"/>
-        <circle cx="17" cy="17" r="2"/>
-      </svg>
-    </div>
     <h1 class="main-title" data-i18n="services.title">
       Servicios exclusivos
       <span>de transporte turístico</span>

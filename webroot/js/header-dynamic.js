@@ -65,14 +65,21 @@
      * @returns {boolean} true si encontró los elementos necesarios
      */
     findElements() {
+      // Elementos desktop
       this.loginBtn = document.getElementById('xservLoginBtn');
       this.userProfile = document.getElementById('xservUserProfile');
       this.userAvatar = document.getElementById('xservUserAvatar');
       this.userName = document.getElementById('xservUserName');
-      this.logoutBtn = document.getElementById('xservLogoutBtn');
+
+      // Elementos mobile
+      this.loginBtnMobile = document.getElementById('xservLoginBtnMobile');
+      this.userProfileMobile = document.getElementById('xservUserProfileMobile');
+      this.userAvatarMobile = document.getElementById('xservUserAvatarMobile');
+      this.userNameMobile = document.getElementById('xservUserNameMobile');
+      this.logoutBtnMobile = document.getElementById('xservLogoutBtnMobile');
 
       // Si encontramos al menos el botón de login O el perfil de usuario, podemos continuar
-      return !!(this.loginBtn || this.userProfile);
+      return !!(this.loginBtn || this.userProfile || this.loginBtnMobile || this.userProfileMobile);
     }
 
     /**
@@ -149,14 +156,24 @@
       this.isAuthenticated = true;
       this.userData = user;
 
-      // Ocultar botón de login
+      // Ocultar botón de login desktop
       if (this.loginBtn) {
         this.loginBtn.classList.add('is-hidden');
       }
 
-      // Mostrar perfil de usuario
+      // Mostrar perfil de usuario desktop
       if (this.userProfile) {
         this.userProfile.classList.remove('is-hidden');
+      }
+
+      // Ocultar botón de login mobile
+      if (this.loginBtnMobile) {
+        this.loginBtnMobile.classList.add('is-hidden');
+      }
+
+      // Mostrar perfil de usuario mobile
+      if (this.userProfileMobile) {
+        this.userProfileMobile.classList.remove('is-hidden');
       }
 
       // Actualizar información del usuario
@@ -170,14 +187,24 @@
       this.isAuthenticated = false;
       this.userData = null;
 
-      // Mostrar botón de login
+      // Mostrar botón de login desktop
       if (this.loginBtn) {
         this.loginBtn.classList.remove('is-hidden');
       }
 
-      // Ocultar perfil de usuario
+      // Ocultar perfil de usuario desktop
       if (this.userProfile) {
         this.userProfile.classList.add('is-hidden');
+      }
+
+      // Mostrar botón de login mobile
+      if (this.loginBtnMobile) {
+        this.loginBtnMobile.classList.remove('is-hidden');
+      }
+
+      // Ocultar perfil de usuario mobile
+      if (this.userProfileMobile) {
+        this.userProfileMobile.classList.add('is-hidden');
       }
 
       // Limpiar cache
@@ -188,18 +215,28 @@
      * Actualiza la información visual del usuario
      */
     updateUserInfo(user) {
-      // Actualizar avatar con iniciales (usar nombre o username)
+      const displayName = user.nombre || user.username || 'Usuario';
+      const initials = this.getInitials(displayName);
+
+      // Actualizar avatar desktop
       if (this.userAvatar) {
-        const displayName = user.nombre || user.username || 'US';
-        const initials = this.getInitials(displayName);
         this.userAvatar.textContent = initials;
       }
 
-      // Actualizar nombre de usuario
+      // Actualizar nombre desktop
       if (this.userName) {
-        const displayName = user.nombre || user.username || 'Usuario';
         this.userName.textContent = displayName;
         this.userName.setAttribute('title', displayName);
+      }
+
+      // Actualizar avatar mobile
+      if (this.userAvatarMobile) {
+        this.userAvatarMobile.textContent = initials;
+      }
+
+      // Actualizar nombre mobile
+      if (this.userNameMobile) {
+        this.userNameMobile.textContent = displayName;
       }
     }
 
@@ -233,33 +270,92 @@
      * Configura eventos del header
      */
     setupEvents() {
-      // Toggle dropdown al hacer clic en el perfil
-      if (this.userProfile) {
-        this.userProfile.addEventListener('click', (e) => {
-          e.stopPropagation();
-          this.toggleDropdown();
-        });
-      }
+      // Elementos
+      const menuToggle = document.getElementById('menuToggle');
+      const navSidebar = document.getElementById('navSidebar');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+      const navItems = document.querySelectorAll('.xserv-nav-item-mobile');
 
-      // Evento de logout
-      if (this.logoutBtn) {
-        this.logoutBtn.addEventListener('click', async (e) => {
+      // Funciones auxiliares
+      const toggleSidebar = () => {
+        navSidebar?.classList.toggle('open');
+        sidebarOverlay?.classList.toggle('active');
+        document.body.style.overflow = navSidebar?.classList.contains('open') ? 'hidden' : '';
+      };
+
+      const closeSidebar = () => {
+        navSidebar?.classList.remove('open');
+        sidebarOverlay?.classList.remove('active');
+        document.body.style.overflow = '';
+      };
+
+      // Toggle al hacer clic en hamburguesa
+      menuToggle?.addEventListener('click', toggleSidebar);
+
+      // Cerrar al hacer clic en overlay
+      sidebarOverlay?.addEventListener('click', closeSidebar);
+
+      // Cerrar al navegar
+      navItems.forEach(item => {
+        item.addEventListener('click', () => {
+          if (window.innerWidth <= 768) {
+            closeSidebar();
+          }
+        });
+      });
+
+      // Cerrar botón de idioma en mobile
+      const langBtnMobile = document.getElementById('langToggleMobile');
+      langBtnMobile?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setTimeout(closeSidebar, 100);
+      });
+
+      // Cerrar botón de login en mobile
+      const loginBtnMobile = document.getElementById('xservLoginBtnMobile');
+      loginBtnMobile?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setTimeout(closeSidebar, 100);
+      });
+
+      // Cerrar al hacer clic en el botón de cierre del sidebar
+      const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
+      sidebarCloseBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeSidebar();
+      });
+
+      // Cerrar en resize
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+          closeSidebar();
+        }
+      });
+
+      // Prevenir scroll en sidebar
+      navSidebar?.addEventListener('touchmove', (e) => {
+        if (navSidebar?.classList.contains('open')) {
+          e.stopPropagation();
+        }
+      }, { passive: true });
+
+      // Logout mobile
+      if (this.logoutBtnMobile) {
+        this.logoutBtnMobile.addEventListener('click', async (e) => {
           e.preventDefault();
           e.stopPropagation();
+          closeSidebar();
           await this.logout();
         });
       }
 
-      // Prevenir que los enlaces del dropdown cierren el menú inmediatamente
-      const dropdownMenu = document.querySelector('.xserv-dropdown-menu');
-      if (dropdownMenu) {
-        const links = dropdownMenu.querySelectorAll('a:not(#xservLogoutBtn)');
-        links.forEach(link => {
-          link.addEventListener('click', () => {
-            this.closeDropdown();
-          });
+      // Enlaces del menú de usuario mobile
+      const userMenuMobile = document.querySelectorAll('.xserv-user-menu-item:not(#xservLogoutBtnMobile)');
+      userMenuMobile?.forEach(link => {
+        link.addEventListener('click', () => {
+          closeSidebar();
         });
-      }
+      });
     }
 
     /**
@@ -267,28 +363,18 @@
      */
     setupOutsideClick() {
       document.addEventListener('click', (e) => {
-        if (this.userProfile && !this.userProfile.contains(e.target)) {
-          this.closeDropdown();
+        // Cerrar menú mobile
+        const navSidebar = document.getElementById('navSidebar');
+        const menuToggle = document.getElementById('menuToggle');
+
+        if (navSidebar && menuToggle) {
+          if (!menuToggle.contains(e.target) && !navSidebar.contains(e.target)) {
+            navSidebar.classList.remove('open');
+            document.getElementById('sidebarOverlay')?.classList.remove('active');
+            document.body.style.overflow = '';
+          }
         }
       });
-    }
-
-    /**
-     * Toggle del dropdown de usuario
-     */
-    toggleDropdown() {
-      if (this.userProfile) {
-        this.userProfile.classList.toggle('open');
-      }
-    }
-
-    /**
-     * Cierra el dropdown
-     */
-    closeDropdown() {
-      if (this.userProfile) {
-        this.userProfile.classList.remove('open');
-      }
     }
 
     /**
@@ -380,13 +466,8 @@
      * Muestra estado de carga
      */
     showLoadingState() {
-      if (this.logoutBtn) {
-        const span = this.logoutBtn.querySelector('span');
-        if (span) {
-          span.setAttribute('data-original-text', span.textContent);
-          span.textContent = 'Cerrando...';
-        }
-      }
+      // No hay cambios visuales necesarios en el estado de carga
+      // El logout sucede rápidamente en mobile
     }
 
     /**

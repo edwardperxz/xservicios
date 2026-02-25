@@ -883,10 +883,20 @@ class I18n {
    * Actualiza el estado activo de los botones de idioma
    */
   updateActiveLanguage() {
-    // Actualizar botón de idioma nuevo (único)
+    // Actualizar botón de idioma de desktop
     const langButton = document.getElementById('langToggle');
     if (langButton) {
       const langCodeSpan = langButton.querySelector('.lang-code');
+      if (langCodeSpan) {
+        // Mostrar el idioma actual (no el opuesto)
+        langCodeSpan.textContent = this.currentLang === 'es' ? 'ES' : 'EN';
+      }
+    }
+
+    // Actualizar botón de idioma del sidebar mobile
+    const langButtonMobile = document.getElementById('langToggleMobile');
+    if (langButtonMobile) {
+      const langCodeSpan = langButtonMobile.querySelector('.lang-code');
       if (langCodeSpan) {
         // Mostrar el idioma actual (no el opuesto)
         langCodeSpan.textContent = this.currentLang === 'es' ? 'ES' : 'EN';
@@ -909,7 +919,7 @@ class I18n {
    * Agrega eventos de clic a los botones de idioma
    */
   attachLanguageButtons() {
-    // Manejar botón único de idioma
+    // Manejar botón de idioma del header (desktop)
     const langToggle = document.getElementById('langToggle');
     if (langToggle) {
       langToggle.addEventListener('click', () => {
@@ -920,6 +930,21 @@ class I18n {
         langToggle.style.transform = 'scale(0.95)';
         setTimeout(() => {
           langToggle.style.transform = 'scale(1)';
+        }, 150);
+      });
+    }
+
+    // Manejar botón de idioma del sidebar mobile
+    const langToggleMobile = document.getElementById('langToggleMobile');
+    if (langToggleMobile) {
+      langToggleMobile.addEventListener('click', () => {
+        const newLang = this.currentLang === 'es' ? 'en' : 'es';
+        this.setLanguage(newLang);
+        
+        // Animación visual de feedback
+        langToggleMobile.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          langToggleMobile.style.transform = 'scale(1)';
         }, 150);
       });
     }

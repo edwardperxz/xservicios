@@ -36,36 +36,19 @@ class HomeController extends AppController
                 return $this->redirect('/panel/admin');
             }
 
-            if ($rol === 'operador') {
-                $this->set('isAuthenticated', true);
-                $this->set('user', $user);
-                return $this->render('/Home/home_login');
-            }
-
             if ($rol === 'chofer') {
                 return $this->redirect('/panel/chofer');
             }
 
-            // Usuario autenticado sin rol de panel
+            // Usuario autenticado (operador u otro)
             $this->set('isAuthenticated', true);
             $this->set('user', $user);
-            return $this->render('/Home/home_login');
+        } else {
+            // Usuario no autenticado
+            $this->set('isAuthenticated', false);
         }
-
-        // Usuario no autenticado - mostrar home-public
-        $this->set('isAuthenticated', false);
-        return $this->render('/Home/home_public');
-    }
-
-    public function home_login()
-    {
-        $this->Authorization->skipAuthorization();
-        $user = $this->request->getAttribute('identity');
-
-        if (!$user) {
-            return $this->redirect(['action' => 'index']);
-        }
-
-        $this->set('user', $user);
+        
+        // Renderiza el archivo unificado index.php sin layout
+        $this->viewBuilder()->disableAutoLayout();
     }
 }

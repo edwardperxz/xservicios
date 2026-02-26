@@ -20,7 +20,7 @@ $estadoPagoOptions = [
     'reembolsado' => 'Reembolsado',
 ];
 $this->assign('header-title', 'Nueva Reserva');
-?>git status
+?>
 
 <style>
     :root {
@@ -86,21 +86,6 @@ $this->assign('header-title', 'Nueva Reserva');
 
         <?= $this->Form->create($xservReserva) ?>
         
-        <div class="form-section">
-            <h3 class="form-section-title">Información Básica</h3>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label required">Código de Reserva</label>
-                    <?= $this->Form->control('codigo_reserva', ['class' => 'form-input', 'label' => false, 'placeholder' => 'ej: RSV-2024-001', 'required' => true]) ?>
-                    <span class="form-help">Identificador único de la reserva</span>
-                </div>
-                <div class="form-group">
-                    <label class="form-label required">Cliente</label>
-                    <?= $this->Form->control('cliente_id', ['options' => $clientes, 'empty' => 'Seleccione un cliente', 'class' => 'form-select', 'label' => false, 'required' => true]) ?>
-                    <span class="form-help">Cliente que realiza la reserva</span>
-                </div>
-            </div>
-        </div>
 
         <div class="form-section">
             <h3 class="form-section-title">Servicio y Ruta</h3>
@@ -155,37 +140,9 @@ $this->assign('header-title', 'Nueva Reserva');
             </div>
         </div>
 
-        <div class="form-section">
-            <h3 class="form-section-title">Costos</h3>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label">Precio Pactado</label>
-                    <?= $this->Form->control('precio_pactado', ['type' => 'number', 'step' => '0.01', 'min' => 0, 'class' => 'form-input', 'label' => false, 'placeholder' => '0.00']) ?>
-                    <span class="form-help">Precio acordado en USD</span>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">ITBMS Pactado</label>
-                    <?= $this->Form->control('itbms_pactado', ['type' => 'number', 'step' => '0.01', 'min' => 0, 'class' => 'form-input', 'label' => false, 'placeholder' => '0.00']) ?>
-                    <span class="form-help">Impuesto aplicado en USD</span>
-                </div>
-            </div>
-        </div>
 
         <div class="form-section">
-            <h3 class="form-section-title">Estados y Observaciones</h3>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label required">Estado de Reserva</label>
-                    <?= $this->Form->control('estado', ['options' => $estadoOptions, 'empty' => 'Seleccione un estado', 'class' => 'form-select', 'label' => false, 'required' => true]) ?>
-                    <span class="form-help">Estado actual de la reserva</span>
-                </div>
-                <div class="form-group">
-                    <label class="form-label required">Estado de Pago</label>
-                    <?= $this->Form->control('estado_pago', ['options' => $estadoPagoOptions, 'empty' => 'Seleccione estado de pago', 'class' => 'form-select', 'label' => false, 'required' => true]) ?>
-                    <span class="form-help">Estado del pago</span>
-                </div>
-            </div>
-            
+            <h3 class="form-section-title">Observaciones</h3>       
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label">Observaciones</label>

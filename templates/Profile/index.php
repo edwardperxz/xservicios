@@ -648,28 +648,6 @@
                 <?php endif; ?>
             </div>
         </div>
-
-        <div class="profile-card">
-            <h3>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                </svg>
-                Miembro desde
-            </h3>
-            <div class="profile-card-value">
-                <?= $usuario['created_at'] ? $usuario['created_at']->format('d/m/Y') : 'N/A' ?>
-            </div>
-        </div>
-
-        <div class="profile-card">
-            <h3>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                </svg>
-                ID de Usuario
-            </h3>
-            <div class="profile-card-value">#<?= h($usuario['id']) ?></div>
-        </div>
     </div>
 
     <!-- Detailed Information -->
@@ -730,14 +708,6 @@
                             <span class="status-badge inactive">Inactivo</span>
                         <?php endif; ?>
                     </span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Creado</span>
-                    <span class="info-value"><?= $usuario['created_at'] ? $usuario['created_at']->format('d/m/Y H:i') : 'N/A' ?></span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Actualizado</span>
-                    <span class="info-value"><?= $usuario['updated_at'] ? $usuario['updated_at']->format('d/m/Y H:i') : 'N/A' ?></span>
                 </div>
             </div>
         </div>

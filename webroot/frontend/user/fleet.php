@@ -314,6 +314,40 @@
       z-index: 5;
     }
 
+    .quote-container.is-custom {
+      border-color: rgba(74, 222, 128, 0.7);
+      box-shadow: 0 12px 42px rgba(74, 222, 128, 0.2);
+    }
+
+    .quote-mode {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin: 0 auto 1rem;
+      color: var(--text-white);
+      background: rgba(201, 169, 98, 0.2);
+      border: 1px solid rgba(201, 169, 98, 0.4);
+      width: fit-content;
+    }
+
+    .quote-mode.custom {
+      background: rgba(74, 222, 128, 0.2);
+      border-color: rgba(74, 222, 128, 0.4);
+      color: #86efac;
+    }
+
+    .quote-container.is-custom .quote-default-only {
+      display: none;
+    }
+
+    .quote-container:not(.is-custom) .quote-custom-only {
+      display: none;
+    }
+
     .quote-title {
       font-family: 'Playfair Display', serif;
       font-size: 1.5rem;
@@ -334,7 +368,8 @@
     }
 
     .form-group input,
-    .form-group select {
+    .form-group select,
+    .form-group textarea {
       width: 100%;
       padding: 0.875rem 1rem;
       background: var(--dark-lighter);
@@ -345,12 +380,19 @@
       transition: border-color 0.3s;
     }
 
-    .form-group input::placeholder {
+    .form-group textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
       color: var(--text-gray);
     }
 
     .form-group input:focus,
-    .form-group select:focus {
+    .form-group select:focus,
+    .form-group textarea:focus {
       outline: none;
       border-color: var(--gold);
     }
@@ -925,79 +967,6 @@
     </div>
   </section>
 
-  <!-- Quote Form Section -->
-  <section class="quote-section">
-    <div class="quote-container">
-      <h2 class="quote-title" data-i18n="fleet.quoteTitle">Solicita tu Cotización</h2>
-      <p class="quote-subtitle" data-i18n="fleet.quoteSubtitle">Completa el formulario y te contactaremos pronto</p>
-      <form>
-        <div class="form-group">
-          <input type="text" placeholder="Tu nombre completo" data-i18n-placeholder="fleet.quoteName">
-        </div>
-        <div class="form-group">
-          <input type="email" placeholder="Correo electrónico" data-i18n-placeholder="fleet.quoteEmail">
-        </div>
-        <div class="form-group">
-          <input type="text" placeholder="Destino deseado" data-i18n-placeholder="fleet.quoteDestination">
-        </div>
-        <div class="form-group passengers-group">
-          <div class="passengers-container">
-            <button type="button" class="counter-button minus" id="minusBtn" onclick="decrementPassengers(event)">−</button>
-            <input type="number" id="passengersInput" class="passengers-input" placeholder="0" data-i18n-placeholder="fleet.quotePassengers" min="1" max="99" value="1">
-            <button type="button" class="counter-button plus" id="plusBtn" onclick="incrementPassengers(event)">+</button>
-          </div>
-          <span class="passengers-error" id="passengersError" data-i18n="fleet.quotePassengersError">Mínimo 1 pasajero requerido</span>
-        </div>
-        <button type="submit" class="btn-primary" data-i18n="fleet.quoteSubmit">Solicitar Cotización</button>
-      </form>
-    </div>
-  </section>
-
-  <!-- Features Section -->
-  <section class="features-section">
-    <div class="features-grid">
-      <div class="feature-card">
-        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&h=350&fit=crop" alt="Cobertura amplia" class="feature-image">
-        <div class="feature-content">
-          <h3 class="feature-title" data-i18n="fleet.feature1Title">Cobertura Regional</h3>
-          <p class="feature-text" data-i18n="fleet.feature1Desc">Ofrecemos servicios de transporte desde traslados privados hasta viajes grupales a cualquier destino en la región de Chiriquí.</p>
-          <a href="#" class="feature-link">
-            <span data-i18n="fleet.moreInfo">Más información</span>
-            <svg viewBox="0 0 24 24" strokeWidth="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </a>
-        </div>
-      </div>
-      <div class="feature-card">
-        <img src="https://images.unsplash.com/photo-1494515843206-f3117d3f51b7?w=500&h=350&fit=crop" alt="Entrega segura" class="feature-image">
-        <div class="feature-content">
-          <h3 class="feature-title" data-i18n="fleet.feature2Title">100% Seguro</h3>
-          <p class="feature-text" data-i18n="fleet.feature2Desc">Nuestras unidades cuentan con todas las medidas de seguridad y nuestros choferes están capacitados profesionalmente.</p>
-          <a href="#" class="feature-link">
-            <span data-i18n="fleet.moreInfo">Más información</span>
-            <svg viewBox="0 0 24 24" strokeWidth="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </a>
-        </div>
-      </div>
-      <div class="feature-card">
-        <img src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=500&h=350&fit=crop" alt="Flota moderna" class="feature-image">
-        <div class="feature-content">
-          <h3 class="feature-title" data-i18n="fleet.feature3Title">Flota Moderna</h3>
-          <p class="feature-text" data-i18n="fleet.feature3Desc">Contamos con buses tipo Coaster y unidades de 15 pasajeros equipados con aire acondicionado y asientos reclinables.</p>
-          <a href="#" class="feature-link">
-            <span data-i18n="fleet.moreInfo">Más información</span>
-            <svg viewBox="0 0 24 24" strokeWidth="2">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Vehicle Park Section -->
   <section class="vehicle-section">
     <div class="section-header">
@@ -1016,22 +985,20 @@
       </div>
     </div>
     <div class="vehicle-grid">
-      <div class="vehicle-card">
-        <img src="https://images.unsplash.com/photo-1564694202779-bc908c327862?w=400&h=300&fit=crop" alt="Bus Coaster 1">
-        <span class="vehicle-label">Bus Coaster - 25 pasajeros</span>
-      </div>
-      <div class="vehicle-card">
-        <img src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=400&h=300&fit=crop" alt="Bus Coaster 2">
-        <span class="vehicle-label">Bus Coaster - 25 pasajeros</span>
-      </div>
-      <div class="vehicle-card">
-        <img src="https://images.unsplash.com/photo-1557223562-6c77ef16210f?w=400&h=300&fit=crop" alt="Van 15 pasajeros">
-        <span class="vehicle-label">Van Premium - 15 pasajeros</span>
-      </div>
-      <div class="vehicle-card">
-        <img src="https://images.unsplash.com/photo-1609520505218-7421df70db62?w=400&h=300&fit=crop" alt="Van 15 pasajeros 2">
-        <span class="vehicle-label">Van Premium - 15 pasajeros</span>
-      </div>
+      <?php if (!empty($vehiculos) && is_array($vehiculos)): ?>
+        <?php foreach ($vehiculos as $vehiculo): ?>
+          <div class="vehicle-card">
+            <?php if (!empty($vehiculo->foto_url)): ?>
+              <img src="<?= h($vehiculo->foto_url) ?>" alt="<?= h($vehiculo->nombre_unidad) ?>" style="width: 100%; height: 200px; object-fit: cover;">
+            <?php else: ?>
+              <div style="width: 100%; height: 200px; background: #2a2a2a; display: flex; align-items: center; justify-content: center; color: #a0a0a0;">Sin imagen</div>
+            <?php endif; ?>
+            <span class="vehicle-label"><?= h($vehiculo->nombre_unidad) ?> - <?= h($vehiculo->capacidad_max) ?> pasajeros</span>
+          </div>
+        <?php endforeach; ?>
+      <?php else: ?>
+        <p style="color: #a0a0a0; text-align: center; padding: 2rem;">No hay vehículos disponibles</p>
+      <?php endif; ?>
     </div>
   </section>
 
@@ -1042,362 +1009,38 @@
       <p class="drivers-subtitle" data-i18n="fleet.driversSubtitle">Profesionales responsables, transparentes y comprometidos con brindar el mejor servicio</p>
     </div>
     <div class="drivers-grid" id="driversGrid">
-      <!-- Row 1 -->
-      <div class="driver-card">
-        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face" alt="Chofer 1" class="driver-image">
-        <div class="driver-info">
-          <h3 class="driver-name">Roberto Méndez</h3>
-          <p class="driver-role">Chofer Principal</p>
-          <div class="driver-experience">
-            <svg viewBox="0 0 24 24" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            8 años de experiencia
+      <?php if (!empty($choferes) && is_array($choferes)): ?>
+        <?php foreach ($choferes as $index => $chofer): ?>
+          <div class="driver-card <?= ($index >= 4) ? 'hidden' : '' ?>">
+            <?php if (!empty($chofer->foto_url)): ?>
+              <img src="<?= h($chofer->foto_url) ?>" alt="<?= h($chofer->usuario->nombre ?? 'Chofer') ?>" class="driver-image" style="width: 100%; height: 250px; object-fit: cover;">
+            <?php else: ?>
+              <div class="driver-image" style="width: 100%; height: 250px; background: #2a2a2a; display: flex; align-items: center; justify-content: center; color: #a0a0a0;">Sin foto</div>
+            <?php endif; ?>
+            <div class="driver-info">
+              <h3 class="driver-name"><?= h($chofer->usuario->nombre ?? 'N/A') ?></h3>
+              <p class="driver-role"><?= h($chofer->tipo_licencia ?? 'Chofer') ?></p>
+              <div class="driver-experience">
+                <svg viewBox="0 0 24 24" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                Desde <?= h($chofer->fecha_ingreso->format('Y')) ?>
+              </div>
+              <div class="driver-rating">
+                <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <span class="rating-text">5.0</span>
+              </div>
+            </div>
           </div>
-          <div class="driver-rating">
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <span class="rating-text">5.0</span>
-          </div>
-        </div>
-      </div>
-      <div class="driver-card">
-        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=face" alt="Chofer 2" class="driver-image">
-        <div class="driver-info">
-          <h3 class="driver-name">Carlos Jiménez</h3>
-          <p class="driver-role">Chofer Senior</p>
-          <div class="driver-experience">
-            <svg viewBox="0 0 24 24" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            6 años de experiencia
-          </div>
-          <div class="driver-rating">
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <span class="rating-text">4.9</span>
-          </div>
-        </div>
-      </div>
-      <div class="driver-card">
-        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face" alt="Chofer 3" class="driver-image">
-        <div class="driver-info">
-          <h3 class="driver-name">Miguel Rodríguez</h3>
-          <p class="driver-role">Chofer Turístico</p>
-          <div class="driver-experience">
-            <svg viewBox="0 0 24 24" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            5 años de experiencia
-          </div>
-          <div class="driver-rating">
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star empty" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <span class="rating-text">4.8</span>
-          </div>
-        </div>
-      </div>
-      <div class="driver-card">
-        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&crop=face" alt="Chofer 4" class="driver-image">
-        <div class="driver-info">
-          <h3 class="driver-name">Andrés Castillo</h3>
-          <p class="driver-role">Chofer Corporativo</p>
-          <div class="driver-experience">
-            <svg viewBox="0 0 24 24" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            7 años de experiencia
-          </div>
-          <div class="driver-rating">
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <span class="rating-text">5.0</span>
-          </div>
-        </div>
-      </div>
-      <!-- Row 2 - Hidden initially -->
-      <div class="driver-card hidden">
-        <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=face" alt="Chofer 5" class="driver-image">
-        <div class="driver-info">
-          <h3 class="driver-name">Fernando López</h3>
-          <p class="driver-role">Chofer de Tours</p>
-          <div class="driver-experience">
-            <svg viewBox="0 0 24 24" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            4 años de experiencia
-          </div>
-          <div class="driver-rating">
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <span class="rating-text">4.9</span>
-          </div>
-        </div>
-      </div>
-      <div class="driver-card hidden">
-        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop&crop=face" alt="Chofer 6" class="driver-image">
-        <div class="driver-info">
-          <h3 class="driver-name">José Martínez</h3>
-          <p class="driver-role">Chofer Ejecutivo</p>
-          <div class="driver-experience">
-            <svg viewBox="0 0 24 24" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            9 años de experiencia
-          </div>
-          <div class="driver-rating">
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <span class="rating-text">5.0</span>
-          </div>
-        </div>
-      </div>
-      <div class="driver-card hidden">
-        <img src="https://images.unsplash.com/photo-1504257432389-52343af06ae3?w=400&h=400&fit=crop&crop=face" alt="Chofer 7" class="driver-image">
-        <div class="driver-info">
-          <h3 class="driver-name">David Herrera</h3>
-          <p class="driver-role">Chofer Nocturno</p>
-          <div class="driver-experience">
-            <svg viewBox="0 0 24 24" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            3 años de experiencia
-          </div>
-          <div class="driver-rating">
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star empty" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <span class="rating-text">4.7</span>
-          </div>
-        </div>
-      </div>
-      <div class="driver-card hidden">
-        <img src="https://images.unsplash.com/photo-1463453091185-61582044d556?w=400&h=400&fit=crop&crop=face" alt="Chofer 8" class="driver-image">
-        <div class="driver-info">
-          <h3 class="driver-name">Luis Vargas</h3>
-          <p class="driver-role">Chofer VIP</p>
-          <div class="driver-experience">
-            <svg viewBox="0 0 24 24" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            10 años de experiencia
-          </div>
-          <div class="driver-rating">
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <span class="rating-text">5.0</span>
-          </div>
-        </div>
-      </div>
-      <!-- Row 3 - Hidden initially -->
-      <div class="driver-card hidden">
-        <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=400&h=400&fit=crop&crop=face" alt="Chofer 9" class="driver-image">
-        <div class="driver-info">
-          <h3 class="driver-name">Pedro Sánchez</h3>
-          <p class="driver-role">Chofer de Eventos</p>
-          <div class="driver-experience">
-            <svg viewBox="0 0 24 24" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            5 años de experiencia
-          </div>
-          <div class="driver-rating">
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <span class="rating-text">4.9</span>
-          </div>
-        </div>
-      </div>
-      <div class="driver-card hidden">
-        <img src="https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=400&h=400&fit=crop&crop=face" alt="Chofer 10" class="driver-image">
-        <div class="driver-info">
-          <h3 class="driver-name">Ricardo Gómez</h3>
-          <p class="driver-role">Chofer Aeropuerto</p>
-          <div class="driver-experience">
-            <svg viewBox="0 0 24 24" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            6 años de experiencia
-          </div>
-          <div class="driver-rating">
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <span class="rating-text">5.0</span>
-          </div>
-        </div>
-      </div>
-      <div class="driver-card hidden">
-        <img src="https://images.unsplash.com/photo-1480429370612-2f93f4358f84?w=400&h=400&fit=crop&crop=face" alt="Chofer 11" class="driver-image">
-        <div class="driver-info">
-          <h3 class="driver-name">Tomás Núñez</h3>
-          <p class="driver-role">Chofer Interurbano</p>
-          <div class="driver-experience">
-            <svg viewBox="0 0 24 24" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            8 años de experiencia
-          </div>
-          <div class="driver-rating">
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star empty" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <span class="rating-text">4.8</span>
-          </div>
-        </div>
-      </div>
-      <div class="driver-card hidden">
-        <img src="https://images.unsplash.com/photo-1508341591423-4347099e1f19?w=400&h=400&fit=crop&crop=face" alt="Chofer 12" class="driver-image">
-        <div class="driver-info">
-          <h3 class="driver-name">Enrique Díaz</h3>
-          <p class="driver-role">Chofer Premium</p>
-          <div class="driver-experience">
-            <svg viewBox="0 0 24 24" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            7 años de experiencia
-          </div>
-          <div class="driver-rating">
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <span class="rating-text">5.0</span>
-          </div>
-        </div>
-      </div>
-      <!-- Row 4 - Hidden initially -->
-      <div class="driver-card hidden">
-        <img src="https://images.unsplash.com/photo-1599566150163-29194dcabd36?w=400&h=400&fit=crop&crop=face" alt="Chofer 13" class="driver-image">
-        <div class="driver-info">
-          <h3 class="driver-name">Marcos Peña</h3>
-          <p class="driver-role">Chofer de Excursiones</p>
-          <div class="driver-experience">
-            <svg viewBox="0 0 24 24" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            4 años de experiencia
-          </div>
-          <div class="driver-rating">
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <span class="rating-text">4.9</span>
-          </div>
-        </div>
-      </div>
-      <div class="driver-card hidden">
-        <img src="https://images.unsplash.com/photo-1556474835-b0f3ac40d4d1?w=400&h=400&fit=crop&crop=face" alt="Chofer 14" class="driver-image">
-        <div class="driver-info">
-          <h3 class="driver-name">Alberto Reyes</h3>
-          <p class="driver-role">Chofer Bilingüe</p>
-          <div class="driver-experience">
-            <svg viewBox="0 0 24 24" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            6 años de experiencia
-          </div>
-          <div class="driver-rating">
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <span class="rating-text">5.0</span>
-          </div>
-        </div>
-      </div>
-      <div class="driver-card hidden">
-        <img src="https://images.unsplash.com/photo-1548372290-8d01b6c8e78c?w=400&h=400&fit=crop&crop=face" alt="Chofer 15" class="driver-image">
-        <div class="driver-info">
-          <h3 class="driver-name">Santiago Mora</h3>
-          <p class="driver-role">Chofer Junior</p>
-          <div class="driver-experience">
-            <svg viewBox="0 0 24 24" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            2 años de experiencia
-          </div>
-          <div class="driver-rating">
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star empty" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <span class="rating-text">4.6</span>
-          </div>
-        </div>
-      </div>
-      <div class="driver-card hidden">
-        <img src="https://images.unsplash.com/photo-1557862921-37829c790f19?w=400&h=400&fit=crop&crop=face" alt="Chofer 16" class="driver-image">
-        <div class="driver-info">
-          <h3 class="driver-name">Guillermo Torres</h3>
-          <p class="driver-role">Chofer Fundador</p>
-          <div class="driver-experience">
-            <svg viewBox="0 0 24 24" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            12 años de experiencia
-          </div>
-          <div class="driver-rating">
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <span class="rating-text">5.0</span>
-          </div>
-        </div>
-      </div>
+        <?php endforeach; ?>
+      <?php else: ?>
+        <p style="color: #a0a0a0; text-align: center; padding: 2rem; grid-column: 1/-1;">No hay choferes disponibles</p>
+      <?php endif; ?>
     </div>
     <button class="btn-ver-mas" id="btnVerMas" onclick="toggleDrivers()">Ver más</button>
   </section>
@@ -1541,5 +1184,32 @@
   <script src="/js/i18n.js"></script>
   <script src="/js/header-loader.js"></script>
   <script src="/js/header-dynamic.js"></script>
+  <script>
+    (function preselectService() {
+      const params = new URLSearchParams(window.location.search);
+      const serviceId = params.get('service_id');
+      const serviceName = params.get('service_name');
+      const serviceNameInput = document.getElementById('selectedServiceName');
+      const serviceIdInput = document.getElementById('selectedServiceId');
+      const quoteContainer = document.getElementById('quoteContainer');
+
+      if (quoteContainer) {
+        quoteContainer.classList.toggle('is-custom', Boolean(serviceId || serviceName));
+      }
+
+      if (serviceNameInput) {
+        if (serviceName) {
+          serviceNameInput.value = decodeURIComponent(serviceName);
+          serviceNameInput.readOnly = true;
+        } else {
+          serviceNameInput.placeholder = 'Servicio a personalizar';
+        }
+      }
+
+      if (serviceIdInput && serviceId) {
+        serviceIdInput.value = serviceId;
+      }
+    })();
+  </script>
 </body>
 </html>

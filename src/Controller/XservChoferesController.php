@@ -123,7 +123,36 @@ class XservChoferesController extends AppController
         $this->Authorization->skipAuthorization();
         $xservChofere = $this->XservChoferes->newEmptyEntity();
         if ($this->request->is('post')) {
-            $xservChofere = $this->XservChoferes->patchEntity($xservChofere, $this->request->getData());
+            $data = $this->request->getData();
+            
+            // Manejar carga de archivo
+            if (!empty($data['foto']) && $data['foto']->getSize() > 0) {
+                $uploadDir = WWW_ROOT . 'img' . DS . 'choferes' . DS;
+                
+                // Crear directorio si no existe
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+                
+                $file = $data['foto'];
+                $filename = time() . '_' . $file->getClientFilename();
+                $filepath = $uploadDir . $filename;
+                
+                // Mover archivo cargado
+                try {
+                    $file->moveTo($filepath);
+                    $data['foto_url'] = '/img/choferes/' . $filename;
+                } catch (\Exception $e) {
+                    $this->Flash->error(__('Error al subir la imagen.'));
+                    $this->set(compact('xservChofere'));
+                    return;
+                }
+            }
+            
+            // Eliminar la clave 'foto' si existe (no es parte del modelo)
+            unset($data['foto']);
+            
+            $xservChofere = $this->XservChoferes->patchEntity($xservChofere, $data);
             if ($this->XservChoferes->save($xservChofere)) {
                 $this->Flash->success(__('The xserv chofer has been saved.'));
 
@@ -152,7 +181,44 @@ class XservChoferesController extends AppController
         $this->Authorization->skipAuthorization();
         $xservChofere = $this->XservChoferes->get($id, contain: []);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $xservChofere = $this->XservChoferes->patchEntity($xservChofere, $this->request->getData());
+            $data = $this->request->getData();
+            
+            // Manejar carga de archivo
+            if (!empty($data['foto']) && $data['foto']->getSize() > 0) {
+                $uploadDir = WWW_ROOT . 'img' . DS . 'choferes' . DS;
+                
+                // Crear directorio si no existe
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+                
+                // Eliminar foto anterior si existe
+                if (!empty($xservChofere->foto_url)) {
+                    $oldPath = WWW_ROOT . ltrim($xservChofere->foto_url, '/');
+                    if (is_file($oldPath)) {
+                        unlink($oldPath);
+                    }
+                }
+                
+                $file = $data['foto'];
+                $filename = time() . '_' . $file->getClientFilename();
+                $filepath = $uploadDir . $filename;
+                
+                // Mover archivo cargado
+                try {
+                    $file->moveTo($filepath);
+                    $data['foto_url'] = '/img/choferes/' . $filename;
+                } catch (\Exception $e) {
+                    $this->Flash->error(__('Error al subir la imagen.'));
+                    $this->set(compact('xservChofere'));
+                    return;
+                }
+            }
+            
+            // Eliminar la clave 'foto' si existe (no es parte del modelo)
+            unset($data['foto']);
+            
+            $xservChofere = $this->XservChoferes->patchEntity($xservChofere, $data);
             if ($this->XservChoferes->save($xservChofere)) {
                 $this->Flash->success(__('The xserv chofer has been saved.'));
 

@@ -311,7 +311,7 @@ $this->assign('header-title', 'Gestión de Servicios');
                 <tr>
                     <th><?= $this->Paginator->sort('id', 'ID') ?></th>
                     <th><?= $this->Paginator->sort('nombre', 'Servicio') ?></th>
-                    <th>Descripción</th>
+                    <th>Variantes</th>
                     <th><?= $this->Paginator->sort('precio_base', 'Precio Base') ?></th>
                     <th><?= $this->Paginator->sort('estado', 'Estado') ?></th>
                     <th><?= $this->Paginator->sort('created_at', 'Creado') ?></th>
@@ -323,7 +323,7 @@ $this->assign('header-title', 'Gestión de Servicios');
                 <tr>
                     <td><strong><?= h($servicio->id) ?></strong></td>
                     <td><?= h($servicio->nombre) ?></td>
-                    <td><span class="description"><?= h($servicio->descripcion_es) ?></span></td>
+                    <td><span class="description"><?= h($servicio->variantes ?? '(Sin variantes)') ?></span></td>
                     <td><strong>$<?= h(number_format((float)$servicio->precio_base, 2)) ?></strong></td>
                     <td><span class="badge <?= h($servicio->estado) ?>"><?= h(ucfirst($servicio->estado)) ?></span></td>
                     <td><?= h($servicio->created_at->format('d/m/Y')) ?></td>

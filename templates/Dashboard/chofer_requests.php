@@ -240,6 +240,20 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
     font-weight: 500;
   }
 
+  .driver-request-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+    font-size: 0.8rem;
+    color: var(--text-gray);
+  }
+
+  .driver-request-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
   .driver-request-state {
     display: inline-block;
     padding: 0.4rem 0.8rem;
@@ -499,7 +513,7 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
     <div class="driver-requests" id="solicitudesList">
       <?php 
         $solicitudes = array_filter((array)$asignaciones, function($a) { 
-          return $a->estado === 'programada'; 
+          return $a->estado_asignacion === 'programada'; 
         });
         
         if (empty($solicitudes)): 
@@ -515,20 +529,27 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
       <?php else: ?>
         <?php foreach ($solicitudes as $asig): ?>
           <?php
-            $origen = $asig->ruta?->origen ?? 'Origen desconocido';
-            $destino = $asig->ruta?->destino ?? 'Destino desconocido';
-            $fecha = new DateTime($asig->fecha_programada);
+            $reserva = $asig->reserva;
+            $clienteUsuario = $reserva?->cliente?->usuario;
+            $origen = $reserva?->punto_recogida ?? 'Origen desconocido';
+            $destino = $reserva?->punto_destino ?? 'Destino desconocido';
+            $fecha = new DateTime($asig->fecha_inicio_pactada ?? $asig->fecha_programada);
             $fechaFormato = $fecha->format('d/m/Y');
             $horaFormato = $fecha->format('H:i');
-            $avatar = substr((string)$asig->cliente?->nombre ?? 'C', 0, 1);
-            $clienteNombre = $asig->cliente?->nombre ?? 'Cliente desconocido';
-            $servicioNombre = $asig->servicio?->nombre ?? 'Servicio';
+            $nombreCliente = $clienteUsuario?->nombre ?? $clienteUsuario?->username ?? 'Cliente desconocido';
+            $avatar = substr((string)$nombreCliente, 0, 1);
+            $servicioNombre = $reserva?->servicio?->nombre ?? 'Servicio';
+            $pasajeros = $reserva?->pasajeros ?? null;
+            $precioPactado = $reserva?->precio_pactado ?? null;
+            $precioTexto = $precioPactado !== null ? '$' . number_format((float)$precioPactado, 2) : 'N/A';
+            $vehiculoTipo = $asig->vehiculo?->tipo === 'coaster' ? 'Coaster' : ($asig->vehiculo?->tipo === 'bus_15' ? 'Bus 15' : '');
+            $vehiculoNombre = $asig->vehiculo?->placa ? trim($vehiculoTipo . ' ' . ($asig->vehiculo->nombre_unidad ?? '') . ' - ' . $asig->vehiculo->placa) : 'Vehículo no asignado';
           ?>
           <div class="driver-request-card">
             <div class="driver-request-profile">
               <div class="driver-avatar"><?= strtoupper($avatar) ?></div>
               <div class="driver-request-info">
-                <div class="driver-name"><?= h($clienteNombre) ?></div>
+                <div class="driver-name"><?= h($nombreCliente) ?></div>
                 <div class="driver-meta"><?= h($servicioNombre) ?></div>
               </div>
             </div>
@@ -545,6 +566,11 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
                 </div>
               </div>
               <div class="driver-route-time"><?= $fechaFormato ?> a las <?= $horaFormato ?></div>
+              <div class="driver-request-meta">
+                <span>Pasajeros: <?= h($pasajeros ?? 'N/A') ?></span>
+                <span>Precio: <?= h($precioTexto) ?></span>
+                <span><?= h($vehiculoNombre) ?></span>
+              </div>
             </div>
 
             <div class="driver-request-actions">
@@ -561,7 +587,7 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
     <div class="driver-requests" id="historialList">
       <?php 
         $historial = array_filter((array)$asignaciones, function($a) { 
-          return $a->estado === 'completada' || $a->estado === 'cancelada'; 
+          return in_array($a->estado_asignacion, ['en_curso', 'finalizada', 'cancelada'], true); 
         });
         
         if (empty($historial)): 
@@ -572,25 +598,37 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
             <path d="M12 6v6l4 2"/>
           </svg>
           <h3>Sin historial</h3>
-          <p>Tu historial de viajes completados aparecerá aquí</p>
+          <p>Tu historial de solicitudes aparecerá aquí</p>
         </div>
       <?php else: ?>
         <?php foreach ($historial as $asig): ?>
           <?php
-            $origen = $asig->ruta?->origen ?? 'Origen desconocido';
-            $destino = $asig->ruta?->destino ?? 'Destino desconocido';
-            $fecha = new DateTime($asig->fecha_programada);
+            $reserva = $asig->reserva;
+            $clienteUsuario = $reserva?->cliente?->usuario;
+            $origen = $reserva?->punto_recogida ?? 'Origen desconocido';
+            $destino = $reserva?->punto_destino ?? 'Destino desconocido';
+            $fecha = new DateTime($asig->fecha_inicio_pactada ?? $asig->fecha_programada);
             $fechaFormato = $fecha->format('d/m/Y');
-            $avatar = substr((string)$asig->cliente?->nombre ?? 'C', 0, 1);
-            $clienteNombre = $asig->cliente?->nombre ?? 'Cliente desconocido';
-            $estadoClass = strtolower($asig->estado);
-            $estadoLabel = $asig->estado === 'completada' ? 'Completado' : 'Cancelado';
+            $nombreCliente = $clienteUsuario?->nombre ?? $clienteUsuario?->username ?? 'Cliente desconocido';
+            $avatar = substr((string)$nombreCliente, 0, 1);
+            $estadoClass = strtolower((string)$asig->estado_asignacion);
+            $pasajeros = $reserva?->pasajeros ?? null;
+            $precioPactado = $reserva?->precio_pactado ?? null;
+            $precioTexto = $precioPactado !== null ? '$' . number_format((float)$precioPactado, 2) : 'N/A';
+            $vehiculoTipo = $asig->vehiculo?->tipo === 'coaster' ? 'Coaster' : ($asig->vehiculo?->tipo === 'bus_15' ? 'Bus 15' : '');
+            $vehiculoNombre = $asig->vehiculo?->placa ? trim($vehiculoTipo . ' ' . ($asig->vehiculo->nombre_unidad ?? '') . ' - ' . $asig->vehiculo->placa) : 'Vehículo no asignado';
+            $estadoLabels = [
+              'en_curso' => 'En Curso',
+              'finalizada' => 'Finalizada',
+              'cancelada' => 'Cancelada'
+            ];
+            $estadoLabel = $estadoLabels[$asig->estado_asignacion] ?? ucfirst((string)$asig->estado_asignacion);
           ?>
           <div class="driver-request-card">
             <div class="driver-request-profile">
               <div class="driver-avatar"><?= strtoupper($avatar) ?></div>
               <div class="driver-request-info">
-                <div class="driver-name"><?= h($clienteNombre) ?></div>
+                <div class="driver-name"><?= h($nombreCliente) ?></div>
                 <div class="driver-meta"><?= $fechaFormato ?></div>
               </div>
             </div>
@@ -605,6 +643,11 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
                   </svg>
                   <span><?= h($destino) ?></span>
                 </div>
+              </div>
+              <div class="driver-request-meta">
+                <span>Pasajeros: <?= h($pasajeros ?? 'N/A') ?></span>
+                <span>Precio: <?= h($precioTexto) ?></span>
+                <span><?= h($vehiculoNombre) ?></span>
               </div>
               <div class="driver-request-state <?= $estadoClass ?>"><?= $estadoLabel ?></div>
             </div>
@@ -667,6 +710,7 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
       
       if (data.success) {
         renderSolicitudes(data.asignaciones);
+        renderHistorial(data.asignaciones);
         updateStats(data.stats);
       }
     } catch (error) {
@@ -677,7 +721,10 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
   function renderSolicitudes(asignaciones) {
     const lista = document.getElementById('solicitudesList');
     
-    const solicitudes = asignaciones.filter(a => a.estado === 'programada');
+    const solicitudes = asignaciones.filter(a => {
+      const estado = a.estado ?? a.estado_asignacion;
+      return estado === 'programada';
+    });
     
     if (solicitudes.length === 0) {
       lista.innerHTML = `
@@ -694,19 +741,29 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
     }
 
     lista.innerHTML = solicitudes.map(asig => {
-      const origen = asig.ruta?.origen || 'Origen desconocido';
-      const destino = asig.ruta?.destino || 'Destino desconocido';
-      const fecha = new Date(asig.fecha_programada).toLocaleDateString('es-ES');
-      const hora = new Date(asig.fecha_programada).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-      const avatar = asig.cliente?.nombre.charAt(0).toUpperCase() || 'C';
+      const reserva = asig.reserva || {};
+      const clienteUsuario = reserva.cliente?.usuario || {};
+      const nombreCliente = clienteUsuario.nombre || clienteUsuario.username || 'Cliente';
+      const origen = reserva.punto_recogida || 'Origen desconocido';
+      const destino = reserva.punto_destino || 'Destino desconocido';
+      const fechaInicio = asig.fecha_inicio_pactada || asig.fecha_programada;
+      const fecha = fechaInicio ? new Date(fechaInicio).toLocaleDateString('es-ES') : 'N/A';
+      const hora = fechaInicio ? new Date(fechaInicio).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }) : '';
+      const avatar = nombreCliente.charAt(0).toUpperCase() || 'C';
+      const pasajeros = reserva.pasajeros ?? asig.pasajeros;
+      const precio = reserva.precio_pactado ?? asig.precio_pactado;
+      const precioTexto = precio !== undefined && precio !== null ? `$${Number(precio).toFixed(2)}` : 'N/A';
+      const vehiculo = asig.vehiculo || {};
+      const vehiculoTipo = vehiculo.tipo === 'coaster' ? 'Coaster' : (vehiculo.tipo === 'bus_15' ? 'Bus 15' : '');
+      const vehiculoNombre = vehiculo.placa ? `${vehiculoTipo} ${vehiculo.nombre_unidad || ''} - ${vehiculo.placa}`.trim().replace(/\s+/g, ' ') : 'Vehículo no asignado';
 
       return `
         <div class="driver-request-card">
           <div class="driver-request-profile">
             <div class="driver-avatar">${avatar}</div>
             <div class="driver-request-info">
-              <div class="driver-name">${asig.cliente?.nombre || 'Cliente'}</div>
-              <div class="driver-meta">${asig.servicio?.nombre || 'Servicio'}</div>
+              <div class="driver-name">${nombreCliente}</div>
+              <div class="driver-meta">${reserva.servicio?.nombre || 'Servicio'}</div>
             </div>
           </div>
           
@@ -722,6 +779,11 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
               </div>
             </div>
             <div class="driver-route-time">${fecha} a las ${hora}</div>
+            <div class="driver-request-meta">
+              <span>Pasajeros: ${pasajeros ?? 'N/A'}</span>
+              <span>Precio: ${precioTexto}</span>
+              <span>${vehiculoNombre}</span>
+            </div>
           </div>
 
           <div class="driver-request-actions">
@@ -736,7 +798,10 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
   function renderHistorial(asignaciones) {
     const lista = document.getElementById('historialList');
     
-    const historial = asignaciones.filter(a => a.estado === 'completada' || a.estado === 'cancelada');
+    const historial = asignaciones.filter(a => {
+      const estado = a.estado_asignacion ?? a.estado;
+      return ['en_curso', 'finalizada', 'cancelada'].includes(estado);
+    });
     
     if (historial.length === 0) {
       lista.innerHTML = `
@@ -746,26 +811,42 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
             <path d="M12 6v6l4 2"/>
           </svg>
           <h3>Sin historial</h3>
-          <p>Tu historial de viajes completados aparecerá aquí</p>
+          <p>Tu historial de solicitudes aparecerá aquí</p>
         </div>
       `;
       return;
     }
 
     lista.innerHTML = historial.map(asig => {
-      const origen = asig.ruta?.origen || 'Origen desconocido';
-      const destino = asig.ruta?.destino || 'Destino desconocido';
-      const fecha = new Date(asig.fecha_programada).toLocaleDateString('es-ES');
-      const avatar = asig.cliente?.nombre.charAt(0).toUpperCase() || 'C';
-      const estadoClass = asig.estado;
-      const estadoLabel = asig.estado === 'completada' ? 'Completado' : 'Cancelado';
+      const reserva = asig.reserva || {};
+      const clienteUsuario = reserva.cliente?.usuario || {};
+      const nombreCliente = clienteUsuario.nombre || clienteUsuario.username || 'Cliente';
+      const origen = reserva.punto_recogida || 'Origen desconocido';
+      const destino = reserva.punto_destino || 'Destino desconocido';
+      const fechaInicio = asig.fecha_inicio_pactada || asig.fecha_programada;
+      const fecha = fechaInicio ? new Date(fechaInicio).toLocaleDateString('es-ES') : 'N/A';
+      const avatar = nombreCliente.charAt(0).toUpperCase() || 'C';
+      const pasajeros = reserva.pasajeros ?? asig.pasajeros;
+      const precio = reserva.precio_pactado ?? asig.precio_pactado;
+      const precioTexto = precio !== undefined && precio !== null ? `$${Number(precio).toFixed(2)}` : 'N/A';
+      const vehiculo = asig.vehiculo || {};
+      const vehiculoTipo = vehiculo.tipo === 'coaster' ? 'Coaster' : (vehiculo.tipo === 'bus_15' ? 'Bus 15' : '');
+      const vehiculoNombre = vehiculo.placa ? `${vehiculoTipo} ${vehiculo.nombre_unidad || ''} - ${vehiculo.placa}`.trim().replace(/\s+/g, ' ') : 'Vehículo no asignado';
+      const estado = asig.estado_asignacion ?? asig.estado;
+      const estadoClass = estado;
+      const estadoLabels = {
+        'en_curso': 'En Curso',
+        'finalizada': 'Finalizada',
+        'cancelada': 'Cancelada'
+      };
+      const estadoLabel = estadoLabels[estado] || estado.charAt(0).toUpperCase() + estado.slice(1);
 
       return `
         <div class="driver-request-card">
           <div class="driver-request-profile">
             <div class="driver-avatar">${avatar}</div>
             <div class="driver-request-info">
-              <div class="driver-name">${asig.cliente?.nombre || 'Cliente'}</div>
+              <div class="driver-name">${nombreCliente}</div>
               <div class="driver-meta">${fecha}</div>
             </div>
           </div>
@@ -780,6 +861,11 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
                 </svg>
                 <span>${destino}</span>
               </div>
+            </div>
+            <div class="driver-request-meta">
+              <span>Pasajeros: ${pasajeros ?? 'N/A'}</span>
+              <span>Precio: ${precioTexto}</span>
+              <span>${vehiculoNombre}</span>
             </div>
             <div class="driver-request-state ${estadoClass}">${estadoLabel}</div>
           </div>

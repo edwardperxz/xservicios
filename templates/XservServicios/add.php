@@ -69,6 +69,13 @@ $this->assign('header-title', 'Nuevo Servicio');
         </div>
 
         <?= $this->Form->create($xservServicio) ?>
+
+        <div style="background: rgba(201, 169, 98, 0.1); border-left: 4px solid #c9a962; padding: 1rem; margin-bottom: 1.5rem; border-radius: 4px;">
+            <p style="color: #c9a962; margin: 0; font-size: 0.875rem; line-height: 1.5;">
+                <strong>Nota importante:</strong> Las descripciones del servicio se traducen automáticamente desde el sistema de idiomas (i18n). <br>
+                Para agregar o editar descripciones en español e inglés, contacte al administrador del sistema.
+            </p>
+        </div>
         
         <div class="form-row">
             <div class="form-group">
@@ -80,22 +87,6 @@ $this->assign('header-title', 'Nuevo Servicio');
                 <label class="form-label required">Precio Base</label>
                 <?= $this->Form->control('precio_base', ['type' => 'number', 'step' => '0.01', 'min' => 0, 'class' => 'form-input', 'label' => false, 'placeholder' => '0.00', 'required' => true]) ?>
                 <span class="form-help">Precio en USD</span>
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label class="form-label required">Descripción (Español)</label>
-                <?= $this->Form->control('descripcion_es', ['type' => 'textarea', 'class' => 'form-textarea', 'label' => false, 'placeholder' => 'Descripción del servicio en español', 'required' => true]) ?>
-                <span class="form-help">Versión en español</span>
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label class="form-label required">Descripción (Inglés)</label>
-                <?= $this->Form->control('descripcion_en', ['type' => 'textarea', 'class' => 'form-textarea', 'label' => false, 'placeholder' => 'Service description in English', 'required' => true]) ?>
-                <span class="form-help">English version</span>
             </div>
         </div>
 

@@ -91,24 +91,8 @@ $this->assign('header-title', 'Editar Servicio');
 
         <div class="form-row">
             <div class="form-group">
-                <label class="form-label">Descripción (Español)</label>
-                <?= $this->Form->control('descripcion_es', ['type' => 'textarea', 'class' => 'form-textarea', 'label' => false, 'placeholder' => 'Descripción del servicio en español']) ?>
-                <span class="form-help">Versión en español</span>
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label class="form-label">Descripción (Inglés)</label>
-                <?= $this->Form->control('descripcion_en', ['type' => 'textarea', 'class' => 'form-textarea', 'label' => false, 'placeholder' => 'Service description in English']) ?>
-                <span class="form-help">English version</span>
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
                 <label class="form-label">Variantes</label>
-                <?= $this->Form->control('variantes', ['type' => 'textarea', 'class' => 'form-textarea', 'label' => false, 'placeholder' => 'Opciones o variantes del servicio']) ?>
+                <?= $this->Form->control('variantes', ['type' => 'textarea', 'class' => 'form-textarea', 'label' => false, 'placeholder' => 'Opciones o variantes del servicio (separar por ; o nueva línea)']) ?>
                 <span class="form-help">Variaciones o extras disponibles</span>
             </div>
             <div class="form-group">
@@ -116,6 +100,12 @@ $this->assign('header-title', 'Editar Servicio');
                 <?= $this->Form->control('estado', ['options' => $estadoOptions, 'empty' => 'Seleccione un estado', 'class' => 'form-select', 'label' => false, 'required' => true]) ?>
                 <span class="form-help">Estado del servicio</span>
             </div>
+        </div>
+
+        <div style="background: rgba(201, 169, 98, 0.1); border-left: 4px solid #c9a962; padding: 1rem; border-radius: 4px; margin-bottom: 1.5rem;">
+            <p style="color: #c9a962; font-size: 0.875rem; margin: 0;">
+                <strong>Nota:</strong> Las descripciones del servicio se traducen automáticamente desde el sistema de idiomas (i18n). Para editar descripciones, contacte al administrador del sistema.
+            </p>
         </div>
 
         <div class="form-actions">

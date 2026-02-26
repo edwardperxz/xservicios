@@ -127,7 +127,36 @@ class XservVehiculosController extends AppController
         $this->Authorization->skipAuthorization();
         $xservVehiculo = $this->XservVehiculos->newEmptyEntity();
         if ($this->request->is('post')) {
-            $xservVehiculo = $this->XservVehiculos->patchEntity($xservVehiculo, $this->request->getData());
+            $data = $this->request->getData();
+            
+            // Manejar carga de archivo
+            if (!empty($data['foto']) && $data['foto']->getSize() > 0) {
+                $uploadDir = WWW_ROOT . 'img' . DS . 'vehiculos' . DS;
+                
+                // Crear directorio si no existe
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+                
+                $file = $data['foto'];
+                $filename = time() . '_' . $file->getClientFilename();
+                $filepath = $uploadDir . $filename;
+                
+                // Mover archivo cargado
+                try {
+                    $file->moveTo($filepath);
+                    $data['foto_url'] = '/img/vehiculos/' . $filename;
+                } catch (\Exception $e) {
+                    $this->Flash->error(__('Error al subir la imagen.'));
+                    $this->set(compact('xservVehiculo'));
+                    return;
+                }
+            }
+            
+            // Eliminar la clave 'foto' si existe (no es parte del modelo)
+            unset($data['foto']);
+            
+            $xservVehiculo = $this->XservVehiculos->patchEntity($xservVehiculo, $data);
             if ($this->XservVehiculos->save($xservVehiculo)) {
                 $this->Flash->success(__('The xserv vehiculo has been saved.'));
 
@@ -150,7 +179,44 @@ class XservVehiculosController extends AppController
         $this->Authorization->skipAuthorization();
         $xservVehiculo = $this->XservVehiculos->get($id, contain: []);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $xservVehiculo = $this->XservVehiculos->patchEntity($xservVehiculo, $this->request->getData());
+            $data = $this->request->getData();
+            
+            // Manejar carga de archivo
+            if (!empty($data['foto']) && $data['foto']->getSize() > 0) {
+                $uploadDir = WWW_ROOT . 'img' . DS . 'vehiculos' . DS;
+                
+                // Crear directorio si no existe
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+                
+                // Eliminar foto anterior si existe
+                if (!empty($xservVehiculo->foto_url)) {
+                    $oldPath = WWW_ROOT . ltrim($xservVehiculo->foto_url, '/');
+                    if (is_file($oldPath)) {
+                        unlink($oldPath);
+                    }
+                }
+                
+                $file = $data['foto'];
+                $filename = time() . '_' . $file->getClientFilename();
+                $filepath = $uploadDir . $filename;
+                
+                // Mover archivo cargado
+                try {
+                    $file->moveTo($filepath);
+                    $data['foto_url'] = '/img/vehiculos/' . $filename;
+                } catch (\Exception $e) {
+                    $this->Flash->error(__('Error al subir la imagen.'));
+                    $this->set(compact('xservVehiculo'));
+                    return;
+                }
+            }
+            
+            // Eliminar la clave 'foto' si existe (no es parte del modelo)
+            unset($data['foto']);
+            
+            $xservVehiculo = $this->XservVehiculos->patchEntity($xservVehiculo, $data);
             if ($this->XservVehiculos->save($xservVehiculo)) {
                 $this->Flash->success(__('The xserv vehiculo has been saved.'));
 

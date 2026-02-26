@@ -149,9 +149,59 @@ class DashboardController extends AppController
             return $this->redirect(['controller' => 'XservUsuarios', 'action' => 'profile']);
         }
 
-        $this->set(compact('user'));
+        // Usar layout admin para sidebar y header correctos
+        $this->viewBuilder()->setLayout('admin');
 
-        $this->render('/XservUsuarios/profile');
+        // Cargar tablas necesarias para operador
+        $reservasTable = $this->fetchTable('XservReservas');
+        $asignacionesTable = $this->fetchTable('XservAsignaciones');
+        $choferesTable = $this->fetchTable('XservChoferes');
+        $vehiculosTable = $this->fetchTable('XservVehiculos');
+
+        // Estadísticas relevantes para operador
+        $hoy = FrozenDate::now();
+        
+        // Reservas pendientes de asignación
+        $reservasPendientes = $reservasTable->find()
+            ->where(['estado' => 'pendiente'])
+            ->count();
+        
+        // Asignaciones activas
+        $asignacionesActivas = $asignacionesTable->find()
+            ->where(['estado_asignacion IN' => ['programada', 'en_curso']])
+            ->count();
+        
+        // Choferes disponibles
+        $choferesDisponibles = $choferesTable->find()
+            ->where(['disponibilidad' => 'disponible', 'estado' => 'activo'])
+            ->count();
+        
+        // Vehículos disponibles
+        $vehiculosDisponibles = $vehiculosTable->find()
+            ->where(['estado_operativo' => 'disponible'])
+            ->count();
+
+        // Reservas de hoy
+        $reservasHoy = $reservasTable->find()
+            ->contain(['Clientes', 'Servicios'])
+            ->where([
+                'DATE(fecha)' => $hoy->format('Y-m-d'),
+                'estado IN' => ['pendiente', 'confirmada', 'asignada']
+            ])
+            ->order(['hora' => 'ASC'])
+            ->limit(10)
+            ->toArray();
+
+        $this->set(compact(
+            'user',
+            'reservasPendientes',
+            'asignacionesActivas',
+            'choferesDisponibles',
+            'vehiculosDisponibles',
+            'reservasHoy'
+        ));
+
+        $this->render('operador_panel');
     }
 
 
@@ -251,10 +301,8 @@ class DashboardController extends AppController
         $asignaciones = $asignacionesTable->find()
             ->where(['chofer_id' => $chofer->id])
             ->contain([
-                'Reservas' => [
-                    'Clientes' => ['XservUsuarios'],
-                    'Servicios'
-                ],
+                'Reservas.Clientes.XservUsuarios',
+                'Reservas.Servicios',
                 'Vehiculos'
             ])
             ->order(['XservAsignaciones.fecha_inicio_pactada' => 'ASC'])
@@ -547,6 +595,9 @@ class DashboardController extends AppController
                 return $this->redirect(['action' => 'choferPanel']);
             }
 
+            // Usar layout frontend para eliminar la interfaz de CakePHP
+            $this->viewBuilder()->setLayout('frontend');
+            
             // Renderizar la vista de viajes
             $this->set(compact('user', 'chofer'));
             $this->render('chofer_trips');

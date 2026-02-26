@@ -107,8 +107,6 @@ class XservServiciosController extends AppController
                     'nombre' => $xservServicio->nombre,
                     'estado' => $xservServicio->estado,
                     'precio_base' => $xservServicio->precio_base,
-                    'descripcion_es' => $xservServicio->descripcion_es,
-                    'descripcion_en' => $xservServicio->descripcion_en,
                     'variantes' => $xservServicio->variantes,
                 ],
             ]));

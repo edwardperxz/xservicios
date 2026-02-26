@@ -369,17 +369,15 @@ $isAdmin = $authUser && $authUser->rol === 'admin';
                 <div class="detail-value">$<?= $this->Number->format($xservServicio->precio_base) ?></div>
             </div>
             <div class="detail-item detail-item--full">
-                <div class="detail-label">Descripción (Español)</div>
-                <div class="detail-value"><?= h($xservServicio->descripcion_es) ?></div>
-            </div>
-            <div class="detail-item detail-item--full">
-                <div class="detail-label">Descripción (Inglés)</div>
-                <div class="detail-value"><?= h($xservServicio->descripcion_en) ?></div>
-            </div>
-            <div class="detail-item detail-item--full">
                 <div class="detail-label">Variantes</div>
-                <div class="detail-value"><?= h($xservServicio->variantes) ?></div>
+                <div class="detail-value"><?= h($xservServicio->variantes) ?: '(Sin variantes)' ?></div>
             </div>
+        </div>
+
+        <div style="background: rgba(201, 169, 98, 0.1); border-left: 4px solid #c9a962; padding: 1rem; border-radius: 4px; margin-top: 1.5rem;">
+            <p style="color: #c9a962; font-size: 0.875rem; margin: 0;">
+                <strong>Nota:</strong> Las descripciones del servicio se gestionan automáticamente a través del sistema de idiomas (i18n). Las descripciones mostradas al público en español e inglés se actualizan desde la configuración centralizada del sistema.
+            </p>
         </div>
 
         <?php if (!$isAdmin): ?>

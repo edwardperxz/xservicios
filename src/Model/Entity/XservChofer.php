@@ -13,6 +13,7 @@ use Cake\ORM\Entity;
  * @property string|null $estado
  * @property \Cake\I18n\Date $fecha_ingreso
  * @property string|null $tipo_licencia
+ * @property string|null $foto_url
  * @property string|null $disponibilidad
  * @property \Cake\I18n\DateTime|null $created_at
  * @property \Cake\I18n\DateTime|null $updated_at
@@ -35,6 +36,7 @@ class XservChofer extends Entity
         'estado' => true,
         'fecha_ingreso' => true,
         'tipo_licencia' => true,
+        'foto_url' => true,
         'disponibilidad' => true,
         'created_at' => true,
         'updated_at' => true,

@@ -295,6 +295,153 @@ $user = $user ?? null;
       text-align: center;
       padding: 2rem;
     }
+
+    /* Quote Form Section */
+    .quote-section {
+      padding: 3.5rem 3rem;
+      background: var(--dark-card);
+      border-top: 1px solid var(--dark-lighter);
+      border-bottom: 1px solid var(--dark-lighter);
+    }
+
+    .quote-container {
+      max-width: 640px;
+      margin: 0 auto;
+      background: var(--dark-lighter);
+      padding: 2rem;
+      border-radius: 12px;
+      border: 1px solid rgba(201, 169, 98, 0.25);
+    }
+
+    .quote-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      color: var(--text-white);
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .quote-subtitle {
+      text-align: center;
+      color: var(--text-gray);
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .quote-section .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .quote-section .form-group input,
+    .quote-section .form-group textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(201, 169, 98, 0.3);
+      border-radius: 6px;
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      transition: border-color 0.3s;
+    }
+
+    .quote-section .form-group input::placeholder,
+    .quote-section .form-group textarea::placeholder {
+      color: var(--text-gray);
+    }
+
+    .quote-section .form-group input:focus,
+    .quote-section .form-group textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .quote-section .passengers-group {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .quote-section .passengers-container {
+      display: flex;
+      align-items: center;
+      border: 1px solid rgba(201, 169, 98, 0.3);
+      border-radius: 6px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.05);
+      flex-grow: 1;
+    }
+
+    .quote-section .counter-button {
+      background: transparent;
+      border: none;
+      color: var(--gold);
+      font-size: 1.25rem;
+      padding: 0.5rem 0.75rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .quote-section .counter-button:hover {
+      background: rgba(201, 169, 98, 0.2);
+    }
+
+    .quote-section .passengers-input {
+      border: none;
+      background: transparent;
+      width: 60px;
+      text-align: center;
+      color: var(--text-white);
+      font-weight: 600;
+      padding: 0.5rem 0;
+    }
+
+    .quote-section .passengers-input:focus {
+      outline: none;
+    }
+
+    .quote-section .passengers-error {
+      color: #ef4444;
+      font-size: 0.8rem;
+      display: none;
+    }
+
+    .quote-section .passengers-error.show {
+      display: block;
+    }
+
+    .quote-section .quote-submit {
+      width: 100%;
+      padding: 0.85rem 1.5rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--dark-bg);
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 1rem;
+    }
+
+    .quote-section .quote-submit:hover {
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(201, 169, 98, 0.3);
+    }
+
+    .quote-section .is-hidden {
+      display: none;
+    }
+
+    .quote-section .form-label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-gray);
+      margin-bottom: 0.35rem;
+    }
   </style>
 </head>
 <body>
@@ -398,10 +545,135 @@ $user = $user ?? null;
     </section>
   <?php endif; ?>
 
+  <!-- Quote Form Section -->
+  <section class="quote-section" id="quote-section">
+    <div class="quote-container" id="quoteContainer">
+      <h2 class="quote-title" data-i18n="fleet.quoteTitle">Solicita tu Cotizacion</h2>
+      <p class="quote-subtitle" data-i18n="fleet.quoteSubtitle">Completa el formulario y te contactaremos pronto</p>
+      <form>
+        <input type="hidden" id="quoteServiceId" name="service_id" value="">
+        <div class="form-group">
+          <input type="text" id="quoteName" placeholder="Tu nombre completo" data-i18n-placeholder="fleet.quoteName">
+        </div>
+        <div class="form-group">
+          <input type="email" id="quoteEmail" placeholder="Correo electronico" data-i18n-placeholder="fleet.quoteEmail">
+        </div>
+        <div id="defaultFields">
+          <div class="form-group">
+            <input type="text" id="quoteDestination" placeholder="Destino deseado" data-i18n-placeholder="fleet.quoteDestination">
+          </div>
+          <div class="form-group">
+            <textarea id="quoteNotes" rows="3" placeholder="Notas adicionales"></textarea>
+          </div>
+        </div>
+        <div id="customFields" class="is-hidden">
+          <div class="form-group">
+            <label class="form-label" for="quoteServiceName">Servicio seleccionado</label>
+            <input type="text" id="quoteServiceName" placeholder="Servicio" readonly>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="quotePickup">Punto de recogida</label>
+            <input type="text" id="quotePickup" placeholder="Escribe el punto de recogida">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="quoteDropoff">Punto de destino</label>
+            <input type="text" id="quoteDropoff" placeholder="Escribe el destino final">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="quoteDate">Fecha deseada</label>
+            <input type="date" id="quoteDate">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="quoteTime">Hora deseada</label>
+            <input type="time" id="quoteTime">
+          </div>
+          <div class="form-group">
+            <textarea id="quoteCustomNotes" rows="3" placeholder="Detalles de personalizacion"></textarea>
+          </div>
+        </div>
+        <div class="form-group passengers-group">
+          <div class="passengers-container">
+            <button type="button" class="counter-button minus" id="minusBtn" onclick="decrementPassengers(event)">-</button>
+            <input type="number" id="passengersInput" class="passengers-input" placeholder="0" data-i18n-placeholder="fleet.quotePassengers" min="1" max="99" value="1">
+            <button type="button" class="counter-button plus" id="plusBtn" onclick="incrementPassengers(event)">+</button>
+          </div>
+          <span class="passengers-error" id="passengersError" data-i18n="fleet.quotePassengersError">Minimo 1 pasajero requerido</span>
+        </div>
+        <button type="submit" class="quote-submit" data-i18n="fleet.quoteSubmit">Solicitar Cotizacion</button>
+      </form>
+    </div>
+  </section>
+
   <!-- Scripts -->
   <!-- i18n-preload.js ya está cargado en el <head> -->
   <script src="/js/i18n.js"></script>
   <script src="/js/header-loader.js"></script>
   <script src="/js/header-dynamic.js"></script>
+  <script>
+    function applyQuoteMode() {
+      const params = new URLSearchParams(window.location.search);
+      const serviceId = params.get('service_id');
+      const serviceName = params.get('service_name');
+      const defaultFields = document.getElementById('defaultFields');
+      const customFields = document.getElementById('customFields');
+      const title = document.querySelector('.quote-title');
+      const subtitle = document.querySelector('.quote-subtitle');
+      const serviceIdInput = document.getElementById('quoteServiceId');
+      const serviceNameInput = document.getElementById('quoteServiceName');
+
+      if (serviceId) {
+        defaultFields.classList.add('is-hidden');
+        customFields.classList.remove('is-hidden');
+        if (title) title.textContent = 'Personaliza tu servicio';
+        if (subtitle) subtitle.textContent = 'Cuéntanos los detalles y te enviaremos una propuesta a medida.';
+        if (serviceIdInput) serviceIdInput.value = serviceId;
+        if (serviceNameInput) serviceNameInput.value = serviceName ? serviceName.replace(/\+/g, ' ') : '';
+      } else {
+        defaultFields.classList.remove('is-hidden');
+        customFields.classList.add('is-hidden');
+        if (title) title.textContent = 'Solicita tu Cotizacion';
+        if (subtitle) subtitle.textContent = 'Completa el formulario y te contactaremos pronto';
+        if (serviceIdInput) serviceIdInput.value = '';
+        if (serviceNameInput) serviceNameInput.value = '';
+      }
+    }
+
+    function incrementPassengers(e) {
+      e.preventDefault();
+      const input = document.getElementById('passengersInput');
+      const currentValue = parseInt(input.value, 10) || 0;
+      if (currentValue < 99) {
+        input.value = currentValue + 1;
+        validatePassengers();
+      }
+    }
+
+    function decrementPassengers(e) {
+      e.preventDefault();
+      const input = document.getElementById('passengersInput');
+      const currentValue = parseInt(input.value, 10) || 0;
+      if (currentValue > 1) {
+        input.value = currentValue - 1;
+        validatePassengers();
+      }
+    }
+
+    function validatePassengers() {
+      const input = document.getElementById('passengersInput');
+      const errorMsg = document.getElementById('passengersError');
+      const value = parseInt(input.value, 10);
+
+      if (isNaN(value) || value < 1) {
+        input.value = 1;
+        errorMsg.classList.add('show');
+        return false;
+      }
+
+      errorMsg.classList.remove('show');
+      return true;
+    }
+
+    document.addEventListener('DOMContentLoaded', applyQuoteMode);
+  </script>
 </body>
 </html>

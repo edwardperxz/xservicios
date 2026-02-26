@@ -4,6 +4,12 @@ $identity = $this->request->getAttribute('identity');
 $userName = $identity ? $identity->username : 'Usuario';
 $userRole = $identity ? ($identity->rol ?? 'Admin') : 'Admin';
 $userInitial = strtoupper(substr($userName, 0, 1));
+
+// Determinar URLs según el rol
+$isAdmin = $userRole === 'admin';
+$isOperador = $userRole === 'operador';
+$dashboardUrl = $isAdmin ? '/panel/admin' : '/panel/operador';
+$roleLabel = $isAdmin ? 'Administrador' : ($isOperador ? 'Operador' : ucfirst($userRole));
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -272,7 +278,7 @@ $userInitial = strtoupper(substr($userName, 0, 1));
         /* Flash Messages */
         .flash-container {
             position: fixed;
-            top: 20px;
+            top: 90px;
             right: 20px;
             z-index: 1000;
             max-width: 400px;
@@ -441,7 +447,7 @@ $userInitial = strtoupper(substr($userName, 0, 1));
             }
 
             .flash-container {
-                top: 10px;
+                top: 80px;
             }
 
             .flash-message {
@@ -459,7 +465,7 @@ $userInitial = strtoupper(substr($userName, 0, 1));
         <!-- Sidebar -->
         <aside class="admin-sidebar" id="adminSidebar">
             <div class="sidebar-header">
-                <a href="/panel/admin" class="logo">
+                <a href="<?= $dashboardUrl ?>" class="logo">
                     <span class="logo-x">X</span><span>SERVICIOS</span>
                 </a>
             </div>
@@ -467,7 +473,7 @@ $userInitial = strtoupper(substr($userName, 0, 1));
             <nav class="sidebar-nav">
                 <div class="nav-section">
                     <div class="nav-section-title">Principal</div>
-                    <a href="/panel/admin" class="nav-item <?= $this->request->getParam('action') === 'adminPanel' ? 'active' : '' ?>">
+                    <a href="<?= $dashboardUrl ?>" class="nav-item <?= in_array($this->request->getParam('action'), ['adminPanel', 'operadorPanel']) ? 'active' : '' ?>">
                         <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                         </svg>
@@ -477,12 +483,14 @@ $userInitial = strtoupper(substr($userName, 0, 1));
 
                 <div class="nav-section">
                     <div class="nav-section-title">Gestión</div>
+                    <?php if ($isAdmin): ?>
                     <a href="/xserv-usuarios" class="nav-item <?= $this->request->getParam('controller') === 'XservUsuarios' ? 'active' : '' ?>">
                         <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                         </svg>
                         Usuarios y Roles
                     </a>
+                    <?php endif; ?>
                     <a href="/xserv-choferes" class="nav-item <?= $this->request->getParam('controller') === 'XservChoferes' ? 'active' : '' ?>">
                         <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
@@ -503,6 +511,7 @@ $userInitial = strtoupper(substr($userName, 0, 1));
                     </a>
                 </div>
 
+                <?php if ($isAdmin): ?>
                 <div class="nav-section">
                     <div class="nav-section-title">Catálogo</div>
                     <a href="/xserv-servicios" class="nav-item <?= $this->request->getParam('controller') === 'XservServicios' ? 'active' : '' ?>">
@@ -525,6 +534,7 @@ $userInitial = strtoupper(substr($userName, 0, 1));
                         Ubicaciones
                     </a>
                 </div>
+                <?php endif; ?>
 
                 <div class="nav-section">
                     <div class="nav-section-title">Operaciones</div>
@@ -570,6 +580,7 @@ $userInitial = strtoupper(substr($userName, 0, 1));
                     </a>
                 </div>
 
+                <?php if ($isAdmin): ?>
                 <div class="nav-section">
                     <div class="nav-section-title">Configuración</div>
                     <a href="/xserv-configuraciones" class="nav-item <?= $this->request->getParam('controller') === 'XservConfiguraciones' ? 'active' : '' ?>">
@@ -586,6 +597,7 @@ $userInitial = strtoupper(substr($userName, 0, 1));
                         Reportes
                     </a>
                 </div>
+                <?php endif; ?>
             </nav>
         </aside>
 
@@ -609,7 +621,7 @@ $userInitial = strtoupper(substr($userName, 0, 1));
                         </div>
                         <div class="user-details">
                             <div class="user-name"><?= h($userName) ?></div>
-                            <div class="user-role"><?= h($userRole) ?></div>
+                            <div class="user-role"><?= h($roleLabel) ?></div>
                         </div>
                     </div>
                     <?= $this->Form->postLink('Cerrar Sesión', ['controller' => 'XservUsuarios', 'action' => 'logout'], ['class' => 'btn-logout']) ?>

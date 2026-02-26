@@ -46,6 +46,14 @@ $this->assign('header-title', 'Detalle de Vehículo');
                 <div class="detail-label">Kilometraje Actual</div>
                 <div class="detail-value"><?= $xservVehiculo->kilometraje_actual === null ? '' : $this->Number->format($xservVehiculo->kilometraje_actual) ?></div>
             </div>
+            <?php if (!empty($xservVehiculo->foto_url)): ?>
+            <div class="detail-item" style="grid-column: span 1">
+                <div class="detail-label">Foto del Vehículo</div>
+                <div style="margin-top: 0.5rem; width: 100%; max-width: 200px; height: 150px; border-radius: 6px; overflow: hidden;">
+                    <img src="<?= h($xservVehiculo->foto_url) ?>" alt="<?= h($xservVehiculo->nombre_unidad) ?>" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+            </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>

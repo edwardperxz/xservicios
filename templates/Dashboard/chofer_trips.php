@@ -191,32 +191,35 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
     margin-top: 2rem;
     display: flex;
     flex-direction: column;
-    gap: 1.1rem;
+    gap: 0.75rem;
   }
 
   .trip-card {
     background: var(--dark-card-strong);
-    border-radius: 16px;
-    padding: 1.5rem;
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
     border: 1px solid rgba(255, 255, 255, 0.06);
     transition: all 0.3s ease;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    align-items: center;
   }
 
   .trip-card:hover {
     border-color: rgba(201, 169, 98, 0.3);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    transform: translateX(4px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
   }
 
   .trip-header {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
+    flex-direction: column;
+    gap: 0.4rem;
   }
 
   .trip-id {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: var(--text-gray);
     font-weight: 500;
   }
@@ -224,11 +227,12 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
   .trip-status {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    padding: 0.4rem 0.9rem;
+    gap: 0.3rem;
+    padding: 0.3rem 0.7rem;
     border-radius: 999px;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 600;
+    width: fit-content;
   }
 
   .trip-status.programada { background: rgba(56, 189, 248, 0.15); color: var(--blue); }
@@ -237,8 +241,8 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
   .trip-status.cancelada { background: rgba(248, 113, 113, 0.15); color: var(--red); }
 
   .trip-status span {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
     background: currentColor;
   }
@@ -246,13 +250,12 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
   .trip-client {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    gap: 0.75rem;
   }
 
   .trip-avatar {
-    width: 44px;
-    height: 44px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     background: linear-gradient(135deg, var(--gold), var(--gold-dark));
     display: inline-flex;
@@ -260,73 +263,98 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
     justify-content: center;
     font-weight: 700;
     color: #0d0d0d;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+
+  .trip-client-info {
+    flex: 1;
+    min-width: 0;
   }
 
   .trip-client-name {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .trip-service {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--text-gray);
-    margin-top: 0.2rem;
+    margin-top: 0.15rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .trip-route {
-    background: rgba(201, 169, 98, 0.05);
-    border: 1px solid rgba(201, 169, 98, 0.15);
-    border-radius: 12px;
-    padding: 1rem;
-    margin-bottom: 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-width: 0;
   }
 
   .trip-route-line {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    font-weight: 600;
-    margin-bottom: 0.6rem;
+    gap: 0.5rem;
+    font-weight: 500;
+    font-size: 0.85rem;
   }
 
   .trip-route-line svg {
-    width: 24px;
-    height: 6px;
+    width: 20px;
+    height: 5px;
     fill: var(--gold);
     flex-shrink: 0;
   }
 
   .trip-route-point {
-    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    min-width: 0;
   }
 
   .trip-route-time {
     color: var(--text-gray);
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.3rem;
+  }
+
+  .trip-route-time svg {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
   }
 
   .trip-meta {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-end;
   }
 
   .trip-meta-item {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.8rem;
+    gap: 0.4rem;
+    font-size: 0.75rem;
     color: var(--text-gray);
+    white-space: nowrap;
   }
 
   .trip-meta-item svg {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     stroke: var(--gold);
+    flex-shrink: 0;
   }
 
   .trip-meta-value {
@@ -363,6 +391,33 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
     .trips-stats {
       grid-template-columns: repeat(2, 1fr);
     }
+
+    .trip-card {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+
+    .trip-header {
+      order: 1;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .trip-client {
+      order: 2;
+    }
+
+    .trip-route {
+      order: 3;
+    }
+
+    .trip-meta {
+      order: 4;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
   }
 
   @media (max-width: 768px) {
@@ -397,11 +452,55 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
     }
 
     .trip-card {
+      padding: 1rem;
+    }
+
+    .trip-client-name,
+    .trip-service,
+    .trip-route-point {
+      font-size: 0.85rem;
+    }
+
+    .trip-meta-item {
+      font-size: 0.7rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .trips-shell {
+      padding: 1rem 0.8rem 2rem;
+    }
+
+    .trips-hero {
       padding: 1.2rem;
     }
 
+    .trips-title {
+      font-size: 1.5rem;
+    }
+
+    .trip-card {
+      padding: 0.8rem;
+      gap: 0.6rem;
+    }
+
+    .trip-avatar {
+      width: 32px;
+      height: 32px;
+      font-size: 0.7rem;
+    }
+
+    .trip-route-line {
+      font-size: 0.8rem;
+    }
+
     .trip-meta {
-      grid-template-columns: 1fr;
+      gap: 0.4rem;
+    }
+
+    .trip-meta-item svg {
+      width: 12px;
+      height: 12px;
     }
   }
 </style>
@@ -588,43 +687,43 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
     }
 
     container.innerHTML = filtered.map(viaje => {
-      const reserva = viaje.xserv_reserva || {};
-      const cliente = reserva.xserv_cliente || {};
+      const reserva = viaje.reserva || {};
+      const cliente = reserva.cliente || {};
       const usuario = cliente.usuario || {};
-      const servicio = reserva.xserv_servicio || {};
-      const vehiculo = viaje.xserv_vehiculo || {};
+      const servicio = reserva.servicio || {};
+      const vehiculo = viaje.vehiculo || {};
       
       const nombreCliente = usuario.nombre || usuario.username || 'Cliente';
       const iniciales = getInitials(nombreCliente);
       const origen = reserva.punto_recogida || 'Origen no especificado';
       const destino = reserva.punto_destino || 'Destino no especificado';
       const servicioNombre = servicio.nombre || 'Servicio';
-      const vehiculoNombre = vehiculo.placa ? `${vehiculo.marca || ''} ${vehiculo.modelo || ''} - ${vehiculo.placa}`.trim() : 'Vehículo no asignado';
+      const vehiculoTipo = vehiculo.tipo ? (vehiculo.tipo === 'coaster' ? 'Coaster' : 'Bus 15') : '';
+      const vehiculoNombre = vehiculo.placa ? `${vehiculoTipo} ${vehiculo.nombre_unidad || ''} - ${vehiculo.placa}`.trim().replace(/\s+/g, ' ') : 'Vehículo no asignado';
       
       const fechaInicio = formatDate(viaje.fecha_inicio_pactada);
-      const fechaFin = viaje.fecha_fin_pactada ? formatDate(viaje.fecha_fin_pactada) : 'No especificada';
+      const fechaFin = viaje.fecha_fin_pactada ? formatDateShort(viaje.fecha_fin_pactada) : 'N/A';
       const statusClass = getStatusClass(viaje.estado_asignacion);
       const statusText = getStatusText(viaje.estado_asignacion);
 
       return `
         <div class="trip-card">
-          <div class="trip-header">
-            <div class="trip-id">Viaje #${viaje.id} • Reserva #${reserva.id || 'N/A'}</div>
-            <div class="trip-status ${statusClass}">
-              <span></span>
-              ${statusText}
-            </div>
-          </div>
-
           <div class="trip-client">
             <div class="trip-avatar">${iniciales}</div>
-            <div>
+            <div class="trip-client-info">
               <div class="trip-client-name">${nombreCliente}</div>
               <div class="trip-service">${servicioNombre}</div>
             </div>
           </div>
 
           <div class="trip-route">
+            <div class="trip-header">
+              <div class="trip-id">Viaje #${viaje.id} • Reserva #${reserva.id || 'N/A'}</div>
+              <div class="trip-status ${statusClass}">
+                <span></span>
+                ${statusText}
+              </div>
+            </div>
             <div class="trip-route-line">
               <span class="trip-route-point">${origen}</span>
               <svg viewBox="0 0 24 6">
@@ -676,8 +775,15 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
       if (!res.ok) throw new Error('Error al cargar viajes');
       
       const data = await res.json();
+      console.log('Datos recibidos de la API:', data);
+      
       if (data.success && data.asignaciones) {
         todosViajes = data.asignaciones;
+        
+        // Log de estructura para debugging
+        if (todosViajes.length > 0) {
+          console.log('Estructura del primer viaje:', todosViajes[0]);
+        }
         
         // Actualizar estadísticas
         const total = todosViajes.length;

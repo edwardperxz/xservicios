@@ -189,4 +189,139 @@ class XservChoferesController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    /**
+     * View travel history for a driver
+     *
+     * @param string|null $id Xserv Chofer id.
+     * @return \Cake\Http\Response|null|void Renders view
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function viajesHistorial(?string $id = null)
+    {
+        $this->Authorization->skipAuthorization();
+        
+        $xservChofere = $this->XservChoferes->get($id, contain: ['Usuarios']);
+        
+        $this->loadModel('XservAsignaciones');
+        
+        $query = $this->XservAsignaciones->find()
+            ->where(['chofer_id' => $id])
+            ->contain(['Reservas', 'Vehiculos'])
+            ->order(['created_at' => 'DESC']);
+        
+        $viajes = $this->paginate($query, ['limit' => 15]);
+        
+        $this->set(compact('xservChofere', 'viajes'));
+    }
+
+    /**
+     * View ratings for a driver
+     *
+     * @param string|null $id Xserv Chofer id.
+     * @return \Cake\Http\Response|null|void Renders view
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function valoraciones(?string $id = null)
+    {
+        $this->Authorization->skipAuthorization();
+        
+        $xservChofere = $this->XservChoferes->get($id, contain: ['Usuarios']);
+        
+        $this->loadModel('XservValoraciones');
+        $this->loadModel('XservAsignaciones');
+        $this->loadModel('XservReservas');
+        
+        // Get all assignments for this driver
+        $asignacionesIds = $this->XservAsignaciones->find()
+            ->where(['chofer_id' => $id])
+            ->select(['reserva_id'])
+            ->extract('reserva_id')
+            ->toList();
+        
+        // Get ratings for those reservations
+        $query = $this->XservValoraciones->find()
+            ->whereInList('reserva_id', $asignacionesIds)
+            ->contain(['Reservas'])
+            ->order(['created_at' => 'DESC']);
+        
+        $valoraciones = $this->paginate($query, ['limit' => 10]);
+        
+        // Calculate statistics
+        $estadisticas = [
+            'total_viajes' => count($asignacionesIds),
+            'total_valoraciones' => $this->XservValoraciones->find()
+                ->whereInList('reserva_id', $asignacionesIds)
+                ->count(),
+            'promedio_calificacion' => $this->XservValoraciones->find()
+                ->select(['promedio' => $this->XservValoraciones->find()->func('AVG', ['calificacion'])])
+                ->whereInList('reserva_id', $asignacionesIds)
+                ->first()
+                ->promedio ?? 0,
+        ];
+        
+        $this->set(compact('xservChofere', 'valoraciones', 'estadisticas'));
+    }
+
+    /**
+     * View driver statistics
+     *
+     * @param string|null $id Xserv Chofer id.
+     * @return \Cake\Http\Response|null|void Renders view
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function estadisticas(?string $id = null)
+    {
+        $this->Authorization->skipAuthorization();
+        
+        $xservChofere = $this->XservChoferes->get($id, contain: ['Usuarios']);
+        
+        $this->loadModel('XservAsignaciones');
+        $this->loadModel('XservValoraciones');
+        $this->loadModel('XservEjecucionViajes');
+        
+        // Total trips
+        $totalViajes = $this->XservAsignaciones->find()
+            ->where(['chofer_id' => $id])
+            ->count();
+        
+        // Completed trips
+        $viajuesCompletados = $this->XservAsignaciones->find()
+            ->where(['chofer_id' => $id, 'estado_asignacion' => 'finalizada'])
+            ->count();
+        
+        // Current assignments
+        $asignacionesActuales = $this->XservAsignaciones->find()
+            ->where(['chofer_id' => $id, 'estado_asignacion' => 'en_curso'])
+            ->contain(['Reservas', 'Vehiculos'])
+            ->all();
+        
+        // Get ratings info
+        $asignacionesIds = $this->XservAsignaciones->find()
+            ->where(['chofer_id' => $id])
+            ->select(['reserva_id'])
+            ->extract('reserva_id')
+            ->toList();
+        
+        $promediCalificacion = $this->XservValoraciones->find()
+            ->select(['promedio' => $this->XservValoraciones->find()->func('AVG', ['calificacion'])])
+            ->whereInList('reserva_id', $asignacionesIds)
+            ->first()
+            ->promedio ?? 0;
+        
+        $totalValoraciones = $this->XservValoraciones->find()
+            ->whereInList('reserva_id', $asignacionesIds)
+            ->count();
+        
+        $estadisticas = [
+            'total_viajes' => $totalViajes,
+            'viajes_completados' => $viajuesCompletados,
+            'porcentaje_completacion' => $totalViajes > 0 ? ($viajuesCompletados / $totalViajes) * 100 : 0,
+            'promedio_calificacion' => round($promediCalificacion, 1),
+            'total_valoraciones' => $totalValoraciones,
+            'asignaciones_actuales' => $asignacionesActuales->count(),
+        ];
+        
+        $this->set(compact('xservChofere', 'estadisticas', 'asignacionesActuales'));
+    }
 }

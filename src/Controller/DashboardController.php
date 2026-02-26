@@ -164,16 +164,264 @@ class DashboardController extends AppController
             return $this->redirect(['controller' => 'XservUsuarios', 'action' => 'profile']);
         }
 
-        $choferesTable = $this->fetchTable('XservChoferes');
+        $this->viewBuilder()->setLayout('frontend');
+        $this->set(compact('user'));
+        $this->render('chofer_requests');
+    }
 
-        $chofer = $choferesTable
-            ->find()
+    public function requests()
+    {
+        $user = $this->request->getAttribute('identity');
+        $this->Authorization->skipAuthorization();
+
+        if (!$user || $user->rol !== 'chofer') {
+            return $this->redirect(['controller' => 'XservUsuarios', 'action' => 'profile']);
+        }
+
+        // Cargar asignaciones pendientes del chofer
+        $asignacionesTable = $this->fetchTable('XservAsignaciones');
+        $asignaciones = $asignacionesTable->find()
+            ->where(['XservAsignaciones.chofer_id' => $user->id])
+            ->contain([
+                'Reservas' => ['Clientes', 'XservServicios'],
+                'XservVehiculos',
+                'XservRutas'
+            ])
+            ->order(['XservAsignaciones.created_at' => 'DESC'])
+            ->all();
+
+        $this->viewBuilder()->setLayout('frontend');
+        $this->set(compact('user', 'asignaciones'));
+        $this->render('chofer_requests');
+    }
+
+    /**
+     * Mostrar notificaciones del chofer
+     */
+    public function choferNotifications()
+    {
+        $user = $this->request->getAttribute('identity');
+        $this->Authorization->skipAuthorization();
+
+        if (!$user || $user->rol !== 'chofer') {
+            return $this->redirect(['controller' => 'XservUsuarios', 'action' => 'profile']);
+        }
+
+        // Cargar notificaciones del chofer autenticado
+        $notificacionesTable = $this->fetchTable('XservNotificaciones');
+        $notificaciones = $notificacionesTable->find()
+            ->where(['XservNotificaciones.usuario_id' => $user->id])
+            ->contain(['Reservas'])
+            ->order(['XservNotificaciones.created_at' => 'DESC'])
+            ->all();
+
+        $this->viewBuilder()->setLayout('frontend');
+        $this->set(compact('user', 'notificaciones'));
+        $this->render('chofer_notifications');
+    }
+
+    /**
+     * API: Obtener asignaciones del chofer logueado
+     */
+    public function getAsignaciones()
+    {
+        $this->Authorization->skipAuthorization();
+        $user = $this->request->getAttribute('identity');
+
+        if (!$user || $user->rol !== 'chofer') {
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode(['success' => false, 'message' => 'No autorizado']))
+                ->withStatus(403);
+        }
+
+        $choferesTable = $this->fetchTable('XservChoferes');
+        $chofer = $choferesTable->find()
             ->where(['usuario_id' => $user->id])
             ->first();
 
-        $this->set(compact('user', 'chofer'));
+        if (!$chofer) {
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode(['success' => false, 'message' => 'Chofer no encontrado']))
+                ->withStatus(404);
+        }
 
-        $this->render('/XservUsuarios/profile');
+        $asignacionesTable = $this->fetchTable('XservAsignaciones');
+        $asignaciones = $asignacionesTable->find()
+            ->where(['chofer_id' => $chofer->id])
+            ->contain([
+                'Reservas' => [
+                    'Clientes' => ['XservUsuarios'],
+                    'Servicios'
+                ],
+                'Vehiculos'
+            ])
+            ->order(['XservAsignaciones.fecha_inicio_pactada' => 'ASC'])
+            ->all();
+
+        return $this->response
+            ->withType('application/json')
+            ->withStringBody(json_encode(['success' => true, 'asignaciones' => $asignaciones]));
+    }
+
+    /**
+     * API: Obtener estadísticas del chofer
+     */
+    public function getChoferStats()
+    {
+        $this->Authorization->skipAuthorization();
+        $user = $this->request->getAttribute('identity');
+
+        if (!$user || $user->rol !== 'chofer') {
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode(['success' => false, 'message' => 'No autorizado']))
+                ->withStatus(403);
+        }
+
+        $choferesTable = $this->fetchTable('XservChoferes');
+        $chofer = $choferesTable->find()
+            ->where(['usuario_id' => $user->id])
+            ->first();
+
+        if (!$chofer) {
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode(['success' => false, 'message' => 'Chofer no encontrado']))
+                ->withStatus(404);
+        }
+
+        $asignacionesTable = $this->fetchTable('XservAsignaciones');
+        $valoracionesTable = $this->fetchTable('XservValoraciones');
+
+        // Viajes completados este mes
+        $inicioMes = new \DateTime('first day of this month');
+        $viajesEsteMes = $asignacionesTable->find()
+            ->where([
+                'chofer_id' => $chofer->id,
+                'estado_asignacion' => 'finalizada',
+                'fecha_fin_pactada >=' => $inicioMes
+            ])
+            ->count();
+
+        // Solicitudes pendientes
+        $solicitudesPendientes = $asignacionesTable->find()
+            ->where([
+                'chofer_id' => $chofer->id,
+                'estado_asignacion' => 'programada'
+            ])
+            ->count();
+
+        // Rating promedio
+        $reservasIds = $asignacionesTable->find()
+            ->select(['reserva_id'])
+            ->where(['chofer_id' => $chofer->id])
+            ->extract('reserva_id')
+            ->toArray();
+
+        $ratingPromedio = 0;
+        if (!empty($reservasIds)) {
+            $rating = $valoracionesTable->find()
+                ->select(['promedio' => $valoracionesTable->find()->func()->avg('calificacion')])
+                ->where(['reserva_id IN' => $reservasIds])
+                ->first();
+            
+            $ratingPromedio = $rating && $rating->promedio ? round((float)$rating->promedio, 1) : 0;
+        }
+
+        // Total de notificaciones no leídas (para el badge del header)
+        $notificacionesTable = $this->fetchTable('XservNotificaciones');
+        $notificacionesPendientes = $notificacionesTable->find()
+            ->where([
+                'usuario_id' => $user->id,
+                'estado_envio' => 'pendiente'
+            ])
+            ->count();
+
+        return $this->response
+            ->withType('application/json')
+            ->withStringBody(json_encode([
+                'success' => true,
+                'stats' => [
+                    'viajesEsteMes' => $viajesEsteMes,
+                    'ratingPromedio' => $ratingPromedio,
+                    'solicitudesPendientes' => $solicitudesPendientes,
+                    'notificacionesPendientes' => $notificacionesPendientes
+                ]
+            ]));
+    }
+
+    /**
+     * API: Aceptar o rechazar asignación
+     */
+    public function updateAsignacion()
+    {
+        $this->Authorization->skipAuthorization();
+        $this->request->allowMethod(['post', 'put']);
+        
+        $user = $this->request->getAttribute('identity');
+        if (!$user || $user->rol !== 'chofer') {
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode(['success' => false, 'message' => 'No autorizado']))
+                ->withStatus(403);
+        }
+
+        $data = $this->request->getData();
+        $asignacionId = $data['asignacion_id'] ?? null;
+        $accion = $data['accion'] ?? null; // 'aceptar' o 'rechazar'
+
+        if (!$asignacionId || !$accion) {
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode(['success' => false, 'message' => 'Datos incompletos']))
+                ->withStatus(400);
+        }
+
+        $choferesTable = $this->fetchTable('XservChoferes');
+        $chofer = $choferesTable->find()
+            ->where(['usuario_id' => $user->id])
+            ->first();
+
+        if (!$chofer) {
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode(['success' => false, 'message' => 'Chofer no encontrado']))
+                ->withStatus(404);
+        }
+
+        $asignacionesTable = $this->fetchTable('XservAsignaciones');
+        $asignacion = $asignacionesTable->get($asignacionId);
+
+        if ($asignacion->chofer_id !== $chofer->id) {
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode(['success' => false, 'message' => 'Esta asignación no te pertenece']))
+                ->withStatus(403);
+        }
+
+        if ($accion === 'aceptar') {
+            $asignacion->estado_asignacion = 'en_curso';
+        } elseif ($accion === 'rechazar') {
+            $asignacion->estado_asignacion = 'cancelada';
+        } else {
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode(['success' => false, 'message' => 'Acción inválida']))
+                ->withStatus(400);
+        }
+
+        if ($asignacionesTable->save($asignacion)) {
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode(['success' => true, 'message' => 'Asignación actualizada']));
+        } else {
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode(['success' => false, 'message' => 'Error al actualizar']))
+                ->withStatus(500);
+        }
     }
 
         public function reportes()
@@ -276,4 +524,35 @@ class DashboardController extends AppController
             ];
         }
 
+        /**
+         * Acción para mostrar los viajes/asignaciones del chofer autenticado
+         */
+        public function choferViajes()
+        {
+            $user = $this->request->getAttribute('identity');
+            $this->Authorization->skipAuthorization();
+
+            if (!$user) {
+                return $this->redirect(['controller' => 'Frontend', 'action' => 'login']);
+            }
+
+            // Obtener el chofer del usuario autenticado
+            $choferesTable = $this->fetchTable('XservChoferes');
+            $chofer = $choferesTable->find()
+                ->where(['usuario_id' => $user->id])
+                ->first();
+
+            if (!$chofer) {
+                $this->Flash->error('No hay perfil de chofer asociado a tu usuario.');
+                return $this->redirect(['action' => 'choferPanel']);
+            }
+
+            // Renderizar la vista de viajes
+            $this->set(compact('user', 'chofer'));
+            $this->render('chofer_trips');
+        }
+
+
+
 }
+

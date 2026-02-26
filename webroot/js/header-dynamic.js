@@ -377,6 +377,12 @@
         });
       });
 
+      // Botón de notificaciones
+      const notificationBtn = document.getElementById('xservNotificationBtn');
+      notificationBtn?.addEventListener('click', () => {
+        window.location.href = '/notifications';
+      });
+
       // Dropdown de perfil en desktop
       if (this.userProfileBtn && this.userProfileWrapper) {
         this.userProfileBtn.addEventListener('click', (e) => {

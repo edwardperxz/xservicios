@@ -6,10 +6,31 @@
 (function() {
   'use strict';
 
+  function getHeaderConfig() {
+    const bodyData = document.body ? document.body.dataset : {};
+    const config = window.xservHeaderConfig || {};
+
+    const notificationCountRaw = config.notificationCount ?? bodyData.notificationCount ?? 0;
+    const notificationCount = Number(notificationCountRaw);
+
+    return {
+      variant: config.variant || bodyData.headerVariant || 'default',
+      activePage: config.activePage || bodyData.activePage || null,
+      notificationCount: Number.isFinite(notificationCount) ? notificationCount : 0,
+    };
+  }
+
   // Determinar página activa basada en la URL
-  function getActivePage() {
+  function getActivePage(headerConfig) {
+    if (headerConfig && headerConfig.activePage) {
+      return headerConfig.activePage;
+    }
+
     const path = window.location.pathname.toLowerCase();
-    
+
+    if (path.includes('requests')) return 'requests';
+    if (path.includes('trips')) return 'trips';
+    if (path.includes('messages')) return 'messages';
     if (path.includes('nosotros') || path.includes('about')) return 'about';
     if (path.includes('flota') || path.includes('fleet')) return 'fleet';
     if (path.includes('service')) return 'services';
@@ -17,25 +38,30 @@
   }
 
   // Crear el HTML del header
-  function createHeaderHTML(activePage) {
+  function createHeaderHTML(activePage, headerConfig) {
+    const variant = headerConfig?.variant || 'default';
+    const notificationCount = headerConfig?.notificationCount || 0;
     const isActive = (page) => page === activePage ? 'active' : '';
 
-    return `
-      <header class="xserv-header">
-        <!-- Hamburger Menu Button -->
-        <button class="xserv-hamburger-menu" id="menuToggle" aria-label="Menú">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-          </svg>
-        </button>
+    const notificationBadgeClass = notificationCount > 0 ? '' : ' is-hidden';
+    const notificationsButton = variant === 'driver' ? `
+          <button class="xserv-notification-button" id="xservNotificationBtn" aria-label="Notificaciones">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+            <span class="xserv-notification-count${notificationBadgeClass}" id="xservNotificationCount">${notificationCount}</span>
+          </button>
+        ` : '';
 
-        <!-- Logo -->
-        <a href="/home" class="xserv-logo">
-          <span class="xserv-logo-x">X</span>SERVICIOS
-        </a>
-
-        <!-- Desktop Navigation -->
-        <nav class="xserv-nav-menu">
+    const navDesktop = variant === 'driver' ? `
+          <a href="/home" class="xserv-nav-item ${isActive('home')}">
+            <span data-i18n="nav.home">Inicio</span>
+          </a>
+          <a href="/chofer/viajes" class="xserv-nav-item ${isActive('trips')}">
+            <span data-i18n="nav.trips">Mis Viajes</span>
+          </a>
+        ` : `
           <a href="/home" class="xserv-nav-item ${isActive('home')}">
             <span data-i18n="nav.home">Inicio</span>
           </a>
@@ -50,22 +76,24 @@
           <a href="/about" class="xserv-nav-item ${isActive('about')}">
             <span data-i18n="nav.about">Nosotros</span>
           </a>
-        </nav>
+        `;
 
-        <!-- Mobile Sidebar -->
-        <nav class="xserv-nav-menu-mobile" id="navSidebar">
-          <!-- Sidebar Header with Close Button -->
-          <div class="xserv-sidebar-header">
-            <span class="xserv-sidebar-title">Menú</span>
-            <button class="xserv-sidebar-close" id="sidebarCloseBtn" aria-label="Cerrar menú">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+    const navMobile = variant === 'driver' ? `
+            <a href="/home" class="xserv-nav-item-mobile ${isActive('home')}">
+              <svg class="xserv-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
               </svg>
-            </button>
-          </div>
-
-          <!-- Navigation Items -->
-          <div class="xserv-sidebar-nav">
+              <span data-i18n="nav.home">Inicio</span>
+            </a>
+            <a href="/chofer/viajes" class="xserv-nav-item-mobile ${isActive('trips')}">
+              <svg class="xserv-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22 16.13 2.97 16.13 2.97 5.74 22 5.74"/>
+                <path d="M16 13l6-6m-6 6l-6-6" stroke="currentColor" fill="none"/>
+              </svg>
+              <span data-i18n="nav.trips">Mis Viajes</span>
+            </a>
+        ` : `
             <a href="/home" class="xserv-nav-item-mobile ${isActive('home')}">
               <svg class="xserv-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
@@ -106,6 +134,42 @@
               </svg>
               <span data-i18n="nav.about">Nosotros</span>
             </a>
+        `;
+
+    return `
+      <header class="xserv-header">
+        <!-- Hamburger Menu Button -->
+        <button class="xserv-hamburger-menu" id="menuToggle" aria-label="Menú">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+
+        <!-- Logo -->
+        <a href="/home" class="xserv-logo">
+          <span class="xserv-logo-x">X</span><span class="xserv-logo-text">SERVICIOS</span>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="xserv-nav-menu">
+          ${navDesktop}
+        </nav>
+
+        <!-- Mobile Sidebar -->
+        <nav class="xserv-nav-menu-mobile" id="navSidebar">
+          <!-- Sidebar Header with Close Button -->
+          <div class="xserv-sidebar-header">
+            <span class="xserv-sidebar-title">Menú</span>
+            <button class="xserv-sidebar-close" id="sidebarCloseBtn" aria-label="Cerrar menú">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Navigation Items -->
+          <div class="xserv-sidebar-nav">
+            ${navMobile}
           </div>
 
           <!-- Sidebar Footer Section -->
@@ -153,6 +217,7 @@
 
         <!-- Right Actions -->
         <div class="xserv-user-actions">
+          ${notificationsButton}
           <!-- Language Button (Desktop Only) -->
           <button class="xserv-lang-button" id="langToggle" aria-label="Cambiar idioma">
             <svg class="lang-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -231,7 +296,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 2rem 2.5rem 1.5rem 2.5rem;
+        padding: 1rem 1.5rem;
         background: rgba(0, 0, 0, 0.4);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
@@ -241,6 +306,8 @@
         right: 0;
         width: 100%;
         z-index: 100;
+        min-height: 70px;
+        box-sizing: border-box;
       }
 
       .xserv-logo {
@@ -254,7 +321,15 @@
         color: var(--text-white);
         text-decoration: none;
         position: absolute;
-        left: 2.5rem;
+        left: 1.5rem;
+        flex-shrink: 0;
+      }
+
+      .xserv-logo-text {
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        margin-left: 0.3rem;
+        display: inline;
       }
 
       .xserv-logo-x {
@@ -266,7 +341,7 @@
       .xserv-nav-menu {
         display: flex;
         align-items: center;
-        gap: 2rem;
+        gap: 1.8rem;
       }
 
       .xserv-nav-item {
@@ -279,6 +354,7 @@
         text-decoration: none;
         font-size: 0.875rem;
         transition: color 0.3s;
+        padding: 0.5rem 0;
       }
 
       .xserv-nav-item:hover,
@@ -292,7 +368,7 @@
         background: transparent;
         border: none;
         cursor: pointer;
-        padding: 0.5rem;
+        padding: 0.4rem;
         color: var(--text-white);
         transition: all 0.3s;
         position: relative;
@@ -332,7 +408,7 @@
         position: fixed;
         top: 0;
         left: 0;
-        width: 300px;
+        width: 280px;
         height: 100vh;
         background: var(--dark-bg);
         border-right: 1px solid rgba(201, 169, 98, 0.15);
@@ -401,14 +477,17 @@
       .xserv-sidebar-nav {
         flex: 1;
         overflow-y: auto;
-        padding: 0.75rem 0;
+        padding: 1.5rem 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
       }
 
       .xserv-nav-item-mobile {
         display: flex;
         align-items: center;
         gap: 1rem;
-        padding: 0.9rem 1.5rem;
+        padding: 1.3rem 1.5rem;
         color: var(--text-gray);
         text-decoration: none;
         font-size: 0.95rem;
@@ -416,11 +495,13 @@
         transition: all 0.2s ease;
         border-left: 3px solid transparent;
         position: relative;
+        margin: 0 0.5rem;
+        border-radius: 10px;
       }
 
       .xserv-nav-icon {
-        width: 20px;
-        height: 20px;
+        width: 22px;
+        height: 22px;
         stroke-width: 2;
         flex-shrink: 0;
         transition: stroke 0.2s ease;
@@ -430,8 +511,7 @@
       .xserv-nav-item-mobile:hover {
         background: rgba(201, 169, 98, 0.08);
         color: var(--text-white);
-        border-left-color: rgba(201, 169, 98, 0.4);
-        padding-left: 1.7rem;
+        border-left-color: rgba(201, 169, 98, 0.6);
       }
 
       .xserv-nav-item-mobile:hover .xserv-nav-icon {
@@ -440,10 +520,9 @@
       }
 
       .xserv-nav-item-mobile.active {
-        background: rgba(201, 169, 98, 0.12);
+        background: rgba(201, 169, 98, 0.15);
         color: var(--gold);
         border-left-color: var(--gold);
-        padding-left: 1.7rem;
       }
 
       .xserv-nav-item-mobile.active .xserv-nav-icon {
@@ -453,59 +532,62 @@
 
       /* Sidebar Footer Section */
       .xserv-sidebar-footer {
-        padding: 1.25rem 1.5rem;
+        padding: 1.5rem;
         border-top: 1px solid rgba(201, 169, 98, 0.15);
         margin-top: auto;
         display: flex;
         flex-direction: column;
-        gap: 0.85rem;
-        background: rgba(13, 13, 13, 0.3);
+        gap: 1rem;
+        background: rgba(13, 13, 13, 0.5);
       }
 
       /* User Profile Mobile */
       .xserv-user-profile-mobile {
         display: flex;
         flex-direction: column;
-        gap: 0.75rem;
+        gap: 1rem;
       }
 
       .xserv-user-info-mobile {
         display: flex;
         align-items: center;
         gap: 1rem;
-        padding: 0.75rem;
+        padding: 1rem;
         background: rgba(201, 169, 98, 0.08);
-        border-radius: 8px;
-        border: 1px solid rgba(201, 169, 98, 0.2);
+        border-radius: 10px;
+        border: 1px solid rgba(201, 169, 98, 0.25);
         text-decoration: none;
         color: inherit;
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
         cursor: pointer;
       }
 
       .xserv-user-info-mobile:hover {
         background: rgba(201, 169, 98, 0.15);
-        border-color: rgba(201, 169, 98, 0.4);
+        border-color: rgba(201, 169, 98, 0.5);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(201, 169, 98, 0.2);
       }
 
       .xserv-user-avatar-mobile {
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
         background: linear-gradient(135deg, var(--gold), var(--gold-dark));
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 0.9rem;
+        font-size: 1rem;
         font-weight: 700;
         color: var(--dark-bg);
         font-family: 'Inter', sans-serif;
         flex-shrink: 0;
+        box-shadow: 0 2px 8px rgba(201, 169, 98, 0.3);
       }
 
       .xserv-user-name-mobile {
         color: var(--text-white);
-        font-size: 0.95rem;
+        font-size: 1rem;
         font-weight: 600;
         font-family: 'Inter', sans-serif;
       }
@@ -513,27 +595,28 @@
       .xserv-user-menu-mobile {
         display: flex;
         flex-direction: column;
-        gap: 0.6rem;
+        gap: 0.75rem;
       }
 
       .xserv-user-menu-item {
         display: flex;
         align-items: center;
-        gap: 0.9rem;
-        padding: 0.9rem 1rem;
+        gap: 0.75rem;
+        padding: 0.85rem 0.75rem;
         color: var(--text-gray);
         text-decoration: none;
-        font-size: 0.95rem;
+        font-size: 0.875rem;
         font-weight: 500;
-        transition: all 0.2s ease;
-        border-radius: 8px;
-        border: 1px solid transparent;
-        background: transparent;
+        transition: all 0.3s ease;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: rgba(255, 255, 255, 0.02);
         cursor: pointer;
         font-family: inherit;
         width: 100%;
         text-align: left;
         position: relative;
+        box-sizing: border-box;
       }
 
       .xserv-user-menu-item::before {
@@ -547,14 +630,14 @@
         border-radius: 0 4px 4px 0;
         transform: scaleY(0);
         transform-origin: center;
-        transition: transform 0.2s ease;
+        transition: transform 0.3s ease;
       }
 
       .xserv-user-menu-item:hover {
         background: rgba(201, 169, 98, 0.12);
         color: var(--text-white);
         border-color: rgba(201, 169, 98, 0.3);
-        padding-left: 1.1rem;
+        transform: translateY(-2px);
       }
 
       .xserv-user-menu-item:hover::before {
@@ -566,7 +649,7 @@
         height: 18px;
         stroke: currentColor;
         flex-shrink: 0;
-        transition: stroke 0.2s ease;
+        transition: stroke 0.3s ease;
       }
 
       .xserv-user-menu-item:hover svg {
@@ -575,13 +658,14 @@
 
       .xserv-user-menu-item.danger {
         color: #f87171;
+        border-color: rgba(248, 113, 113, 0.15);
       }
 
       .xserv-user-menu-item.danger:hover {
         background: rgba(239, 68, 68, 0.12);
         color: #fca5a5;
-        border-color: rgba(239, 68, 68, 0.3);
-        padding-left: 1.1rem;
+        border-color: rgba(239, 68, 68, 0.4);
+        transform: translateY(-2px);
       }
 
       .xserv-user-menu-item.danger:hover svg {
@@ -595,9 +679,58 @@
       .xserv-user-actions {
         display: flex;
         align-items: center;
-        gap: 1.5rem;
+        gap: 1rem;
         position: absolute;
-        right: 2.5rem;
+        right: 1.5rem;
+        flex-shrink: 0;
+      }
+
+      .xserv-notification-button {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        border: 1px solid rgba(201, 169, 98, 0.35);
+        background: rgba(201, 169, 98, 0.12);
+        color: var(--text-white);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        padding: 0;
+      }
+
+      .xserv-notification-button:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+        background: rgba(201, 169, 98, 0.2);
+        transform: translateY(-2px);
+      }
+
+      .xserv-notification-button svg {
+        width: 18px;
+        height: 18px;
+        stroke: currentColor;
+      }
+
+      .xserv-notification-count {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 5px;
+        border-radius: 999px;
+        background: #ef4444;
+        color: #ffffff;
+        font-size: 0.7rem;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+        box-shadow: 0 4px 10px rgba(239, 68, 68, 0.35);
       }
 
       .xserv-lang-button {
@@ -635,14 +768,14 @@
       .xserv-lang-button-mobile {
         display: none;
         width: 100%;
-        padding: 0.8rem 1.25rem;
+        padding: 1rem 1.25rem;
         gap: 0.75rem;
         justify-content: center;
         align-items: center;
         border: 1px solid rgba(201, 169, 98, 0.3);
-        background: rgba(201, 169, 98, 0.05);
-        border-radius: 8px;
-        font-size: 0.9rem;
+        background: rgba(201, 169, 98, 0.08);
+        border-radius: 10px;
+        font-size: 0.95rem;
         font-weight: 600;
         color: var(--text-white);
         transition: all 0.3s ease;
@@ -650,15 +783,22 @@
       }
 
       .xserv-lang-button-mobile:hover {
-        background: rgba(201, 169, 98, 0.12);
+        background: rgba(201, 169, 98, 0.15);
         border-color: rgba(201, 169, 98, 0.5);
         color: var(--gold);
+        transform: translateY(-2px);
       }
 
       .xserv-lang-button-mobile .lang-icon {
-        width: 18px;
-        height: 18px;
+        width: 20px;
+        height: 20px;
         stroke: currentColor;
+      }
+
+      .xserv-lang-button-mobile .lang-code {
+        color: var(--gold);
+        font-family: 'Inter', sans-serif;
+        font-size: 0.9rem;
       }
 
       .xserv-auth-button {
@@ -885,14 +1025,32 @@
       /* Tablet */
       @media (max-width: 1024px) {
         .xserv-nav-menu {
-          gap: 1.5rem;
+          gap: 1.2rem;
+        }
+
+        .xserv-logo {
+          width: 36px;
+          height: 36px;
+          font-size: 0.75rem;
+        }
+
+        .xserv-logo-text {
+          font-size: 0.75rem;
+          letter-spacing: 1px;
+          display: none;
         }
       }
 
-      /* Mobile */
+      /* Mobile: 768px - 1115px */
       @media (max-width: 1115px) {
         .xserv-header {
-          padding: 1rem 1.5rem;
+          padding: 1.2rem 1.5rem;
+          min-height: 75px;
+        }
+
+        .xserv-header.driver-variant {
+          padding: 1.3rem 1.5rem;
+          min-height: 80px;
         }
 
         .xserv-hamburger-menu {
@@ -900,12 +1058,39 @@
           position: absolute;
           left: 1.5rem;
           z-index: 102;
+          width: 32px;
+          height: 28px;
+        }
+
+        .xserv-header.driver-variant .xserv-hamburger-menu {
+          left: 1.5rem;
         }
 
         .xserv-logo {
-          position: static;
-          left: auto;
-          margin: 0 auto;
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 42px;
+          height: 42px;
+          font-size: 1.4rem;
+        }
+
+        .xserv-header.driver-variant .xserv-logo {
+          width: 48px;
+          height: 48px;
+          font-size: 1.5rem;
+        }
+
+        .xserv-logo-x {
+          font-size: 1.68rem;
+        }
+
+        .xserv-header.driver-variant .xserv-logo-x {
+          font-size: 1.8rem;
+        }
+
+        .xserv-logo-text {
+          display: none;
         }
 
         .xserv-nav-menu {
@@ -918,31 +1103,72 @@
           gap: 0;
         }
 
+        .xserv-nav-menu-mobile.driver-variant {
+          gap: 0;
+          padding-top: 0.5rem;
+        }
+
         .xserv-lang-button:not(.xserv-lang-button-mobile) {
           display: none;
         }
 
         .xserv-lang-button-mobile {
           display: flex;
+          width: 100%;
+          padding: 1.25rem 1.25rem;
+          gap: 0.75rem;
+          justify-content: center;
+          align-items: center;
+          border: 1px solid rgba(201, 169, 98, 0.3);
+          background: rgba(201, 169, 98, 0.08);
+          border-radius: 10px;
+          font-size: 0.95rem;
+          font-weight: 600;
+          color: var(--text-white);
+          transition: all 0.3s ease;
+          cursor: pointer;
+        }
+
+        .xserv-lang-button-mobile:hover {
+          background: rgba(201, 169, 98, 0.15);
+          border-color: rgba(201, 169, 98, 0.5);
+          color: var(--gold);
+          transform: translateY(-2px);
+        }
+
+        .xserv-lang-button-mobile .lang-icon {
+          width: 20px;
+          height: 20px;
+          stroke: currentColor;
+        }
+
+        .xserv-lang-button-mobile .lang-code {
+          color: var(--gold);
+          font-family: 'Inter', sans-serif;
+          font-size: 0.9rem;
         }
 
         .xserv-auth-button-mobile {
           display: flex;
           width: 100%;
-          padding: 0.85rem 1.5rem;
+          padding: 1.25rem 1.25rem;
           background: linear-gradient(135deg, var(--gold), var(--gold-dark));
           color: var(--dark-bg);
-          font-weight: 600;
+          font-weight: 700;
           font-size: 0.95rem;
-          min-width: auto;
           border: none;
-          border-radius: 8px;
+          border-radius: 10px;
           transition: all 0.3s ease;
+          cursor: pointer;
+          box-shadow: 0 4px 12px rgba(201, 169, 98, 0.25);
+          align-items: center;
+          justify-content: center;
         }
 
         .xserv-auth-button-mobile:hover {
           background: linear-gradient(135deg, var(--gold-light), var(--gold));
           transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(201, 169, 98, 0.35);
         }
 
         /* Hide desktop login button in mobile */
@@ -956,24 +1182,291 @@
         }
 
         .xserv-user-actions {
-          position: static;
-          gap: 1rem;
+          position: absolute;
+          right: 1.5rem;
+          gap: 0.75rem;
+        }
+
+        .xserv-header.driver-variant .xserv-user-actions {
+          right: 1.5rem;
         }
 
         .xserv-user-name {
           display: none;
         }
 
-        .xserv-auth-button {
-          padding: 0.5rem 1rem;
+        .xserv-auth-button:not(.xserv-auth-button-mobile) {
+          padding: 0.5rem 0.8rem;
           min-width: auto;
-          font-size: 0.8rem;
+          font-size: 0.75rem;
+          height: 36px;
+          width: 36px;
+          border-radius: 8px;
         }
 
         .xserv-user-avatar {
-          width: 24px;
-          height: 24px;
+          width: 36px;
+          height: 36px;
+          font-size: 0.7rem;
+          border-radius: 8px;
+        }
+
+        .xserv-notification-button {
+          width: 42px;
+          height: 42px;
+        }
+
+        .xserv-header.driver-variant .xserv-notification-button {
+          width: 44px;
+          height: 44px;
+        }
+
+        .xserv-notification-button svg {
+          width: 20px;
+          height: 20px;
+        }
+
+        .xserv-header.driver-variant .xserv-notification-button svg {
+          width: 22px;
+          height: 22px;
+        }
+      }
+
+      /* Small Mobile: < 768px */
+      @media (max-width: 768px) {
+        .xserv-header {
+          padding: 1rem 1.2rem;
+          min-height: 70px;
+        }
+
+        .xserv-header.driver-variant {
+          padding: 1.1rem 1.2rem;
+          min-height: 75px;
+        }
+
+        .xserv-hamburger-menu {
+          left: 1.2rem;
+          width: 30px;
+          height: 26px;
+        }
+
+        .xserv-header.driver-variant .xserv-hamburger-menu {
+          left: 1.2rem;
+        }
+
+        .xserv-logo {
+          width: 38px;
+          height: 38px;
+          font-size: 1.2rem;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+
+        .xserv-header.driver-variant .xserv-logo {
+          width: 42px;
+          height: 42px;
+          font-size: 1.35rem;
+        }
+
+        .xserv-logo-x {
+          font-size: 1.44rem;
+        }
+
+        .xserv-header.driver-variant .xserv-logo-x {
+          font-size: 1.62rem;
+        }
+
+        .xserv-logo-text {
           font-size: 0.6rem;
+          display: none;
+        }
+
+        .xserv-lang-button-mobile {
+          display: flex;
+          width: 100%;
+          padding: 1.25rem 1.25rem;
+          gap: 0.75rem;
+          justify-content: center;
+          align-items: center;
+          border: 1px solid rgba(201, 169, 98, 0.3);
+          background: rgba(201, 169, 98, 0.08);
+          border-radius: 10px;
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: var(--text-white);
+          transition: all 0.3s ease;
+          cursor: pointer;
+        }
+
+        .xserv-lang-button-mobile:hover {
+          background: rgba(201, 169, 98, 0.15);
+          border-color: rgba(201, 169, 98, 0.5);
+          color: var(--gold);
+          transform: translateY(-2px);
+        }
+
+        .xserv-lang-button-mobile .lang-icon {
+          width: 20px;
+          height: 20px;
+          stroke: currentColor;
+        }
+
+        .xserv-lang-button-mobile .lang-code {
+          color: var(--gold);
+          font-family: 'Inter', sans-serif;
+          font-size: 0.9rem;
+        }
+
+        .xserv-auth-button-mobile {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 1.25rem 1.25rem;
+          font-size: 0.9rem;
+          width: 100%;
+          border-radius: 10px;
+          background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+          color: var(--dark-bg);
+          font-weight: 700;
+          border: none;
+          transition: all 0.3s ease;
+          cursor: pointer;
+          box-shadow: 0 4px 12px rgba(201, 169, 98, 0.25);
+        }
+
+        .xserv-auth-button-mobile:hover {
+          background: linear-gradient(135deg, var(--gold-light), var(--gold));
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(201, 169, 98, 0.35);
+        }
+
+        .xserv-user-menu-item {
+          display: flex;
+          padding: 0.85rem 0.75rem;
+          font-size: 0.875rem;
+          gap: 0.75rem;
+          align-items: center;
+          color: var(--text-gray);
+          text-decoration: none;
+          font-weight: 500;
+          transition: all 0.3s ease;
+          border-radius: 10px;
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          background: rgba(255, 255, 255, 0.02);
+          cursor: pointer;
+          font-family: inherit;
+          width: 100%;
+          text-align: left;
+          position: relative;
+          box-sizing: border-box;
+        }
+
+        .xserv-user-menu-item::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 3px;
+          background: var(--gold);
+          border-radius: 0 4px 4px 0;
+          transform: scaleY(0);
+          transform-origin: center;
+          transition: transform 0.3s ease;
+        }
+
+        .xserv-user-menu-item:hover {
+          background: rgba(201, 169, 98, 0.12);
+          color: var(--text-white);
+          border-color: rgba(201, 169, 98, 0.3);
+          transform: translateY(-2px);
+        }
+
+        .xserv-user-menu-item:hover::before {
+          transform: scaleY(1);
+        }
+
+        .xserv-user-menu-item svg {
+          width: 18px;
+          height: 18px;
+          stroke: currentColor;
+          flex-shrink: 0;
+          transition: stroke 0.3s ease;
+        }
+
+        .xserv-user-menu-item:hover svg {
+          stroke: var(--gold);
+        }
+
+        .xserv-user-menu-item.danger {
+          color: #f87171;
+          border-color: rgba(248, 113, 113, 0.15);
+        }
+
+        .xserv-user-menu-item.danger:hover {
+          background: rgba(239, 68, 68, 0.12);
+          color: #fca5a5;
+          border-color: rgba(239, 68, 68, 0.4);
+          transform: translateY(-2px);
+        }
+
+        .xserv-user-menu-item.danger:hover svg {
+          stroke: #fca5a5;
+        }
+
+        .xserv-user-menu-item.danger::before {
+          background: #f87171;
+        }
+
+        .xserv-user-actions {
+          right: 1.2rem;
+          gap: 0.6rem;
+        }
+
+        .xserv-header.driver-variant .xserv-user-actions {
+          right: 1.2rem;
+        }
+
+        .xserv-auth-button:not(.xserv-auth-button-mobile) {
+          width: 32px;
+          height: 32px;
+          padding: 0.4rem;
+          font-size: 0.65rem;
+        }
+
+        .xserv-user-avatar {
+          width: 32px;
+          height: 32px;
+          font-size: 0.6rem;
+        }
+
+        .xserv-notification-button {
+          width: 38px;
+          height: 38px;
+        }
+
+        .xserv-header.driver-variant .xserv-notification-button {
+          width: 40px;
+          height: 40px;
+        }
+
+        .xserv-notification-button svg {
+          width: 18px;
+          height: 18px;
+        }
+
+        .xserv-header.driver-variant .xserv-notification-button svg {
+          width: 20px;
+          height: 20px;
+        }
+      }
+          width: 32px;
+          height: 32px;
+        }
+
+        .xserv-notification-button svg {
+          width: 16px;
+          height: 16px;
         }
       }
 
@@ -993,10 +1486,11 @@
     const existingHeader = document.querySelector('.header');
     
     // Determinar página activa
-    const activePage = getActivePage();
+    const headerConfig = getHeaderConfig();
+    const activePage = getActivePage(headerConfig);
 
     // Crear HTML del header
-    const headerHTML = createHeaderHTML(activePage);
+    const headerHTML = createHeaderHTML(activePage, headerConfig);
 
     if (existingHeader) {
       // Reemplazar header existente
@@ -1017,6 +1511,19 @@
 
     // Reinicializar el sistema i18n después de cargar el header
     function initializeI18n() {
+      const headerConfig = getHeaderConfig();
+      const isDriver = headerConfig.variant === 'driver';
+      
+      // Los choferes no necesitan esperar i18n (todo está en español)
+      if (isDriver) {
+        console.log('✅ Header cargado (chofer - sin i18n)');
+        const event = new CustomEvent('headerLoaded', { 
+          detail: { timestamp: Date.now() } 
+        });
+        document.dispatchEvent(event);
+        return;
+      }
+      
       if (window.i18n) {
         // Traducir el contenido del header
         window.i18n.translatePage();

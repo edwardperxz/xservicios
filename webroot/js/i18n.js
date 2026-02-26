@@ -10,6 +10,8 @@ const translations = {
     'nav.fleet': 'Ver flota',
     'nav.services': 'Servicios',
     'nav.about': 'Nosotros',
+    'nav.trips': 'Viajes',
+    'nav.messages': 'Mensajes',
     
     // Común
     'common.loading': 'Cargando...',
@@ -380,6 +382,8 @@ const translations = {
     'nav.fleet': 'View Fleet',
     'nav.services': 'Services',
     'nav.about': 'About Us',
+    'nav.trips': 'Trips',
+    'nav.messages': 'Messages',
     
     // Common
     'common.loading': 'Loading...',

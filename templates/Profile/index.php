@@ -103,9 +103,9 @@
 
     /* Container */
     .profile-container {
-        max-width: 1150px;
+        max-width: 1400px;
         margin: 0 auto;
-        padding: 3rem 1.5rem;
+        padding: 1.5rem 2rem 2rem;
         width: 100%;
         animation: fadeInUp 0.8s ease-out;
     }
@@ -115,8 +115,8 @@
         background: linear-gradient(135deg, rgba(201, 169, 98, 0.15) 0%, rgba(201, 169, 98, 0.05) 100%);
         border: 1px solid var(--border-color);
         border-radius: 24px;
-        padding: 4rem 3rem;
-        margin-bottom: 3rem;
+        padding: 2rem 2.5rem;
+        margin-bottom: 2rem;
         box-shadow: var(--shadow-lg);
         position: relative;
         overflow: hidden;
@@ -153,20 +153,20 @@
         z-index: 1;
         display: flex;
         align-items: center;
-        gap: 2.5rem;
+        gap: 1.5rem;
         flex-wrap: wrap;
     }
 
     .profile-avatar {
-        width: 140px;
-        height: 140px;
-        min-width: 140px;
+        width: 110px;
+        height: 110px;
+        min-width: 110px;
         background: linear-gradient(135deg, #d4b978 0%, #c9a962 50%, #a88b4a 100%);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 3.5rem;
+        font-size: 2.8rem;
         font-weight: 800;
         color: var(--dark-bg);
         box-shadow: 0 12px 36px rgba(201, 169, 98, 0.35);
@@ -187,9 +187,9 @@
     }
 
     .profile-info h1 {
-        font-size: 2.8rem;
+        font-size: 2.2rem;
         font-weight: 800;
-        margin-bottom: 0.8rem;
+        margin-bottom: 0.5rem;
         background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -198,8 +198,8 @@
 
     .profile-meta {
         display: flex;
-        gap: 2rem;
-        margin-top: 1.2rem;
+        gap: 1.5rem;
+        margin-top: 0.8rem;
         flex-wrap: wrap;
     }
 
@@ -342,7 +342,7 @@
         background: linear-gradient(135deg, rgba(26, 26, 26, 0.8) 0%, rgba(26, 26, 26, 0.5) 100%);
         border: 1px solid var(--border-color);
         border-radius: 16px;
-        padding: 2rem;
+        padding: 1.5rem;
         box-shadow: var(--shadow-md);
         transition: all 0.4s ease;
         animation: fadeInUp 0.8s ease-out;
@@ -355,8 +355,8 @@
     }
 
     .profile-section-header {
-        margin-bottom: 1.8rem;
-        padding-bottom: 1.2rem;
+        margin-bottom: 1.2rem;
+        padding-bottom: 0.8rem;
         border-bottom: 2px solid var(--border-color);
     }
 
@@ -364,7 +364,7 @@
         display: flex;
         align-items: center;
         gap: 0.8rem;
-        font-size: 1.3rem;
+        font-size: 1.15rem;
         font-weight: 700;
         color: var(--text-white);
     }
@@ -378,14 +378,14 @@
     .profile-section-content {
         display: flex;
         flex-direction: column;
-        gap: 1.2rem;
+        gap: 0.8rem;
     }
 
     .info-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1rem;
+        padding: 0.8rem;
         border-radius: 8px;
         background: rgba(255, 255, 255, 0.02);
         transition: all 0.3s ease;
@@ -418,7 +418,7 @@
         gap: 1rem;
         flex-wrap: wrap;
         justify-content: center;
-        padding: 2rem 0;
+        padding: 1rem 0;
     }
 
     .btn {
@@ -426,10 +426,10 @@
         align-items: center;
         justify-content: center;
         gap: 0.6rem;
-        padding: 1rem 2rem;
+        padding: 0.8rem 1.8rem;
         border: none;
         border-radius: 12px;
-        font-size: 1rem;
+        font-size: 0.9rem;
         font-weight: 600;
         text-decoration: none;
         cursor: pointer;
@@ -481,12 +481,12 @@
     /* ===== RESPONSIVE DESIGN ===== */
     @media (max-width: 768px) {
         .profile-container {
-            padding: 2rem 1rem;
+            padding: 1.5rem 1rem 1.5rem;
         }
 
         .profile-header {
-            padding: 2.5rem 1.5rem;
-            margin-bottom: 2rem;
+            padding: 1.5rem 1.2rem;
+            margin-bottom: 1.5rem;
         }
 
         .profile-header__content {
@@ -496,14 +496,14 @@
         }
 
         .profile-avatar {
-            width: 100px;
-            height: 100px;
-            min-width: 100px;
-            font-size: 2.5rem;
+            width: 90px;
+            height: 90px;
+            min-width: 90px;
+            font-size: 2rem;
         }
 
         .profile-info h1 {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
         }
 
         .profile-meta {
@@ -544,53 +544,41 @@
 
     @media (max-width: 480px) {
         .profile-container {
-            padding: 1.5rem 1rem;
+            padding: 1rem 0.8rem 1.5rem;
         }
 
         .profile-header {
-            padding: 1.5rem 1rem;
-            margin-bottom: 1.5rem;
+            padding: 1.2rem 1rem;
+            margin-bottom: 1rem;
         }
 
         .profile-avatar {
             width: 80px;
             height: 80px;
-            font-size: 2rem;
+            font-size: 1.8rem;
         }
 
         .profile-info h1 {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
         }
 
         .profile-meta {
             flex-direction: column;
-            gap: 0.8rem;
+            gap: 0.6rem;
             align-items: center;
         }
 
-        .profile-card {
-            padding: 1.5rem;
-        }
-
-        .profile-card h3 {
-            font-size: 0.9rem;
-        }
-
-        .profile-card-value {
-            font-size: 1.3rem;
-        }
-
         .profile-section {
-            padding: 1.5rem;
+            padding: 1.2rem;
         }
 
         .profile-section-header h2 {
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
 
         .btn {
-            padding: 0.8rem 1.2rem;
-            font-size: 0.9rem;
+            padding: 0.7rem 1.2rem;
+            font-size: 0.85rem;
         }
     }
 </style>
@@ -598,7 +586,7 @@
 <body>
     <!-- Header se carga con header-loader.js -->
 
-<div class="profile-container" style="padding-top: 8rem;">
+<div class="profile-container" style="padding-top: 6rem;">
     <!-- Profile Header -->
     <div class="profile-header">
         <div class="profile-header__content">
@@ -775,6 +763,12 @@
     </div>
 </div>
 
+<script>
+  window.xservHeaderConfig = {
+    variant: '<?= ($usuario && $usuario->rol === 'chofer') ? 'driver' : 'user' ?>',
+    activePage: 'profile'
+  };
+</script>
 <script src="/js/i18n.js"></script>
 <script src="/js/header-loader.js"></script>
 <script src="/js/header-dynamic.js"></script>

@@ -130,9 +130,8 @@
               </a>
               <div class="xserv-user-menu-mobile">
                 <a href="/settings" class="xserv-user-menu-item">
-                  <svg viewBox="0 0 24 24" stroke-width="2" fill="none" stroke="currentColor">
-                    <circle cx="12" cy="12" r="3"/>
-                    <path d="M12 1v6m0 6v6M5.6 5.6l4.2 4.2m4.2 4.2l4.2 4.2M1 12h6m6 0h6M5.6 18.4l4.2-4.2m4.2-4.2l4.2-4.2"/>
+                  <svg viewBox="7 0 54 54" stroke-width="3.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M45,14.67l-2.76,2a1,1,0,0,1-1,.11L37.65,15.3a1,1,0,0,1-.61-.76l-.66-3.77a1,1,0,0,0-1-.84H30.52a1,1,0,0,0-1,.77l-.93,3.72a1,1,0,0,1-.53.65l-3.3,1.66a1,1,0,0,1-1-.08l-3-2.13a1,1,0,0,0-1.31.12l-3.65,3.74a1,1,0,0,0-.13,1.26l1.87,2.88a1,1,0,0,1,.1.89L16.34,27a1,1,0,0,1-.68.63l-3.85,1.06a1,1,0,0,0-.74,1v4.74a1,1,0,0,0,.8,1l3.9.8a1,1,0,0,1,.72.57l1.42,3.15a1,1,0,0,1-.05.92l-2.13,3.63a1,1,0,0,0,.17,1.24L19.32,49a1,1,0,0,0,1.29.09L23.49,47a1,1,0,0,1,1-.1l3.74,1.67a1,1,0,0,1,.59.75l.66,3.79a1,1,0,0,0,1,.84h4.89a1,1,0,0,0,1-.86l.58-4a1,1,0,0,1,.58-.77l3.58-1.62a1,1,0,0,1,1,.09l3.14,2.12a1,1,0,0,0,1.3-.15L50,45.06a1,1,0,0,0,.09-1.27l-2.08-3a1,1,0,0,1-.09-1l1.48-3.43a1,1,0,0,1,.71-.59L53.77,35a1,1,0,0,0,.8-1V29.42a1,1,0,0,0-.8-1l-3.72-.78a1,1,0,0,1-.73-.62l-1.45-3.65a1,1,0,0,1,.11-.94l2.15-3.14A1,1,0,0,0,50,18l-3.71-3.25A1,1,0,0,0,45,14.67Z"/>
                   </svg>
                   <span data-i18n="profile.settings">Configuración</span>
                 </a>
@@ -186,9 +185,8 @@
                 <span data-i18n="profile.myProfile">Mi Perfil</span>
               </a>
               <a href="/settings" class="xserv-dropdown-item">
-                <svg viewBox="0 0 24 24" stroke-width="2" fill="none" stroke="currentColor">
-                  <circle cx="12" cy="12" r="3"/>
-                  <path d="M12 1v6m0 6v6M5.6 5.6l4.2 4.2m4.2 4.2l4.2 4.2M1 12h6m6 0h6M5.6 18.4l4.2-4.2m4.2-4.2l4.2-4.2"/>
+                <svg viewBox="7 0 54 54" stroke-width="3.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M45,14.67l-2.76,2a1,1,0,0,1-1,.11L37.65,15.3a1,1,0,0,1-.61-.76l-.66-3.77a1,1,0,0,0-1-.84H30.52a1,1,0,0,0-1,.77l-.93,3.72a1,1,0,0,1-.53.65l-3.3,1.66a1,1,0,0,1-1-.08l-3-2.13a1,1,0,0,0-1.31.12l-3.65,3.74a1,1,0,0,0-.13,1.26l1.87,2.88a1,1,0,0,1,.1.89L16.34,27a1,1,0,0,1-.68.63l-3.85,1.06a1,1,0,0,0-.74,1v4.74a1,1,0,0,0,.8,1l3.9.8a1,1,0,0,1,.72.57l1.42,3.15a1,1,0,0,1-.05.92l-2.13,3.63a1,1,0,0,0,.17,1.24L19.32,49a1,1,0,0,0,1.29.09L23.49,47a1,1,0,0,1,1-.1l3.74,1.67a1,1,0,0,1,.59.75l.66,3.79a1,1,0,0,0,1,.84h4.89a1,1,0,0,0,1-.86l.58-4a1,1,0,0,1,.58-.77l3.58-1.62a1,1,0,0,1,1,.09l3.14,2.12a1,1,0,0,0,1.3-.15L50,45.06a1,1,0,0,0,.09-1.27l-2.08-3a1,1,0,0,1-.09-1l1.48-3.43a1,1,0,0,1,.71-.59L53.77,35a1,1,0,0,0,.8-1V29.42a1,1,0,0,0-.8-1l-3.72-.78a1,1,0,0,1-.73-.62l-1.45-3.65a1,1,0,0,1,.11-.94l2.15-3.14A1,1,0,0,0,50,18l-3.71-3.25A1,1,0,0,0,45,14.67Z"/>
                 </svg>
                 <span data-i18n="profile.settings">Configuración</span>
               </a>
@@ -515,32 +513,52 @@
       .xserv-user-menu-mobile {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
+        gap: 0.6rem;
       }
 
       .xserv-user-menu-item {
         display: flex;
         align-items: center;
-        gap: 0.85rem;
-        padding: 0.75rem 1rem;
+        gap: 0.9rem;
+        padding: 0.9rem 1rem;
         color: var(--text-gray);
         text-decoration: none;
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         font-weight: 500;
         transition: all 0.2s ease;
-        border-radius: 6px;
+        border-radius: 8px;
         border: 1px solid transparent;
         background: transparent;
         cursor: pointer;
         font-family: inherit;
         width: 100%;
         text-align: left;
+        position: relative;
+      }
+
+      .xserv-user-menu-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: var(--gold);
+        border-radius: 0 4px 4px 0;
+        transform: scaleY(0);
+        transform-origin: center;
+        transition: transform 0.2s ease;
       }
 
       .xserv-user-menu-item:hover {
-        background: rgba(201, 169, 98, 0.1);
+        background: rgba(201, 169, 98, 0.12);
         color: var(--text-white);
         border-color: rgba(201, 169, 98, 0.3);
+        padding-left: 1.1rem;
+      }
+
+      .xserv-user-menu-item:hover::before {
+        transform: scaleY(1);
       }
 
       .xserv-user-menu-item svg {
@@ -548,16 +566,30 @@
         height: 18px;
         stroke: currentColor;
         flex-shrink: 0;
+        transition: stroke 0.2s ease;
+      }
+
+      .xserv-user-menu-item:hover svg {
+        stroke: var(--gold);
       }
 
       .xserv-user-menu-item.danger {
-        color: #ef4444;
+        color: #f87171;
       }
 
       .xserv-user-menu-item.danger:hover {
-        background: rgba(239, 68, 68, 0.1);
-        color: #ef4444;
+        background: rgba(239, 68, 68, 0.12);
+        color: #fca5a5;
         border-color: rgba(239, 68, 68, 0.3);
+        padding-left: 1.1rem;
+      }
+
+      .xserv-user-menu-item.danger:hover svg {
+        stroke: #fca5a5;
+      }
+
+      .xserv-user-menu-item.danger::before {
+        background: #f87171;
       }
 
       .xserv-user-actions {
@@ -659,21 +691,43 @@
       .xserv-user-profile {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.6rem;
         cursor: pointer;
-        padding: 0.4rem 0.75rem;
-        background: rgba(201, 169, 98, 0.1);
+        padding: 0.5rem 0.9rem;
+        background: linear-gradient(135deg, rgba(201, 169, 98, 0.12), rgba(201, 169, 98, 0.08));
+        border: 1px solid rgba(201, 169, 98, 0.35);
         border-radius: 25px;
-        transition: background 0.3s;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         position: relative;
         color: inherit;
-        border: none;
         font-family: 'Inter', sans-serif;
         font-size: inherit;
+        overflow: hidden;
+      }
+
+      .xserv-user-profile::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(201, 169, 98, 0.2), rgba(201, 169, 98, 0.1));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
       }
 
       .xserv-user-profile:hover {
-        background: rgba(201, 169, 98, 0.2);
+        background: linear-gradient(135deg, rgba(201, 169, 98, 0.18), rgba(201, 169, 98, 0.12));
+        border-color: rgba(201, 169, 98, 0.5);
+        box-shadow: 0 4px 16px rgba(201, 169, 98, 0.15);
+        transform: translateY(-2px);
+      }
+
+      .xserv-user-profile:hover::before {
+        opacity: 1;
+      }
+
+      .xserv-user-profile:active {
+        transform: translateY(0);
       }
 
       .xserv-user-profile-wrapper {
@@ -683,50 +737,61 @@
       }
 
       .xserv-user-avatar {
-        width: 28px;
-        height: 28px;
+        width: 32px;
+        height: 32px;
         background: linear-gradient(135deg, var(--gold), var(--gold-dark));
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 0.7rem;
-        font-weight: 600;
+        font-size: 0.75rem;
+        font-weight: 700;
         color: var(--dark-bg);
         font-family: 'Inter', sans-serif;
+        flex-shrink: 0;
+        box-shadow: 0 2px 8px rgba(201, 169, 98, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
       }
 
       .xserv-user-name {
         color: var(--text-white);
-        font-size: 0.85rem;
+        font-size: 0.9rem;
+        font-weight: 600;
         font-family: 'Inter', sans-serif;
       }
 
       .xserv-dropdown-icon {
-        width: 14px;
-        height: 14px;
-        stroke: var(--text-gray);
+        width: 16px;
+        height: 16px;
+        stroke: rgba(201, 169, 98, 0.6);
         fill: none;
-        transition: transform 0.3s;
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.3s ease;
       }
 
       .xserv-user-profile-wrapper.open .xserv-dropdown-icon {
         transform: rotate(180deg);
+        stroke: var(--gold);
+      }
+
+      .xserv-user-profile:hover .xserv-dropdown-icon {
+        stroke: var(--gold);
       }
 
       .xserv-dropdown-menu {
         position: absolute;
-        top: calc(100% + 0.5rem);
+        top: calc(100% + 0.75rem);
         right: 0;
-        background: var(--dark-card);
-        border: 1px solid rgba(201, 169, 98, 0.3);
-        border-radius: 8px;
-        min-width: 200px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        background: linear-gradient(135deg, rgba(26, 26, 26, 0.98), rgba(42, 42, 42, 0.95));
+        border: 1px solid rgba(201, 169, 98, 0.4);
+        border-radius: 12px;
+        min-width: 220px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 20px rgba(201, 169, 98, 0.1);
         opacity: 0;
         visibility: hidden;
-        transform: translateY(-10px);
-        transition: all 0.3s;
+        transform: translateY(-12px);
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        overflow: hidden;
+        backdrop-filter: blur(10px);
       }
 
       .xserv-user-profile-wrapper.open .xserv-dropdown-menu {
@@ -738,39 +803,79 @@
       .xserv-dropdown-item {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
-        padding: 0.75rem 1rem;
+        gap: 0.9rem;
+        padding: 0.95rem 1.25rem;
         color: var(--text-gray);
         text-decoration: none;
-        font-size: 0.85rem;
-        transition: all 0.3s;
-        border-bottom: 1px solid rgba(201, 169, 98, 0.1);
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        border-bottom: 1px solid rgba(201, 169, 98, 0.08);
         font-family: 'Inter', sans-serif;
+        cursor: pointer;
+        position: relative;
+        background: transparent;
+        width: 100%;
+        text-align: left;
+        border: none;
       }
 
       .xserv-dropdown-item:last-child {
         border-bottom: none;
       }
 
+      .xserv-dropdown-item::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: var(--gold);
+        transform: scaleY(0);
+        transform-origin: center;
+        transition: transform 0.2s ease;
+      }
+
       .xserv-dropdown-item:hover {
-        background: rgba(201, 169, 98, 0.1);
+        background: rgba(201, 169, 98, 0.12);
         color: var(--gold);
+        padding-left: 1.4rem;
+      }
+
+      .xserv-dropdown-item:hover::before {
+        transform: scaleY(1);
       }
 
       .xserv-dropdown-item svg {
-        width: 16px;
-        height: 16px;
+        width: 18px;
+        height: 18px;
         stroke: currentColor;
         fill: none;
+        flex-shrink: 0;
+        transition: stroke 0.2s ease;
+      }
+
+      .xserv-dropdown-item:hover svg {
+        stroke: var(--gold);
       }
 
       .xserv-dropdown-item.danger {
-        color: #ef4444;
+        color: #f87171;
       }
 
       .xserv-dropdown-item.danger:hover {
-        background: rgba(239, 68, 68, 0.1);
-        color: #ef4444;
+        background: rgba(239, 68, 68, 0.12);
+        color: #fca5a5;
+        padding-left: 1.4rem;
+      }
+
+      .xserv-dropdown-item.danger:hover svg {
+        stroke: #fca5a5;
+      }
+
+      .xserv-dropdown-item.danger::before {
+        background: #f87171;
       }
 
       .is-hidden {

@@ -34,7 +34,7 @@ class ProfileController extends AppController
 
         // Pasar datos a la vista
         $this->set(compact('usuario'));
-        $this->viewBuilder()->setLayout('default');
+        $this->viewBuilder()->disableAutoLayout();
     }
 
     /**
@@ -77,7 +77,7 @@ class ProfileController extends AppController
 
         // Pasar datos a la vista
         $this->set(compact('usuario'));
-        $this->viewBuilder()->setLayout('default');
+        $this->viewBuilder()->disableAutoLayout();
     }
 }
 

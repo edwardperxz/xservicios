@@ -86,8 +86,8 @@ class XservUsuariosController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
-        $user = $this->Authentication->getIdentity();
-        if (!$user) {
+        $userIdentity = $this->Authentication->getIdentity();
+        if (!$userIdentity) {
             $this->Flash->error('Debe iniciar sesión para ver el perfil', [
                 'params' => ['i18n' => 'errors.mustLoginProfile'],
             ]);
@@ -95,10 +95,10 @@ class XservUsuariosController extends AppController
         }
 
         // Solo redirigir si es chofer
-        if ($user->rol === 'chofer') {
+        if ($userIdentity->rol === 'chofer') {
             $chofer = $this->XservUsuarios->XservChoferes
                 ->find()
-                ->where(['usuario_id' => $user->id])
+                ->where(['usuario_id' => $userIdentity->id])
                 ->first();
 
             if ($chofer) {
@@ -111,8 +111,11 @@ class XservUsuariosController extends AppController
             }
         }
 
-        // Para admin u operador, puedes mostrar profile normal
-        $this->set(compact('user'));
+        // Para admin u operador, mostrar interfaz completa del perfil
+        $usuario = $this->XservUsuarios->get($userIdentity->id);
+        $this->set(compact('usuario'));
+        $this->viewBuilder()->disableAutoLayout();
+        $this->render('/Profile/index');
     }
 
     public function me(): ?Response

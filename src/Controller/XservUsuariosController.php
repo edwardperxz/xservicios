@@ -326,12 +326,23 @@ class XservUsuariosController extends AppController
      */
     public function delete(?string $id = null)
     {
+        $this->Authorization->skipAuthorization();
         $this->request->allowMethod(['post', 'delete']);
+        
+        // Obtener el usuario autenticado
+        $authUser = $this->Authentication->getIdentity();
+        
+        // Verificar que el usuario no intente eliminarse a sí mismo
+        if ($authUser && $authUser->id == $id) {
+            $this->Flash->error(__('No puedes eliminarte a ti mismo.'));
+            return $this->redirect(['action' => 'index']);
+        }
+        
         $xservUsuario = $this->XservUsuarios->get($id);
         if ($this->XservUsuarios->delete($xservUsuario)) {
-            $this->Flash->success(__('The xserv usuario has been deleted.'));
+            $this->Flash->success(__('El usuario ha sido eliminado.'));
         } else {
-            $this->Flash->error(__('The xserv usuario could not be deleted. Please, try again.'));
+            $this->Flash->error(__('El usuario no pudo ser eliminado. Por favor, intente de nuevo.'));
         }
 
         return $this->redirect(['action' => 'index']);

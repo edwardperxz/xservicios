@@ -143,13 +143,13 @@ $this->assign('header-title', 'Nueva Reserva');
             <h3 class="form-section-title">Puntos de Recogida y Destino</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label class="form-label">Punto de Recogida</label>
-                    <?= $this->Form->control('punto_recogida', ['class' => 'form-input', 'label' => false, 'placeholder' => 'Dirección o ubicación']) ?>
+                    <label class="form-label required">Punto de Recogida</label>
+                    <?= $this->Form->control('punto_recogida', ['class' => 'form-input', 'label' => false, 'placeholder' => 'Dirección o ubicación', 'required' => true]) ?>
                     <span class="form-help">Lugar de partida</span>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Punto de Destino</label>
-                    <?= $this->Form->control('punto_destino', ['class' => 'form-input', 'label' => false, 'placeholder' => 'Dirección o ubicación']) ?>
+                    <label class="form-label required">Punto de Destino</label>
+                    <?= $this->Form->control('punto_destino', ['class' => 'form-input', 'label' => false, 'placeholder' => 'Dirección o ubicación', 'required' => true]) ?>
                     <span class="form-help">Lugar de llegada</span>
                 </div>
             </div>
@@ -159,8 +159,8 @@ $this->assign('header-title', 'Nueva Reserva');
             <h3 class="form-section-title">Costos</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label class="form-label">Precio Pactado</label>
-                    <?= $this->Form->control('precio_pactado', ['type' => 'number', 'step' => '0.01', 'min' => 0, 'class' => 'form-input', 'label' => false, 'placeholder' => '0.00']) ?>
+                    <label class="form-label required">Precio Pactado</label>
+                    <?= $this->Form->control('precio_pactado', ['type' => 'number', 'step' => '0.01', 'min' => 0, 'class' => 'form-input', 'label' => false, 'placeholder' => '0.00', 'required' => true]) ?>
                     <span class="form-help">Precio acordado en USD</span>
                 </div>
                 <div class="form-group">

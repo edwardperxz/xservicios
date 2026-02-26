@@ -87,12 +87,11 @@ $this->assign('header-title', 'Nuevo Vehículo');
                 <span class="form-help">Categoría del vehículo</span>
             </div>
             <div class="form-group">
-                <label class="form-label required">Nombre de Unidad</label>
+                <label class="form-label">Nombre de Unidad</label>
                 <?= $this->Form->control('nombre_unidad', [
                     'class' => 'form-input',
                     'label' => false,
-                    'placeholder' => 'ej: Unidad 001',
-                    'required' => true
+                    'placeholder' => 'ej: Unidad 001'
                 ]) ?>
                 <span class="form-help">Identificador de la unidad</span>
             </div>
@@ -122,15 +121,14 @@ $this->assign('header-title', 'Nuevo Vehículo');
                 <span class="form-help">Número de pasajeros</span>
             </div>
             <div class="form-group">
-                <label class="form-label required">Año</label>
+                <label class="form-label">Año</label>
                 <?= $this->Form->control('anio', [
                     'type' => 'number',
                     'min' => 1900,
                     'max' => date('Y') + 1,
                     'class' => 'form-input',
                     'label' => false,
-                    'placeholder' => 'ej: ' . date('Y'),
-                    'required' => true
+                    'placeholder' => 'ej: ' . date('Y')
                 ]) ?>
                 <span class="form-help">Año de fabricación</span>
             </div>
@@ -149,13 +147,12 @@ $this->assign('header-title', 'Nuevo Vehículo');
 
         <div class="form-row">
             <div class="form-group">
-                <label class="form-label required">Estado Operativo</label>
+                <label class="form-label">Estado Operativo</label>
                 <?= $this->Form->control('estado_operativo', [
                     'options' => $estadoOperativoOptions,
                     'empty' => 'Seleccione un estado',
                     'class' => 'form-select',
-                    'label' => false,
-                    'required' => true
+                    'label' => false
                 ]) ?>
                 <span class="form-help">Condición actual del vehículo</span>
             </div>

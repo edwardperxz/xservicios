@@ -97,8 +97,8 @@ $this->assign('header-title', 'Nueva Configuración');
 
         <div class="form-row">
             <div class="form-group">
-                <label class="form-label">Grupo</label>
-                <?= $this->Form->control('grupo', ['options' => $grupoOptions, 'empty' => 'Seleccione un grupo', 'class' => 'form-select', 'label' => false]) ?>
+                <label class="form-label required">Grupo</label>
+                <?= $this->Form->control('grupo', ['options' => $grupoOptions, 'empty' => 'Seleccione un grupo', 'class' => 'form-select', 'label' => false, 'required' => true]) ?>
                 <span class="form-help">Categoría de la configuración</span>
             </div>
             <div class="form-group">

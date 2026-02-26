@@ -85,16 +85,16 @@ $this->assign('header-title', 'Nuevo Servicio');
 
         <div class="form-row">
             <div class="form-group">
-                <label class="form-label">Descripción (Español)</label>
-                <?= $this->Form->control('descripcion_es', ['type' => 'textarea', 'class' => 'form-textarea', 'label' => false, 'placeholder' => 'Descripción del servicio en español']) ?>
+                <label class="form-label required">Descripción (Español)</label>
+                <?= $this->Form->control('descripcion_es', ['type' => 'textarea', 'class' => 'form-textarea', 'label' => false, 'placeholder' => 'Descripción del servicio en español', 'required' => true]) ?>
                 <span class="form-help">Versión en español</span>
             </div>
         </div>
 
         <div class="form-row">
             <div class="form-group">
-                <label class="form-label">Descripción (Inglés)</label>
-                <?= $this->Form->control('descripcion_en', ['type' => 'textarea', 'class' => 'form-textarea', 'label' => false, 'placeholder' => 'Service description in English']) ?>
+                <label class="form-label required">Descripción (Inglés)</label>
+                <?= $this->Form->control('descripcion_en', ['type' => 'textarea', 'class' => 'form-textarea', 'label' => false, 'placeholder' => 'Service description in English', 'required' => true]) ?>
                 <span class="form-help">English version</span>
             </div>
         </div>

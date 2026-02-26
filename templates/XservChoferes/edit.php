@@ -83,70 +83,33 @@ $this->assign('header-title', 'Editar Chofer');
         
         <div class="form-row">
             <div class="form-group">
-                <label class="form-label">Usuario (Opcional)</label>
+                <label class="form-label required">Usuario</label>
                 <?= $this->Form->control('usuario_id', [
                     'options' => $usuarios,
                     'empty' => 'Seleccione un usuario',
                     'class' => 'form-select',
-                    'label' => false
-                ]) ?>
-                <span class="form-help">Vincular con usuario del sistema</span>
-            </div>
-            <div class="form-group">
-                <label class="form-label required">Nombre Completo</label>
-                <?= $this->Form->control('nombre', [
-                    'class' => 'form-input',
                     'label' => false,
-                    'placeholder' => 'ej: Juan Pérez',
                     'required' => true
                 ]) ?>
-                <span class="form-help">Nombre completo del chofer</span>
-            </div>
-            <div class="form-group">
-                <label class="form-label required">Identificación</label>
-                <?= $this->Form->control('identificacion', [
-                    'class' => 'form-input',
-                    'label' => false,
-                    'placeholder' => 'ej: 8-123-456',
-                    'required' => true
-                ]) ?>
-                <span class="form-help">Cédula o documento de identidad</span>
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label class="form-label">Teléfono</label>
-                <?= $this->Form->control('telefono', [
-                    'class' => 'form-input',
-                    'label' => false,
-                    'placeholder' => '+507 6XXX-XXXX'
-                ]) ?>
-                <span class="form-help">Número de contacto</span>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Correo Electrónico</label>
-                <?= $this->Form->control('correo', [
-                    'type' => 'email',
-                    'class' => 'form-input',
-                    'label' => false,
-                    'placeholder' => 'chofer@ejemplo.com'
-                ]) ?>
-                <span class="form-help">Correo electrónico del chofer</span>
+                <span class="form-help">Usuario del sistema vinculado a este chofer</span>
             </div>
             <div class="form-group">
                 <label class="form-label required">Tipo de Licencia</label>
-                <?= $this->Form->control('tipo_licencia', [
-                    'class' => 'form-input',
-                    'label' => false,
-                    'placeholder' => 'ej: E, D, C',
-                    'required' => true
-                ]) ?>
-                <span class="form-help">Tipo de licencia de conducir</span>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; padding: 0.75rem;">
+                    <?php
+                    $licenciaActual = isset($xservChofere->tipo_licencia) ? array_map('trim', explode(',', $xservChofere->tipo_licencia)) : [];
+                    $categorias = ['B', 'C', 'D', 'E1', 'E2', 'E3', 'F', 'G', 'H', 'I', 'J'];
+                    foreach ($categorias as $tipo) {
+                        $checked = in_array($tipo, $licenciaActual) ? 'checked' : '';
+                        echo '<label style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-white); cursor: pointer;">';
+                        echo '<input type="checkbox" name="licencia_tipos[]" value="' . $tipo . '" ' . $checked . ' style="width: 18px; height: 18px; cursor: pointer;"> ' . $tipo;
+                        echo '</label>';
+                    }
+                    ?>
+                </div>
+                <?= $this->Form->hidden('tipo_licencia', ['id' => 'tipo_licencia_hidden', 'value' => $xservChofere->tipo_licencia]) ?>
+                <span class="form-help">Seleccione uno o más tipos de licencia</span>
             </div>
-        </div>
-
-        <div class="form-row">
             <div class="form-group">
                 <label class="form-label required">Fecha de Ingreso</label>
                 <?= $this->Form->control('fecha_ingreso', [
@@ -157,6 +120,9 @@ $this->assign('header-title', 'Editar Chofer');
                 ]) ?>
                 <span class="form-help">Fecha de ingreso a la empresa</span>
             </div>
+        </div>
+
+        <div class="form-row">
             <div class="form-group">
                 <label class="form-label required">Estado</label>
                 <?= $this->Form->control('estado', [
@@ -181,16 +147,25 @@ $this->assign('header-title', 'Editar Chofer');
             </div>
         </div>
 
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const checkboxes = document.querySelectorAll('input[name="licencia_tipos[]"]');
+                const hiddenInput = document.getElementById('tipo_licencia_hidden');
+                
+                checkboxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', function() {
+                        const selected = Array.from(checkboxes)
+                            .filter(cb => cb.checked)
+                            .map(cb => cb.value);
+                        hiddenInput.value = selected.join(', ');
+                    });
+                });
+            });
+        </script>
+
         <div class="form-actions">
             <div class="form-actions-left">
-                <?= $this->Form->postLink(
-                    'Eliminar',
-                    ['action' => 'delete', $xservChofere->id],
-                    [
-                        'confirm' => '¿Está seguro que desea eliminar este chofer?',
-                        'class' => 'btn btn-danger'
-                    ]
-                ) ?>
+                <!-- Botón de eliminar movido fuera del formulario -->
             </div>
             <div class="form-actions-right">
                 <a href="<?= $this->Url->build(['action' => 'index']) ?>" class="btn btn-secondary">Cancelar</a>
@@ -199,5 +174,16 @@ $this->assign('header-title', 'Editar Chofer');
         </div>
         
         <?= $this->Form->end() ?>
+        
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--dark-lighter, #2a2a2a);">
+            <?= $this->Form->postLink(
+                'Eliminar Chofer',
+                ['action' => 'delete', $xservChofere->id],
+                [
+                    'confirm' => '¿Está seguro que desea eliminar este chofer? Esta acción no se puede deshacer.',
+                    'class' => 'btn btn-danger'
+                ]
+            ) ?>
+        </div>
     </div>
 </div>

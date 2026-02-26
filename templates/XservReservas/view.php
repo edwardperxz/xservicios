@@ -24,7 +24,7 @@ $this->assign('header-title', 'Detalle de Reserva');
             </div>
             <div class="detail-item">
                 <div class="detail-label">Cliente</div>
-                <div class="detail-value"><?= $xservReserva->hasValue('cliente') ? $this->Html->link($xservReserva->cliente->nombre, ['controller' => 'XservClientes', 'action' => 'view', $xservReserva->cliente->id]) : '<span style="color: #6b7280;">No asignado</span>' ?></div>
+                <div class="detail-value"><?= $xservReserva->hasValue('cliente') ? $this->Html->link(($xservReserva->cliente?->usuario?->nombre ?? $xservReserva->cliente?->usuario?->username ?? 'Sin nombre'), ['controller' => 'XservClientes', 'action' => 'view', $xservReserva->cliente->id]) : '<span style="color: #6b7280;">No asignado</span>' ?></div>
             </div>
             <div class="detail-item">
                 <div class="detail-label">Servicio</div>

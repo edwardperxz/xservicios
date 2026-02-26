@@ -161,7 +161,12 @@ class XservIncidenciasViajeController extends AppController
             }
             $this->Flash->error(__('The xserv incidencias viaje could not be saved. Please, try again.'));
         }
-        $ejecucions = $this->XservIncidenciasViaje->Ejecucions->find('list', limit: 200)->all();
+        $ejecucions = $this->XservIncidenciasViaje->Ejecucions->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($ejecucion) {
+                return $ejecucion->asignacion->reserva->codigo_reserva . ' - Estado: ' . $ejecucion->estado_viaje;
+            }
+        ])->contain(['Asignacions' => ['Reservas']])->order(['XservEjecucionViajes.id' => 'DESC'])->all();
         $this->set(compact('xservIncidenciasViaje', 'ejecucions'));
     }
 
@@ -184,7 +189,12 @@ class XservIncidenciasViajeController extends AppController
             }
             $this->Flash->error(__('The xserv incidencias viaje could not be saved. Please, try again.'));
         }
-        $ejecucions = $this->XservIncidenciasViaje->Ejecucions->find('list', limit: 200)->all();
+        $ejecucions = $this->XservIncidenciasViaje->Ejecucions->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($ejecucion) {
+                return $ejecucion->asignacion->reserva->codigo_reserva . ' - Estado: ' . $ejecucion->estado_viaje;
+            }
+        ])->contain(['Asignacions' => ['Reservas']])->order(['XservEjecucionViajes.id' => 'DESC'])->all();
         $this->set(compact('xservIncidenciasViaje', 'ejecucions'));
     }
 

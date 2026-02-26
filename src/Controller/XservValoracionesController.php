@@ -168,7 +168,10 @@ class XservValoracionesController extends AppController
             
             $this->Flash->error(__('The xserv valoracion could not be saved. Please, try again.'));
         }
-        $xservReservas = $this->XservValoraciones->XservReservas->find('list', limit: 200)->all();
+        $xservReservas = $this->XservValoraciones->XservReservas->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'codigo_reserva'
+        ])->order(['codigo_reserva' => 'ASC'])->all();
         $this->set(compact('xservValoracione', 'xservReservas'));
     }
 
@@ -192,7 +195,10 @@ class XservValoracionesController extends AppController
             }
             $this->Flash->error(__('The xserv valoracion could not be saved. Please, try again.'));
         }
-        $xservReservas = $this->XservValoraciones->XservReservas->find('list', limit: 200)->all();
+        $xservReservas = $this->XservValoraciones->XservReservas->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'codigo_reserva'
+        ])->order(['codigo_reserva' => 'ASC'])->all();
         $this->set(compact('xservValoracione', 'xservReservas'));
     }
 

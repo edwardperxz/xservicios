@@ -9,9 +9,10 @@ $this->assign('header-title', 'Detalle de Cliente');
 <div class="view-container">
     <div class="view-card">
         <div class="view-header">
-            <h2 class="view-title">Cliente: <?= h($xservCliente->nombre) ?></h2>
+            <h2 class="view-title">Cliente: <?= h($xservCliente->usuario->nombre ?? 'Sin nombre') ?></h2>
             <div class="view-actions">
                 <a href="<?= $this->Url->build(['action' => 'edit', $xservCliente->id]) ?>" class="btn btn-primary">Editar</a>
+                <a href="<?= $this->Url->build(['controller' => 'XservReservas', 'action' => 'index', '?' => ['cliente_id' => $xservCliente->id]]) ?>" class="btn btn-secondary">Ver Reservas</a>
                 <a href="<?= $this->Url->build(['action' => 'index']) ?>" class="btn btn-secondary">Volver al Listado</a>
                 <?= $this->Form->postLink('Eliminar', ['action' => 'delete', $xservCliente->id], ['confirm' => '¿Está seguro?', 'class' => 'btn btn-danger']) ?>
             </div>
@@ -19,20 +20,28 @@ $this->assign('header-title', 'Detalle de Cliente');
 
         <div class="detail-grid">
             <div class="detail-item">
+                <div class="detail-label">Usuario</div>
+                <div class="detail-value"><?= $xservCliente->has('usuario') ? $this->Html->link($xservCliente->usuario->username, ['controller' => 'XservUsuarios', 'action' => 'view', $xservCliente->usuario->id]) : '' ?></div>
+            </div>
+            <div class="detail-item">
                 <div class="detail-label">Nombre</div>
-                <div class="detail-value"><?= h($xservCliente->nombre) ?></div>
+                <div class="detail-value"><?= h($xservCliente->usuario->nombre ?? '') ?></div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Correo</div>
+                <div class="detail-value"><?= h($xservCliente->usuario->correo ?? '') ?></div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Teléfono</div>
+                <div class="detail-value"><?= h($xservCliente->usuario->telefono ?? '') ?></div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Identificación</div>
+                <div class="detail-value"><?= h($xservCliente->usuario->identificacion ?? '') ?></div>
             </div>
             <div class="detail-item">
                 <div class="detail-label">Identificación Fiscal</div>
                 <div class="detail-value"><?= h($xservCliente->identificacion_fiscal) ?></div>
-            </div>
-            <div class="detail-item">
-                <div class="detail-label">Correo</div>
-                <div class="detail-value"><?= h($xservCliente->correo) ?></div>
-            </div>
-            <div class="detail-item">
-                <div class="detail-label">Teléfono</div>
-                <div class="detail-value"><?= h($xservCliente->telefono) ?></div>
             </div>
             <div class="detail-item">
                 <div class="detail-label">Idioma Preferido</div>

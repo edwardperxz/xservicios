@@ -9,7 +9,7 @@ $this->assign('header-title', 'Detalle de Chofer');
 <div class="view-container">
     <div class="view-card">
         <div class="view-header">
-            <h2 class="view-title">Chofer: <?= h($xservChofere->nombre) ?></h2>
+            <h2 class="view-title">Chofer: <?= $xservChofere->hasValue('usuario') ? h($xservChofere->usuario->nombre) : 'Sin usuario asignado' ?></h2>
             <div class="view-actions">
                 <a href="<?= $this->Url->build(['action' => 'edit', $xservChofere->id]) ?>" class="btn btn-primary">Editar</a>
                 <a href="<?= $this->Url->build(['action' => 'index']) ?>" class="btn btn-secondary">Volver al Listado</a>
@@ -19,40 +19,44 @@ $this->assign('header-title', 'Detalle de Chofer');
 
         <div class="detail-grid">
             <div class="detail-item">
-                <div class="detail-label">Usuario</div>
+                <div class="detail-label">ID Chofer</div>
+                <div class="detail-value"><?= h($xservChofere->id) ?></div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Usuario Vinculado</div>
                 <div class="detail-value"><?= $xservChofere->hasValue('usuario') ? $this->Html->link($xservChofere->usuario->username, ['controller' => 'XservUsuarios', 'action' => 'view', $xservChofere->usuario->id]) : '<span style="color: #6b7280;">No asignado</span>' ?></div>
             </div>
             <div class="detail-item">
-                <div class="detail-label">Nombre</div>
-                <div class="detail-value"><?= h($xservChofere->nombre) ?></div>
+                <div class="detail-label">Nombre Completo</div>
+                <div class="detail-value"><?= $xservChofere->hasValue('usuario') ? h($xservChofere->usuario->nombre) : '<span style="color: #6b7280;">-</span>' ?></div>
             </div>
             <div class="detail-item">
                 <div class="detail-label">Identificación</div>
-                <div class="detail-value"><?= h($xservChofere->identificacion) ?></div>
+                <div class="detail-value"><?= $xservChofere->hasValue('usuario') ? h($xservChofere->usuario->identificacion) : '<span style="color: #6b7280;">-</span>' ?></div>
             </div>
             <div class="detail-item">
                 <div class="detail-label">Teléfono</div>
-                <div class="detail-value"><?= h($xservChofere->telefono) ?></div>
+                <div class="detail-value"><?= $xservChofere->hasValue('usuario') ? h($xservChofere->usuario->telefono) : '<span style="color: #6b7280;">-</span>' ?></div>
             </div>
             <div class="detail-item">
-                <div class="detail-label">Correo</div>
-                <div class="detail-value"><?= h($xservChofere->correo) ?></div>
+                <div class="detail-label">Correo Electrónico</div>
+                <div class="detail-value"><?= $xservChofere->hasValue('usuario') ? h($xservChofere->usuario->correo) : '<span style="color: #6b7280;">-</span>' ?></div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Tipo de Licencia</div>
+                <div class="detail-value"><?= h($xservChofere->tipo_licencia ?: '-') ?></div>
             </div>
             <div class="detail-item">
                 <div class="detail-label">Estado</div>
-                <div class="detail-value"><?= h($xservChofere->estado) ?></div>
-            </div>
-            <div class="detail-item">
-                <div class="detail-label">Tipo Licencia</div>
-                <div class="detail-value"><?= h($xservChofere->tipo_licencia) ?></div>
+                <div class="detail-value"><?= h(ucfirst($xservChofere->estado)) ?></div>
             </div>
             <div class="detail-item">
                 <div class="detail-label">Disponibilidad</div>
-                <div class="detail-value"><?= h($xservChofere->disponibilidad) ?></div>
+                <div class="detail-value"><?= h(ucfirst(str_replace('_', ' ', $xservChofere->disponibilidad))) ?></div>
             </div>
             <div class="detail-item">
-                <div class="detail-label">Fecha Ingreso</div>
-                <div class="detail-value"><?= h($xservChofere->fecha_ingreso) ?></div>
+                <div class="detail-label">Fecha de Ingreso</div>
+                <div class="detail-value"><?= h($xservChofere->fecha_ingreso->format('d/m/Y')) ?></div>
             </div>
         </div>
     </div>

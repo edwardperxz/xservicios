@@ -77,70 +77,71 @@ $this->assign('header-title', 'Nuevo Chofer');
         
         <div class="form-row">
             <div class="form-group">
-                <label class="form-label">Usuario (Opcional)</label>
+                <label class="form-label required">Usuario</label>
                 <?= $this->Form->control('usuario_id', [
                     'options' => $usuarios,
                     'empty' => 'Seleccione un usuario',
                     'class' => 'form-select',
-                    'label' => false
-                ]) ?>
-                <span class="form-help">Vincular con usuario del sistema</span>
-            </div>
-            <div class="form-group">
-                <label class="form-label required">Nombre Completo</label>
-                <?= $this->Form->control('nombre', [
-                    'class' => 'form-input',
                     'label' => false,
-                    'placeholder' => 'ej: Juan Pérez',
                     'required' => true
                 ]) ?>
-                <span class="form-help">Nombre completo del chofer</span>
-            </div>
-            <div class="form-group">
-                <label class="form-label required">Identificación</label>
-                <?= $this->Form->control('identificacion', [
-                    'class' => 'form-input',
-                    'label' => false,
-                    'placeholder' => 'ej: 8-123-456',
-                    'required' => true
-                ]) ?>
-                <span class="form-help">Cédula o documento de identidad</span>
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label class="form-label">Teléfono</label>
-                <?= $this->Form->control('telefono', [
-                    'class' => 'form-input',
-                    'label' => false,
-                    'placeholder' => '+507 6XXX-XXXX'
-                ]) ?>
-                <span class="form-help">Número de contacto</span>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Correo Electrónico</label>
-                <?= $this->Form->control('correo', [
-                    'type' => 'email',
-                    'class' => 'form-input',
-                    'label' => false,
-                    'placeholder' => 'chofer@ejemplo.com'
-                ]) ?>
-                <span class="form-help">Correo electrónico del chofer</span>
+                <span class="form-help">Usuario del sistema vinculado a este chofer</span>
             </div>
             <div class="form-group">
                 <label class="form-label required">Tipo de Licencia</label>
-                <?= $this->Form->control('tipo_licencia', [
-                    'class' => 'form-input',
-                    'label' => false,
-                    'placeholder' => 'ej: E, D, C',
-                    'required' => true
-                ]) ?>
-                <span class="form-help">Tipo de licencia de conducir</span>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; padding: 0.75rem;">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-white); cursor: pointer;">
+                        <input type="checkbox" name="licencia_tipos[]" value="B" style="width: 18px; height: 18px; cursor: pointer;"> B
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-white); cursor: pointer;">
+                        <input type="checkbox" name="licencia_tipos[]" value="C" style="width: 18px; height: 18px; cursor: pointer;"> C
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-white); cursor: pointer;">
+                        <input type="checkbox" name="licencia_tipos[]" value="D" style="width: 18px; height: 18px; cursor: pointer;"> D
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-white); cursor: pointer;">
+                        <input type="checkbox" name="licencia_tipos[]" value="E1" style="width: 18px; height: 18px; cursor: pointer;"> E1
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-white); cursor: pointer;">
+                        <input type="checkbox" name="licencia_tipos[]" value="E2" style="width: 18px; height: 18px; cursor: pointer;"> E2
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-white); cursor: pointer;">
+                        <input type="checkbox" name="licencia_tipos[]" value="E3" style="width: 18px; height: 18px; cursor: pointer;"> E3
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-white); cursor: pointer;">
+                        <input type="checkbox" name="licencia_tipos[]" value="F" style="width: 18px; height: 18px; cursor: pointer;"> F
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-white); cursor: pointer;">
+                        <input type="checkbox" name="licencia_tipos[]" value="G" style="width: 18px; height: 18px; cursor: pointer;"> G
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-white); cursor: pointer;">
+                        <input type="checkbox" name="licencia_tipos[]" value="H" style="width: 18px; height: 18px; cursor: pointer;"> H
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-white); cursor: pointer;">
+                        <input type="checkbox" name="licencia_tipos[]" value="I" style="width: 18px; height: 18px; cursor: pointer;"> I
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-white); cursor: pointer;">
+                        <input type="checkbox" name="licencia_tipos[]" value="J" style="width: 18px; height: 18px; cursor: pointer;"> J
+                    </label>
+                </div>
+                <?= $this->Form->hidden('tipo_licencia', ['id' => 'tipo_licencia_hidden']) ?>
+                <span class="form-help">Seleccione uno o más tipos de licencia</span>
             </div>
-        </div>
-
-        <div class="form-row">
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const checkboxes = document.querySelectorAll('input[name="licencia_tipos[]"]');
+                    const hiddenInput = document.getElementById('tipo_licencia_hidden');
+                    
+                    checkboxes.forEach(checkbox => {
+                        checkbox.addEventListener('change', function() {
+                            const selected = Array.from(checkboxes)
+                                .filter(cb => cb.checked)
+                                .map(cb => cb.value);
+                            hiddenInput.value = selected.join(', ');
+                        });
+                    });
+                });
+            </script>
             <div class="form-group">
                 <label class="form-label required">Fecha de Ingreso</label>
                 <?= $this->Form->control('fecha_ingreso', [
@@ -151,6 +152,9 @@ $this->assign('header-title', 'Nuevo Chofer');
                 ]) ?>
                 <span class="form-help">Fecha de ingreso a la empresa</span>
             </div>
+        </div>
+
+        <div class="form-row">
             <div class="form-group">
                 <label class="form-label required">Estado</label>
                 <?= $this->Form->control('estado', [

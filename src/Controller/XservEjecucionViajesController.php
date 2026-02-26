@@ -143,7 +143,12 @@ class XservEjecucionViajesController extends AppController
             }
             $this->Flash->error(__('The xserv ejecucion viaje could not be saved. Please, try again.'));
         }
-        $asignacions = $this->XservEjecucionViajes->Asignacions->find('list', limit: 200)->all();
+        $asignacions = $this->XservEjecucionViajes->Asignacions->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($asignacion) {
+                return $asignacion->reserva->codigo_reserva . ' - ' . $asignacion->chofer->usuario->nombre . ' / ' . $asignacion->vehiculo->placa;
+            }
+        ])->contain(['Reservas', 'Chofers' => ['Usuarios'], 'Vehiculos'])->order(['Reservas.codigo_reserva' => 'ASC'])->all();
         $this->set(compact('xservEjecucionViaje', 'asignacions'));
     }
 
@@ -166,7 +171,12 @@ class XservEjecucionViajesController extends AppController
             }
             $this->Flash->error(__('The xserv ejecucion viaje could not be saved. Please, try again.'));
         }
-        $asignacions = $this->XservEjecucionViajes->Asignacions->find('list', limit: 200)->all();
+        $asignacions = $this->XservEjecucionViajes->Asignacions->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($asignacion) {
+                return $asignacion->reserva->codigo_reserva . ' - ' . $asignacion->chofer->usuario->nombre . ' / ' . $asignacion->vehiculo->placa;
+            }
+        ])->contain(['Reservas', 'Chofers' => ['Usuarios'], 'Vehiculos'])->order(['Reservas.codigo_reserva' => 'ASC'])->all();
         $this->set(compact('xservEjecucionViaje', 'asignacions'));
     }
 

@@ -36,8 +36,14 @@ class XservClientesTable extends Table
         parent::initialize($config);
 
         $this->setTable('xserv_clientes');
-        $this->setDisplayField('nombre');
+        $this->setDisplayField('id');
         $this->setPrimaryKey('id');
+
+        $this->belongsTo('XservUsuarios', [
+            'foreignKey' => 'usuario_id',
+            'joinType' => 'LEFT',
+            'propertyName' => 'usuario'
+        ]);
     }
 
     /**
@@ -49,27 +55,13 @@ class XservClientesTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->scalar('nombre')
-            ->maxLength('nombre', 100)
-            ->requirePresence('nombre', 'create')
-            ->notEmptyString('nombre');
+            ->integer('usuario_id')
+            ->allowEmptyString('usuario_id');
 
         $validator
             ->scalar('identificacion_fiscal')
             ->maxLength('identificacion_fiscal', 50)
             ->allowEmptyString('identificacion_fiscal');
-
-        $validator
-            ->scalar('correo')
-            ->maxLength('correo', 100)
-            ->requirePresence('correo', 'create')
-            ->notEmptyString('correo');
-
-        $validator
-            ->scalar('telefono')
-            ->maxLength('telefono', 20)
-            ->requirePresence('telefono', 'create')
-            ->notEmptyString('telefono');
 
         $validator
             ->scalar('direccion_facturacion')

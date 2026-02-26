@@ -330,7 +330,7 @@ $this->assign('header-title', 'Gestión de Reservaciones');
                 <?php foreach ($xservReservas as $reserva): ?>
                 <tr>
                     <td><strong><?= h($reserva->codigo_reserva) ?></strong></td>
-                    <td><?= h($reserva->cliente->nombre ?? 'N/A') ?></td>
+                    <td><?= h($reserva->cliente?->usuario?->nombre ?? $reserva->cliente?->usuario?->username ?? 'N/A') ?></td>
                     <td><?= h($reserva->servicio->nombre ?? 'N/A') ?></td>
                     <td><?= h($reserva->fecha->format('d/m/Y')) ?></td>
                     <td><?= h($reserva->hora->format('H:i')) ?></td>

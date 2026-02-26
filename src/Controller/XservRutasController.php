@@ -54,8 +54,16 @@ class XservRutasController extends AppController
             }
             $this->Flash->error(__('The xserv ruta could not be saved. Please, try again.'));
         }
-        $origens = $this->XservRutas->Origens->find('list', limit: 200)->all();
-        $destinos = $this->XservRutas->Destinos->find('list', limit: 200)->all();
+        $origens = $this->XservRutas->Origens->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'nombre'
+        ])->order(['nombre' => 'ASC'])->all();
+        
+        $destinos = $this->XservRutas->Destinos->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'nombre'
+        ])->order(['nombre' => 'ASC'])->all();
+        
         $this->set(compact('xservRuta', 'origens', 'destinos'));
     }
 
@@ -78,8 +86,16 @@ class XservRutasController extends AppController
             }
             $this->Flash->error(__('The xserv ruta could not be saved. Please, try again.'));
         }
-        $origens = $this->XservRutas->Origens->find('list', limit: 200)->all();
-        $destinos = $this->XservRutas->Destinos->find('list', limit: 200)->all();
+        $origens = $this->XservRutas->Origens->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'nombre'
+        ])->order(['nombre' => 'ASC'])->all();
+        
+        $destinos = $this->XservRutas->Destinos->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'nombre'
+        ])->order(['nombre' => 'ASC'])->all();
+        
         $this->set(compact('xservRuta', 'origens', 'destinos'));
     }
 

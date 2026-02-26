@@ -38,7 +38,7 @@ class XservChoferesTable extends Table
         parent::initialize($config);
 
         $this->setTable('xserv_choferes');
-        $this->setDisplayField('nombre');
+        $this->setDisplayField('id');
         $this->setPrimaryKey('id');
         $this->setEntityClass('App\\Model\\Entity\\XservChofer');
 
@@ -58,31 +58,8 @@ class XservChoferesTable extends Table
     {
         $validator
             ->integer('usuario_id')
-            ->allowEmptyString('usuario_id');
-
-        $validator
-            ->scalar('nombre')
-            ->maxLength('nombre', 100)
-            ->requirePresence('nombre', 'create')
-            ->notEmptyString('nombre');
-
-        $validator
-            ->scalar('identificacion')
-            ->maxLength('identificacion', 50)
-            ->requirePresence('identificacion', 'create')
-            ->notEmptyString('identificacion')
-            ->add('identificacion', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
-
-        $validator
-            ->scalar('telefono')
-            ->maxLength('telefono', 20)
-            ->requirePresence('telefono', 'create')
-            ->notEmptyString('telefono');
-
-        $validator
-            ->scalar('correo')
-            ->maxLength('correo', 100)
-            ->allowEmptyString('correo');
+            ->requirePresence('usuario_id', 'create')
+            ->notEmptyString('usuario_id');
 
         $validator
             ->scalar('estado')
@@ -122,7 +99,7 @@ class XservChoferesTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->isUnique(['identificacion']), ['errorField' => 'identificacion']);
+        $rules->add($rules->isUnique(['usuario_id']), ['errorField' => 'usuario_id']);
         $rules->add($rules->existsIn(['usuario_id'], 'Usuarios'), ['errorField' => 'usuario_id']);
 
         return $rules;

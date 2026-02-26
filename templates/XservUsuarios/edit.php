@@ -365,14 +365,7 @@ $this->assign('header-title', 'Editar Usuario');
 
         <div class="form-actions">
             <div class="form-actions-left">
-                <?= $this->Form->postLink(
-                    'Eliminar',
-                    ['action' => 'delete', $xservUsuario->id],
-                    [
-                        'confirm' => '¿Está seguro que desea eliminar este usuario?',
-                        'class' => 'btn btn-danger'
-                    ]
-                ) ?>
+                <!-- El botón de eliminar se mueve fuera del formulario para evitar anidación -->
             </div>
             <div class="form-actions-right">
                 <a href="<?= $this->Url->build(['action' => 'index']) ?>" class="btn btn-secondary">Cancelar</a>
@@ -381,5 +374,18 @@ $this->assign('header-title', 'Editar Usuario');
         </div>
         
         <?= $this->Form->end() ?>
+        
+        <?php if (isset($authUser) && $authUser->id != $xservUsuario->id): ?>
+            <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--dark-lighter, #2a2a2a);">
+                <?= $this->Form->postLink(
+                    'Eliminar Usuario',
+                    ['action' => 'delete', $xservUsuario->id],
+                    [
+                        'confirm' => '¿Está seguro que desea eliminar este usuario? Esta acción no se puede deshacer.',
+                        'class' => 'btn btn-danger'
+                    ]
+                ) ?>
+            </div>
+        <?php endif; ?>
     </div>
 </div>

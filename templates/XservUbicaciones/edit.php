@@ -103,11 +103,7 @@ $this->assign('header-title', 'Editar Ubicación');
 
         <div class="form-actions">
             <div class="form-actions-left">
-                <?= $this->Form->postLink(
-                    'Eliminar',
-                    ['action' => 'delete', $xservUbicacione->id],
-                    ['confirm' => '¿Está seguro de eliminar esta ubicación?', 'class' => 'btn btn-danger']
-                ) ?>
+                <!-- Botón de eliminar movido fuera del formulario -->
             </div>
             <div class="form-actions-right">
                 <a href="<?= $this->Url->build(['action' => 'index']) ?>" class="btn btn-secondary">Cancelar</a>
@@ -116,5 +112,13 @@ $this->assign('header-title', 'Editar Ubicación');
         </div>
         
         <?= $this->Form->end() ?>
+        
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--dark-lighter, #2a2a2a);">
+            <?= $this->Form->postLink(
+                'Eliminar Ubicación',
+                ['action' => 'delete', $xservUbicacione->id],
+                ['confirm' => '¿Está seguro de eliminar esta ubicación? Esta acción no se puede deshacer.', 'class' => 'btn btn-danger']
+            ) ?>
+        </div>
     </div>
 </div>

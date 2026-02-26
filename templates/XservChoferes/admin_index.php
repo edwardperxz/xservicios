@@ -311,10 +311,10 @@ $this->assign('header-title', 'Gestión de Choferes');
                 <div style="display: flex; gap: 0.5rem;">
                     <input 
                         type="text" 
-                        name="nombre" 
+                        name="tipo_licencia" 
                         class="search-input" 
-                        placeholder="Nombre o teléfono..." 
-                        value="<?= h($filters['nombre'] ?? '') ?>"
+                        placeholder="Buscar por tipo de licencia..." 
+                        value="<?= h($filters['tipo_licencia'] ?? '') ?>"
                     >
                     <button type="submit" class="btn btn-secondary">
                         <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -335,9 +335,8 @@ $this->assign('header-title', 'Gestión de Choferes');
             <thead>
                 <tr>
                     <th><?= $this->Paginator->sort('id', 'ID') ?></th>
-                    <th><?= $this->Paginator->sort('nombre', 'Nombre') ?></th>
-                    <th><?= $this->Paginator->sort('identificacion', 'Identificación') ?></th>
-                    <th><?= $this->Paginator->sort('telefono', 'Teléfono') ?></th>
+                    <th><?= $this->Paginator->sort('usuario_id', 'Usuario') ?></th>
+                    <th><?= $this->Paginator->sort('tipo_licencia', 'Licencia') ?></th>
                     <th><?= $this->Paginator->sort('disponibilidad', 'Disponibilidad') ?></th>
                     <th><?= $this->Paginator->sort('estado', 'Estado') ?></th>
                     <th><?= $this->Paginator->sort('created_at', 'Fecha Ingreso') ?></th>
@@ -348,9 +347,8 @@ $this->assign('header-title', 'Gestión de Choferes');
                 <?php foreach ($xservChoferes as $chofer): ?>
                 <tr>
                     <td><strong><?= h($chofer->id) ?></strong></td>
-                    <td><?= h($chofer->nombre) ?></td>
-                    <td><?= h($chofer->identificacion) ?></td>
-                    <td><?= h($chofer->telefono) ?></td>
+                    <td><?= $chofer->hasValue('usuario') ? $this->Html->link(h($chofer->usuario->nombre), ['controller' => 'XservUsuarios', 'action' => 'view', $chofer->usuario->id]) : '<span style="color: #6b7280;">No asignado</span>' ?></td>
+                    <td><?= h($chofer->tipo_licencia ?: '-') ?></td>
                     <td><span class="badge <?= h($chofer->disponibilidad) ?>"><?= h(ucfirst(str_replace('_', ' ', $chofer->disponibilidad))) ?></span></td>
                     <td><span class="badge <?= h($chofer->estado) ?>"><?= h(ucfirst($chofer->estado)) ?></span></td>
                     <td><?= h($chofer->created_at->format('d/m/Y')) ?></td>

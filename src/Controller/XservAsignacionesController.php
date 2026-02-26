@@ -84,10 +84,36 @@ class XservAsignacionesController extends AppController
             }
             $this->Flash->error(__('The xserv asignacion could not be saved. Please, try again.'));
         }
-        $reservas = $this->XservAsignaciones->Reservas->find('list', limit: 200)->all();
-        $chofers = $this->XservAsignaciones->Chofers->find('list', limit: 200)->all();
-        $vehiculos = $this->XservAsignaciones->Vehiculos->find('list', limit: 200)->all();
-        $asignadoPors = $this->XservAsignaciones->AsignadoPors->find('list', limit: 200)->all();
+        $reservas = $this->XservAsignaciones->Reservas->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'codigo_reserva'
+        ])->order(['codigo_reserva' => 'ASC'])->all();
+        
+        $chofers = $this->XservAsignaciones->Chofers->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($chofer) {
+                return $chofer->usuario->nombre ?? 'Sin nombre';
+            }
+        ])->contain(['Usuarios'])->order(['Usuarios.nombre' => 'ASC'])->all();
+        
+        $vehiculos = $this->XservAsignaciones->Vehiculos->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($vehiculo) {
+                $display = $vehiculo->placa;
+                if ($vehiculo->nombre_unidad) {
+                    $display .= ' - ' . $vehiculo->nombre_unidad;
+                }
+                return $display;
+            }
+        ])->order(['placa' => 'ASC'])->all();
+        
+        $asignadoPors = $this->XservAsignaciones->AsignadoPors->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($usuario) {
+                return $usuario->username . ' - ' . $usuario->nombre;
+            }
+        ])->order(['username' => 'ASC'])->all();
+        
         $this->set(compact('xservAsignacione', 'reservas', 'chofers', 'vehiculos', 'asignadoPors'));
     }
 
@@ -111,10 +137,36 @@ class XservAsignacionesController extends AppController
             }
             $this->Flash->error(__('The xserv asignacion could not be saved. Please, try again.'));
         }
-        $reservas = $this->XservAsignaciones->Reservas->find('list', limit: 200)->all();
-        $chofers = $this->XservAsignaciones->Chofers->find('list', limit: 200)->all();
-        $vehiculos = $this->XservAsignaciones->Vehiculos->find('list', limit: 200)->all();
-        $asignadoPors = $this->XservAsignaciones->AsignadoPors->find('list', limit: 200)->all();
+        $reservas = $this->XservAsignaciones->Reservas->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'codigo_reserva'
+        ])->order(['codigo_reserva' => 'ASC'])->all();
+        
+        $chofers = $this->XservAsignaciones->Chofers->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($chofer) {
+                return $chofer->usuario->nombre ?? 'Sin nombre';
+            }
+        ])->contain(['Usuarios'])->order(['Usuarios.nombre' => 'ASC'])->all();
+        
+        $vehiculos = $this->XservAsignaciones->Vehiculos->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($vehiculo) {
+                $display = $vehiculo->placa;
+                if ($vehiculo->nombre_unidad) {
+                    $display .= ' - ' . $vehiculo->nombre_unidad;
+                }
+                return $display;
+            }
+        ])->order(['placa' => 'ASC'])->all();
+        
+        $asignadoPors = $this->XservAsignaciones->AsignadoPors->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($usuario) {
+                return $usuario->username . ' - ' . $usuario->nombre;
+            }
+        ])->order(['username' => 'ASC'])->all();
+        
         $this->set(compact('xservAsignacione', 'reservas', 'chofers', 'vehiculos', 'asignadoPors'));
     }
 

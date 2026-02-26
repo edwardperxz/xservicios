@@ -48,7 +48,7 @@ class XservChoferesController extends AppController
         }
         
         if (!empty($filters['nombre'])) {
-            $query->where(['nombre LIKE' => '%' . $filters['nombre'] . '%']);
+            $query->where(['Usuarios.nombre LIKE' => '%' . $filters['nombre'] . '%']);
         }
         
         $xservChoferes = $this->paginate($query);
@@ -90,7 +90,7 @@ class XservChoferesController extends AppController
         }
 
         if (!empty($filters['nombre'])) {
-            $query->where(['nombre LIKE' => '%' . $filters['nombre'] . '%']);
+            $query->where(['Usuarios.nombre LIKE' => '%' . $filters['nombre'] . '%']);
         }
 
         $xservChoferes = $this->paginate($query);
@@ -131,7 +131,12 @@ class XservChoferesController extends AppController
             }
             $this->Flash->error(__('The xserv chofer could not be saved. Please, try again.'));
         }
-        $usuarios = $this->XservChoferes->Usuarios->find('list', limit: 200)->all();
+        $usuarios = $this->XservChoferes->Usuarios->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($usuario) {
+                return $usuario->username . ' - ' . $usuario->nombre;
+            }
+        ])->where(['rol' => 'operador'])->order(['username' => 'ASC'])->all();
         $this->set(compact('xservChofere', 'usuarios'));
     }
 
@@ -155,7 +160,12 @@ class XservChoferesController extends AppController
             }
             $this->Flash->error(__('The xserv chofer could not be saved. Please, try again.'));
         }
-        $usuarios = $this->XservChoferes->Usuarios->find('list', limit: 200)->all();
+        $usuarios = $this->XservChoferes->Usuarios->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($usuario) {
+                return $usuario->username . ' - ' . $usuario->nombre;
+            }
+        ])->where(['rol' => 'operador'])->order(['username' => 'ASC'])->all();
         $this->set(compact('xservChofere', 'usuarios'));
     }
 

@@ -9,11 +9,7 @@ use Cake\ORM\Entity;
  * XservChofer Entity
  *
  * @property int $id
- * @property int|null $usuario_id
- * @property string $nombre
- * @property string $identificacion
- * @property string $telefono
- * @property string|null $correo
+ * @property int $usuario_id
  * @property string|null $estado
  * @property \Cake\I18n\Date $fecha_ingreso
  * @property string|null $tipo_licencia
@@ -21,7 +17,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\DateTime|null $created_at
  * @property \Cake\I18n\DateTime|null $updated_at
  *
- * @property \App\Model\Entity\Usuario $usuario
+ * @property \App\Model\Entity\XservUsuario $usuario
  */
 class XservChofer extends Entity
 {
@@ -36,10 +32,6 @@ class XservChofer extends Entity
      */
     protected array $_accessible = [
         'usuario_id' => true,
-        'nombre' => true,
-        'identificacion' => true,
-        'telefono' => true,
-        'correo' => true,
         'estado' => true,
         'fecha_ingreso' => true,
         'tipo_licencia' => true,

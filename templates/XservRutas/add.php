@@ -82,8 +82,8 @@ $this->assign('header-title', 'Nueva Ruta');
 
         <div class="form-row">
             <div class="form-group">
-                <label class="form-label">Precio Base</label>
-                <?= $this->Form->control('precio_base', ['type' => 'number', 'step' => '0.01', 'min' => 0, 'class' => 'form-input', 'label' => false, 'placeholder' => '0.00']) ?>
+                <label class="form-label required">Precio Base</label>
+                <?= $this->Form->control('precio_base', ['type' => 'number', 'step' => '0.01', 'min' => 0, 'class' => 'form-input', 'label' => false, 'placeholder' => '0.00', 'required' => true]) ?>
                 <span class="form-help">Precio estándar en USD</span>
             </div>
             <div class="form-group">

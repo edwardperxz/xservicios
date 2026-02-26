@@ -971,7 +971,7 @@ class I18n {
           // Cerrar el sidebar después del cambio de idioma en mobile
           const navSidebar = document.getElementById('navSidebar');
           const sidebarOverlay = document.getElementById('sidebarOverlay');
-          if (navSidebar && window.innerWidth <= 768) {
+          if (navSidebar && window.innerWidth <= 1115) {
             navSidebar.classList.remove('open');
             sidebarOverlay?.classList.remove('active');
             document.body.style.overflow = '';

@@ -67,9 +67,13 @@
     findElements() {
       // Elementos desktop
       this.loginBtn = document.getElementById('xservLoginBtn');
-      this.userProfile = document.getElementById('xservUserProfile');
+      this.userProfileWrapper = document.getElementById('xservUserProfileWrapper');
+      this.userProfileBtn = document.getElementById('xservUserProfile');
+      this.logoutBtn = document.getElementById('xservLogoutBtn');
       this.userAvatar = document.getElementById('xservUserAvatar');
       this.userName = document.getElementById('xservUserName');
+      this.navMyReservations = document.getElementById('xservNavMyReservations');
+      this.navMyReservationsMobile = document.getElementById('xservNavMyReservationsMobile');
 
       // Elementos mobile
       this.loginBtnMobile = document.getElementById('xservLoginBtnMobile');
@@ -79,7 +83,7 @@
       this.logoutBtnMobile = document.getElementById('xservLogoutBtnMobile');
 
       // Si encontramos al menos el botón de login O el perfil de usuario, podemos continuar
-      return !!(this.loginBtn || this.userProfile || this.loginBtnMobile || this.userProfileMobile);
+      return !!(this.loginBtn || this.userProfileWrapper || this.loginBtnMobile || this.userProfileMobile);
     }
 
     /**
@@ -162,8 +166,8 @@
       }
 
       // Mostrar perfil de usuario desktop
-      if (this.userProfile) {
-        this.userProfile.classList.remove('is-hidden');
+      if (this.userProfileWrapper) {
+        this.userProfileWrapper.classList.remove('is-hidden');
       }
 
       // Ocultar botón de login mobile
@@ -174,6 +178,16 @@
       // Mostrar perfil de usuario mobile
       if (this.userProfileMobile) {
         this.userProfileMobile.classList.remove('is-hidden');
+      }
+
+      // Mostrar "Mis Reservas" en navegación desktop
+      if (this.navMyReservations) {
+        this.navMyReservations.classList.remove('is-hidden');
+      }
+
+      // Mostrar "Mis Reservas" en navegación mobile
+      if (this.navMyReservationsMobile) {
+        this.navMyReservationsMobile.classList.remove('is-hidden');
       }
 
       // Actualizar información del usuario
@@ -193,8 +207,8 @@
       }
 
       // Ocultar perfil de usuario desktop
-      if (this.userProfile) {
-        this.userProfile.classList.add('is-hidden');
+      if (this.userProfileWrapper) {
+        this.userProfileWrapper.classList.add('is-hidden');
       }
 
       // Mostrar botón de login mobile
@@ -205,6 +219,16 @@
       // Ocultar perfil de usuario mobile
       if (this.userProfileMobile) {
         this.userProfileMobile.classList.add('is-hidden');
+      }
+
+      // Ocultar "Mis Reservas" en navegación desktop
+      if (this.navMyReservations) {
+        this.navMyReservations.classList.add('is-hidden');
+      }
+
+      // Ocultar "Mis Reservas" en navegación mobile
+      if (this.navMyReservationsMobile) {
+        this.navMyReservationsMobile.classList.add('is-hidden');
       }
 
       // Limpiar cache
@@ -298,7 +322,7 @@
       // Cerrar al navegar
       navItems.forEach(item => {
         item.addEventListener('click', () => {
-          if (window.innerWidth <= 768) {
+          if (window.innerWidth <= 1115) {
             closeSidebar();
           }
         });
@@ -323,7 +347,7 @@
 
       // Cerrar en resize
       window.addEventListener('resize', () => {
-        if (window.innerWidth > 768) {
+        if (window.innerWidth > 1115) {
           closeSidebar();
         }
       });
@@ -352,6 +376,26 @@
           closeSidebar();
         });
       });
+
+      // Dropdown de perfil en desktop
+      if (this.userProfileBtn && this.userProfileWrapper) {
+        this.userProfileBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.userProfileWrapper.classList.toggle('open');
+        });
+      }
+
+      // Logout en desktop
+      if (this.logoutBtn) {
+        this.logoutBtn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (this.userProfileWrapper) {
+            this.userProfileWrapper.classList.remove('open');
+          }
+          await this.logout();
+        });
+      }
     }
 
     /**
@@ -368,6 +412,13 @@
             navSidebar.classList.remove('open');
             document.getElementById('sidebarOverlay')?.classList.remove('active');
             document.body.style.overflow = '';
+          }
+        }
+
+        // Cerrar dropdown de perfil en desktop
+        if (this.userProfileWrapper && this.userProfileBtn) {
+          if (!this.userProfileWrapper.contains(e.target)) {
+            this.userProfileWrapper.classList.remove('open');
           }
         }
       });

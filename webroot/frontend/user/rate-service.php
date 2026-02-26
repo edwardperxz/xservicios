@@ -762,7 +762,7 @@
     /* Responsive for Tablet Portrait */
     @media (max-width: 768px) {
       body {
-        padding-top: 70px;
+        padding-top: 100px;
       }
 
       .header {
@@ -942,7 +942,7 @@
     /* Responsive for Mobile */
     @media (max-width: 480px) {
       body {
-        padding-top: 65px;
+        padding-top: 100px;
       }
 
       html, body {

@@ -307,7 +307,7 @@
 
     @media (max-width: 768px) {
       .page-hero {
-        padding-top: 5.5rem;
+        padding-top: 100px;
       }
 
       .detail-section {

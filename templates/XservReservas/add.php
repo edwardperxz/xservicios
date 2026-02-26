@@ -140,6 +140,33 @@ $this->assign('header-title', 'Nueva Reserva');
             </div>
         </div>
 
+        <div class="form-section">
+            <h3 class="form-section-title">Vehiculo y Chofer (Opcional)</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Chofer</label>
+                    <?= $this->Form->control('chofer_id', [
+                        'type' => 'select',
+                        'options' => $choferes,
+                        'empty' => 'Seleccione un chofer',
+                        'class' => 'form-select',
+                        'label' => false
+                    ]) ?>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Vehículo</label>
+                    <?= $this->Form->control('vehiculo_id', [
+                        'type' => 'select',
+                        'options' => $vehiculos,
+                        'empty' => 'Seleccione un vehículo',
+                        'class' => 'form-select',
+                        'label' => false
+                    ]) ?>
+                </div>
+            </div>
+        </div>
+
 
         <div class="form-section">
             <h3 class="form-section-title">Observaciones</h3>       

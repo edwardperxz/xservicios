@@ -1,0 +1,78 @@
+/* Contenedor del grid */
+.choferes-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+/* Tarjeta de chofer */
+.chofer-card {
+    background-color: #f8f6f2; /* beige suave */
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+    width: 300px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-family: 'Arial', sans-serif;
+    color: #3d2314; /* texto principal oscuro */
+}
+
+/* Header de la tarjeta */
+.chofer-header {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Badge categoría */
+.categoria {
+    background-color: #c9a962; /* dorado */
+    color: #3d2314; /* texto oscuro */
+    padding: 5px 12px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 0.85em;
+}
+
+/* Foto del chofer */
+.chofer-foto img {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    border: 2px solid #c9a962; /* borde dorado */
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+}
+
+/* Información del chofer */
+.chofer-info h3 {
+    margin: 5px 0;
+    font-size: 1.25em;
+    font-weight: bold;
+    color: #3d2314; /* color nombre */
+}
+
+.chofer-info p {
+    margin: 2px 0;
+    font-size: 0.95em;
+    color: #5a3a2a; /* texto secundario */
+}
+
+/* Footer con estadísticas */
+.chofer-footer {
+    margin-top: 15px;
+    font-size: 0.9em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: space-between;
+    color: #3d2314; /* texto oscuro */
+}
+
+/* Pseudoresponsivo */
+@media (max-width: 500px) {
+    .chofer-card {
+        width: 90%;
+    }
+}

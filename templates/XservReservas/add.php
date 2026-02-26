@@ -20,7 +20,7 @@ $estadoPagoOptions = [
     'reembolsado' => 'Reembolsado',
 ];
 $this->assign('header-title', 'Nueva Reserva');
-?>
+?>git status
 
 <style>
     :root {

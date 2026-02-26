@@ -1,0 +1,182 @@
+/* Quote Form Container */
+.quote-section {
+    padding: 2rem 0;
+}
+
+.form-container {
+    display: flex;
+    justify-content: center; /* centra horizontalmente */
+    align-items: center;    /* centra verticalmente */
+    flex-direction: column; /* apila los inputs verticalmente */
+    min-height: 80vh;       /* opcional, para centrar también vertical */
+}
+
+
+.quote-container {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #111; /* fondo oscuro */
+    border-radius: 12px;
+    border: 1px solid #d4af37; /* borde dorado */
+    color: #fff;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+/* Títulos */
+.quote-title {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #d4af37; /* dorado */
+    margin-bottom: 0.5rem;
+}
+
+.quote-subtitle {
+    text-align: center;
+    font-size: 1rem;
+    color: #ccc;
+    margin-bottom: 1.5rem;
+}
+
+/* Inputs */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid #d4af37; /* borde dorado */
+    background: #1c1c1c;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.form-control::placeholder {
+    color: #bbb;
+}
+
+/* Botón */
+.btn-primary {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #d4af37;
+    color: #111;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    background: #ffc85c;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.choferes-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.chofer-card {
+    background-color: #fdf6e3; /* color claro como en tu imagen */
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    width: 280px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-family: 'Arial', sans-serif;
+}
+
+.chofer-header {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.categoria {
+    background-color: #d4af37; /* color según categoría */
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 0.8em;
+}
+
+.chofer-foto img {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.chofer-info h3 {
+    margin: 5px 0;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.chofer-info p {
+    margin: 2px 0;
+    font-size: 0.9em;
+}
+
+.chofer-footer {
+    margin-top: 10px;
+    font-size: 0.85em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: space-between;
+}
+
+.paginator-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    font-family: 'Arial', sans-serif;
+    color: #3d2314;
+}
+
+.paginator-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.paginator-buttons .btn, .paginator-buttons .btn-number {
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid #c9a962;
+    background-color: #f8f6f2;
+    color: #3d2314;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.3s, color 0.3s;
+}
+
+.paginator-buttons .btn:hover, .paginator-buttons .btn-number:hover {
+    background-color: #c9a962;
+    color: #fff;
+}
+
+.paginator-info {
+    font-size: 0.85em;
+    color: #5a3a2a;
+}
+

@@ -57,6 +57,11 @@ class XservReservasTable extends Table
             'foreignKey' => 'ruta_id',
             'className' => 'XservRutas',
         ]);
+        $this->hasMany('Asignaciones', [
+        'foreignKey' => 'reserva_id',
+        'className' => 'XservAsignaciones',
+        'dependent' => true,
+        ]);
     }
 
     /**

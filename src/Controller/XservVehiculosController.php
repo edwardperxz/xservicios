@@ -65,14 +65,13 @@ class XservVehiculosController extends AppController
     public function vehicles()
     {
         $this->Authorization->skipAuthorization();
-        $this->viewBuilder()->setLayout('vehicles'); // si harás layout personalizado
+        $this->viewBuilder()->setLayout('vehicles');
 
-        $query = $this->XservVehiculos
-            ->find()
-            ->order(['marca' => 'ASC']);
+        $vehiculos = $this->paginate(
+            $this->XservVehiculos->find()->order(['anio' => 'DESC'])
+        );
 
-        $xservVehiculos = $this->paginate($query);
-        $this->set(compact('xservVehiculos'));
+        $this->set(compact('vehiculos'));
     }
 
     /**

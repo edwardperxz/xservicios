@@ -1,0 +1,75 @@
+/* Header texto oscuro */
+
+.badge-tipo {
+    background: #e2e8f0;
+    color: #0f172a; /* oscuro */
+    font-weight: 600;
+}
+
+.ficha-brand-name {
+    color: #0f172a; /* oscuro elegante */
+    font-weight: 700;
+}
+
+.ficha-brand-name span {
+    color: #0d6efd; /* azul corporativo para la X */
+}
+
+.ficha-brand-sub {
+    color: #475569; /* gris oscuro */
+    font-size: 14px;
+}
+
+.ficha-body {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.ficha-image-container {
+    width: 300px;
+    height: 200px;
+}
+
+.ficha-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+.ficha-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ficha-name {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1e293b; /* Oscuro elegante */
+    margin-bottom: 10px;
+}
+
+.ficha-row {
+    display: flex;
+    gap: 10px;
+    font-size: 15px;
+}
+
+.ficha-label {
+    font-weight: 600;
+    color: #475569; /* Gris oscuro */
+    min-width: 90px;
+}
+
+.ficha-value {
+    color: #0f172a; /* Negro azulado fuerte */
+}
+
+.ficha-value.highlight {
+    color: #0d6efd; /* Azul corporativo */
+    font-weight: 600;
+}

@@ -139,9 +139,6 @@ class XservValoracionesController extends AppController
     {
         $this->Authorization->skipAuthorization();
         $xservValoracione = $this->XservValoraciones->newEmptyEntity();
-
-        $reservaId = $this->request->getQuery('reserva_id');
-        
         if ($this->request->is('post')) {
             $xservValoracione = $this->XservValoraciones->patchEntity($xservValoracione, $this->request->getData());
             if ($this->XservValoraciones->save($xservValoracione)) {
@@ -171,20 +168,10 @@ class XservValoracionesController extends AppController
             
             $this->Flash->error(__('The xserv valoracion could not be saved. Please, try again.'));
         }
-        $queryReservas = $this->XservValoraciones->XservReservas->find('list', [
+        $xservReservas = $this->XservValoraciones->XservReservas->find('list', [
             'keyField' => 'id',
             'valueField' => 'codigo_reserva'
-        ])->order(['codigo_reserva' => 'ASC']);
-
-        if ($reservaId) {
-            $queryReservas->where(['id' => $reservaId]);
-        }
-
-        if ($reservaId) {
-            $xservValoracione->reserva_id = $reservaId;
-        }
-        
-        $xservReservas = $queryReservas->all();
+        ])->order(['codigo_reserva' => 'ASC'])->all();
         $this->set(compact('xservValoracione', 'xservReservas'));
     }
 

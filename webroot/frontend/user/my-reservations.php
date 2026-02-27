@@ -762,6 +762,26 @@
                     <span class="detail-label">${t('reservations.paymentStatus')}</span>
                     <span class="detail-value">${res.estado_pago ? res.estado_pago.charAt(0).toUpperCase() + res.estado_pago.slice(1) : 'Pendiente'}</span>
                   </div>
+                  ${res.estado === 'completada' ? `
+                    <div style="margin-top: 1.5rem; text-align: right;">
+                      <a href="/xserv-valoraciones/add?reserva_id=${res.id}"
+                        style="
+                          background: var(--gold);
+                          color: var(--dark-bg);
+                          padding: 0.6rem 1.2rem;
+                          border-radius: 6px;
+                          font-weight: 600;
+                          text-decoration: none;
+                          transition: 0.3s;
+                          display: inline-block;
+                        "
+                        onmouseover="this.style.background='var(--gold-dark)'"
+                        onmouseout="this.style.background='var(--gold)'"
+                      >
+                        Valorar
+                      </a>
+                    </div>
+                  ` : ''}
                 </div>
               </div>
             ` : ''}

@@ -1042,7 +1042,9 @@
         <p style="color: #a0a0a0; text-align: center; padding: 2rem; grid-column: 1/-1;">No hay choferes disponibles</p>
       <?php endif; ?>
     </div>
-    <button class="btn-ver-mas" id="btnVerMas" onclick="toggleDrivers()">Ver más</button>
+    <?php if (!empty($choferes) && is_array($choferes) && count($choferes) > 4): ?>
+      <button class="btn-ver-mas" id="btnVerMas" onclick="toggleDrivers()">Ver más</button>
+    <?php endif; ?>
   </section>
 
   <!-- Info Section -->

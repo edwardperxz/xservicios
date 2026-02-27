@@ -5,6 +5,12 @@
 
 $isAuthenticated = $isAuthenticated ?? false;
 $user = $user ?? null;
+
+// Cargar variables de EmailJS desde el .env
+$emailjsPublicKey = getenv('public_key') ?: '';
+$emailjsServiceId = getenv('service_id') ?: '';
+$emailjsTemplateConsultUs = getenv('template_id_consult_us') ?: '';
+$emailjsTemplateAutoReply = getenv('template_id_autoreply') ?: '';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -441,6 +447,129 @@ $user = $user ?? null;
       font-size: 0.85rem;
       color: var(--text-gray);
       margin-bottom: 0.35rem;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+
+    /* Quitar flechas del input type="number" */
+    .quote-section input[type="number"]::-webkit-outer-spin-button,
+    .quote-section input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .quote-section input[type="number"] {
+      -moz-appearance: textfield;
+    }
+
+    /* Mejoras estéticas generales */
+    .quote-section .form-group {
+      position: relative;
+    }
+
+    .quote-section .form-group input,
+    .quote-section .form-group textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1.5px solid rgba(201, 169, 98, 0.3);
+      border-radius: 8px;
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .quote-section .form-group input:hover,
+    .quote-section .form-group textarea:hover {
+      border-color: rgba(201, 169, 98, 0.5);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .quote-section .form-group input:focus,
+    .quote-section .form-group textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 12px rgba(201, 169, 98, 0.25);
+    }
+
+    .quote-section .passengers-label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-gray);
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+
+    .quote-section .passengers-container {
+      display: flex;
+      align-items: center;
+      border: 1.5px solid rgba(201, 169, 98, 0.3);
+      border-radius: 8px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.05);
+      flex-grow: 1;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .quote-section .passengers-container:hover {
+      border-color: rgba(201, 169, 98, 0.5);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .quote-section .passengers-container:focus-within {
+      border-color: var(--gold);
+      box-shadow: 0 0 12px rgba(201, 169, 98, 0.25);
+    }
+
+    .quote-section .counter-button {
+      background: transparent;
+      border: none;
+      color: var(--gold);
+      font-size: 1.25rem;
+      padding: 0.65rem 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+
+    .quote-section .counter-button:hover {
+      background: rgba(201, 169, 98, 0.15);
+      transform: scale(1.1);
+    }
+
+    .quote-section .counter-button:active {
+      transform: scale(0.95);
+    }
+
+    .quote-section .passengers-input {
+      border: none !important;
+      background: transparent !important;
+      width: 70px;
+      text-align: center;
+      color: var(--text-white);
+      font-weight: 700;
+      padding: 0.65rem 0;
+      font-size: 1.1rem;
+      box-shadow: none !important;
+      cursor: text;
+    }
+
+    .quote-section .passengers-input:focus {
+      outline: none !important;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    .quote-section .passengers-input::-webkit-outer-spin-button,
+    .quote-section .passengers-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
     }
   </style>
 </head>
@@ -550,56 +679,57 @@ $user = $user ?? null;
     <div class="quote-container" id="quoteContainer">
       <h2 class="quote-title" data-i18n="fleet.quoteTitle">Solicita tu Cotizacion</h2>
       <p class="quote-subtitle" data-i18n="fleet.quoteSubtitle">Completa el formulario y te contactaremos pronto</p>
-      <form>
+      <form id="quoteForm">
         <input type="hidden" id="quoteServiceId" name="service_id" value="">
         <div class="form-group">
-          <input type="text" id="quoteName" placeholder="Tu nombre completo" data-i18n-placeholder="fleet.quoteName">
+          <input type="text" id="quoteName" name="quoteName" placeholder="Tu nombre completo" data-i18n-placeholder="fleet.quoteName" required>
         </div>
         <div class="form-group">
-          <input type="email" id="quoteEmail" placeholder="Correo electronico" data-i18n-placeholder="fleet.quoteEmail">
+          <input type="email" id="quoteEmail" name="quoteEmail" placeholder="Correo electronico" data-i18n-placeholder="fleet.quoteEmail" required>
         </div>
         <div id="defaultFields">
           <div class="form-group">
-            <input type="text" id="quoteDestination" placeholder="Destino deseado" data-i18n-placeholder="fleet.quoteDestination">
+            <input type="text" id="quoteDestination" name="destination" placeholder="Destino deseado" data-i18n-placeholder="fleet.quoteDestination">
           </div>
           <div class="form-group">
-            <textarea id="quoteNotes" rows="3" placeholder="Notas adicionales"></textarea>
+            <textarea id="quoteNotes" name="notes" rows="3" placeholder="Notas adicionales"></textarea>
           </div>
         </div>
         <div id="customFields" class="is-hidden">
           <div class="form-group">
             <label class="form-label" for="quoteServiceName">Servicio seleccionado</label>
-            <input type="text" id="quoteServiceName" placeholder="Servicio" readonly>
+            <input type="text" id="quoteServiceName" name="serviceName" placeholder="Servicio" readonly>
           </div>
           <div class="form-group">
             <label class="form-label" for="quotePickup">Punto de recogida</label>
-            <input type="text" id="quotePickup" placeholder="Escribe el punto de recogida">
+            <input type="text" id="quotePickup" name="pickup" placeholder="Escribe el punto de recogida">
           </div>
           <div class="form-group">
             <label class="form-label" for="quoteDropoff">Punto de destino</label>
-            <input type="text" id="quoteDropoff" placeholder="Escribe el destino final">
+            <input type="text" id="quoteDropoff" name="dropoff" placeholder="Escribe el destino final">
           </div>
           <div class="form-group">
             <label class="form-label" for="quoteDate">Fecha deseada</label>
-            <input type="date" id="quoteDate">
+            <input type="date" id="quoteDate" name="date">
           </div>
           <div class="form-group">
             <label class="form-label" for="quoteTime">Hora deseada</label>
-            <input type="time" id="quoteTime">
+            <input type="time" id="quoteTime" name="time">
           </div>
           <div class="form-group">
-            <textarea id="quoteCustomNotes" rows="3" placeholder="Detalles de personalizacion"></textarea>
+            <textarea id="quoteCustomNotes" name="customNotes" rows="3" placeholder="Detalles de personalizacion"></textarea>
           </div>
         </div>
-        <div class="form-group passengers-group">
-          <div class="passengers-container">
-            <button type="button" class="counter-button minus" id="minusBtn" onclick="decrementPassengers(event)">-</button>
-            <input type="number" id="passengersInput" class="passengers-input" placeholder="0" data-i18n-placeholder="fleet.quotePassengers" min="1" max="99" value="1">
+        <div class="form-group passengers-group" style="flex-direction: column; align-items: flex-start; gap: 0.5rem;">
+          <label class="passengers-label" for="passengersInput" data-i18n="fleet.quotePassengers">Número de Pasajeros</label>
+          <div class="passengers-container" style="width: 100%;">
+            <button type="button" class="counter-button minus" id="minusBtn" onclick="decrementPassengers(event)">−</button>
+            <input type="number" id="passengersInput" name="passengers" class="passengers-input" data-i18n-placeholder="fleet.quotePassengers" min="1" max="99" value="1" onchange="validatePassengers()" oninput="validatePassengersInput(event)" onpaste="event.preventDefault()">
             <button type="button" class="counter-button plus" id="plusBtn" onclick="incrementPassengers(event)">+</button>
           </div>
           <span class="passengers-error" id="passengersError" data-i18n="fleet.quotePassengersError">Minimo 1 pasajero requerido</span>
         </div>
-        <button type="submit" class="quote-submit" data-i18n="fleet.quoteSubmit">Solicitar Cotizacion</button>
+        <button type="submit" class="quote-submit" id="submitBtn" data-i18n="fleet.quoteSubmit">Solicitar Cotizacion</button>
       </form>
     </div>
   </section>
@@ -609,7 +739,95 @@ $user = $user ?? null;
   <script src="/js/i18n.js"></script>
   <script src="/js/header-loader.js"></script>
   <script src="/js/header-dynamic.js"></script>
+  <!-- EmailJS v4 - Sin defer para cargar primero -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>
+    // Esperar a que EmailJS esté disponible antes de inicializar
+    function waitForEmailJS() {
+      if (typeof emailjs !== 'undefined') {
+        const publicKey = '<?= $emailjsPublicKey ?>';
+        if (publicKey) {
+          emailjs.init({
+            publicKey: publicKey
+          });
+          console.log('EmailJS inicializado correctamente');
+        } else {
+          console.warn('EmailJS public key no disponible. Revisa la configuración del servidor.');
+        }
+      } else {
+        setTimeout(waitForEmailJS, 50);
+      }
+    }
+    waitForEmailJS();
+  </script>
+  <script defer>
+    function loadScriptFrom(src) {
+      return new Promise((resolve) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.async = true;
+        script.dataset.emailjs = 'true';
+        script.onload = resolve;
+        script.onerror = resolve;
+        document.head.appendChild(script);
+      });
+    }
+
+    function loadEmailJSScript() {
+      return new Promise(async (resolve) => {
+        if (typeof emailjs !== 'undefined') {
+          resolve();
+          return;
+        }
+
+        const existing = document.querySelector('script[data-emailjs]');
+        if (existing) {
+          existing.addEventListener('load', resolve, { once: true });
+          existing.addEventListener('error', resolve, { once: true });
+          return;
+        }
+
+        const sources = [
+          'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js',
+          'https://unpkg.com/@emailjs/browser@4/dist/email.min.js',
+          '/js/emailjs.min.js'
+        ];
+
+        for (let i = 0; i < sources.length; i += 1) {
+          await loadScriptFrom(sources[i]);
+          if (typeof emailjs !== 'undefined') {
+            resolve();
+            return;
+          }
+        }
+
+        resolve();
+      });
+    }
+
+    // Función helper para esperar a que EmailJS esté listo
+    function ensureEmailJSReady() {
+      return new Promise(async (resolve) => {
+        if (typeof emailjs !== 'undefined') {
+          resolve();
+          return;
+        }
+
+        await loadEmailJSScript();
+
+        const start = Date.now();
+        const checkInterval = setInterval(() => {
+          if (typeof emailjs !== 'undefined') {
+            clearInterval(checkInterval);
+            resolve();
+          } else if (Date.now() - start > 5000) {
+            clearInterval(checkInterval);
+            resolve();
+          }
+        }, 50);
+      });
+    }
+
     function applyQuoteMode() {
       const params = new URLSearchParams(window.location.search);
       const serviceId = params.get('service_id');
@@ -641,7 +859,7 @@ $user = $user ?? null;
     function incrementPassengers(e) {
       e.preventDefault();
       const input = document.getElementById('passengersInput');
-      const currentValue = parseInt(input.value, 10) || 0;
+      const currentValue = parseInt(input.value, 10) || 1;
       if (currentValue < 99) {
         input.value = currentValue + 1;
         validatePassengers();
@@ -651,29 +869,246 @@ $user = $user ?? null;
     function decrementPassengers(e) {
       e.preventDefault();
       const input = document.getElementById('passengersInput');
-      const currentValue = parseInt(input.value, 10) || 0;
+      const currentValue = parseInt(input.value, 10) || 1;
       if (currentValue > 1) {
         input.value = currentValue - 1;
         validatePassengers();
       }
     }
 
+    function validatePassengersInput(e) {
+      const input = e.target;
+      let value = input.value;
+
+      // Remover cualquier carácter que no sea número
+      value = value.replace(/[^0-9]/g, '');
+
+      // Si está vacío, poner 1
+      if (value === '' || value === '0') {
+        input.value = '1';
+        return;
+      }
+
+      // Convertir a número y validar rango
+      let numValue = parseInt(value, 10);
+
+      // Si es mayor a 99, limitarlo a 99
+      if (numValue > 99) {
+        input.value = '99';
+      } else if (numValue < 1) {
+        input.value = '1';
+      } else {
+        input.value = numValue;
+      }
+
+      validatePassengers();
+    }
+
     function validatePassengers() {
       const input = document.getElementById('passengersInput');
       const errorMsg = document.getElementById('passengersError');
-      const value = parseInt(input.value, 10);
+      let value = parseInt(input.value, 10);
 
+      // Si no es un número válido, poner 1
       if (isNaN(value) || value < 1) {
         input.value = 1;
         errorMsg.classList.add('show');
         return false;
       }
 
+      // Si es mayor a 99, limitarlo a 99
+      if (value > 99) {
+        input.value = 99;
+      }
+
       errorMsg.classList.remove('show');
       return true;
     }
 
-    document.addEventListener('DOMContentLoaded', applyQuoteMode);
+    function getFormData() {
+      const isCustomMode = document.getElementById('defaultFields').classList.contains('is-hidden');
+      const name = document.getElementById('quoteName').value.trim();
+      const email = document.getElementById('quoteEmail').value.trim();
+      const passengers = document.getElementById('passengersInput').value;
+
+      let data = {
+        name: name,
+        email: email,
+        passengers: passengers
+      };
+
+      if (!isCustomMode) {
+        // Modo default
+        data.destination = document.getElementById('quoteDestination').value.trim();
+        data.notes = document.getElementById('quoteNotes').value.trim();
+        data.service = 'Cotización General';
+        data.pickup = '';
+        data.dropoff = '';
+        data.date = '';
+        data.time = '';
+        data.customNotes = '';
+      } else {
+        // Modo custom
+        data.service = document.getElementById('quoteServiceName').value.trim();
+        data.pickup = document.getElementById('quotePickup').value.trim();
+        data.dropoff = document.getElementById('quoteDropoff').value.trim();
+        data.date = document.getElementById('quoteDate').value || 'No especificada';
+        data.time = document.getElementById('quoteTime').value || 'No especificada';
+        data.customNotes = document.getElementById('quoteCustomNotes').value.trim();
+        data.destination = data.pickup + ' → ' + data.dropoff;
+        data.notes = data.customNotes;
+      }
+
+      return data;
+    }
+
+    function validateQuoteForm() {
+      const name = document.getElementById('quoteName').value.trim();
+      const email = document.getElementById('quoteEmail').value.trim();
+      const passengers = parseInt(document.getElementById('passengersInput').value, 10);
+      const isCustomMode = document.getElementById('defaultFields').classList.contains('is-hidden');
+
+      if (!name || name.length < 3) {
+        alert('Por favor ingresa un nombre válido (mínimo 3 caracteres)');
+        return false;
+      }
+
+      if (!email || !email.includes('@')) {
+        alert('Por favor ingresa un correo electrónico válido');
+        return false;
+      }
+
+      if (isNaN(passengers) || passengers < 1 || passengers > 99) {
+        alert('Por favor ingresa un número válido de pasajeros (1-99)');
+        return false;
+      }
+
+      if (!isCustomMode) {
+        const destination = document.getElementById('quoteDestination').value.trim();
+        if (!destination) {
+          alert('Por favor ingresa un destino deseado');
+          return false;
+        }
+      } else {
+        const pickup = document.getElementById('quotePickup').value.trim();
+        const dropoff = document.getElementById('quoteDropoff').value.trim();
+        if (!pickup || !dropoff) {
+          alert('Por favor ingresa punto de recogida y destino');
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    async function sendQuoteEmail(e) {
+      e.preventDefault();
+
+      if (!validateQuoteForm()) {
+        return;
+      }
+
+      const submitBtn = document.getElementById('submitBtn');
+      const originalText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Enviando...';
+
+      try {
+        // Asegurar que EmailJS esté disponible antes de intentar usarlo
+        await ensureEmailJSReady();
+
+        // Verificar que EmailJS se inicializó correctamente
+        if (typeof emailjs === 'undefined') {
+          throw new Error('EmailJS no se pudo cargar. Por favor recarga la página.');
+        }
+
+        const data = getFormData();
+        let adminSuccess = false;
+        let userSuccess = false;
+
+        // Preparar parámetros para el admin
+        const adminParams = {
+          to_email: 'admin@xservicios.com',
+          customer_name: data.name,
+          customer_email: data.email,
+          service: data.service,
+          destination: data.destination,
+          pickup: data.pickup,
+          dropoff: data.dropoff,
+          passengers: data.passengers,
+          date: data.date,
+          time: data.time,
+          notes: data.notes,
+          customNotes: data.customNotes
+        };
+
+        // Intentar enviar email al admin
+        try {
+          await emailjs.send(
+            '<?= $emailjsServiceId ?>',
+            '<?= $emailjsTemplateConsultUs ?>',
+            adminParams
+          );
+          adminSuccess = true;
+        } catch (adminError) {
+          console.warn('No se pudo enviar notificación al admin:', adminError);
+        }
+
+        // Preparar parámetros para confirmación al usuario
+        const userParams = {
+          user_email: data.email,
+          user_name: data.name,
+          service: data.service,
+          destination: data.destination,
+          pickup: data.pickup,
+          dropoff: data.dropoff,
+          passengers: data.passengers,
+          date: data.date,
+          time: data.time
+        };
+
+        // Intentar enviar confirmación al usuario
+        try {
+          await emailjs.send(
+            '<?= $emailjsServiceId ?>',
+            '<?= $emailjsTemplateAutoReply ?>',
+            userParams
+          );
+          userSuccess = true;
+        } catch (userError) {
+          console.warn('No se pudo enviar confirmación al usuario:', userError);
+        }
+
+        // Si al menos uno de los envíos fue exitoso, considerar exitosa la operación
+        if (adminSuccess || userSuccess) {
+          // Limpiar formulario
+          document.getElementById('quoteForm').reset();
+          document.getElementById('passengersInput').value = '1';
+
+          // Mostrar mensaje de éxito
+          alert('¡Cotización enviada exitosamente! Te contactaremos pronto.');
+        } else {
+          // Si ambos fallaron, mostrar error
+          throw new Error('No se pudo enviar la cotización');
+        }
+
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      } catch (error) {
+        console.error('Error crítico al enviar cotización:', error);
+        alert('Hubo un error al enviar tu cotización. Por favor intenta de nuevo.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      applyQuoteMode();
+      const quoteForm = document.getElementById('quoteForm');
+      if (quoteForm) {
+        quoteForm.addEventListener('submit', sendQuoteEmail);
+      }
+    });
   </script>
 </body>
 </html>

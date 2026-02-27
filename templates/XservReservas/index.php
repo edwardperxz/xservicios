@@ -73,7 +73,6 @@
                 <tr>
                     <td><?= $this->Number->format($xservReserva->id) ?></td>
                     <td><?= h($xservReserva->codigo_reserva) ?></td>
-                    <td><?= $xservReserva->hasValue('cliente') ? $this->Html->link($xservReserva->cliente->nombre, ['controller' => 'XservClientes', 'action' => 'view', $xservReserva->cliente->id]) : '' ?></td>
                     <td><?= $xservReserva->hasValue('servicio') ? $this->Html->link($xservReserva->servicio->nombre, ['controller' => 'XservServicios', 'action' => 'view', $xservReserva->servicio->id]) : '' ?></td>
                     <td><?= $xservReserva->hasValue('ruta') ? $this->Html->link($xservReserva->ruta->id, ['controller' => 'XservRutas', 'action' => 'view', $xservReserva->ruta->id]) : '' ?></td>
                     <td><?= h($xservReserva->fecha) ?></td>

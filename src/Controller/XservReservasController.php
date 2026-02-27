@@ -38,121 +38,110 @@ class XservReservasController extends AppController
     }
 
     public function index()
-{
-    $this->Authorization->skipAuthorization();
-
-    // --- CONSULTA PRINCIPAL ---
-    $query = $this->XservReservas->find()
-        ->contain([
-            'Clientes',
-            'Servicios',
-            'Rutas',
-            'Asignaciones' => [
-                'Choferes',
-                'Vehiculos'
-            ]
-        ])
-        ->order(['XservReservas.created_at' => 'DESC']);
-
-    // --- FILTROS DESDE GET ---
-    $clienteId = $this->request->getQuery('cliente_id');
-    $estado = $this->request->getQuery('estado');
-
-    if ($clienteId) {
-        $query->where(['cliente_id' => $clienteId]);
-    }
-
-    if ($estado) {
-        $query->where(['estado' => $estado]);
-    }
-
-    // --- PAGINAR ---
-    $xservReservas = $this->paginate($query);
     {
         $this->Authorization->skipAuthorization();
-        
+
         $user = $this->Authentication->getIdentity();
         $isAdmin = $user && $user->rol === 'admin';
-        
+
+        // --- CONSULTA BASE ---
         $query = $this->XservReservas->find()
-            ->contain(['Clientes', 'Servicios', 'Rutas']);
-        
+            ->contain([
+                'Clientes',
+                'Servicios',
+                'Rutas',
+                'Asignaciones' => [
+                    'Choferes',
+                    'Vehiculos'
+                ]
+            ])
+            ->order(['XservReservas.created_at' => 'DESC']);
+
+        // --- FILTROS ---
         $filters = $this->request->getQuery();
-        
+
+        if (!empty($filters['cliente_id'])) {
+            $query->where(['XservReservas.cliente_id' => $filters['cliente_id']]);
+        }
+
         if (!empty($filters['estado'])) {
             $query->where(['XservReservas.estado' => $filters['estado']]);
         }
-        
+
         if (!empty($filters['codigo'])) {
-            $query->where(['codigo_reserva LIKE' => '%' . $filters['codigo'] . '%']);
+            $query->where(['XservReservas.codigo_reserva LIKE' => '%' . $filters['codigo'] . '%']);
         }
-        
+
+        // --- PAGINAR ---
         $xservReservas = $this->paginate($query);
 
-    // --- DATOS PARA EL PANEL DE FILTROS ---
-    $clientes = $this->XservReservas->Clientes->find('list')->toArray();
-    $estados = $this->XservReservas->find()
-        ->select(['estado'])
-        ->distinct(['estado'])
-        ->all()
-        ->extract('estado')
-        ->toList();
+        // --- DATOS PARA FILTROS ---
+        $clientes = $this->XservReservas->Clientes->find('list')->toArray();
 
+        $estados = $this->XservReservas->find()
+            ->select(['estado'])
+            ->distinct(['estado'])
+            ->all()
+            ->extract('estado')
+            ->toList();
 
+        // --- JSON (AJAX) ---
+        if ($this->request->is('json') || 
+            $this->request->getHeaderLine('X-Requested-With') === 'XMLHttpRequest') {
 
-    // --- RESPUESTA JSON PARA AJAX ---
-    if ($this->request->is('json') || $this->request->getHeader('X-Requested-With') === 'XMLHttpRequest') {
-        $this->response = $this->response->withType('application/json');
-        return $this->response->withStringBody(json_encode([
-            'xservReservas' => $xservReservas->toArray()
-        ]));
-    }
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode([
+                    'xservReservas' => $xservReservas->toArray()
+                ]));
+        }
 
-    // --- PASAR DATOS A LA VISTA ---
-    $this->set(compact('xservReservas', 'clientes', 'estados', 'clienteId', 'estado'));
-}
+        // --- VISTA ---
+        $this->set(compact(
+            'xservReservas',
+            'clientes',
+            'estados',
+            'filters'
+        ));
 
-        $this->set(compact('xservReservas', 'filters'));
-        
         if ($isAdmin) {
             $this->render('admin_index');
         }
     }
+        /**
+         * Admin index method
+         *
+         * @return \Cake\Http\Response|null|void Renders view
+         */
+        public function adminIndex()
+        {
+            $this->Authorization->skipAuthorization();
 
-    /**
-     * Admin index method
-     *
-     * @return \Cake\Http\Response|null|void Renders view
-     */
-    public function adminIndex()
-    {
-        $this->Authorization->skipAuthorization();
+            $user = $this->Authentication->getIdentity();
+            if (!$user || $user->rol !== 'admin') {
+                return $this->redirect(['controller' => 'XservUsuarios', 'action' => 'profile']);
+            }
 
-        $user = $this->Authentication->getIdentity();
-        if (!$user || $user->rol !== 'admin') {
-            return $this->redirect(['controller' => 'XservUsuarios', 'action' => 'profile']);
+            $this->viewBuilder()->setLayout('admin');
+
+            $query = $this->XservReservas->find()
+                ->contain(['Clientes', 'Servicios', 'Rutas']);
+
+            $filters = $this->request->getQuery();
+
+            if (!empty($filters['estado'])) {
+                $query->where(['XservReservas.estado' => $filters['estado']]);
+            }
+
+            if (!empty($filters['codigo'])) {
+                $query->where(['codigo_reserva LIKE' => '%' . $filters['codigo'] . '%']);
+            }
+
+            $xservReservas = $this->paginate($query);
+
+            $this->set(compact('xservReservas', 'filters'));
+            $this->render('admin_index');
         }
-
-        $this->viewBuilder()->setLayout('admin');
-
-        $query = $this->XservReservas->find()
-            ->contain(['Clientes', 'Servicios', 'Rutas']);
-
-        $filters = $this->request->getQuery();
-
-        if (!empty($filters['estado'])) {
-            $query->where(['XservReservas.estado' => $filters['estado']]);
-        }
-
-        if (!empty($filters['codigo'])) {
-            $query->where(['codigo_reserva LIKE' => '%' . $filters['codigo'] . '%']);
-        }
-
-        $xservReservas = $this->paginate($query);
-
-        $this->set(compact('xservReservas', 'filters'));
-        $this->render('admin_index');
-    }
 
     /**
      * View method
@@ -338,8 +327,15 @@ class XservReservasController extends AppController
         $rutas = $this->XservReservas->Rutas->find('list')->all();
 
         $choferes = $this->XservReservas->Asignaciones->Choferes
-            ->find('list')
-            ->where(['estado' => 'activo'])
+            ->find('list', [
+                'keyField' => 'id',
+                'valueField' => 'usuario.nombre'
+            ])
+            ->contain(['Usuarios'])
+            ->where([
+                'Choferes.estado' => 'activo',
+                'Choferes.disponibilidad' => 'disponible'
+            ])
             ->all();
 
         $vehiculos = $this->XservReservas->Asignaciones->Vehiculos

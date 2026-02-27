@@ -31,6 +31,7 @@ class HomeController extends AppController
         $this->Authorization->skipAuthorization();
         $user = $this->request->getAttribute('identity');
 
+
         // Si hay sesión, redirigir por rol
         if ($user) {
             $rol = $user->rol ?? null;
@@ -59,7 +60,7 @@ class HomeController extends AppController
                     'XservReservas.hora' => 'DESC'
                 ])
                 ->all();
-            $this->set('misReservas', $misReservas);
+                $this->set('misReservas', $misReservas);
             }
         } else {
             // Usuario no autenticado

@@ -38,6 +38,9 @@ class XservClientesTable extends Table
         $this->setTable('xserv_clientes');
         $this->setDisplayField('nombre');
         $this->setPrimaryKey('id');
+        $this->belongsTo('Usuarios', [
+            'foreignKey' => 'usuario_id',
+        ]);
     }
 
     /**

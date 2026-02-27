@@ -347,8 +347,62 @@ $user = $user ?? null;
           </button>
         </div>
 
-        <div class="service-list" id="serviceList">
-          <p class="empty-message" data-i18n="homeLogin.emptyRecent">No hay reservas recientes.</p>
+        <div id="tabResumen" class="tab-content active-tab">
+
+          <?php if (!empty($misReservas) && count($misReservas) > 0): ?>
+
+            <table style="width:100%; border-collapse: collapse;">
+              <thead>
+                <tr style="border-bottom:1px solid var(--dark-lighter); color: var(--text-gray); font-size:0.85rem;">
+                  <th style="padding:0.5rem; text-align:left;">Código</th>
+                  <th style="padding:0.5rem; text-align:left;">Servicio</th>
+                  <th style="padding:0.5rem; text-align:left;">Fecha</th>
+                  <th style="padding:0.5rem; text-align:left;">Hora</th>
+                  <th style="padding:0.5rem; text-align:left;">Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach ($misReservas as $reserva): ?>
+                  <tr style="border-bottom:1px solid var(--dark-lighter);">
+                    <td style="padding:0.5rem;"><strong><?= h($reserva->codigo_reserva) ?></strong></td>
+                    <td style="padding:0.5rem;"><?= h($reserva->servicio->nombre ?? 'N/A') ?></td>
+                    <td style="padding:0.5rem;"><?= h($reserva->fecha->format('d/m/Y')) ?></td>
+                    <td style="padding:0.5rem;"><?= h($reserva->hora->format('H:i')) ?></td>
+                    <td style="padding:0.5rem;">
+                      <span style="padding:0.25rem 0.75rem;border-radius:12px;font-size:0.75rem;background: rgba(201,169,98,0.15);color: var(--gold);">
+                        <?= h(ucfirst(str_replace('_',' ', $reserva->estado))) ?>
+                      </span>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+
+          <?php else: ?>
+            <p class="empty-message">No hay reservas recientes.</p>
+          <?php endif; ?>
+
+        </div>
+
+        <div id="tabMisReservas" class="tab-content" style="display:none;">
+          <h3 style="margin-bottom:1rem;">Todas mis reservas</h3>
+
+          <?php if (!empty($misReservas)): ?>
+            <?php foreach ($misReservas as $reserva): ?>
+              <div style="padding:1rem;border:1px solid var(--dark-lighter);border-radius:8px;margin-bottom:1rem;">
+                <strong><?= h($reserva->codigo_reserva) ?></strong><br>
+                Servicio: <?= h($reserva->servicio->nombre ?? 'N/A') ?><br>
+                Fecha: <?= h($reserva->fecha->format('d/m/Y')) ?> <?= h($reserva->hora->format('H:i')) ?><br>
+                Estado: <?= h($reserva->estado) ?>
+              </div>
+            <?php endforeach; ?>
+          <?php else: ?>
+            <p class="empty-message">No tienes reservas registradas.</p>
+          <?php endif; ?>
+        </div>
+
+        <div id="tabValoracion" class="tab-content" style="display:none;">
+          <p class="empty-message">Aquí irá el sistema de valoración.</p>
         </div>
 
         <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
@@ -403,5 +457,47 @@ $user = $user ?? null;
   <script src="/js/header-loader.js"></script>
   <script src="/js/i18n.js"></script>
   <script src="/js/header-dynamic.js"></script>
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+
+    const tabs = document.querySelectorAll(".tab-item");
+    const resumen = document.getElementById("tabResumen");
+    const misReservas = document.getElementById("tabMisReservas");
+    const valoracion = document.getElementById("tabValoracion");
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", function () {
+
+        // Quitar active visual
+        tabs.forEach(t => t.classList.remove("active"));
+        this.classList.add("active");
+
+        // Ocultar todo
+        resumen.style.display = "none";
+        misReservas.style.display = "none";
+        valoracion.style.display = "none";
+
+        // Mostrar según tab
+        if (index === 0) {
+          resumen.style.display = "block";
+        }
+
+        if (index === 1) {
+          window.location.href = "/services"; // Nueva reserva sí puede redirigir
+        }
+
+        if (index === 2) {
+          misReservas.style.display = "block";
+        }
+
+        if (index === 3) {
+          valoracion.style.display = "block";
+        }
+
+      });
+    });
+
+  });
+  </script>
 </body>
 </html>

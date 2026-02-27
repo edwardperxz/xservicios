@@ -540,6 +540,10 @@
           <span data-i18n="reservations.cancelled">Canceladas</span>
           <span class="category-count" id="count-canceladas">0</span>
         </button>
+        <button class="category-tab" data-category="pendientes">
+        <span data-i18n="reservations.pending">Pendientes</span>
+        <span class="category-count" id="count-pendientes">0</span>
+      </button>
       </div>
 
       <!-- Reservations List -->
@@ -555,6 +559,7 @@
     let currentCategory = 'proximos';
     let expandedReservation = null;
     let reservationsData = {
+      pendientes: [],
       proximos: [],
       completadas: [],
       canceladas: []
@@ -606,6 +611,7 @@
       document.getElementById('count-proximos').textContent = reservationsData.proximos.length;
       document.getElementById('count-completadas').textContent = reservationsData.completadas.length;
       document.getElementById('count-canceladas').textContent = reservationsData.canceladas.length;
+      document.getElementById('count-pendientes').textContent = reservationsData.pendientes.length;
     }
 
     // Formatear fecha

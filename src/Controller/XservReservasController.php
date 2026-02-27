@@ -493,11 +493,10 @@ class XservReservasController extends AppController
     {
         $this->Authorization->skipAuthorization();
         $this->request->allowMethod(['get']);
-        
-        $user = $this->Authentication->getIdentity();
-        
-        // Si no hay usuario autenticado, retornar error
-        if (!$user) {
+
+        $usuario = $this->Authentication->getIdentity();
+
+        if (!$usuario) {
             $this->response = $this->response->withStatus(401)->withType('application/json');
             return $this->response->withStringBody(json_encode([
                 'success' => false,
@@ -506,19 +505,33 @@ class XservReservasController extends AppController
         }
 
         try {
-            // Obtener todas las reservas del usuario
-            $query = $this->XservReservas->find()
-                ->contain(['Clientes', 'Servicios', 'Rutas'])
-                ->where(['XservReservas.cliente_id' => $user->id])
-                ->orderBy(['XservReservas.fecha' => 'DESC']);
+            // Obtener el cliente asociado al usuario
+            $cliente = $this->XservReservas->Clientes
+                ->find()
+                ->where(['usuario_id' => $usuario->id])
+                ->first();
 
-            $allReservas = $query->all();
-            
+            if (!$cliente) {
+                $this->response = $this->response->withStatus(404)->withType('application/json');
+                return $this->response->withStringBody(json_encode([
+                    'success' => false,
+                    'error' => 'Cliente no encontrado para este usuario'
+                ]));
+            }
+
+            // Obtener todas las reservas del cliente
+            $allReservas = $this->XservReservas->find()
+                ->contain(['Clientes', 'Servicios', 'Rutas'])
+                ->where(['XservReservas.cliente_id' => $cliente->id])
+                ->order(['XservReservas.fecha' => 'DESC'])
+                ->all();
+
             // Categorizar reservas
             $categorized = [
-                'proximos' => [],      // Reservas futuras (no completada ni cancelada)
-                'completadas' => [],   // Reservas completadas
-                'canceladas' => []     // Reservas canceladas
+                'pendientes' => [],
+                'proximos' => [],
+                'completadas' => [],
+                'canceladas' => []
             ];
 
             foreach ($allReservas as $reserva) {
@@ -541,13 +554,21 @@ class XservReservasController extends AppController
                         'nombre' => $reserva->servicio->nombre
                     ] : null
                 ];
-                
-                if ($estado === 'cancelada') {
-                    $categorized['canceladas'][] = $reservaArray;
-                } elseif ($estado === 'completada') {
-                    $categorized['completadas'][] = $reservaArray;
-                } else {
-                    $categorized['proximos'][] = $reservaArray;
+
+                switch ($estado) {
+                    case 'pendiente':
+                        $categorized['pendientes'][] = $reservaArray;
+                        break;
+                    case 'confirmada':
+                    case 'asignada':
+                        $categorized['proximos'][] = $reservaArray;
+                        break;
+                    case 'completada':
+                        $categorized['completadas'][] = $reservaArray;
+                        break;
+                    case 'cancelada':
+                        $categorized['canceladas'][] = $reservaArray;
+                        break;
                 }
             }
 
@@ -556,6 +577,7 @@ class XservReservasController extends AppController
                 'success' => true,
                 'reservations' => $categorized
             ]));
+
         } catch (\Exception $e) {
             $this->response = $this->response->withStatus(500)->withType('application/json');
             return $this->response->withStringBody(json_encode([

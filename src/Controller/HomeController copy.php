@@ -5,9 +5,6 @@ namespace App\Controller;
 
 use Cake\Event\EventInterface;
 
-use Cake\ORM\TableRegistry;
-
-
 class HomeController extends AppController
 {
     public function initialize(): void
@@ -46,21 +43,6 @@ class HomeController extends AppController
             // Usuario autenticado (operador u otro)
             $this->set('isAuthenticated', true);
             $this->set('user', $user);
-
-            if ($rol === 'operador') {
-                $reservasTable = TableRegistry::getTableLocator()->get('XservReservas');
-                $misReservas = $reservasTable->find()
-                ->contain(['Servicios', 'Clientes'])
-                ->where([
-                    'Clientes.usuario_id' => $user->id
-                ])
-                ->order([
-                    'XservReservas.fecha' => 'DESC',
-                    'XservReservas.hora' => 'DESC'
-                ])
-                ->all();
-                $this->set('misReservas', $misReservas);
-            }
         } else {
             // Usuario no autenticado
             $this->set('isAuthenticated', false);

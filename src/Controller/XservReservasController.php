@@ -46,10 +46,8 @@ class XservReservasController extends AppController
 
         // --- CONSULTA BASE ---
         $query = $this->XservReservas->find()
-            ->contain(['Clientes' => ['XservUsuarios'], 'Servicios', 'Rutas']);
-        
             ->contain([
-                'Clientes',
+                'Clientes' => ['XservUsuarios'],
                 'Servicios',
                 'Rutas',
                 'Asignaciones' => [
@@ -357,7 +355,6 @@ class XservReservasController extends AppController
             $this->Flash->error('Error al guardar la reserva.');
 
             $this->Flash->error('La reserva no pudo guardarse. Intente nuevamente.');
-        }
 
         // Listas para formulario
         $clientes = $this->XservReservas->Clientes->find('list')->all();

@@ -6,9 +6,6 @@ namespace App\Controller;
 use Cake\Event\EventInterface;
 use Cake\ORM\TableRegistry;
 
-use Cake\ORM\TableRegistry;
-
-
 class HomeController extends AppController
 {
     public function initialize(): void

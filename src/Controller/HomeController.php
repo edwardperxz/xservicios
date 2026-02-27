@@ -59,7 +59,7 @@ class HomeController extends AppController
                     'XservReservas.hora' => 'DESC'
                 ])
                 ->all();
-                $this->set('misReservas', $misReservas);
+            $this->set('misReservas', $misReservas);
             }
         } else {
             // Usuario no autenticado

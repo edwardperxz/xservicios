@@ -447,15 +447,14 @@
 
     <h3 style="margin-bottom:1.5rem;">Mis Reservas</h3>
 
-    <?php if (!empty($misReservas) && count($misReservas) > 0): ?>
+    <?php if (count($misReservas) > 0): ?>
 
     <table class="reservas-table">
         <thead>
             <tr>
                 <th>Código</th>
                 <th>Servicio</th>
-                <th>Fecha</th>
-                <th>Hora</th>
+                <th>Fecha y Hora</th>
                 <th>Pasajeros</th>
                 <th>Estado</th>
             </tr>
@@ -465,8 +464,10 @@
             <tr>
                 <td><strong><?= h($reserva->codigo_reserva) ?></strong></td>
                 <td><?= h($reserva->servicio->nombre ?? 'N/A') ?></td>
-                <td><?= h($reserva->fecha->format('d/m/Y')) ?></td>
-                <td><?= h($reserva->hora->format('H:i')) ?></td>
+                <td>
+                    <?= h($reserva->fecha->format('d/m/Y')) ?>
+                    <?= h($reserva->hora->format('H:i')) ?>
+                </td>
                 <td><?= h($reserva->pasajeros) ?></td>
                 <td>
                     <span class="badge <?= h(str_replace('_','-',$reserva->estado)) ?>">

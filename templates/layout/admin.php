@@ -17,6 +17,7 @@ $roleLabel = $isAdmin ? 'Administrador' : ($isOperador ? 'Operador' : ucfirst($u
     <meta charset="UTF-8">
     <title><?= $this->fetch('title', 'Panel de Administración - Xservicios') ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="<?= $this->request->getAttribute('csrfToken') ?>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <?= $this->fetch('css') ?>
     
@@ -48,6 +49,17 @@ $roleLabel = $isAdmin ? 'Administrador' : ($isOperador ? 'Operador' : ucfirst($u
             background-color: var(--dark-bg);
             color: var(--text-white);
             min-height: 100vh;
+        }
+
+        /* Prevenir scroll cuando sidebar está abierto en móvil */
+        body.sidebar-open {
+            overflow: hidden !important;
+            position: fixed;
+            width: 100%;
+        }
+
+        body.sidebar-open .admin-main {
+            overflow: hidden;
         }
 
         /* Layout principal */
@@ -653,13 +665,13 @@ $roleLabel = $isAdmin ? 'Administrador' : ($isOperador ? 'Operador' : ucfirst($u
         function toggleSidebar() {
             sidebar.classList.toggle('open');
             overlay.classList.toggle('active');
-            document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+            document.body.classList.toggle('sidebar-open');
         }
         
         function closeSidebar() {
             sidebar.classList.remove('open');
             overlay.classList.remove('active');
-            document.body.style.overflow = '';
+            document.body.classList.remove('sidebar-open');
         }
         
         // Toggle al hacer clic en el botón

@@ -12,16 +12,6 @@ $tipoNotificacionOptions = [
     'actualizacion_estado' => 'Actualización de Estado',
     'recordatorio' => 'Recordatorio',
 ];
-$medioOptions = [
-    'correo' => 'Correo',
-    'whatsapp' => 'WhatsApp',
-    'sistema' => 'Sistema',
-];
-$estadoEnvioOptions = [
-    'pendiente' => 'Pendiente',
-    'enviado' => 'Enviado',
-    'fallido' => 'Fallido',
-];
 $this->assign('header-title', 'Editar Notificación');
 ?>
 
@@ -97,9 +87,9 @@ $this->assign('header-title', 'Editar Notificación');
             <h3 class="form-section-title">Destinatarios</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label class="form-label">Usuario (Opcional)</label>
+                    <label class="form-label">Chofer (Usuario)</label>
                     <?= $this->Form->control('usuario_id', ['options' => $usuarios, 'empty' => 'Seleccione un usuario', 'class' => 'form-select', 'label' => false]) ?>
-                    <span class="form-help">Usuario del sistema a notificar</span>
+                    <span class="form-help">Chofer del sistema a notificar</span>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Cliente (Opcional)</label>
@@ -114,30 +104,21 @@ $this->assign('header-title', 'Editar Notificación');
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label class="form-label required">Destinatario</label>
-                    <?= $this->Form->control('destinatario', ['class' => 'form-input', 'label' => false, 'placeholder' => 'Email o teléfono', 'required' => true]) ?>
-                    <span class="form-help">Correo o número telefónico</span>
+                    <label class="form-label">Destinatario</label>
+                    <input type="text" class="form-input" value="Sistema" readonly style="background-color: var(--dark-lighter, #2a2a2a); cursor: not-allowed; opacity: 0.7;" />
+                    <?= $this->Form->control('destinatario', ['type' => 'hidden', 'value' => 'sistema']) ?>
+                    <span class="form-help">Las notificaciones se envían a través del panel del sistema</span>
                 </div>
             </div>
         </div>
 
         <div class="form-section">
-            <h3 class="form-section-title">Tipo y Medio</h3>
+            <h3 class="form-section-title">Tipo de Notificación</h3>
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label required">Tipo de Notificación</label>
                     <?= $this->Form->control('tipo_notificacion', ['options' => $tipoNotificacionOptions, 'empty' => 'Seleccione un tipo', 'class' => 'form-select', 'label' => false, 'required' => true]) ?>
                     <span class="form-help">Categoría de la notificación</span>
-                </div>
-                <div class="form-group">
-                    <label class="form-label required">Medio de Envío</label>
-                    <?= $this->Form->control('medio', ['options' => $medioOptions, 'empty' => 'Seleccione un medio', 'class' => 'form-select', 'label' => false, 'required' => true]) ?>
-                    <span class="form-help">Canal de comunicación</span>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Estado de Envío</label>
-                    <?= $this->Form->control('estado_envio', ['options' => $estadoEnvioOptions, 'empty' => 'Seleccione un estado', 'class' => 'form-select', 'label' => false]) ?>
-                    <span class="form-help">Estado actual del envío</span>
                 </div>
             </div>
         </div>
@@ -146,30 +127,15 @@ $this->assign('header-title', 'Editar Notificación');
             <h3 class="form-section-title">Contenido</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label class="form-label required">Contenido del Mensaje</label>
-                    <?= $this->Form->control('contenido', ['type' => 'textarea', 'class' => 'form-textarea', 'label' => false, 'placeholder' => 'Mensaje a enviar...', 'required' => true]) ?>
-                    <span class="form-help">Cuerpo del mensaje de notificación</span>
+                    <label class="form-label">Vista previa</label>
+                    <div class="form-textarea" id="contenidoPreview" style="min-height: 100px;"></div>
+                    <span class="form-help">El contenido se genera automaticamente segun la plantilla. Variables: {chofer}, {reserva}</span>
                 </div>
             </div>
         </div>
 
-        <div class="form-section">
-            <h3 class="form-section-title">Información Adicional</h3>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label">Fecha/Hora de Envío</label>
-                    <?= $this->Form->control('enviado_at', ['type' => 'datetime-local', 'class' => 'form-input', 'label' => false]) ?>
-                    <span class="form-help">Cuándo se envió o programar envío</span>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label">Log de Errores</label>
-                    <?= $this->Form->control('error_log', ['type' => 'textarea', 'class' => 'form-textarea', 'label' => false, 'placeholder' => 'Dejar vacío si no hay errores']) ?>
-                    <span class="form-help">Registro de errores (si aplica)</span>
-                </div>
-            </div>
-        </div>
+        <?= $this->Form->control('contenido', ['type' => 'hidden']) ?>
+        <?= $this->Form->control('medio', ['type' => 'hidden', 'value' => 'sistema']) ?>
 
         <div class="form-actions">
             <div class="form-actions-left">
@@ -177,18 +143,222 @@ $this->assign('header-title', 'Editar Notificación');
             </div>
             <div class="form-actions-right">
                 <a href="<?= $this->Url->build(['action' => 'index']) ?>" class="btn btn-secondary">Cancelar</a>
-                <?= $this->Form->button('Actualizar Notificación', ['class' => 'btn btn-primary']) ?>
+                <?= $this->Form->button('Enviar Notificación', ['class' => 'btn btn-primary']) ?>
             </div>
         </div>
         
         <?= $this->Form->end() ?>
         
         <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--dark-lighter, #2a2a2a);">
-            <?= $this->Form->postLink(
-                'Eliminar Notificación',
-                ['action' => 'delete', $xservNotificacione->id],
-                ['confirm' => '¿Está seguro de eliminar esta notificación? Esta acción no se puede deshacer.', 'class' => 'btn btn-danger']
-            ) ?>
+            <button type="button" class="btn btn-danger" id="deleteBtn" data-delete-url="<?= $this->Url->build(['action' => 'delete', $xservNotificacione->id]) ?>">Eliminar Notificación</button>
         </div>
     </div>
 </div>
+
+<!-- Modal de confirmación de eliminación -->
+<div id="deleteModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); z-index: 9999; justify-content: center; align-items: center;">
+    <div style="background: var(--dark-card, #1a1a1a); border: 1px solid var(--dark-lighter, #2a2a2a); border-radius: 12px; padding: 2rem; max-width: 500px; width: 90%;">
+        <h3 style="color: var(--text-white, #ffffff); margin-top: 0; margin-bottom: 1rem;">Confirmar Eliminación</h3>
+        <p style="color: var(--text-gray, #a0a0a0); margin-bottom: 1.5rem; line-height: 1.6;">¿Está seguro de eliminar esta notificación? Esta acción no se puede deshacer.
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: flex-end; flex-wrap: wrap;">
+            <button type="button" class="btn btn-secondary" id="cancelDeleteBtn">Cancelar</button>
+            <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Eliminar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const deleteBtn = document.getElementById('deleteBtn');
+        const deleteModal = document.getElementById('deleteModal');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        const modal = document.getElementById('deleteModal');
+
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', function() {
+                deleteModal.style.display = 'flex';
+            });
+        }
+
+        if (cancelDeleteBtn) {
+            cancelDeleteBtn.addEventListener('click', function() {
+                deleteModal.style.display = 'none';
+            });
+        }
+
+        if (confirmDeleteBtn) {
+            confirmDeleteBtn.addEventListener('click', function() {
+                const url = deleteBtn.getAttribute('data-delete-url');
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = url;
+                
+                // Obtener el token CSRF del formulario existente
+                const existingForm = document.querySelector('form');
+                const csrfToken = existingForm ? existingForm.querySelector('input[name="_csrfToken"]')?.value : null;
+                
+                // Agregar el token CSRF
+                if (csrfToken) {
+                    const csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = '_csrfToken';
+                    csrfInput.value = csrfToken;
+                    form.appendChild(csrfInput);
+                }
+                
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = '_method';
+                input.value = 'DELETE';
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            });
+        }
+
+        // Cerrar modal al hacer clic fuera de él
+        if (modal) {
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+    })();
+</script>
+
+<script>
+    (function() {
+        const templateMap = {
+            confirmacion_reserva: 'Chofer {chofer}, la reserva {reserva} ha sido confirmada.',
+            asignacion_chofer: 'Se te ha asignado la reserva {reserva}. Por favor revisa los detalles.',
+            actualizacion_estado: 'Actualización de estado para la reserva {reserva}.',
+            'actualización_estado': 'Actualización de estado para la reserva {reserva}.',
+            recordatorio: 'Recordatorio para la reserva {reserva}.',
+        };
+
+        const tipoSelect = document.querySelector('[name="tipo_notificacion"]');
+        const usuarioSelect = document.querySelector('[name="usuario_id"]');
+        const clienteSelect = document.querySelector('[name="cliente_id"]');
+        const reservaSelect = document.querySelector('[name="reserva_id"]');
+        const contenidoInput = document.querySelector('[name="contenido"]');
+        const preview = document.getElementById('contenidoPreview');
+        const form = document.querySelector('form');
+        const submitBtn = form ? form.querySelector('button[type="submit"]') : null;
+
+        function getSelectedText(selectEl) {
+            if (!selectEl) {
+                return '';
+            }
+            const option = selectEl.options[selectEl.selectedIndex];
+            return option && option.value ? option.text.trim() : '';
+        }
+
+        function buildTemplate() {
+            const tipo = tipoSelect ? tipoSelect.value : '';
+            const base = templateMap[tipo] || 'Notificacion para la reserva {reserva}.';
+            const choferText = getSelectedText(usuarioSelect) || 'chofer asignado';
+            const reservaText = getSelectedText(reservaSelect) || 'sin reserva';
+            return base
+                .replace('{chofer}', choferText)
+                .replace('{reserva}', reservaText);
+        }
+
+        function applyTemplate(force) {
+            if (!contenidoInput || !preview) {
+                return;
+            }
+            const current = contenidoInput.value.trim();
+            if (force || !current) {
+                const text = buildTemplate();
+                contenidoInput.value = text;
+                preview.textContent = text;
+            } else {
+                preview.textContent = current;
+            }
+        }
+
+        function validateForm() {
+            const errors = [];
+            
+            // Validar que al menos uno de usuario o cliente esté seleccionado
+            const usuarioId = usuarioSelect ? usuarioSelect.value : '';
+            const clienteId = clienteSelect ? clienteSelect.value : '';
+            
+            if (!usuarioId && !clienteId) {
+                errors.push('Debe seleccionar al menos un Chofer o Cliente');
+            }
+            
+            // Validar que tipo_notificacion esté seleccionado
+            if (!tipoSelect || !tipoSelect.value) {
+                errors.push('Debe seleccionar un tipo de notificación');
+            }
+            
+            // Validar que contenido no esté vacío
+            if (!contenidoInput || !contenidoInput.value.trim()) {
+                errors.push('El contenido de la notificación es obligatorio');
+            }
+            
+            if (errors.length > 0) {
+                alert('Errores en el formulario:\n\n' + errors.join('\n'));
+                return false;
+            }
+            
+            return true;
+        }
+
+        function updateFormValidity() {
+            if (!submitBtn) return;
+            
+            const usuarioId = usuarioSelect ? usuarioSelect.value : '';
+            const clienteId = clienteSelect ? clienteSelect.value : '';
+            const tipoValue = tipoSelect ? tipoSelect.value : '';
+            const contenido = contenidoInput ? contenidoInput.value.trim() : '';
+            
+            const isValid = (usuarioId || clienteId) && tipoValue && contenido;
+            submitBtn.disabled = !isValid;
+            submitBtn.style.opacity = isValid ? '1' : '0.5';
+            submitBtn.style.cursor = isValid ? 'pointer' : 'not-allowed';
+        }
+
+        if (tipoSelect) {
+            tipoSelect.addEventListener('change', function() {
+                applyTemplate(true);
+                updateFormValidity();
+            });
+        }
+
+        if (usuarioSelect) {
+            usuarioSelect.addEventListener('change', function() {
+                applyTemplate(true);
+                updateFormValidity();
+            });
+        }
+
+        if (clienteSelect) {
+            clienteSelect.addEventListener('change', function() {
+                updateFormValidity();
+            });
+        }
+
+        if (reservaSelect) {
+            reservaSelect.addEventListener('change', function() {
+                applyTemplate(true);
+                updateFormValidity();
+            });
+        }
+
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                if (!validateForm()) {
+                    e.preventDefault();
+                }
+            });
+        }
+
+        applyTemplate(false);
+        updateFormValidity();
+    })();
+</script>

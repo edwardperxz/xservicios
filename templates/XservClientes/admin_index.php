@@ -271,10 +271,15 @@ $this->assign('header-title', 'Gestion de Clientes');
             </thead>
             <tbody>
                 <?php foreach ($xservClientes as $cliente): ?>
+                <?php $usuario = $cliente->usuario ?? null; ?>
+                <?php $username = $usuario->username ?? null; ?>
+                <?php $nombre = $usuario->nombre ?? null; ?>
                 <tr>
                     <td><strong><?= h($cliente->id) ?></strong></td>
-                    <td><?= $cliente->has('usuario') ? $this->Html->link($cliente->usuario->username, ['controller' => 'XservUsuarios', 'action' => 'view', $cliente->usuario->id]) : '' ?></td>
-                    <td><?= h($cliente->usuario->nombre ?? '') ?></td>
+                    <td><?= $usuario && $username !== null && $username !== ''
+                        ? $this->Html->link($username, ['controller' => 'XservUsuarios', 'action' => 'view', $usuario->id])
+                        : 'Sin usuario' ?></td>
+                    <td><?= $nombre !== null && $nombre !== '' ? h($nombre) : 'Sin nombre' ?></td>
                     <td><?= h($cliente->identificacion_fiscal) ?></td>
                     <td><?= h($cliente->idioma_preferido) ?></td>
                     <td><?= h($cliente->created_at) ?></td>

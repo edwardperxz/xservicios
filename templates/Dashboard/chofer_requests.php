@@ -881,32 +881,58 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
   }
 
   async function acceptAsignacion(id) {
-    try {
-      const response = await fetch(`/api/chofer/asignaciones/${id}/accept`, {
-        method: 'POST',
-        credentials: 'same-origin'
-      });
-      
-      if (response.ok) {
-        loadAsignaciones();
-      }
-    } catch (error) {
-      console.error('Error accepting asignacion:', error);
-    }
+    await updateAsignacionStatus(id, 'aceptar');
   }
 
   async function declineAsignacion(id) {
+    await updateAsignacionStatus(id, 'rechazar');
+  }
+
+  async function updateAsignacionStatus(id, accion) {
     try {
-      const response = await fetch(`/api/chofer/asignaciones/${id}/decline`, {
+      console.log('Actualizando asignación:', id, accion);
+
+      const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+      console.log('CSRF Token:', csrfToken ? 'Presente' : 'No encontrado');
+
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+
+      if (csrfToken) {
+        headers['X-CSRF-Token'] = csrfToken;
+      }
+
+      const response = await fetch('/api/chofer/asignacion/update', {
         method: 'POST',
-        credentials: 'same-origin'
+        credentials: 'same-origin',
+        headers: headers,
+        body: JSON.stringify({
+          asignacion_id: id,
+          accion: accion
+        })
       });
-      
-      if (response.ok) {
+
+      console.log('Response status:', response.status);
+
+      const contentType = response.headers.get('content-type') || '';
+      const data = contentType.includes('application/json')
+        ? await response.json()
+        : { success: false, message: 'Respuesta inesperada del servidor' };
+
+      console.log('Response data:', data);
+
+      if (response.ok && data.success) {
+        alert(accion === 'aceptar'
+          ? 'Asignación aceptada correctamente'
+          : 'Asignación rechazada correctamente');
         loadAsignaciones();
+      } else {
+        alert('Error: ' + (data.message || 'No se pudo actualizar la asignación'));
       }
     } catch (error) {
-      console.error('Error declining asignacion:', error);
+      console.error('Error al actualizar asignación:', error);
+      alert('Error al actualizar la asignación: ' + error.message);
     }
   }
 

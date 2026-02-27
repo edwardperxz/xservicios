@@ -93,7 +93,7 @@ $this->assign('header-title', 'Nueva Ubicación');
             <div class="form-group">
                 <label class="form-label">Dirección GPS</label>
                 <?= $this->Form->control('direccion_gps', ['class' => 'form-input', 'label' => false, 'placeholder' => 'ej: 8.4271,-82.4268']) ?>
-                <span class="form-help">Coordenadas GPS (latitud, longitud)</span>
+                <span class="form-help">Busque la ubicacion en Google Maps, copie las coordenadas y peguela aqui (latitud, longitud)</span>
             </div>
         </div>
 

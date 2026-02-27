@@ -988,8 +988,20 @@
       <?php if (!empty($vehiculos) && is_array($vehiculos)): ?>
         <?php foreach ($vehiculos as $vehiculo): ?>
           <div class="vehicle-card">
-            <?php if (!empty($vehiculo->foto_url)): ?>
-              <img src="<?= h($vehiculo->foto_url) ?>" alt="<?= h($vehiculo->nombre_unidad) ?>" style="width: 100%; height: 200px; object-fit: cover;">
+            <?php 
+            // Determinar imagen a mostrar
+            if (!empty($vehiculo->foto_url)):
+                $imagenVehiculo = h($vehiculo->foto_url);
+            elseif ($vehiculo->tipo === 'coaster'):
+                $imagenVehiculo = '../img/vehiculos/coaster_xservicios.png';
+            elseif ($vehiculo->tipo === 'bus_15'):
+                $imagenVehiculo = '../img/vehiculos/bus15_xservicios.png';
+            else:
+                $imagenVehiculo = null;
+            endif;
+            ?>
+            <?php if ($imagenVehiculo): ?>
+              <img src="<?= $imagenVehiculo ?>" alt="<?= h($vehiculo->nombre_unidad) ?>" style="width: 100%; height: 200px; object-fit: cover;">
             <?php else: ?>
               <div style="width: 100%; height: 200px; background: #2a2a2a; display: flex; align-items: center; justify-content: center; color: #a0a0a0;">Sin imagen</div>
             <?php endif; ?>

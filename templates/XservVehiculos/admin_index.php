@@ -476,8 +476,20 @@ $this->assign('header-title', 'Gestión de Flota');
         <div class="vehicle-card">
             <!-- Imagen -->
             <div class="vehicle-image-container">
-                <?php if (!empty($vehiculo->foto_url)): ?>
-                    <img src="<?= h($vehiculo->foto_url) ?>" alt="<?= h($vehiculo->nombre_unidad ?? 'Vehículo') ?>" class="vehicle-image">
+                <?php 
+                if (!empty($vehiculo->foto_url)): 
+                    $imagenSrc = h($vehiculo->foto_url);
+                elseif ($vehiculo->tipo === 'coaster'):
+                    $imagenSrc = $this->Url->webroot('img/vehiculos/coaster_xservicios.png');
+                elseif ($vehiculo->tipo === 'bus_15'):
+                    $imagenSrc = $this->Url->webroot('img/vehiculos/bus15_xservicios.png');
+                else:
+                    $imagenSrc = null;
+                endif;
+                ?>
+                
+                <?php if ($imagenSrc): ?>
+                    <img src="<?= $imagenSrc ?>" alt="<?= h($vehiculo->nombre_unidad ?? 'Vehículo') ?>" class="vehicle-image">
                 <?php else: ?>
                     <div class="vehicle-placeholder">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 48px; height: 48px;">

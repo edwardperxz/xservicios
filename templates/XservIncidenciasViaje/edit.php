@@ -116,14 +116,15 @@ $this->assign('header-title', 'Editar Incidencia');
 
         <div class="form-row">
             <div class="form-group">
-                <label class="form-label">Latitud</label>
-                <?= $this->Form->control('latitud_incidencia', ['type' => 'number', 'step' => '0.00000001', 'class' => 'form-input', 'label' => false, 'placeholder' => 'ej: 8.427']) ?>
-                <span class="form-help">Latitud donde ocurrió la incidencia</span>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Longitud</label>
-                <?= $this->Form->control('longitud_incidencia', ['type' => 'number', 'step' => '0.00000001', 'class' => 'form-input', 'label' => false, 'placeholder' => 'ej: -82.426']) ?>
-                <span class="form-help">Longitud donde ocurrió la incidencia</span>
+                <label class="form-label">Dirección GPS</label>
+                <?php 
+                    $gpsValue = '';
+                    if ($xservIncidenciasViaje->latitud_incidencia && $xservIncidenciasViaje->longitud_incidencia) {
+                        $gpsValue = $xservIncidenciasViaje->latitud_incidencia . ',' . $xservIncidenciasViaje->longitud_incidencia;
+                    }
+                ?>
+                <?= $this->Form->control('direccion_gps_incidencia', ['class' => 'form-input', 'label' => false, 'placeholder' => 'ej: 8.4271,-82.4268', 'value' => $gpsValue]) ?>
+                <span class="form-help">Busque la ubicacion donde ocurrió la incidencia en Google Maps, copie las coordenadas y peguela aqui (latitud, longitud)</span>
             </div>
         </div>
 
@@ -148,11 +149,81 @@ $this->assign('header-title', 'Editar Incidencia');
         <?= $this->Form->end() ?>
         
         <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--dark-lighter, #2a2a2a);">
-            <?= $this->Form->postLink(
-                'Eliminar Incidencia',
-                ['action' => 'delete', $xservIncidenciasViaje->id],
-                ['confirm' => '¿Está seguro de eliminar esta incidencia? Esta acción no se puede deshacer.', 'class' => 'btn btn-danger']
-            ) ?>
+            <button type="button" class="btn btn-danger" id="deleteBtn" data-delete-url="<?= $this->Url->build(['action' => 'delete', $xservIncidenciasViaje->id]) ?>">Eliminar Incidencia</button>
         </div>
     </div>
 </div>
+
+<!-- Modal de confirmación de eliminación -->
+<div id="deleteModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); z-index: 9999; justify-content: center; align-items: center;">
+    <div style="background: var(--dark-card, #1a1a1a); border: 1px solid var(--dark-lighter, #2a2a2a); border-radius: 12px; padding: 2rem; max-width: 500px; width: 90%;">
+        <h3 style="color: var(--text-white, #ffffff); margin-top: 0; margin-bottom: 1rem;">Confirmar Eliminación</h3>
+        <p style="color: var(--text-gray, #a0a0a0); margin-bottom: 1.5rem; line-height: 1.6;">¿Está seguro de eliminar esta incidencia? Esta acción no se puede deshacer.
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: flex-end; flex-wrap: wrap;">
+            <button type="button" class="btn btn-secondary" id="cancelDeleteBtn">Cancelar</button>
+            <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Eliminar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const deleteBtn = document.getElementById('deleteBtn');
+        const deleteModal = document.getElementById('deleteModal');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        const modal = document.getElementById('deleteModal');
+
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', function() {
+                deleteModal.style.display = 'flex';
+            });
+        }
+
+        if (cancelDeleteBtn) {
+            cancelDeleteBtn.addEventListener('click', function() {
+                deleteModal.style.display = 'none';
+            });
+        }
+
+        if (confirmDeleteBtn) {
+            confirmDeleteBtn.addEventListener('click', function() {
+                const url = deleteBtn.getAttribute('data-delete-url');
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = url;
+                
+                // Obtener el token CSRF del formulario existente
+                const existingForm = document.querySelector('form');
+                const csrfToken = existingForm ? existingForm.querySelector('input[name="_csrfToken"]')?.value : null;
+                
+                // Agregar el token CSRF
+                if (csrfToken) {
+                    const csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = '_csrfToken';
+                    csrfInput.value = csrfToken;
+                    form.appendChild(csrfInput);
+                }
+                
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = '_method';
+                input.value = 'DELETE';
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            });
+        }
+
+        // Cerrar modal al hacer clic fuera de él
+        if (modal) {
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+    })();
+</script>

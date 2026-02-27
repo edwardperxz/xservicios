@@ -24,7 +24,15 @@ $this->assign('header-title', 'Detalle de Asignación');
             </div>
             <div class="detail-item">
                 <div class="detail-label">Chofer</div>
-                <div class="detail-value"><?= $xservAsignacione->hasValue('chofer') ? $this->Html->link($xservAsignacione->chofer->nombre, ['controller' => 'XservChoferes', 'action' => 'view', $xservAsignacione->chofer->id]) : '<span style="color: #6b7280;">No asignado</span>' ?></div>
+                <?php
+                $choferNombre = null;
+                if ($xservAsignacione->hasValue('chofer')) {
+                    $choferNombre = $xservAsignacione->chofer->usuario->nombre
+                        ?? $xservAsignacione->chofer->usuario->username
+                        ?? null;
+                }
+                ?>
+                <div class="detail-value"><?= $choferNombre ? $this->Html->link($choferNombre, ['controller' => 'XservChoferes', 'action' => 'view', $xservAsignacione->chofer->id]) : '<span style="color: #6b7280;">No asignado</span>' ?></div>
             </div>
             <div class="detail-item">
                 <div class="detail-label">Vehículo</div>

@@ -222,7 +222,7 @@ class XservUsuariosController extends AppController
             $this->viewBuilder()->setLayout('admin');
         }
         
-        $xservUsuario = $this->XservUsuarios->get($id, contain: []);
+        $xservUsuario = $this->XservUsuarios->get($id, contain: ['XservChoferes', 'XservClientes']);
         $this->set(compact('xservUsuario', 'authUser'));
     }
 

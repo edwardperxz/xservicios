@@ -321,7 +321,7 @@ $this->assign('header-title', 'Gestión de Reservaciones');
                     <th><?= $this->Paginator->sort('fecha', 'Fecha') ?></th>
                     <th><?= $this->Paginator->sort('hora', 'Hora') ?></th>
                     <th><?= $this->Paginator->sort('pasajeros', 'Pasajeros') ?></th>
-                    <th>Precio</th>
+                    <th>Total</th>
                     <th><?= $this->Paginator->sort('estado', 'Estado') ?></th>
                     <th>Acciones</th>
                 </tr>
@@ -335,7 +335,7 @@ $this->assign('header-title', 'Gestión de Reservaciones');
                     <td><?= h($reserva->fecha->format('d/m/Y')) ?></td>
                     <td><?= h($reserva->hora->format('H:i')) ?></td>
                     <td><?= h($reserva->pasajeros) ?></td>
-                    <td><span class="price">$<?= h(number_format((float)$reserva->precio_pactado, 2)) ?></span></td>
+                    <td><span class="price">$<?= h(number_format((float)$reserva->precio_pactado + (float)($reserva->itbms_pactado ?? 0), 2)) ?></span></td>
                     <td><span class="badge <?= h(str_replace('_', '-', $reserva->estado)) ?>"><?= h(ucfirst($reserva->estado)) ?></span></td>
                     <td>
                         <div class="action-buttons">

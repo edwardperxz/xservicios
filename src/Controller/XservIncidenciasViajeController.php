@@ -153,7 +153,19 @@ class XservIncidenciasViajeController extends AppController
     {
         $xservIncidenciasViaje = $this->XservIncidenciasViaje->newEmptyEntity();
         if ($this->request->is('post')) {
-            $xservIncidenciasViaje = $this->XservIncidenciasViaje->patchEntity($xservIncidenciasViaje, $this->request->getData());
+            $data = $this->request->getData();
+            // Procesar campo GPS unificado
+            if (!empty($data['direccion_gps_incidencia'])) {
+                $gps = trim($data['direccion_gps_incidencia']);
+                $coords = array_map('trim', explode(',', $gps));
+                if (count($coords) === 2) {
+                    $data['latitud_incidencia'] = (float)$coords[0];
+                    $data['longitud_incidencia'] = (float)$coords[1];
+                }
+            }
+            unset($data['direccion_gps_incidencia']);
+            
+            $xservIncidenciasViaje = $this->XservIncidenciasViaje->patchEntity($xservIncidenciasViaje, $data);
             if ($this->XservIncidenciasViaje->save($xservIncidenciasViaje)) {
                 $this->Flash->success(__('The xserv incidencias viaje has been saved.'));
 
@@ -166,7 +178,7 @@ class XservIncidenciasViajeController extends AppController
             'valueField' => function($ejecucion) {
                 return $ejecucion->asignacion->reserva->codigo_reserva . ' - Estado: ' . $ejecucion->estado_viaje;
             }
-        ])->contain(['Asignacions' => ['Reservas']])->order(['XservEjecucionViajes.id' => 'DESC'])->all();
+        ])->contain(['Asignacions' => ['Reservas']])->order(['Ejecucions.id' => 'DESC'])->all();
         $this->set(compact('xservIncidenciasViaje', 'ejecucions'));
     }
 
@@ -181,7 +193,19 @@ class XservIncidenciasViajeController extends AppController
     {
         $xservIncidenciasViaje = $this->XservIncidenciasViaje->get($id, contain: []);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $xservIncidenciasViaje = $this->XservIncidenciasViaje->patchEntity($xservIncidenciasViaje, $this->request->getData());
+            $data = $this->request->getData();
+            // Procesar campo GPS unificado
+            if (!empty($data['direccion_gps_incidencia'])) {
+                $gps = trim($data['direccion_gps_incidencia']);
+                $coords = array_map('trim', explode(',', $gps));
+                if (count($coords) === 2) {
+                    $data['latitud_incidencia'] = (float)$coords[0];
+                    $data['longitud_incidencia'] = (float)$coords[1];
+                }
+            }
+            unset($data['direccion_gps_incidencia']);
+            
+            $xservIncidenciasViaje = $this->XservIncidenciasViaje->patchEntity($xservIncidenciasViaje, $data);
             if ($this->XservIncidenciasViaje->save($xservIncidenciasViaje)) {
                 $this->Flash->success(__('The xserv incidencias viaje has been saved.'));
 
@@ -194,7 +218,7 @@ class XservIncidenciasViajeController extends AppController
             'valueField' => function($ejecucion) {
                 return $ejecucion->asignacion->reserva->codigo_reserva . ' - Estado: ' . $ejecucion->estado_viaje;
             }
-        ])->contain(['Asignacions' => ['Reservas']])->order(['XservEjecucionViajes.id' => 'DESC'])->all();
+        ])->contain(['Asignacions' => ['Reservas']])->order(['Ejecucions.id' => 'DESC'])->all();
         $this->set(compact('xservIncidenciasViaje', 'ejecucions'));
     }
 

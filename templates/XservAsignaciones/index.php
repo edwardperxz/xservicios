@@ -29,7 +29,15 @@
                 <tr>
                     <td><?= $this->Number->format($xservAsignacione->id) ?></td>
                     <td><?= $xservAsignacione->hasValue('reserva') ? $this->Html->link($xservAsignacione->reserva->codigo_reserva, ['controller' => 'XservReservas', 'action' => 'view', $xservAsignacione->reserva->id]) : '' ?></td>
-                    <td><?= $xservAsignacione->hasValue('chofer') ? $this->Html->link($xservAsignacione->chofer->nombre, ['controller' => 'XservChoferes', 'action' => 'view', $xservAsignacione->chofer->id]) : '' ?></td>
+                    <?php
+                    $choferNombre = null;
+                    if ($xservAsignacione->hasValue('chofer')) {
+                        $choferNombre = $xservAsignacione->chofer->usuario->nombre
+                            ?? $xservAsignacione->chofer->usuario->username
+                            ?? null;
+                    }
+                    ?>
+                    <td><?= $choferNombre ? $this->Html->link($choferNombre, ['controller' => 'XservChoferes', 'action' => 'view', $xservAsignacione->chofer->id]) : '' ?></td>
                     <td><?= $xservAsignacione->hasValue('vehiculo') ? $this->Html->link($xservAsignacione->vehiculo->tipo, ['controller' => 'XservVehiculos', 'action' => 'view', $xservAsignacione->vehiculo->id]) : '' ?></td>
                     <td><?= $xservAsignacione->hasValue('asignado_por') ? $this->Html->link($xservAsignacione->asignado_por->username, ['controller' => 'XservUsuarios', 'action' => 'view', $xservAsignacione->asignado_por->id]) : '' ?></td>
                     <td><?= h($xservAsignacione->fecha_inicio_pactada) ?></td>

@@ -144,7 +144,7 @@ class XservReservasController extends AppController
         $clientes = $this->XservReservas->Clientes->find('list', [
             'keyField' => 'id',
             'valueField' => function($cliente) {
-                return $cliente->xserv_usuario->nombre ?? 'Sin nombre';
+                return $cliente->usuario->nombre ?? $cliente->usuario->username ?? 'Sin nombre';
             }
         ])->contain(['XservUsuarios'])->order(['XservUsuarios.nombre' => 'ASC'])->all();
         
@@ -187,7 +187,7 @@ class XservReservasController extends AppController
         $clientes = $this->XservReservas->Clientes->find('list', [
             'keyField' => 'id',
             'valueField' => function($cliente) {
-                return $cliente->xserv_usuario->nombre ?? 'Sin nombre';
+                return $cliente->usuario->nombre ?? $cliente->usuario->username ?? 'Sin nombre';
             }
         ])->contain(['XservUsuarios'])->order(['XservUsuarios.nombre' => 'ASC'])->all();
         

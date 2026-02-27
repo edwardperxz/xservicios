@@ -40,11 +40,11 @@ class XservChoferesController extends AppController
         $filters = $this->request->getQuery();
         
         if (!empty($filters['disponibilidad'])) {
-            $query->where(['disponibilidad' => $filters['disponibilidad']]);
+            $query->where(['XservChoferes.disponibilidad' => $filters['disponibilidad']]);
         }
         
         if (!empty($filters['estado'])) {
-            $query->where(['estado' => $filters['estado']]);
+            $query->where(['XservChoferes.estado' => $filters['estado']]);
         }
         
         if (!empty($filters['nombre'])) {
@@ -82,11 +82,11 @@ class XservChoferesController extends AppController
         $filters = $this->request->getQuery();
 
         if (!empty($filters['disponibilidad'])) {
-            $query->where(['disponibilidad' => $filters['disponibilidad']]);
+            $query->where(['XservChoferes.disponibilidad' => $filters['disponibilidad']]);
         }
 
         if (!empty($filters['estado'])) {
-            $query->where(['estado' => $filters['estado']]);
+            $query->where(['XservChoferes.estado' => $filters['estado']]);
         }
 
         if (!empty($filters['nombre'])) {
@@ -165,7 +165,7 @@ class XservChoferesController extends AppController
             'valueField' => function($usuario) {
                 return $usuario->username . ' - ' . $usuario->nombre;
             }
-        ])->where(['rol' => 'operador'])->order(['username' => 'ASC'])->all();
+        ])->where(['rol' => 'chofer'])->order(['username' => 'ASC'])->all();
         $this->set(compact('xservChofere', 'usuarios'));
     }
 
@@ -179,7 +179,7 @@ class XservChoferesController extends AppController
     public function edit(?string $id = null)
     {
         $this->Authorization->skipAuthorization();
-        $xservChofere = $this->XservChoferes->get($id, contain: []);
+        $xservChofere = $this->XservChoferes->get($id, contain: ['Usuarios']);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $data = $this->request->getData();
             
@@ -231,7 +231,7 @@ class XservChoferesController extends AppController
             'valueField' => function($usuario) {
                 return $usuario->username . ' - ' . $usuario->nombre;
             }
-        ])->where(['rol' => 'operador'])->order(['username' => 'ASC'])->all();
+        ])->where(['rol' => 'chofer'])->order(['username' => 'ASC'])->all();
         $this->set(compact('xservChofere', 'usuarios'));
     }
 

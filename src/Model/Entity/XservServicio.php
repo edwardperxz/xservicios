@@ -10,8 +10,8 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property string $nombre
- * @property string $descripcion_es
- * @property string $descripcion_en
+ * @property string|null $descripcion
+ * @property string|null $descripcion_key
  * @property string $precio_base
  * @property string|null $variantes
  * @property string|null $estado
@@ -31,8 +31,9 @@ class XservServicio extends Entity
      */
     protected array $_accessible = [
         'nombre' => true,
-        'descripcion_es' => true,
-        'descripcion_en' => true,
+            'descripcion' => true,
+            '_translations' => true,
+        'descripcion_key' => true,
         'precio_base' => true,
         'variantes' => true,
         'estado' => true,

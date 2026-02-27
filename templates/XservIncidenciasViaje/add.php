@@ -112,14 +112,9 @@ $this->assign('header-title', 'Nueva Incidencia');
 
         <div class="form-row">
             <div class="form-group">
-                <label class="form-label">Latitud</label>
-                <?= $this->Form->control('latitud_incidencia', ['type' => 'number', 'step' => '0.00000001', 'class' => 'form-input', 'label' => false, 'placeholder' => 'ej: 8.427']) ?>
-                <span class="form-help">Latitud donde ocurrió la incidencia</span>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Longitud</label>
-                <?= $this->Form->control('longitud_incidencia', ['type' => 'number', 'step' => '0.00000001', 'class' => 'form-input', 'label' => false, 'placeholder' => 'ej: -82.426']) ?>
-                <span class="form-help">Longitud donde ocurrió la incidencia</span>
+                <label class="form-label">Dirección GPS</label>
+                <?= $this->Form->control('direccion_gps_incidencia', ['class' => 'form-input', 'label' => false, 'placeholder' => 'ej: 8.4271,-82.4268']) ?>
+                <span class="form-help">Busque la ubicacion donde ocurrió la incidencia en Google Maps, copie las coordenadas y peguela aqui (latitud, longitud)</span>
             </div>
         </div>
 

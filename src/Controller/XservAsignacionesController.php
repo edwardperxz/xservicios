@@ -35,7 +35,7 @@ class XservAsignacionesController extends AppController
         $isAdmin = $user && $user->rol === 'admin';
         
         $query = $this->XservAsignaciones->find()
-            ->contain(['Chofers', 'Vehiculos']);
+            ->contain(['Reservas', 'Chofers.Usuarios', 'Vehiculos', 'AsignadoPors']);
         
         $filters = $this->request->getQuery();
         
@@ -62,7 +62,7 @@ class XservAsignacionesController extends AppController
     public function view(?string $id = null)
     {
         $this->Authorization->skipAuthorization();
-        $xservAsignacione = $this->XservAsignaciones->get($id, contain: ['Reservas', 'Chofers', 'Vehiculos', 'AsignadoPors']);
+        $xservAsignacione = $this->XservAsignaciones->get($id, contain: ['Reservas', 'Chofers.Usuarios', 'Vehiculos', 'AsignadoPors']);
         $this->set(compact('xservAsignacione'));
     }
 

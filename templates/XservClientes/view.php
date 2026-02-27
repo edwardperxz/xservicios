@@ -21,23 +21,33 @@ $this->assign('header-title', 'Detalle de Cliente');
         <div class="detail-grid">
             <div class="detail-item">
                 <div class="detail-label">Usuario</div>
-                <div class="detail-value"><?= $xservCliente->has('usuario') ? $this->Html->link($xservCliente->usuario->username, ['controller' => 'XservUsuarios', 'action' => 'view', $xservCliente->usuario->id]) : '' ?></div>
+                <div class="detail-value">
+                    <?php 
+                    $usuario = $xservCliente->usuario ?? null;
+                    $username = $usuario->username ?? null;
+                    if ($usuario && $username !== null && $username !== '') {
+                        echo $this->Html->link($username, ['controller' => 'XservUsuarios', 'action' => 'view', $usuario->id]);
+                    } else {
+                        echo 'Sin usuario';
+                    }
+                    ?>
+                </div>
             </div>
             <div class="detail-item">
                 <div class="detail-label">Nombre</div>
-                <div class="detail-value"><?= h($xservCliente->usuario->nombre ?? '') ?></div>
+                <div class="detail-value"><?= h($xservCliente->usuario->nombre ?? 'Sin nombre') ?></div>
             </div>
             <div class="detail-item">
                 <div class="detail-label">Correo</div>
-                <div class="detail-value"><?= h($xservCliente->usuario->correo ?? '') ?></div>
+                <div class="detail-value"><?= h($xservCliente->usuario->correo ?? 'Sin correo') ?></div>
             </div>
             <div class="detail-item">
                 <div class="detail-label">Teléfono</div>
-                <div class="detail-value"><?= h($xservCliente->usuario->telefono ?? '') ?></div>
+                <div class="detail-value"><?= h($xservCliente->usuario->telefono ?? 'Sin teléfono') ?></div>
             </div>
             <div class="detail-item">
                 <div class="detail-label">Identificación</div>
-                <div class="detail-value"><?= h($xservCliente->usuario->identificacion ?? '') ?></div>
+                <div class="detail-value"><?= h($xservCliente->usuario->identificacion ?? 'Sin identificación') ?></div>
             </div>
             <div class="detail-item">
                 <div class="detail-label">Identificación Fiscal</div>

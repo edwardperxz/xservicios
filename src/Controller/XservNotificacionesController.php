@@ -125,7 +125,7 @@ class XservNotificacionesController extends AppController
         $clientes = $this->XservNotificaciones->Clientes->find('list', [
             'keyField' => 'id',
             'valueField' => function($cliente) {
-                return $cliente->xserv_usuario->nombre ?? 'Sin nombre';
+                return $cliente->usuario->nombre ?? 'Sin nombre';
             }
         ])->contain(['XservUsuarios'])->order(['XservUsuarios.nombre' => 'ASC'])->all();
         
@@ -166,7 +166,7 @@ class XservNotificacionesController extends AppController
         $clientes = $this->XservNotificaciones->Clientes->find('list', [
             'keyField' => 'id',
             'valueField' => function($cliente) {
-                return $cliente->xserv_usuario->nombre ?? 'Sin nombre';
+                return $cliente->usuario->nombre ?? 'Sin nombre';
             }
         ])->contain(['XservUsuarios'])->order(['XservUsuarios.nombre' => 'ASC'])->all();
         

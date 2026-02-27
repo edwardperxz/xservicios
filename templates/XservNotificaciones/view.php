@@ -13,22 +13,34 @@ $this->assign('header-title', 'Detalle de Notificación');
             <div class="view-actions">
                 <a href="<?= $this->Url->build(['action' => 'edit', $xservNotificacione->id]) ?>" class="btn btn-primary">Editar</a>
                 <a href="<?= $this->Url->build(['action' => 'index']) ?>" class="btn btn-secondary">Volver al Listado</a>
-                <?= $this->Form->postLink('Eliminar', ['action' => 'delete', $xservNotificacione->id], ['confirm' => '¿Está seguro?', 'class' => 'btn btn-danger']) ?>
+                <button type="button" class="btn btn-danger" id="deleteBtn" data-delete-url="<?= $this->Url->build(['action' => 'delete', $xservNotificacione->id]) ?>">Eliminar</button>
             </div>
         </div>
 
         <div class="detail-grid">
             <div class="detail-item">
                 <div class="detail-label">Usuario</div>
-                <div class="detail-value"><?= $xservNotificacione->hasValue('usuario') ? $this->Html->link($xservNotificacione->usuario->username, ['controller' => 'XservUsuarios', 'action' => 'view', $xservNotificacione->usuario->id]) : '<span style="color: #6b7280;">No asignado</span>' ?></div>
+                <div class="detail-value">
+                    <?= $xservNotificacione->hasValue('usuario') && !empty($xservNotificacione->usuario->username)
+                        ? $this->Html->link($xservNotificacione->usuario->username, ['controller' => 'XservUsuarios', 'action' => 'view', $xservNotificacione->usuario->id])
+                        : $this->Html->tag('span', 'No asignado', ['style' => 'color: #6b7280;']) ?>
+                </div>
             </div>
             <div class="detail-item">
                 <div class="detail-label">Cliente</div>
-                <div class="detail-value"><?= $xservNotificacione->hasValue('cliente') ? $this->Html->link($xservNotificacione->cliente->nombre, ['controller' => 'XservClientes', 'action' => 'view', $xservNotificacione->cliente->id]) : '<span style="color: #6b7280;">No asignado</span>' ?></div>
+                <div class="detail-value">
+                    <?= $xservNotificacione->hasValue('cliente') && !empty($xservNotificacione->cliente->nombre)
+                        ? $this->Html->link($xservNotificacione->cliente->nombre, ['controller' => 'XservClientes', 'action' => 'view', $xservNotificacione->cliente->id])
+                        : $this->Html->tag('span', 'No asignado', ['style' => 'color: #6b7280;']) ?>
+                </div>
             </div>
             <div class="detail-item">
                 <div class="detail-label">Reserva</div>
-                <div class="detail-value"><?= $xservNotificacione->hasValue('reserva') ? $this->Html->link($xservNotificacione->reserva->codigo_reserva, ['controller' => 'XservReservas', 'action' => 'view', $xservNotificacione->reserva->id]) : '<span style="color: #6b7280;">No asignado</span>' ?></div>
+                <div class="detail-value">
+                    <?= $xservNotificacione->hasValue('reserva') && !empty($xservNotificacione->reserva->codigo_reserva)
+                        ? $this->Html->link($xservNotificacione->reserva->codigo_reserva, ['controller' => 'XservReservas', 'action' => 'view', $xservNotificacione->reserva->id])
+                        : $this->Html->tag('span', 'No asignado', ['style' => 'color: #6b7280;']) ?>
+                </div>
             </div>
             <div class="detail-item">
                 <div class="detail-label">Tipo Notificación</div>
@@ -61,3 +73,81 @@ $this->assign('header-title', 'Detalle de Notificación');
         </div>
     </div>
 </div>
+
+<!-- Modal de confirmación de eliminación -->
+<div id="deleteModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); z-index: 9999; justify-content: center; align-items: center;">
+    <div style="background: var(--dark-card, #1a1a1a); border: 1px solid var(--dark-lighter, #2a2a2a); border-radius: 12px; padding: 2rem; max-width: 500px; width: 90%;">
+        <h3 style="color: var(--text-white, #ffffff); margin-top: 0; margin-bottom: 1rem;">Confirmar Eliminación</h3>
+        <p style="color: var(--text-gray, #a0a0a0); margin-bottom: 1.5rem; line-height: 1.6;">¿Está seguro de eliminar esta notificación? Esta acción no se puede deshacer.
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: flex-end; flex-wrap: wrap;">
+            <button type="button" class="btn btn-secondary" id="cancelDeleteBtn">Cancelar</button>
+            <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Eliminar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const deleteBtn = document.getElementById('deleteBtn');
+        const deleteModal = document.getElementById('deleteModal');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        const modal = document.getElementById('deleteModal');
+
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', function() {
+                deleteModal.style.display = 'flex';
+            });
+        }
+
+        if (cancelDeleteBtn) {
+            cancelDeleteBtn.addEventListener('click', function() {
+                deleteModal.style.display = 'none';
+            });
+        }
+
+        if (confirmDeleteBtn) {
+            confirmDeleteBtn.addEventListener('click', function() {
+                const url = deleteBtn.getAttribute('data-delete-url');
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = url;
+                
+                // Obtener el token CSRF del documento (está en meta o en formulario existente)
+                let csrfToken = document.querySelector('meta[name="_csrfToken"]')?.getAttribute('content');
+                
+                // Si no está en meta, buscar en formulario existente
+                if (!csrfToken) {
+                    csrfToken = document.querySelector('form input[name="_csrfToken"]')?.value;
+                }
+                
+                // Agregar el token CSRF
+                if (csrfToken) {
+                    const csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = '_csrfToken';
+                    csrfInput.value = csrfToken;
+                    form.appendChild(csrfInput);
+                }
+                
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = '_method';
+                input.value = 'DELETE';
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            });
+        }
+
+        // Cerrar modal al hacer clic fuera de él
+        if (modal) {
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+    })();
+</script>

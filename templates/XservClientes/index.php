@@ -22,10 +22,13 @@
             </thead>
             <tbody>
                 <?php foreach ($xservClientes as $xservCliente): ?>
+                <?php $usuario = $xservCliente->usuario ?? null; ?>
+                <?php $username = $usuario->username ?? null; ?>
+                <?php $nombre = $usuario->nombre ?? null; ?>
                 <tr>
                     <td><?= $this->Number->format($xservCliente->id) ?></td>
-                    <td><?= $xservCliente->has('usuario') ? h($xservCliente->usuario->username) : '' ?></td>
-                    <td><?= $xservCliente->has('usuario') ? h($xservCliente->usuario->nombre) : '' ?></td>
+                    <td><?= $usuario && $username !== null && $username !== '' ? h($username) : 'Sin usuario' ?></td>
+                    <td><?= $nombre !== null && $nombre !== '' ? h($nombre) : 'Sin nombre' ?></td>
                     <td><?= h($xservCliente->identificacion_fiscal) ?></td>
                     <td><?= h($xservCliente->idioma_preferido) ?></td>
                     <td><?= h($xservCliente->created_at) ?></td>

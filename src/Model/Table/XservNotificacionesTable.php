@@ -131,6 +131,17 @@ class XservNotificacionesTable extends Table
         $rules->add($rules->existsIn(['cliente_id'], 'Clientes'), ['errorField' => 'cliente_id']);
         $rules->add($rules->existsIn(['reserva_id'], 'Reservas'), ['errorField' => 'reserva_id']);
 
+        // Debe haber al menos un Chofer o Cliente seleccionado
+        $rules->add(function($entity) {
+            $hasUsuario = !empty($entity->get('usuario_id'));
+            $hasCliente = !empty($entity->get('cliente_id'));
+            
+            return $hasUsuario || $hasCliente;
+        }, 'atLeastOneRecipient', [
+            'errorField' => 'usuario_id',
+            'message' => 'Debe seleccionar al menos un Chofer o Cliente'
+        ]);
+
         return $rules;
     }
 }

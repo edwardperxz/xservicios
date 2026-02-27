@@ -19,8 +19,7 @@
                     <th><?= $this->Paginator->sort('fecha') ?></th>
                     <th><?= $this->Paginator->sort('hora') ?></th>
                     <th><?= $this->Paginator->sort('pasajeros') ?></th>
-                    <th><?= $this->Paginator->sort('precio_pactado') ?></th>
-                    <th><?= $this->Paginator->sort('itbms_pactado') ?></th>
+                    <th>Total</th>
                     <th><?= $this->Paginator->sort('punto_recogida') ?></th>
                     <th><?= $this->Paginator->sort('punto_destino') ?></th>
                     <th><?= $this->Paginator->sort('estado') ?></th>
@@ -41,8 +40,7 @@
                     <td><?= h($xservReserva->fecha) ?></td>
                     <td><?= h($xservReserva->hora) ?></td>
                     <td><?= $this->Number->format($xservReserva->pasajeros) ?></td>
-                    <td><?= $this->Number->format($xservReserva->precio_pactado) ?></td>
-                    <td><?= $xservReserva->itbms_pactado === null ? '' : $this->Number->format($xservReserva->itbms_pactado) ?></td>
+                    <td>$<?= $this->Number->format($xservReserva->precio_pactado + ($xservReserva->itbms_pactado ?? 0)) ?></td>
                     <td><?= h($xservReserva->punto_recogida) ?></td>
                     <td><?= h($xservReserva->punto_destino) ?></td>
                     <td><?= h($xservReserva->estado) ?></td>

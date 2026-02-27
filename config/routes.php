@@ -54,7 +54,12 @@ return function (RouteBuilder $routes): void {
         $builder->connect('/chofer/viajes', ['controller' => 'Dashboard', 'action' => 'choferViajes']);
         $builder->connect('/chofer/viajes/:id', ['controller' => 'XservChoferes', 'action' => 'viajesHistorial'], ['id' => '[0-9]+', 'pass' => ['id']]);
         
-        // API para chofer
+        // API Chofer - Asignaciones (DEBEN IR ANTES DE OTRAS RUTAS)
+        $builder->scope('/chofer', function (RouteBuilder $routes) {
+            $routes->connect('/asignacion/:id/aceptar', ['controller' => 'Dashboard', 'action' => 'aceptarAsignacion'], ['id' => '[0-9]+', 'pass' => ['id']]);
+            $routes->connect('/asignacion/:id/rechazar', ['controller' => 'Dashboard', 'action' => 'rechazarAsignacion'], ['id' => '[0-9]+', 'pass' => ['id']]);
+        });
+        
         $builder->connect('/api/chofer/asignaciones', ['controller' => 'Dashboard', 'action' => 'getAsignaciones']);
         $builder->connect('/api/chofer/stats', ['controller' => 'Dashboard', 'action' => 'getChoferStats']);
         $builder->connect('/api/chofer/asignacion/update', ['controller' => 'Dashboard', 'action' => 'updateAsignacion']);

@@ -38,6 +38,13 @@ class XservServiciosTable extends Table
         $this->setTable('xserv_servicios');
         $this->setDisplayField('nombre');
         $this->setPrimaryKey('id');
+        
+        // Habilitar traducción automática de descripcion
+        $this->addBehavior('Translate', [
+            'fields' => ['descripcion'],
+            'translationTable' => 'I18n',
+            'strategyClass' => \Cake\ORM\Behavior\Translate\EavStrategy::class,
+        ]);
     }
 
     /**
@@ -55,14 +62,13 @@ class XservServiciosTable extends Table
             ->notEmptyString('nombre');
 
         $validator
-            ->scalar('descripcion_es')
-            ->requirePresence('descripcion_es', 'create')
-            ->notEmptyString('descripcion_es');
+            ->scalar('descripcion')
+            ->allowEmptyString('descripcion');
 
         $validator
-            ->scalar('descripcion_en')
-            ->requirePresence('descripcion_en', 'create')
-            ->notEmptyString('descripcion_en');
+            ->scalar('descripcion_key')
+            ->maxLength('descripcion_key', 255)
+            ->allowEmptyString('descripcion_key');
 
         $validator
             ->decimal('precio_base')
@@ -88,3 +94,4 @@ class XservServiciosTable extends Table
         return $validator;
     }
 }
+

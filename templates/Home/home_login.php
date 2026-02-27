@@ -444,29 +444,49 @@
 
     <!-- MIS RESERVAS -->
     <div class="tab-content" id="tab-reservas">
-    <h3 style="margin-bottom:1rem;">Mis Reservas</h3>
 
-    <?php if (!empty($reservasPorEstado)) : ?>
-    <?php foreach ($reservasPorEstado as $estado => $listaReservas) : ?>
-      <h4 style="margin-top:1rem; text-transform:capitalize; color:var(--gold);">
-        <?= h($estado) ?>
-      </h4>
-      <?php foreach ($listaReservas as $reserva) : ?>
-        <div style="background: var(--dark-lighter); padding:1rem; border-radius:8px; margin-bottom:1rem;">
-          <strong><?= h($reserva->codigo_reserva) ?></strong><br>
-          Servicio: <?= h($reserva->servicio->nombre ?? '') ?><br>
-          Fecha: <?= h($reserva->fecha) ?><br>
-          Hora: <?= h($reserva->hora) ?><br>
-          Pasajeros: <?= h($reserva->pasajeros) ?><br>
-          Estado: <span style="color: var(--gold);"><?= h($reserva->estado) ?></span>
-        </div>
-      <?php endforeach; ?>
-    <?php endforeach; ?>
-  <?php else : ?>
-    <p class="empty-message">No tienes reservas registradas.</p>
-  <?php endif; ?>
+    <h3 style="margin-bottom:1.5rem;">Mis Reservas</h3>
 
-  </div>
+    <?php if (!empty($misReservas) && count($misReservas) > 0): ?>
+
+    <table class="reservas-table">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Servicio</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Pasajeros</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($misReservas as $reserva): ?>
+            <tr>
+                <td><strong><?= h($reserva->codigo_reserva) ?></strong></td>
+                <td><?= h($reserva->servicio->nombre ?? 'N/A') ?></td>
+                <td><?= h($reserva->fecha->format('d/m/Y')) ?></td>
+                <td><?= h($reserva->hora->format('H:i')) ?></td>
+                <td><?= h($reserva->pasajeros) ?></td>
+                <td>
+                    <span class="badge <?= h(str_replace('_','-',$reserva->estado)) ?>">
+                        <?= h(ucfirst(str_replace('_',' ',$reserva->estado))) ?>
+                    </span>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <?php else: ?>
+
+    <div class="empty-state">
+        <p>No tienes reservas registradas.</p>
+    </div>
+
+    <?php endif; ?>
+
+    </div>
 
 
   </div>

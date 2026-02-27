@@ -285,6 +285,54 @@ $this->assign('header-title', 'Nuevo Usuario');
 
         <div class="form-row">
             <div class="form-group">
+                <label class="form-label required">Nombre Completo</label>
+                <?= $this->Form->control('nombre', [
+                    'class' => 'form-input',
+                    'label' => false,
+                    'placeholder' => 'ej: Juan Pérez',
+                    'required' => true
+                ]) ?>
+                <span class="form-help">Nombre del usuario</span>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label required">Correo Electrónico</label>
+                <?= $this->Form->control('correo', [
+                    'type' => 'email',
+                    'class' => 'form-input',
+                    'label' => false,
+                    'placeholder' => 'usuario@ejemplo.com',
+                    'required' => true
+                ]) ?>
+                <span class="form-help">Correo de contacto</span>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label required">Teléfono</label>
+                <?= $this->Form->control('telefono', [
+                    'class' => 'form-input',
+                    'label' => false,
+                    'placeholder' => '+507 6XXX-XXXX',
+                    'required' => true
+                ]) ?>
+                <span class="form-help">Número de contacto</span>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Identificación</label>
+                <?= $this->Form->control('identificacion', [
+                    'class' => 'form-input',
+                    'label' => false,
+                    'placeholder' => 'Cédula o pasaporte'
+                ]) ?>
+                <span class="form-help">Documento de identificación (opcional)</span>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
                 <label class="form-label required">Rol</label>
                 <?= $this->Form->control('rol', [
                     'options' => $rolOptions,

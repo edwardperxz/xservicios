@@ -41,5 +41,6 @@ class XservIncidenciaViaje extends Entity
         'resuelto' => true,
         'created_at' => true,
         'ejecucion' => true,
+        'direccion_gps_incidencia' => true,
     ];
 }

@@ -28,6 +28,7 @@ $isAdmin = $authUser && $authUser->rol === 'admin';
         padding: 2rem 1.5rem;
         display: flex;
         justify-content: center;
+        min-height: 100vh;
     }
 
     .view-card {
@@ -43,18 +44,23 @@ $isAdmin = $authUser && $authUser->rol === 'admin';
     .view-header {
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
+        align-items: flex-start;
         gap: 1.25rem;
         padding-bottom: 1.25rem;
         border-bottom: 1px solid var(--dark-lighter, #2a2a2a);
         margin-bottom: 1.5rem;
     }
 
+    .view-header > div:first-child {
+        flex: 1;
+        min-width: 0;
+    }
+
     .view-title {
         font-size: 1.75rem;
         font-weight: 600;
         color: var(--text-white, #ffffff);
+        word-break: break-word;
     }
 
     .view-subtitle {
@@ -67,6 +73,7 @@ $isAdmin = $authUser && $authUser->rol === 'admin';
         display: flex;
         gap: 0.75rem;
         flex-wrap: wrap;
+        justify-content: flex-end;
     }
 
     .btn {
@@ -276,58 +283,201 @@ $isAdmin = $authUser && $authUser->rol === 'admin';
         flex-wrap: wrap;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
         .view-container {
             padding: 1.5rem 1rem;
         }
 
         .view-card {
+            padding: 1.75rem;
+            border-radius: 14px;
+        }
+
+        .view-title {
+            font-size: 1.5rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .view-container {
+            padding: 1.5rem 1rem;
+            min-height: auto;
+        }
+
+        .view-card {
             padding: 1.5rem;
+            border-radius: 12px;
+        }
+
+        .view-header {
+            flex-direction: column;
+        }
+
+        .view-header > div:first-child {
+            width: 100%;
+        }
+
+        .view-actions {
+            width: 100%;
+            justify-content: stretch;
+        }
+
+        .view-actions .btn {
+            flex: 1;
+            min-width: 0;
         }
 
         .view-title {
             font-size: 1.35rem;
         }
 
-        .view-header {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .view-actions {
-            width: 100%;
-        }
-
         .btn {
-            width: 100%;
+            padding: 0.625rem 1rem;
+            font-size: 0.8rem;
         }
 
         .detail-grid {
             grid-template-columns: 1fr;
         }
 
+        .service-meta {
+            gap: 0.5rem;
+        }
+
+        .meta-pill {
+            flex: 1 1 calc(50% - 0.25rem);
+            min-width: auto;
+        }
+
         .reserve-card {
             flex-direction: column;
-            align-items: flex-start;
+            align-items: stretch;
+        }
+
+        .btn-primary {
+            width: 100%;
+        }
+
+        .detail-item {
+            padding: 0.875rem 1rem;
+        }
+
+        .detail-label {
+            font-size: 0.65rem;
+        }
+
+        .detail-value {
+            font-size: 0.875rem;
         }
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 640px) {
         .view-container {
             padding: 1rem 0.75rem;
         }
 
         .view-card {
             padding: 1.25rem;
+            border-radius: 10px;
         }
 
         .view-title {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
+        }
+
+        .view-subtitle {
+            font-size: 0.8rem;
         }
 
         .btn {
-            padding: 0.55rem 1rem;
-            font-size: 0.8125rem;
+            padding: 0.55rem 0.875rem;
+            font-size: 0.75rem;
+            min-width: auto;
+        }
+
+        .service-meta {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .meta-pill {
+            flex: none;
+            width: 100%;
+        }
+
+        .term-modal-dialog {
+            width: min(95vw, 480px);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .view-container {
+            padding: 0.75rem 0.5rem;
+        }
+
+        .view-card {
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .view-header {
+            margin-bottom: 1rem;
+        }
+
+        .view-title {
+            font-size: 1rem;
+        }
+
+        .view-subtitle {
+            font-size: 0.75rem;
+        }
+
+        .btn {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.7rem;
+        }
+
+        .detail-grid {
+            gap: 0.75rem;
+        }
+
+        .detail-item {
+            padding: 0.75rem 0.875rem;
+        }
+
+        .detail-label {
+            font-size: 0.6rem;
+            margin-bottom: 0.375rem;
+        }
+
+        .detail-value {
+            font-size: 0.8rem;
+        }
+
+        .reserve-card {
+            padding: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .reserve-title {
+            font-size: 1rem;
+        }
+
+        .reserve-text {
+            font-size: 0.8rem;
+        }
+
+        .term-modal-dialog {
+            padding: 1.25rem;
+            border-radius: 12px;
+        }
+
+        .terms-title {
+            font-size: 1.1rem;
+        }
+
+        .terms-body {
+            font-size: 0.8rem;
         }
     }
 </style>
@@ -340,6 +490,7 @@ $isAdmin = $authUser && $authUser->rol === 'admin';
                 <div class="view-subtitle">Detalle del servicio y condiciones generales.</div>
             </div>
             <div class="view-actions">
+                <?= $this->Language->languageSelector() ?>
                 <?php if ($isAdmin): ?>
                     <a href="<?= $this->Url->build(['action' => 'edit', $xservServicio->id]) ?>" class="btn btn-primary">Editar</a>
                     <a href="<?= $this->Url->build(['action' => 'index']) ?>" class="btn btn-secondary">Volver al Listado</a>
@@ -351,35 +502,78 @@ $isAdmin = $authUser && $authUser->rol === 'admin';
         </div>
 
         <div class="service-meta">
-            <span class="meta-pill <?= h(strtolower($xservServicio->estado)) === 'activo' ? 'is-active' : 'is-inactive' ?>">Estado: <?= h($xservServicio->estado) ?></span>
+            <span class="meta-pill <?= h(strtolower($xservServicio->estado)) === 'activo' ? 'is-active' : 'is-inactive' ?>">
+                Estado: <?= h($xservServicio->estado) ?>
+            </span>
             <span class="meta-pill price-pill">Precio base: $<?= $this->Number->format($xservServicio->precio_base) ?></span>
+            <?php 
+                $precioConImpuesto = $xservServicio->precio_base * 1.07;
+            ?>
+            <span class="meta-pill" style="background: rgba(74, 222, 128, 0.15); color: #86efac; border-color: rgba(74, 222, 128, 0.3);">
+                Total (ITBMS 7%): $<?= number_format($precioConImpuesto, 2) ?>
+            </span>
         </div>
 
         <div class="detail-grid">
             <div class="detail-item">
-                <div class="detail-label">Nombre</div>
+                <div class="detail-label">Nombre del Servicio</div>
                 <div class="detail-value"><?= h($xservServicio->nombre) ?></div>
             </div>
+            <?php if (!empty($xservServicio->descripcion)): ?>
+            <div class="detail-item detail-item--full">
+                <div class="detail-label">Descripcion</div>
+                <div class="detail-value" style="line-height: 1.6; color: var(--text-gray);">
+                    <?= nl2br(h($xservServicio->descripcion)) ?>
+                </div>
+            </div>
+            <?php endif; ?>
             <div class="detail-item">
-                <div class="detail-label">Estado</div>
+                <div class="detail-label">Estado Actual</div>
                 <div class="detail-value"><?= h($xservServicio->estado) ?></div>
             </div>
             <div class="detail-item">
-                <div class="detail-label">Precio Base</div>
+                <div class="detail-label">Precio Base (Sin impuestos)</div>
                 <div class="detail-value">$<?= $this->Number->format($xservServicio->precio_base) ?></div>
             </div>
-            <div class="detail-item detail-item--full">
-                <div class="detail-label">Descripción (Español)</div>
-                <div class="detail-value"><?= h($xservServicio->descripcion_es) ?></div>
+            <div class="detail-item">
+                <div class="detail-label">Precio Final (Con ITBMS 7%)</div>
+                <div class="detail-value" style="color: #4ade80; font-weight: 600;">$<?= number_format($xservServicio->precio_base * 1.07, 2) ?></div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Clave de Descripcion (i18n)</div>
+                <div class="detail-value"><?= h($xservServicio->descripcion_key ?? '(No configurada)') ?></div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Fecha de Creacion</div>
+                <div class="detail-value"><?= h($xservServicio->created_at ? $xservServicio->created_at->format('d/m/Y H:i') : 'N/A') ?></div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Ultima Actualizacion</div>
+                <div class="detail-value"><?= h($xservServicio->updated_at ? $xservServicio->updated_at->format('d/m/Y H:i') : 'N/A') ?></div>
             </div>
             <div class="detail-item detail-item--full">
-                <div class="detail-label">Descripción (Inglés)</div>
-                <div class="detail-value"><?= h($xservServicio->descripcion_en) ?></div>
+                <div class="detail-label">Variantes Disponibles</div>
+                <div class="detail-value">
+                    <?php if ($xservServicio->variantes): ?>
+                        <?php 
+                            $variantes = array_map('trim', explode(',', $xservServicio->variantes));
+                            foreach ($variantes as $variante): 
+                        ?>
+                            <span style="display: inline-block; background: rgba(201, 169, 98, 0.15); color: #c9a962; padding: 0.25rem 0.75rem; border-radius: 999px; margin-right: 0.5rem; margin-bottom: 0.5rem; font-size: 0.85rem; border: 1px solid rgba(201, 169, 98, 0.3);">
+                                • <?= h($variante) ?>
+                            </span>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <span style="color: var(--text-muted);">(Sin variantes configuradas)</span>
+                    <?php endif; ?>
+                </div>
             </div>
-            <div class="detail-item detail-item--full">
-                <div class="detail-label">Variantes</div>
-                <div class="detail-value"><?= h($xservServicio->variantes) ?></div>
-            </div>
+        </div>
+
+        <div style="background: rgba(59, 130, 246, 0.1); border-left: 4px solid #3b82f6; padding: 1rem; border-radius: 4px; margin-top: 1.5rem;">
+            <p style="color: #60a5fa; font-size: 0.875rem; margin: 0; line-height: 1.6;">
+                <strong>Nota:</strong> Las descripciones del servicio se gestionan automaticamente a traves del sistema de idiomas (i18n). Las descripciones mostradas al publico en espanol e ingles se actualizan desde la configuracion centralizada del sistema.
+            </p>
         </div>
 
         <?php if (!$isAdmin): ?>
@@ -388,7 +582,7 @@ $isAdmin = $authUser && $authUser->rol === 'admin';
                 <div class="reserve-title">Reserva este servicio</div>
                 <div class="reserve-text">Acepta los terminos y condiciones para solicitar tu reserva.</div>
             </div>
-            <button type="button" class="btn btn-primary" id="reserveBtn" data-service-id="<?= h($xservServicio->id) ?>">Reservar</button>
+            <button type="button" class="btn btn-primary" id="reserveBtn" data-service-id="<?= h($xservServicio->id) ?>">Reservar Ahora</button>
         </div>
         <?php endif; ?>
     </div>

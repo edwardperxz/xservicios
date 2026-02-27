@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Event\EventInterface;
+use Cake\ORM\TableRegistry;
 
 use Cake\ORM\TableRegistry;
 
@@ -16,8 +17,9 @@ class HomeController extends AppController
         $this->loadComponent('Authentication.Authentication');
         $this->loadComponent('Authorization.Authorization');
         
-        // Use clean frontend layout without CakePHP UI
-        $this->viewBuilder()->setLayout('frontend');
+        // Cargar modelos
+        $this->XservVehiculos = TableRegistry::getTableLocator()->get('XservVehiculos');
+        $this->XservChoferes = TableRegistry::getTableLocator()->get('XservChoferes');
     }
 
     public function beforeFilter(EventInterface $event): void
@@ -66,6 +68,12 @@ class HomeController extends AppController
             // Usuario no autenticado
             $this->set('isAuthenticated', false);
         }
+
+        // Cargar datos reales de vehículos y choferes
+        $vehiculos = $this->XservVehiculos->find()->where(['estado_operativo' => 'disponible'])->limit(4)->toArray();
+        $choferes = $this->XservChoferes->find()->contain('Usuarios')->where(['XservChoferes.estado' => 'activo'])->limit(6)->toArray();
+
+        $this->set(compact('vehiculos', 'choferes'));
         
         // Renderiza el archivo unificado index.php sin layout
         $this->viewBuilder()->disableAutoLayout();

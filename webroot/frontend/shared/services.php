@@ -17,22 +17,28 @@
       --gold: #c9a962;
       --gold-light: #d4b978;
       --gold-dark: #a88b4a;
+      --gold-soft: rgba(201, 169, 98, 0.2);
       --dark-bg: #0a0a0a;
       --dark-deep: #050505;
       --dark-card: #1a1a1a;
       --dark-lighter: #2a2a2a;
+      --dark-glass: rgba(8, 8, 8, 0.6);
       --text-white: #ffffff;
       --text-gray: #a0a0a0;
       --text-dark: #1a1a1a;
       --green: #2d7a5f;
       --green-hover: #236349;
+      --orange: #f4a261;
+      --paper: #f7f1e6;
       --cream: #f5f0e8;
       --cream-dark: #e8e0d4;
     }
 
     body {
       font-family: 'Inter', sans-serif;
-      background-color: var(--dark-deep);
+      background: radial-gradient(circle at top, rgba(201, 169, 98, 0.18), transparent 45%),
+        radial-gradient(circle at 15% 70%, rgba(244, 162, 97, 0.12), transparent 50%),
+        linear-gradient(180deg, #070707 0%, #0c0c0c 45%, #050505 100%);
       color: var(--text-white);
       min-height: 100vh;
       position: relative;
@@ -65,11 +71,27 @@
 
     /* Title Section */
     .title-section {
-      text-align: center;
-      padding: 3rem 2rem 2rem;
+      padding: 4rem 2rem 2.5rem;
       background: linear-gradient(to bottom, var(--dark-deep), var(--dark-bg));
       position: relative;
       z-index: 1;
+    }
+
+    .title-inner {
+      max-width: 1150px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .title-eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.35em;
+      font-size: 0.75rem;
+      color: var(--gold-light);
+      margin-bottom: 0.75rem;
     }
 
     .brand-logo {
@@ -82,9 +104,9 @@
 
     .main-title {
       font-family: 'Playfair Display', serif;
-      font-size: 2.75rem;
-      font-weight: 400;
-      line-height: 1.2;
+      font-size: 3.1rem;
+      font-weight: 500;
+      line-height: 1.1;
       color: var(--text-white);
     }
 
@@ -94,9 +116,54 @@
       color: var(--text-gray);
     }
 
+    .title-lead {
+      margin-top: 1rem;
+      color: var(--text-gray);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .title-card {
+      background: var(--dark-glass);
+      border: 1px solid rgba(201, 169, 98, 0.2);
+      border-radius: 18px;
+      padding: 1.5rem;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+      display: grid;
+      gap: 1rem;
+      backdrop-filter: blur(6px);
+    }
+
+    .title-card h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-white);
+    }
+
+    .title-card p {
+      color: var(--text-gray);
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+
+    .hero-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .hero-pill {
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-gray);
+      font-size: 0.8rem;
+    }
+
     /* Services Grid */
     .services-section {
-      padding: 2rem 3rem 3rem;
+      padding: 2rem 3rem 3.5rem;
       background: linear-gradient(to bottom, var(--dark-bg), var(--dark-deep));
       position: relative;
       z-index: 1;
@@ -111,23 +178,30 @@
     }
 
     .service-card {
-      background: linear-gradient(180deg, #f9f3ea 0%, #f1e8d9 100%);
-      border-radius: 14px;
+      background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+      border-radius: 18px;
       overflow: hidden;
       transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
-      border: 1px solid rgba(201, 169, 98, 0.6);
-      box-shadow: 0 6px 24px rgba(201, 169, 98, 0.18);
+      border: 1.5px solid rgba(201, 169, 98, 0.35);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(201, 169, 98, 0.1);
+      animation: card-fade 0.6s ease both;
+      animation-delay: calc(var(--i, 0) * 60ms);
     }
 
     .service-card:hover {
       transform: translateY(-6px);
-      box-shadow: 0 16px 44px rgba(201, 169, 98, 0.28);
+      box-shadow: 0 16px 44px rgba(201, 169, 98, 0.25), inset 0 1px 0 rgba(201, 169, 98, 0.15);
       border-color: var(--gold-light);
+    }
+
+    .service-media {
+      position: relative;
+      overflow: hidden;
     }
 
     .service-image {
       width: 100%;
-      height: 190px;
+      height: 210px;
       object-fit: cover;
       transition: transform 0.35s ease;
     }
@@ -136,40 +210,70 @@
       transform: scale(1.02);
     }
 
+    .service-badges {
+      position: absolute;
+      inset: auto 1rem 1rem 1rem;
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .service-badge {
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.45);
+    }
+
+    .service-badge.status {
+      background: rgba(8, 8, 8, 0.55);
+      color: #f1f1f1;
+    }
+
+    .service-badge.price {
+      background: rgba(201, 169, 98, 0.9);
+      color: #2c1d0f;
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
     .service-content {
       padding: 1.35rem 1.35rem 1.5rem;
     }
 
+    .service-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .service-head .service-badge.price {
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+
     .service-title {
       font-size: 1.2rem;
       font-weight: 600;
-      color: var(--text-dark);
+      color: var(--text-white);
       margin-bottom: 0.5rem;
     }
 
     .service-description {
       font-size: 0.85rem;
-      color: #5d5d5d;
+      color: #a0a0a0;
       line-height: 1.55;
       margin-bottom: 1rem;
       min-height: 48px;
     }
 
-    .service-price {
-      margin-bottom: 1rem;
-    }
 
-    .price-amount {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--green);
-    }
-
-    .price-label {
-      font-size: 0.8rem;
-      color: #888;
-      margin-left: 0.25rem;
-    }
 
     .service-actions {
       margin-top: 0.75rem;
@@ -186,14 +290,26 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      transition: background 0.3s, transform 0.3s;
+      transition: all 0.3s ease;
       text-align: center;
       text-decoration: none;
     }
 
     .btn-more:hover {
       background: var(--gold-light);
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(201, 169, 98, 0.3);
+    }
+
+    @keyframes card-fade {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* Features Section */
@@ -235,6 +351,10 @@
 
     /* Responsive */
     @media (max-width: 1024px) {
+      .title-inner {
+        grid-template-columns: 1fr;
+      }
+
       .services-grid {
         grid-template-columns: repeat(2, 1fr);
       }
@@ -246,7 +366,7 @@
 
     @media (max-width: 768px) {
       .main-title {
-        font-size: 2rem;
+        font-size: 2.2rem;
       }
 
       .services-section {
@@ -274,10 +394,25 @@
 
   <!-- Title Section -->
   <section class="title-section">
-    <h1 class="main-title" data-i18n="services.title">
-      Servicios exclusivos
-      <span>de transporte turístico</span>
-    </h1>
+    <div class="title-inner">
+      <div>
+        <div class="title-eyebrow">Xservicios</div>
+        <h1 class="main-title" data-i18n="services.title">
+          Servicios exclusivos
+          <span>de transporte turístico</span>
+        </h1>
+        <p class="title-lead" data-i18n="services.lead">Explora experiencias pensadas para reservar rápido: precio base, disponibilidad y detalles claros antes de elegir.</p>
+      </div>
+      <div class="title-card">
+        <h3 data-i18n="services.cardTitle">Reserva con confianza</h3>
+        <p data-i18n="services.cardText">Compara opciones, revisa condiciones y asegura tu servicio en menos pasos.</p>
+        <div class="hero-pills">
+          <span class="hero-pill" data-i18n="services.pill1">Confirmacion rapida</span>
+          <span class="hero-pill" data-i18n="services.pill2">Precios claros</span>
+          <span class="hero-pill" data-i18n="services.pill3">Soporte 24/7</span>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- Services Grid -->
@@ -372,13 +507,6 @@
       return servicio.imagen || servicio.image || imagenesServicios[index % imagenesServicios.length];
     };
 
-    const getDescripcion = (servicio, lang) => {
-      if (lang === 'en') {
-        return servicio.descripcion_en || servicio.descripcion_es || servicio.descripcion || servicio.detalle || '';
-      }
-      return servicio.descripcion_es || servicio.descripcion_en || servicio.descripcion || servicio.detalle || '';
-    };
-
     const formatPrice = (precio) => {
       const value = Number(precio);
       if (!Number.isFinite(value) || value <= 0) return null;
@@ -392,22 +520,32 @@
     const buildServiceCard = (servicio, index, lang) => {
       const t = window.translate ? window.translate : (key) => key;
       const nombre = servicio.nombre || servicio.titulo || t('services.defaultName');
-      const descripcion = getDescripcion(servicio, lang) || t('services.defaultDesc');
+      const descriptionKey = `service.${servicio.id}.description`;
+      const descripcion = t(descriptionKey) || t('services.defaultDesc');
       const precio = formatPrice(servicio.precio_base ?? servicio.precio ?? servicio.costo);
       const precioTexto = precio || t('services.consult');
       const showFrom = Boolean(precio);
       const href = servicio.id ? `/services/${servicio.id}` : '/services';
-
+      const estado = String(servicio.estado || '').toLowerCase();
+      const activeLabel = t('service.active');
+      const inactiveLabel = t('service.inactive');
+      const activeText = activeLabel && activeLabel !== 'service.active' ? activeLabel : 'Activo';
+      const inactiveText = inactiveLabel && inactiveLabel !== 'service.inactive' ? inactiveLabel : 'Inactivo';
+      const estadoTexto = estado === 'activo' ? activeText : inactiveText;
       return `
-        <div class="service-card">
-          <img src="${getImagenServicio(servicio, index)}" alt="${nombre}" class="service-image">
-          <div class="service-content">
-            <h3 class="service-title">${nombre}</h3>
-            <p class="service-description">${descripcion}</p>
-            <div class="service-price">
-              <span class="price-amount">${precioTexto}</span>
-              ${showFrom ? `<span class="price-label">${t('services.from')}</span>` : ''}
+        <div class="service-card" style="--i: ${index};">
+          <div class="service-media">
+            <img src="${getImagenServicio(servicio, index)}" alt="${nombre}" class="service-image">
+            <div class="service-badges">
+              <span class="service-badge status">${estadoTexto}</span>
             </div>
+          </div>
+          <div class="service-content">
+            <div class="service-head">
+              <h3 class="service-title">${nombre}</h3>
+              <span class="service-badge price">${precioTexto}</span>
+            </div>
+            <p class="service-description">${descripcion}</p>
             <div class="service-actions">
               <a href="${href}" class="btn-more">${t('btn.viewMore')}</a>
             </div>
@@ -435,6 +573,10 @@
       } else {
         servicesGrid.innerHTML = html;
       }
+    };
+
+    const handleLanguageChange = () => {
+      renderServicios(false);
     };
 
     const updateLoadMoreButton = () => {
@@ -503,7 +645,7 @@
     }
 
     cargarServicios(1);
-    window.addEventListener('languageChanged', renderServicios);
+    window.addEventListener('languageChanged', handleLanguageChange);
   </script>
   <script src="/js/header-loader.js"></script>
   <script src="/js/header-dynamic.js"></script>

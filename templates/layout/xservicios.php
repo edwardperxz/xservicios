@@ -40,7 +40,7 @@
         /* Flash Messages */
         .flash-container {
             position: fixed;
-            top: 20px;
+            top: 90px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 9999;

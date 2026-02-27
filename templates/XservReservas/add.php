@@ -86,6 +86,21 @@ $this->assign('header-title', 'Nueva Reserva');
 
         <?= $this->Form->create($xservReserva) ?>
         
+        <div class="form-section">
+            <h3 class="form-section-title">Información Básica</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label required">Cliente</label>
+                    <?= $this->Form->control('cliente_id', ['options' => $clientes, 'empty' => 'Seleccione un cliente', 'class' => 'form-select', 'label' => false, 'required' => true]) ?>
+                    <span class="form-help">Cliente que realiza la reserva</span>
+                </div>
+            </div>
+            <div class="form-info-box" style="margin-top: 1rem; padding: 0.75rem; background-color: #e3f2fd; border-left: 4px solid #2196f3; border-radius: 4px;">
+                <small style="color: #1976d2;">
+                    <strong>ℹ️ Código automático:</strong> El código de reserva se generará automáticamente al guardar
+                </small>
+            </div>
+        </div>
 
         <div class="form-section">
             <h3 class="form-section-title">Servicio y Ruta</h3>
@@ -128,13 +143,13 @@ $this->assign('header-title', 'Nueva Reserva');
             <h3 class="form-section-title">Puntos de Recogida y Destino</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label class="form-label">Punto de Recogida</label>
-                    <?= $this->Form->control('punto_recogida', ['class' => 'form-input', 'label' => false, 'placeholder' => 'Dirección o ubicación']) ?>
+                    <label class="form-label required">Punto de Recogida</label>
+                    <?= $this->Form->control('punto_recogida', ['class' => 'form-input', 'label' => false, 'placeholder' => 'Dirección o ubicación', 'required' => true]) ?>
                     <span class="form-help">Lugar de partida</span>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Punto de Destino</label>
-                    <?= $this->Form->control('punto_destino', ['class' => 'form-input', 'label' => false, 'placeholder' => 'Dirección o ubicación']) ?>
+                    <label class="form-label required">Punto de Destino</label>
+                    <?= $this->Form->control('punto_destino', ['class' => 'form-input', 'label' => false, 'placeholder' => 'Dirección o ubicación', 'required' => true]) ?>
                     <span class="form-help">Lugar de llegada</span>
                 </div>
             </div>
@@ -144,29 +159,50 @@ $this->assign('header-title', 'Nueva Reserva');
             <h3 class="form-section-title">Vehiculo y Chofer (Opcional)</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label class="form-label">Chofer</label>
-                    <?= $this->Form->control('chofer_id', [
-                        'type' => 'select',
-                        'options' => $choferes,
-                        'empty' => 'Seleccione un chofer',
-                        'class' => 'form-select',
-                        'label' => false
-                    ]) ?>
+                    <label class="form-label required">Precio Pactado</label>
+                    <?= $this->Form->control('precio_pactado', ['type' => 'number', 'step' => '0.01', 'min' => 0, 'class' => 'form-input', 'label' => false, 'placeholder' => '0.00', 'required' => true, 'id' => 'precio-pactado']) ?>
+                    <span class="form-help">Precio base acordado en USD</span>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Vehículo</label>
-                    <?= $this->Form->control('vehiculo_id', [
-                        'type' => 'select',
-                        'options' => $vehiculos,
-                        'empty' => 'Seleccione un vehículo',
-                        'class' => 'form-select',
-                        'label' => false
-                    ]) ?>
+                    <label class="form-label">ITBMS (7%)</label>
+                    <?= $this->Form->control('itbms_pactado', ['type' => 'number', 'step' => '0.01', 'min' => 0, 'class' => 'form-input', 'label' => false, 'placeholder' => '0.00', 'readonly' => true, 'id' => 'itbms-pactado']) ?>
+                    <span class="form-help">Impuesto calculado automáticamente</span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Total</label>
+                    <input type="text" class="form-input" id="precio-total" readonly style="font-weight: 600; font-size: 1.1em; color: #2196f3;" placeholder="0.00">
+                    <span class="form-help">Precio total (Precio + ITBMS)</span>
                 </div>
             </div>
         </div>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const precioPactadoInput = document.getElementById('precio-pactado');
+    const itbmsPactadoInput = document.getElementById('itbms-pactado');
+    const precioTotalInput = document.getElementById('precio-total');
+    
+    function calcularITBMS() {
+        const precio = parseFloat(precioPactadoInput.value) || 0;
+        const itbms = precio * 0.07;
+        const total = precio + itbms;
+        
+        itbmsPactadoInput.value = itbms.toFixed(2);
+        precioTotalInput.value = total.toFixed(2);
+    }
+    
+    precioPactadoInput.addEventListener('input', calcularITBMS);
+    precioPactadoInput.addEventListener('change', calcularITBMS);
+    
+    // Calcular al cargar si ya hay un valor
+    if (precioPactadoInput.value) {
+        calcularITBMS();
+    }
+});
+</script>
 
         <div class="form-section">
             <h3 class="form-section-title">Observaciones</h3>       

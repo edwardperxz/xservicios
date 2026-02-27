@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
@@ -63,6 +64,11 @@ class XservValoracionesTable extends Table
             ->allowEmptyString('id', null, 'create');
 
         $validator
+            ->integer('reserva_id')
+            ->requirePresence('reserva_id', 'create')
+            ->notEmptyString('reserva_id');
+
+        $validator
             ->integer('calificacion')
             ->requirePresence('calificacion', 'create')
             ->range('calificacion', [1, 5], 'La calificación debe estar entre 1 y 5');
@@ -86,5 +92,19 @@ class XservValoracionesTable extends Table
             ->allowEmptyString('estado_moderacion');
 
         return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules): RulesChecker
+    {
+        $rules->add($rules->existsIn(['reserva_id'], 'XservReservas'), ['errorField' => 'reserva_id']);
+
+        return $rules;
     }
 }

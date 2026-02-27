@@ -35,10 +35,6 @@
             ['controller' => 'XservNotificaciones', 'action' => 'index'], 
             ['class' => 'button']) ?>
 
-        <?= $this->Html->link('Configuraciones del Sistema', 
-            ['controller' => 'XservConfiguraciones', 'action' => 'index'], 
-            ['class' => 'button']) ?>
-
         <?= $this->Html->link('Reportes', 
             ['controller' => 'Reportes', 'action' => 'index'], 
             ['class' => 'button']) ?>

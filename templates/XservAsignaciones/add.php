@@ -116,17 +116,13 @@ $this->assign('header-title', 'Nueva Asignación');
             <h3 class="form-section-title">Fechas Pactadas</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label class="form-label">Fecha/Hora de Inicio Pactada</label>
-                    <?= $this->Form->control('fecha_inicio_pactada', ['type' => 'datetime-local', 'class' => 'form-input', 'label' => false]) ?>
-                    <span class="form-help">Fecha y hora de inicio programada</span>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Fecha/Hora de Fin Pactada</label>
-                    <?= $this->Form->control('fecha_fin_pactada', ['type' => 'datetime-local', 'class' => 'form-input', 'label' => false]) ?>
-                    <span class="form-help">Fecha y hora de finalización estimada</span>
-                </div>
-            </div>
-        </div>
+                        <label class="form-label required">Fecha/Hora de Inicio Pactada</label>
+                        <?= $this->Form->control('fecha_inicio_pactada', ['type' => 'datetime-local', 'class' => 'form-input', 'label' => false, 'required' => true]) ?>
+                        <span class="form-help">Fecha y hora de inicio programada</span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label required">Fecha/Hora de Fin Pactada</label>
+                        <?= $this->Form->control('fecha_fin_pactada', ['type' => 'datetime-local', 'class' => 'form-input', 'label' => false, 'required' => true]) ?>
 
         <div class="form-section">
             <h3 class="form-section-title">Estado y Observaciones</h3>

@@ -217,77 +217,6 @@ $this->assign('header-title', 'Reportes');
 <div class="reports-section">
     <h2 class="reports-title">
         <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2V17zm4 0h-2V7h2V17zm4 0h-2v-11h2V17z"/>
-        </svg>
-        Reportes Disponibles
-    </h2>
-
-    <div class="reports-grid">
-        <a href="<?= $this->Url->build(['controller' => 'XservReservas', 'action' => 'adminIndex']) ?>" class="report-link">
-            <div class="report-link-text">
-                <span class="report-link-title">Reservas</span>
-                <span class="report-link-desc">Análisis de reservas</span>
-            </div>
-            <svg class="icon-arrow" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"/>
-            </svg>
-        </a>
-
-        <a href="<?= $this->Url->build(['controller' => 'XservChoferes', 'action' => 'adminIndex']) ?>" class="report-link">
-            <div class="report-link-text">
-                <span class="report-link-title">Choferes</span>
-                <span class="report-link-desc">Datos de choferes</span>
-            </div>
-            <svg class="icon-arrow" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"/>
-            </svg>
-        </a>
-
-        <a href="<?= $this->Url->build(['controller' => 'XservVehiculos', 'action' => 'adminIndex']) ?>" class="report-link">
-            <div class="report-link-text">
-                <span class="report-link-title">Vehículos</span>
-                <span class="report-link-desc">Información de vehículos</span>
-            </div>
-            <svg class="icon-arrow" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"/>
-            </svg>
-        </a>
-
-        <a href="<?= $this->Url->build(['controller' => 'XservValoraciones', 'action' => 'adminIndex']) ?>" class="report-link">
-            <div class="report-link-text">
-                <span class="report-link-title">Evaluaciones</span>
-                <span class="report-link-desc">Análisis de evaluaciones</span>
-            </div>
-            <svg class="icon-arrow" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"/>
-            </svg>
-        </a>
-
-        <a href="<?= $this->Url->build(['controller' => 'XservIncidenciasViaje', 'action' => 'adminIndex']) ?>" class="report-link">
-            <div class="report-link-text">
-                <span class="report-link-title">Incidencias</span>
-                <span class="report-link-desc">Reporte de incidencias</span>
-            </div>
-            <svg class="icon-arrow" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"/>
-            </svg>
-        </a>
-
-        <a href="<?= $this->Url->build(['controller' => 'XservEjecucionViajes', 'action' => 'adminIndex']) ?>" class="report-link">
-            <div class="report-link-text">
-                <span class="report-link-title">Viajes</span>
-                <span class="report-link-desc">Ejecución de viajes</span>
-            </div>
-            <svg class="icon-arrow" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"/>
-            </svg>
-        </a>
-    </div>
-</div>
-
-<div class="reports-section">
-    <h2 class="reports-title">
-        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
             <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
         </svg>
         Opciones de Exportación
@@ -308,16 +237,6 @@ $this->assign('header-title', 'Reportes');
             <div class="report-link-text">
                 <span class="report-link-title">Exportar Excel</span>
                 <span class="report-link-desc">Descargar en xlsx</span>
-            </div>
-            <svg class="icon-arrow" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-            </svg>
-        </a>
-
-        <a href="<?= $this->Url->build(['controller' => 'Dashboard', 'action' => 'programarEnvio']) ?>" class="report-link">
-            <div class="report-link-text">
-                <span class="report-link-title">Programar Envío</span>
-                <span class="report-link-desc">Reportes automáticos</span>
             </div>
             <svg class="icon-arrow" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>

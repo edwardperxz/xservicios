@@ -86,8 +86,8 @@ class XservUsuariosController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
-        $user = $this->Authentication->getIdentity();
-        if (!$user) {
+        $userIdentity = $this->Authentication->getIdentity();
+        if (!$userIdentity) {
             $this->Flash->error('Debe iniciar sesión para ver el perfil', [
                 'params' => ['i18n' => 'errors.mustLoginProfile'],
             ]);
@@ -95,10 +95,10 @@ class XservUsuariosController extends AppController
         }
 
         // Solo redirigir si es chofer
-        if ($user->rol === 'chofer') {
+        if ($userIdentity->rol === 'chofer') {
             $chofer = $this->XservUsuarios->XservChoferes
                 ->find()
-                ->where(['usuario_id' => $user->id])
+                ->where(['usuario_id' => $userIdentity->id])
                 ->first();
 
             if ($chofer) {
@@ -111,8 +111,11 @@ class XservUsuariosController extends AppController
             }
         }
 
-        // Para admin u operador, puedes mostrar profile normal
-        $this->set(compact('user'));
+        // Para admin u operador, mostrar interfaz completa del perfil
+        $usuario = $this->XservUsuarios->get($userIdentity->id);
+        $this->set(compact('usuario'));
+        $this->viewBuilder()->disableAutoLayout();
+        $this->render('/Profile/index');
     }
 
     public function me(): ?Response
@@ -219,7 +222,7 @@ class XservUsuariosController extends AppController
             $this->viewBuilder()->setLayout('admin');
         }
         
-        $xservUsuario = $this->XservUsuarios->get($id, contain: []);
+        $xservUsuario = $this->XservUsuarios->get($id, contain: ['XservChoferes', 'XservClientes']);
         $this->set(compact('xservUsuario', 'authUser'));
     }
 
@@ -323,12 +326,23 @@ class XservUsuariosController extends AppController
      */
     public function delete(?string $id = null)
     {
+        $this->Authorization->skipAuthorization();
         $this->request->allowMethod(['post', 'delete']);
+        
+        // Obtener el usuario autenticado
+        $authUser = $this->Authentication->getIdentity();
+        
+        // Verificar que el usuario no intente eliminarse a sí mismo
+        if ($authUser && $authUser->id == $id) {
+            $this->Flash->error(__('No puedes eliminarte a ti mismo.'));
+            return $this->redirect(['action' => 'index']);
+        }
+        
         $xservUsuario = $this->XservUsuarios->get($id);
         if ($this->XservUsuarios->delete($xservUsuario)) {
-            $this->Flash->success(__('The xserv usuario has been deleted.'));
+            $this->Flash->success(__('El usuario ha sido eliminado.'));
         } else {
-            $this->Flash->error(__('The xserv usuario could not be deleted. Please, try again.'));
+            $this->Flash->error(__('El usuario no pudo ser eliminado. Por favor, intente de nuevo.'));
         }
 
         return $this->redirect(['action' => 'index']);
@@ -443,6 +457,7 @@ class XservUsuariosController extends AppController
     public function changePassword()
     {
         $this->Authorization->skipAuthorization(); // temporal si no quieres autorización complicada
+        $this->viewBuilder()->disableAutoLayout();
 
         $user = $this->Authentication->getIdentity();
         if (!$user) {

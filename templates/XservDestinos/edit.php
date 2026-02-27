@@ -90,27 +90,17 @@ $this->assign('header-title', 'Editar Destino');
 
         <div class="form-row">
             <div class="form-group">
-                <label class="form-label">Descripción (Español)</label>
-                <?= $this->Form->control('descripcion_es', ['type' => 'textarea', 'class' => 'form-textarea', 'label' => false, 'placeholder' => 'Descripción del destino en español']) ?>
-                <span class="form-help">Versión en español</span>
+                <label class="form-label">Descripción</label>
+                <?= $this->Form->control('descripcion_es', ['type' => 'textarea', 'id' => 'descripcion-es', 'class' => 'form-textarea', 'label' => false, 'placeholder' => 'Descripción del destino', 'rows' => 5]) ?>
+                <span class="form-help">Ingrese la descripción en español. El sistema traducirá automáticamente al inglés.</span>
             </div>
         </div>
 
-        <div class="form-row">
-            <div class="form-group">
-                <label class="form-label">Descripción (Inglés)</label>
-                <?= $this->Form->control('descripcion_en', ['type' => 'textarea', 'class' => 'form-textarea', 'label' => false, 'placeholder' => 'Destination description in English']) ?>
-                <span class="form-help">English version</span>
-            </div>
-        </div>
+        <?= $this->Form->control('descripcion_en', ['type' => 'hidden', 'id' => 'descripcion-en']) ?>
 
         <div class="form-actions">
             <div class="form-actions-left">
-                <?= $this->Form->postLink(
-                    'Eliminar',
-                    ['action' => 'delete', $xservDestino->id],
-                    ['confirm' => '¿Está seguro de eliminar este destino?', 'class' => 'btn btn-danger']
-                ) ?>
+                <!-- Botón de eliminar movido fuera del formulario -->
             </div>
             <div class="form-actions-right">
                 <a href="<?= $this->Url->build(['action' => 'index']) ?>" class="btn btn-secondary">Cancelar</a>
@@ -119,5 +109,77 @@ $this->assign('header-title', 'Editar Destino');
         </div>
         
         <?= $this->Form->end() ?>
+        
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--dark-lighter, #2a2a2a);">
+            <?= $this->Form->postLink(
+                'Eliminar Destino',
+                ['action' => 'delete', $xservDestino->id],
+                ['confirm' => '¿Está seguro de eliminar este destino? Esta acción no se puede deshacer.', 'class' => 'btn btn-danger']
+            ) ?>
+        </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const descripcionEs = document.getElementById('descripcion-es');
+    const descripcionEn = document.getElementById('descripcion-en');
+    let translationTimeout = null;
+
+    // Función para traducir usando API gratuita de MyMemory
+    async function translateText(text) {
+        if (!text || text.trim().length === 0) {
+            return '';
+        }
+        
+        try {
+            // Usar MyMemory Translation API (gratuita, sin API key necesaria)
+            const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=es|en`);
+            const data = await response.json();
+            
+            if (data.responseData && data.responseData.translatedText) {
+                return data.responseData.translatedText;
+            }
+            
+            // Si falla la traducción, devolver el texto original
+            return text;
+        } catch (error) {
+            console.error('Error en traducción:', error);
+            // En caso de error, usar el texto original
+            return text;
+        }
+    }
+
+    // Traducir automáticamente mientras el usuario escribe (con debounce)
+    if (descripcionEs && descripcionEn) {
+        descripcionEs.addEventListener('input', function() {
+            // Limpiar timeout anterior
+            if (translationTimeout) {
+                clearTimeout(translationTimeout);
+            }
+            
+            // Esperar 1 segundo después de que el usuario deje de escribir
+            translationTimeout = setTimeout(async () => {
+                const textEs = descripcionEs.value.trim();
+                if (textEs) {
+                    // Mostrar indicador de traducción
+                    const helpText = descripcionEs.parentElement.querySelector('.form-help');
+                    const originalText = helpText.textContent;
+                    helpText.textContent = 'Traduciendo automáticamente...';
+                    helpText.style.color = 'var(--gold)';
+                    
+                    // Realizar traducción
+                    const translated = await translateText(textEs);
+                    descripcionEn.value = translated;
+                    
+                    // Restaurar texto de ayuda
+                    helpText.textContent = originalText;
+                    helpText.style.color = '';
+                } else {
+                    descripcionEn.value = '';
+                }
+            }, 1000); // Esperar 1 segundo después de que el usuario deje de escribir
+        });
+    }
+});
+</script>

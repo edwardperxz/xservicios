@@ -94,11 +94,7 @@ $this->assign('header-title', 'Editar Servicio-Destino');
 
         <div class="form-actions">
             <div class="form-actions-left">
-                <?= $this->Form->postLink(
-                    'Eliminar',
-                    ['action' => 'delete', $xservServiciosDestino->servicio_id],
-                    ['confirm' => '¿Está seguro de eliminar esta asociación?', 'class' => 'btn btn-danger']
-                ) ?>
+                <!-- Botón de eliminar movido fuera del formulario -->
             </div>
             <div class="form-actions-right">
                 <a href="<?= $this->Url->build(['action' => 'index']) ?>" class="btn btn-secondary">Cancelar</a>
@@ -107,5 +103,13 @@ $this->assign('header-title', 'Editar Servicio-Destino');
         </div>
         
         <?= $this->Form->end() ?>
+        
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--dark-lighter, #2a2a2a);">
+            <?= $this->Form->postLink(
+                'Eliminar Asociación',
+                ['action' => 'delete', $xservServiciosDestino->servicio_id],
+                ['confirm' => '¿Está seguro de eliminar esta asociación? Esta acción no se puede deshacer.', 'class' => 'btn btn-danger']
+            ) ?>
+        </div>
     </div>
 </div>

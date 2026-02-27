@@ -77,14 +77,16 @@
                     <td class="actions">
                         <?= $this->Html->link(__('View'), ['action' => 'view', $xservUsuario->id]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $xservUsuario->id]) ?>
-                        <?= $this->Form->postLink(
-                            __('Delete'),
-                            ['action' => 'delete', $xservUsuario->id],
-                            [
-                                'method' => 'delete',
-                                'confirm' => __('Are you sure you want to delete # {0}?', $xservUsuario->id),
-                            ]
-                        ) ?>
+                        <?php if (isset($user) && $user->id != $xservUsuario->id): ?>
+                            <?= $this->Form->postLink(
+                                __('Delete'),
+                                ['action' => 'delete', $xservUsuario->id],
+                                [
+                                    'method' => 'delete',
+                                    'confirm' => __('Are you sure you want to delete # {0}?', $xservUsuario->id),
+                                ]
+                            ) ?>
+                        <?php endif; ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>

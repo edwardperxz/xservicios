@@ -33,18 +33,15 @@ class XservClientesController extends AppController
         $isAdmin = $user && $user->rol === 'admin';
         $filters = $this->request->getQuery();
 
-        $query = $this->XservClientes->find();
+        $query = $this->XservClientes->find()
+            ->contain(['XservUsuarios']);
 
-        if (!empty($filters['nombre'])) {
-            $query->where(['nombre LIKE' => '%' . $filters['nombre'] . '%']);
-        }
-
-        if (!empty($filters['correo'])) {
-            $query->where(['correo LIKE' => '%' . $filters['correo'] . '%']);
+        if (!empty($filters['identificacion_fiscal'])) {
+            $query->where(['XservClientes.identificacion_fiscal LIKE' => '%' . $filters['identificacion_fiscal'] . '%']);
         }
 
         if (!empty($filters['idioma_preferido'])) {
-            $query->where(['idioma_preferido' => $filters['idioma_preferido']]);
+            $query->where(['XservClientes.idioma_preferido' => $filters['idioma_preferido']]);
         }
 
         $xservClientes = $this->paginate($query);
@@ -75,7 +72,7 @@ class XservClientesController extends AppController
      */
     public function view(?string $id = null)
     {
-        $xservCliente = $this->XservClientes->get($id, contain: []);
+        $xservCliente = $this->XservClientes->get($id, contain: ['XservUsuarios']);
         $this->set(compact('xservCliente'));
     }
 
@@ -96,7 +93,15 @@ class XservClientesController extends AppController
             }
             $this->Flash->error(__('The xserv cliente could not be saved. Please, try again.'));
         }
-        $this->set(compact('xservCliente'));
+        $usuarios = $this->XservClientes->XservUsuarios->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($usuario) {
+                return $usuario->username . ' - ' . $usuario->nombre;
+            }
+        ])
+        ->where(['rol' => 'operador'])
+        ->orderBy(['username' => 'ASC']);
+        $this->set(compact('xservCliente', 'usuarios'));
     }
 
     /**
@@ -108,7 +113,7 @@ class XservClientesController extends AppController
      */
     public function edit(?string $id = null)
     {
-        $xservCliente = $this->XservClientes->get($id, contain: []);
+        $xservCliente = $this->XservClientes->get($id, contain: ['XservUsuarios']);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $xservCliente = $this->XservClientes->patchEntity($xservCliente, $this->request->getData());
             if ($this->XservClientes->save($xservCliente)) {
@@ -118,7 +123,15 @@ class XservClientesController extends AppController
             }
             $this->Flash->error(__('The xserv cliente could not be saved. Please, try again.'));
         }
-        $this->set(compact('xservCliente'));
+        $usuarios = $this->XservClientes->XservUsuarios->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($usuario) {
+                return $usuario->username . ' - ' . $usuario->nombre;
+            }
+        ])
+        ->where(['rol' => 'operador'])
+        ->orderBy(['username' => 'ASC']);
+        $this->set(compact('xservCliente', 'usuarios'));
     }
 
     /**

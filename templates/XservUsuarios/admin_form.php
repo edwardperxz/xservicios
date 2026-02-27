@@ -102,10 +102,20 @@ $this->assign('header-title', $isEdit ? 'Editar Usuario' : 'Nuevo Usuario');
     .form-actions {
         display: flex;
         gap: 1rem;
-        justify-content: flex-end;
+        justify-content: space-between;
         margin-top: 2rem;
         padding-top: 2rem;
         border-top: 1px solid var(--dark-lighter);
+    }
+
+    .form-actions-left {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .form-actions-right {
+        display: flex;
+        gap: 1rem;
     }
 
     .btn {
@@ -140,6 +150,15 @@ $this->assign('header-title', $isEdit ? 'Editar Usuario' : 'Nuevo Usuario');
     .btn-secondary:hover {
         background: var(--dark-card);
         border-color: var(--gold);
+    }
+
+    .btn-danger {
+        background: var(--red, #ef4444);
+        color: var(--text-white);
+    }
+
+    .btn-danger:hover {
+        background: var(--red-dark, #dc2626);
     }
 
     .icon-sm {
@@ -243,20 +262,38 @@ $this->assign('header-title', $isEdit ? 'Editar Usuario' : 'Nuevo Usuario');
         <?php endif; ?>
 
         <div class="form-actions">
-            <a href="/xserv-usuarios" class="btn btn-secondary">
-                <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-                Cancelar
-            </a>
-            <button type="submit" class="btn btn-primary">
-                <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                <?= $isEdit ? 'Actualizar Usuario' : 'Crear Usuario' ?>
-            </button>
+            <div class="form-actions-left">
+                <!-- El botón de eliminar se mueve fuera del formulario para evitar anidación -->
+            </div>
+            <div class="form-actions-right">
+                <a href="/xserv-usuarios" class="btn btn-secondary">
+                    <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <?= $isEdit ? 'Actualizar Usuario' : 'Crear Usuario' ?>
+                </button>
+            </div>
         </div>
 
         <?= $this->Form->end() ?>
+        
+        <?php if ($isEdit && isset($authUser) && $authUser->id != $xservUsuario->id): ?>
+            <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--dark-lighter);">
+                <?= $this->Form->postLink(
+                    'Eliminar Usuario',
+                    ['action' => 'delete', $xservUsuario->id],
+                    [
+                        'confirm' => '¿Está seguro que desea eliminar este usuario? Esta acción no se puede deshacer.',
+                        'class' => 'btn btn-danger'
+                    ]
+                ) ?>
+            </div>
+        <?php endif; ?>
     </div>
 </div>

@@ -46,6 +46,26 @@ $this->assign('header-title', 'Detalle de Vehículo');
                 <div class="detail-label">Kilometraje Actual</div>
                 <div class="detail-value"><?= $xservVehiculo->kilometraje_actual === null ? '' : $this->Number->format($xservVehiculo->kilometraje_actual) ?></div>
             </div>
+            <?php 
+            // Determinar imagen a mostrar
+            if (!empty($xservVehiculo->foto_url)):
+                $imagenVehiculo = h($xservVehiculo->foto_url);
+            elseif ($xservVehiculo->tipo === 'coaster'):
+                $imagenVehiculo = $this->Url->webroot('img/vehiculos/coaster_xservicios.png');
+            elseif ($xservVehiculo->tipo === 'bus_15'):
+                $imagenVehiculo = $this->Url->webroot('img/vehiculos/bus15_xservicios.png');
+            else:
+                $imagenVehiculo = null;
+            endif;
+            ?>
+            <?php if ($imagenVehiculo): ?>
+            <div class="detail-item" style="grid-column: span 1">
+                <div class="detail-label">Foto del Vehículo</div>
+                <div style="margin-top: 0.5rem; width: 100%; max-width: 200px; height: 150px; border-radius: 6px; overflow: hidden;">
+                    <img src="<?= $imagenVehiculo ?>" alt="<?= h($xservVehiculo->nombre_unidad) ?>" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+            </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>

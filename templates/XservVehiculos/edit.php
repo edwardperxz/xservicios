@@ -78,7 +78,7 @@ $this->assign('header-title', 'Editar Vehículo');
             <p class="form-subtitle">Modifique la información del vehículo (campos marcados con * son obligatorios)</p>
         </div>
 
-        <?= $this->Form->create($xservVehiculo) ?>
+        <?= $this->Form->create($xservVehiculo, ['enctype' => 'multipart/form-data']) ?>
         
         <div class="form-row">
             <div class="form-group">
@@ -165,18 +165,37 @@ $this->assign('header-title', 'Editar Vehículo');
                 ]) ?>
                 <span class="form-help">Condición actual del vehículo</span>
             </div>
+            <div class="form-group">
+                <label class="form-label">Color</label>
+                <?= $this->Form->control('color', [
+                    'class' => 'form-input',
+                    'label' => false,
+                    'placeholder' => 'ej: Blanco, Azul'
+                ]) ?>
+                <span class="form-help">Color del vehículo</span>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Foto del Vehículo</label>
+                <input type="file" id="foto-input" name="foto" accept="image/*" class="form-input" style="cursor: pointer;">
+                <span class="form-help">Seleccione una imagen del vehículo (JPG, PNG, WebP)</span>
+                <?php if (!empty($xservVehiculo->foto_url)): ?>
+                <div style="margin-top: 1rem; text-align: center;">
+                    <img id="foto-preview" src="<?= h($xservVehiculo->foto_url) ?>" alt="Preview" style="width: 100%; height: 250px; object-fit: cover; border-radius: 6px;">
+                </div>
+                <?php else: ?>
+                <div id="foto-preview-container" style="margin-top: 1rem; text-align: center; display: none;">
+                    <img id="foto-preview" alt="Preview" style="width: 100%; height: 250px; object-fit: cover; border-radius: 6px;">
+                </div>
+                <?php endif; ?>
+            </div>
         </div>
 
         <div class="form-actions">
             <div class="form-actions-left">
-                <?= $this->Form->postLink(
-                    'Eliminar',
-                    ['action' => 'delete', $xservVehiculo->id],
-                    [
-                        'confirm' => '¿Está seguro que desea eliminar este vehículo?',
-                        'class' => 'btn btn-danger'
-                    ]
-                ) ?>
+                <!-- Botón de eliminar movido fuera del formulario -->
             </div>
             <div class="form-actions-right">
                 <a href="<?= $this->Url->build(['action' => 'index']) ?>" class="btn btn-secondary">Cancelar</a>
@@ -185,5 +204,45 @@ $this->assign('header-title', 'Editar Vehículo');
         </div>
         
         <?= $this->Form->end() ?>
+        
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--dark-lighter, #2a2a2a);">
+            <?= $this->Form->postLink(
+                'Eliminar Vehículo',
+                ['action' => 'delete', $xservVehiculo->id],
+                [
+                    'confirm' => '¿Está seguro que desea eliminar este vehículo? Esta acción no se puede deshacer.',
+                    'class' => 'btn btn-danger'
+                ]
+            ) ?>
+        </div>
     </div>
 </div>
+
+<script>
+document.getElementById('foto-input').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            let preview = document.getElementById('foto-preview');
+            if (!preview) {
+                const container = document.createElement('div');
+                container.id = 'foto-preview-container';
+                container.style.marginTop = '1rem';
+                container.style.textAlign = 'center';
+                preview = document.createElement('img');
+                preview.id = 'foto-preview';
+                preview.style.width = '100%';
+                preview.style.height = '250px';
+                preview.style.objectFit = 'cover';
+                preview.style.borderRadius = '6px';
+                container.appendChild(preview);
+                document.getElementById('foto-input').parentElement.appendChild(container);
+            }
+            preview.src = event.target.result;
+            document.getElementById('foto-preview-container')?.style.display === 'none' && (document.getElementById('foto-preview-container').style.display = 'block');
+        };
+        reader.readAsDataURL(file);
+    }
+});
+</script>

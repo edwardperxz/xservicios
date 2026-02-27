@@ -43,6 +43,35 @@ return function (RouteBuilder $routes): void {
         $builder->connect('/panel/admin', ['controller' => 'Dashboard', 'action' => 'adminPanel']);
         $builder->connect('/panel/operador', ['controller' => 'Dashboard', 'action' => 'operadorPanel']);
         $builder->connect('/panel/chofer', ['controller' => 'Dashboard', 'action' => 'choferPanel']);
+        $builder->connect('/requests', ['controller' => 'Dashboard', 'action' => 'requests']);
+        $builder->connect('/notifications', ['controller' => 'Dashboard', 'action' => 'choferNotifications']);
+        
+        // Rutas de usuario
+        $builder->connect('/settings', ['controller' => 'Profile', 'action' => 'settings']);
+        $builder->connect('/profile', ['controller' => 'Profile', 'action' => 'index']);
+        
+        // Rutas específicas para chofer
+        $builder->connect('/chofer/viajes', ['controller' => 'Dashboard', 'action' => 'choferViajes']);
+        $builder->connect('/chofer/viajes/:id', ['controller' => 'XservChoferes', 'action' => 'viajesHistorial'], ['id' => '[0-9]+', 'pass' => ['id']]);
+        
+        // Panel de chofer - gestión de servicios
+        $builder->connect('/xserv-ejecucion-viajes/chofer-panel', ['controller' => 'XservEjecucionViajes', 'action' => 'choferPanel']);
+        $builder->connect('/xserv-ejecucion-viajes/iniciar-servicio', ['controller' => 'XservEjecucionViajes', 'action' => 'iniciarServicio']);
+        $builder->connect('/xserv-ejecucion-viajes/finalizar-servicio', ['controller' => 'XservEjecucionViajes', 'action' => 'finalizarServicio']);
+        
+        // Gestión de incidencias para choferes
+        $builder->connect('/xserv-incidencias-viaje/reportar-incidencia', ['controller' => 'XservIncidenciasViaje', 'action' => 'reportarIncidencia']);
+        $builder->connect('/xserv-incidencias-viaje/resolver-incidencia', ['controller' => 'XservIncidenciasViaje', 'action' => 'resolverIncidencia']);
+        
+        // API Chofer - Asignaciones (DEBEN IR ANTES DE OTRAS RUTAS)
+        $builder->scope('/chofer', function (RouteBuilder $routes) {
+            $routes->connect('/asignacion/:id/aceptar', ['controller' => 'Dashboard', 'action' => 'aceptarAsignacion'], ['id' => '[0-9]+', 'pass' => ['id']]);
+            $routes->connect('/asignacion/:id/rechazar', ['controller' => 'Dashboard', 'action' => 'rechazarAsignacion'], ['id' => '[0-9]+', 'pass' => ['id']]);
+        });
+        
+        $builder->connect('/api/chofer/asignaciones', ['controller' => 'Dashboard', 'action' => 'getAsignaciones']);
+        $builder->connect('/api/chofer/stats', ['controller' => 'Dashboard', 'action' => 'getChoferStats']);
+        $builder->connect('/api/chofer/asignacion/update', ['controller' => 'Dashboard', 'action' => 'updateAsignacion']);
 
         //Ruta para crear las reservas
         $builder->connect('/reservations', ['controller' => 'XservReservas', 'action' => 'reservations']);

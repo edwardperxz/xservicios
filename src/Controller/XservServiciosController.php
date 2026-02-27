@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\I18n\I18n;
+
 /**
  * XservServicios Controller
  *
@@ -21,6 +23,9 @@ class XservServiciosController extends AppController
         if ($user && $user->rol === 'admin') {
             $this->viewBuilder()->setLayout('admin');
         }
+
+        // Asegurar que Translate use el locale actual
+        $this->XservServicios->setLocale(I18n::getLocale());
     }
 
     /**
@@ -98,6 +103,14 @@ class XservServiciosController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
+        $queryLang = $this->request->getQuery('lang');
+        $cookieLang = $this->request->getCookie('locale');
+        $locale = $queryLang ?: ($cookieLang ?: I18n::getLocale());
+        if (in_array($locale, ['es', 'en'], true)) {
+            I18n::setLocale($locale);
+            $this->XservServicios->setLocale($locale);
+        }
+
         $xservServicio = $this->XservServicios->get($id, contain: []);
         if ($this->request->is('json') || $this->request->getHeader('X-Requested-With') === 'XMLHttpRequest') {
             $this->response = $this->response->withType('application/json');
@@ -107,8 +120,6 @@ class XservServiciosController extends AppController
                     'nombre' => $xservServicio->nombre,
                     'estado' => $xservServicio->estado,
                     'precio_base' => $xservServicio->precio_base,
-                    'descripcion_es' => $xservServicio->descripcion_es,
-                    'descripcion_en' => $xservServicio->descripcion_en,
                     'variantes' => $xservServicio->variantes,
                 ],
             ]));
@@ -124,6 +135,9 @@ class XservServiciosController extends AppController
      */
     public function add()
     {
+        // Siempre guardar descripcion base en espanol
+        $this->XservServicios->setLocale('es');
+
         $xservServicio = $this->XservServicios->newEmptyEntity();
         if ($this->request->is('post')) {
             $xservServicio = $this->XservServicios->patchEntity($xservServicio, $this->request->getData());
@@ -146,6 +160,9 @@ class XservServiciosController extends AppController
      */
     public function edit(?string $id = null)
     {
+        // Siempre editar descripcion base en espanol
+        $this->XservServicios->setLocale('es');
+
         $xservServicio = $this->XservServicios->get($id, contain: []);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $xservServicio = $this->XservServicios->patchEntity($xservServicio, $this->request->getData());

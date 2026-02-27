@@ -76,27 +76,19 @@ $this->assign('header-title', 'Editar Cliente');
         
         <div class="form-row">
             <div class="form-group">
-                <label class="form-label required">Nombre Completo</label>
-                <?= $this->Form->control('nombre', ['class' => 'form-input', 'label' => false, 'placeholder' => 'ej: Juan Pérez', 'required' => true]) ?>
-                <span class="form-help">Nombre del cliente</span>
+                <label class="form-label required">Usuario</label>
+                <?= $this->Form->control('usuario_id', [
+                    'options' => $usuarios,
+                    'empty' => 'Seleccione un usuario',
+                    'class' => 'form-select',
+                    'label' => false
+                ]) ?>
+                <span class="form-help">Usuario del sistema vinculado a este cliente</span>
             </div>
             <div class="form-group">
                 <label class="form-label">Identificación Fiscal</label>
                 <?= $this->Form->control('identificacion_fiscal', ['class' => 'form-input', 'label' => false, 'placeholder' => 'RUC/NIT']) ?>
                 <span class="form-help">Número de identificación fiscal</span>
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label class="form-label">Correo Electrónico</label>
-                <?= $this->Form->control('correo', ['type' => 'email', 'class' => 'form-input', 'label' => false, 'placeholder' => 'cliente@ejemplo.com']) ?>
-                <span class="form-help">Email del cliente</span>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Teléfono</label>
-                <?= $this->Form->control('telefono', ['class' => 'form-input', 'label' => false, 'placeholder' => '+507 6XXX-XXXX']) ?>
-                <span class="form-help">Número de contacto</span>
             </div>
             <div class="form-group">
                 <label class="form-label">Idioma Preferido</label>
@@ -115,11 +107,7 @@ $this->assign('header-title', 'Editar Cliente');
 
         <div class="form-actions">
             <div class="form-actions-left">
-                <?= $this->Form->postLink(
-                    'Eliminar',
-                    ['action' => 'delete', $xservCliente->id],
-                    ['confirm' => '¿Está seguro de eliminar este cliente?', 'class' => 'btn btn-danger']
-                ) ?>
+                <!-- Botón de eliminar movido fuera del formulario -->
             </div>
             <div class="form-actions-right">
                 <a href="<?= $this->Url->build(['action' => 'index']) ?>" class="btn btn-secondary">Cancelar</a>
@@ -128,5 +116,13 @@ $this->assign('header-title', 'Editar Cliente');
         </div>
         
         <?= $this->Form->end() ?>
+        
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--dark-lighter, #2a2a2a);">
+            <?= $this->Form->postLink(
+                'Eliminar Cliente',
+                ['action' => 'delete', $xservCliente->id],
+                ['confirm' => '¿Está seguro de eliminar este cliente? Esta acción no se puede deshacer.', 'class' => 'btn btn-danger']
+            ) ?>
+        </div>
     </div>
 </div>

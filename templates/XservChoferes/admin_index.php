@@ -8,6 +8,23 @@ $this->assign('header-title', 'Gestión de Choferes');
 ?>
 
 <style>
+    :root {
+        --gold: #c9a962;
+        --gold-light: #d4b978;
+        --dark-bg: #0a0a0a;
+        --dark-card: #1a1a1a;
+        --dark-lighter: #2a2a2a;
+        --text-white: #ffffff;
+        --text-gray: #a0a0a0;
+        --green: #4ade80;
+        --orange: #f59e0b;
+        --blue: #3b82f6;
+    }
+
+    .choferes-container {
+        padding: 1.5rem;
+    }
+
     .page-actions {
         display: flex;
         justify-content: space-between;
@@ -36,6 +53,7 @@ $this->assign('header-title', 'Gestión de Choferes');
 
     .btn-primary:hover {
         background: var(--gold-light);
+        transform: translateY(-2px);
     }
 
     .btn-secondary {
@@ -46,6 +64,7 @@ $this->assign('header-title', 'Gestión de Choferes');
 
     .btn-secondary:hover {
         background: var(--dark-card);
+        border-color: var(--gold);
     }
 
     .btn-sm {
@@ -166,21 +185,6 @@ $this->assign('header-title', 'Gestión de Choferes');
         font-weight: 500;
     }
 
-    .badge.disponible {
-        background: rgba(74, 222, 128, 0.2);
-        color: var(--green);
-    }
-
-    .badge.no_disponible {
-        background: rgba(239, 68, 68, 0.2);
-        color: var(--red);
-    }
-
-    .badge.asignado {
-        background: rgba(59, 130, 246, 0.2);
-        color: var(--blue);
-    }
-
     .badge.activo {
         background: rgba(74, 222, 128, 0.2);
         color: var(--green);
@@ -188,7 +192,22 @@ $this->assign('header-title', 'Gestión de Choferes');
 
     .badge.inactivo {
         background: rgba(239, 68, 68, 0.2);
-        color: var(--red);
+        color: #ef4444;
+    }
+
+    .badge.disponible {
+        background: rgba(74, 222, 128, 0.2);
+        color: var(--green);
+    }
+
+    .badge.asignado {
+        background: rgba(59, 130, 246, 0.2);
+        color: var(--blue);
+    }
+
+    .badge.no_disponible {
+        background: rgba(245, 158, 11, 0.2);
+        color: var(--orange);
     }
 
     .action-buttons {
@@ -252,6 +271,29 @@ $this->assign('header-title', 'Gestión de Choferes');
         width: 16px;
         height: 16px;
     }
+
+    @media (max-width: 768px) {
+        .choferes-container {
+            padding: 1rem;
+        }
+
+        .filters-row {
+            flex-direction: column;
+        }
+
+        .filter-group {
+            width: 100%;
+        }
+
+        .data-table {
+            font-size: 0.8rem;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 0.75rem 0.5rem;
+        }
+    }
 </style>
 
 <div class="choferes-container">
@@ -270,6 +312,22 @@ $this->assign('header-title', 'Gestión de Choferes');
     <div class="filters-card">
         <?= $this->Form->create(null, ['type' => 'get']) ?>
         <div class="filters-row">
+            <!-- Filtro por Estado -->
+            <div class="filter-group">
+                <label class="filter-label">Estado</label>
+                <div class="filter-buttons">
+                    <button type="submit" name="estado" value="" class="filter-btn <?= empty($filters['estado']) ? 'active' : '' ?>">
+                        Todos
+                    </button>
+                    <button type="submit" name="estado" value="activo" class="filter-btn <?= ($filters['estado'] ?? '') === 'activo' ? 'active' : '' ?>">
+                        Activo
+                    </button>
+                    <button type="submit" name="estado" value="inactivo" class="filter-btn <?= ($filters['estado'] ?? '') === 'inactivo' ? 'active' : '' ?>">
+                        Inactivo
+                    </button>
+                </div>
+            </div>
+
             <!-- Filtro por Disponibilidad -->
             <div class="filter-group">
                 <label class="filter-label">Disponibilidad</label>
@@ -280,40 +338,21 @@ $this->assign('header-title', 'Gestión de Choferes');
                     <button type="submit" name="disponibilidad" value="disponible" class="filter-btn <?= ($filters['disponibilidad'] ?? '') === 'disponible' ? 'active' : '' ?>">
                         Disponible
                     </button>
-                    <button type="submit" name="disponibilidad" value="no_disponible" class="filter-btn <?= ($filters['disponibilidad'] ?? '') === 'no_disponible' ? 'active' : '' ?>">
-                        No Disponible
-                    </button>
                     <button type="submit" name="disponibilidad" value="asignado" class="filter-btn <?= ($filters['disponibilidad'] ?? '') === 'asignado' ? 'active' : '' ?>">
                         Asignado
                     </button>
                 </div>
             </div>
 
-            <!-- Filtro por Estado -->
-            <div class="filter-group">
-                <label class="filter-label">Estado</label>
-                <div class="filter-buttons">
-                    <button type="submit" name="estado" value="" class="filter-btn <?= empty($filters['estado']) ? 'active' : '' ?>">
-                        Todos
-                    </button>
-                    <button type="submit" name="estado" value="activo" class="filter-btn <?= ($filters['estado'] ?? '') === 'activo' ? 'active' : '' ?>">
-                        Activos
-                    </button>
-                    <button type="submit" name="estado" value="inactivo" class="filter-btn <?= ($filters['estado'] ?? '') === 'inactivo' ? 'active' : '' ?>">
-                        Inactivos
-                    </button>
-                </div>
-            </div>
-
             <!-- Búsqueda -->
             <div class="filter-group">
-                <label class="filter-label">Buscar chofer</label>
+                <label class="filter-label">Buscar</label>
                 <div style="display: flex; gap: 0.5rem;">
                     <input 
                         type="text" 
                         name="nombre" 
                         class="search-input" 
-                        placeholder="Nombre o teléfono..." 
+                        placeholder="Nombre del chofer..."
                         value="<?= h($filters['nombre'] ?? '') ?>"
                     >
                     <button type="submit" class="btn btn-secondary">
@@ -335,12 +374,12 @@ $this->assign('header-title', 'Gestión de Choferes');
             <thead>
                 <tr>
                     <th><?= $this->Paginator->sort('id', 'ID') ?></th>
-                    <th><?= $this->Paginator->sort('nombre', 'Nombre') ?></th>
-                    <th><?= $this->Paginator->sort('identificacion', 'Identificación') ?></th>
-                    <th><?= $this->Paginator->sort('telefono', 'Teléfono') ?></th>
-                    <th><?= $this->Paginator->sort('disponibilidad', 'Disponibilidad') ?></th>
+                    <th><?= $this->Paginator->sort('usuario_id', 'Nombre') ?></th>
+                    <th><?= $this->Paginator->sort('usuario_id', 'Usuario') ?></th>
+                    <th><?= $this->Paginator->sort('tipo_licencia', 'Licencia') ?></th>
                     <th><?= $this->Paginator->sort('estado', 'Estado') ?></th>
-                    <th><?= $this->Paginator->sort('created_at', 'Fecha Ingreso') ?></th>
+                    <th><?= $this->Paginator->sort('disponibilidad', 'Disponibilidad') ?></th>
+                    <th><?= $this->Paginator->sort('fecha_ingreso', 'Ingreso') ?></th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -348,12 +387,12 @@ $this->assign('header-title', 'Gestión de Choferes');
                 <?php foreach ($xservChoferes as $chofer): ?>
                 <tr>
                     <td><strong><?= h($chofer->id) ?></strong></td>
-                    <td><?= h($chofer->nombre) ?></td>
-                    <td><?= h($chofer->identificacion) ?></td>
-                    <td><?= h($chofer->telefono) ?></td>
-                    <td><span class="badge <?= h($chofer->disponibilidad) ?>"><?= h(ucfirst(str_replace('_', ' ', $chofer->disponibilidad))) ?></span></td>
+                    <td><?= $chofer->hasValue('usuario') ? h($chofer->usuario->nombre) : '—' ?></td>
+                    <td><?= $chofer->hasValue('usuario') ? h($chofer->usuario->username) : '—' ?></td>
+                    <td><?= h($chofer->tipo_licencia ?: '—') ?></td>
                     <td><span class="badge <?= h($chofer->estado) ?>"><?= h(ucfirst($chofer->estado)) ?></span></td>
-                    <td><?= h($chofer->created_at->format('d/m/Y')) ?></td>
+                    <td><span class="badge <?= h($chofer->disponibilidad) ?>"><?= h(ucfirst(str_replace('_', ' ', $chofer->disponibilidad))) ?></span></td>
+                    <td><?= h($chofer->fecha_ingreso ? $chofer->fecha_ingreso->format('d/m/Y') : '—') ?></td>
                     <td>
                         <div class="action-buttons">
                             <a href="/xserv-choferes/view/<?= h($chofer->id) ?>" class="btn btn-secondary btn-sm">
@@ -387,7 +426,7 @@ $this->assign('header-title', 'Gestión de Choferes');
         <?php else: ?>
         <div class="empty-state">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
             </svg>
             <p>No se encontraron choferes</p>
         </div>

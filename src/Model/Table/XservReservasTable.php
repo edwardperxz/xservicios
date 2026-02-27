@@ -53,15 +53,27 @@ class XservReservasTable extends Table
             'className' => 'XservServicios',
             'joinType' => 'INNER',
         ]);
+        $this->belongsTo('XservServicios', [
+            'foreignKey' => 'servicio_id',
+            'className' => 'XservServicios',
+            'joinType' => 'INNER',
+        ]);
+        $this->belongsTo('XservClientes', [
+            'foreignKey' => 'cliente_id',
+            'className' => 'XservClientes',
+            'joinType' => 'INNER',
+        ]);
         $this->belongsTo('Rutas', [
             'foreignKey' => 'ruta_id',
             'className' => 'XservRutas',
         ]);
-        $this->hasMany('Asignaciones', [
-        'foreignKey' => 'reserva_id',
-        'className' => 'XservAsignaciones',
-        'dependent' => true,
-        ]);
+        
+        // Generar código automático antes de guardar
+        $this->getEventManager()->on('Model.beforeSave', function ($event, $entity, $options) {
+            if ($entity->isNew() && empty($entity->codigo_reserva)) {
+                $entity->codigo_reserva = $this->generateUniqueCode();
+            }
+        });
     }
 
     /**
@@ -75,8 +87,7 @@ class XservReservasTable extends Table
         $validator
             ->scalar('codigo_reserva')
             ->maxLength('codigo_reserva', 20)
-            ->requirePresence('codigo_reserva', 'create')
-            ->notEmptyString('codigo_reserva')
+            ->allowEmptyString('codigo_reserva')
             ->add('codigo_reserva', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
         $validator
@@ -165,5 +176,31 @@ class XservReservasTable extends Table
         $rules->add($rules->existsIn(['ruta_id'], 'Rutas'), ['errorField' => 'ruta_id']);
 
         return $rules;
+    }
+
+    /**
+     * Genera un código de reserva único y aleatorio
+     * Formato: RSV-YYYY-XXXXXX
+     * @return string
+     */
+    protected function generateUniqueCode(): string
+    {
+        $year = date('Y');
+        $maxAttempts = 10;
+        
+        for ($i = 0; $i < $maxAttempts; $i++) {
+            // Generar código aleatorio de 6 caracteres alfanuméricos
+            $random = strtoupper(substr(str_shuffle('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 6));
+            $code = "RSV-{$year}-{$random}";
+            
+            // Verificar si ya existe
+            if (!$this->exists(['codigo_reserva' => $code])) {
+                return $code;
+            }
+        }
+        
+        // En caso extremadamente raro de colisión después de 10 intentos, agregar timestamp
+        $timestamp = substr(time(), -4);
+        return "RSV-{$year}-{$timestamp}" . strtoupper(substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 2));
     }
 }

@@ -65,10 +65,9 @@ class XservAsignacionesTable extends Table
             'className' => 'XservUsuarios',
             'joinType' => 'INNER',
         ]);
-        $this->belongsTo('Choferes', [
-        'foreignKey' => 'chofer_id',
-        'className' => 'XservChoferes',
-        'joinType' => 'INNER',
+        $this->hasMany('XservEjecucionViajes', [
+            'foreignKey' => 'asignacion_id',
+            'className' => 'XservEjecucionViajes',
         ]);
     }
 

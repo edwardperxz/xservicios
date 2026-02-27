@@ -297,7 +297,12 @@ $this->assign('header-title', 'Asignación de Recursos');
                 <tr>
                     <td><strong><?= h($asignacion->id) ?></strong></td>
                     <td>
-                        <span class="info-text"><?= h($asignacion->chofer->nombre ?? 'N/A') ?></span>
+                        <?php
+                        $choferNombre = $asignacion->chofer->usuario->nombre
+                            ?? $asignacion->chofer->usuario->username
+                            ?? 'N/A';
+                        ?>
+                        <span class="info-text"><?= h($choferNombre) ?></span>
                     </td>
                     <td>
                         <span class="info-text"><?= h($asignacion->vehiculo->placa ?? 'N/A') ?></span>

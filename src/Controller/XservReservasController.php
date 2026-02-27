@@ -46,6 +46,8 @@ class XservReservasController extends AppController
 
         // --- CONSULTA BASE ---
         $query = $this->XservReservas->find()
+            ->contain(['Clientes' => ['XservUsuarios'], 'Servicios', 'Rutas']);
+        
             ->contain([
                 'Clientes',
                 'Servicios',
@@ -71,6 +73,11 @@ class XservReservasController extends AppController
         if (!empty($filters['codigo'])) {
             $query->where(['XservReservas.codigo_reserva LIKE' => '%' . $filters['codigo'] . '%']);
         }
+        
+        if (!empty($filters['cliente_id'])) {
+            $query->where(['XservReservas.cliente_id' => $filters['cliente_id']]);
+        }
+        
 
         // --- PAGINAR ---
         $xservReservas = $this->paginate($query);
@@ -124,6 +131,8 @@ class XservReservasController extends AppController
 
             $this->viewBuilder()->setLayout('admin');
 
+        $query = $this->XservReservas->find()
+            ->contain(['Clientes' => ['XservUsuarios'], 'Servicios', 'Rutas']);
             $query = $this->XservReservas->find()
                 ->contain(['Clientes', 'Servicios', 'Rutas']);
 
@@ -133,6 +142,13 @@ class XservReservasController extends AppController
                 $query->where(['XservReservas.estado' => $filters['estado']]);
             }
 
+        if (!empty($filters['codigo'])) {
+            $query->where(['codigo_reserva LIKE' => '%' . $filters['codigo'] . '%']);
+        }
+
+        if (!empty($filters['cliente_id'])) {
+            $query->where(['XservReservas.cliente_id' => $filters['cliente_id']]);
+        }
             if (!empty($filters['codigo'])) {
                 $query->where(['codigo_reserva LIKE' => '%' . $filters['codigo'] . '%']);
             }
@@ -154,7 +170,7 @@ class XservReservasController extends AppController
     {
         $this->Authorization->skipAuthorization();
         
-        $xservReserva = $this->XservReservas->get($id, contain: ['Clientes', 'Servicios', 'Rutas']);
+        $xservReserva = $this->XservReservas->get($id, contain: ['Clientes' => ['XservUsuarios'], 'Servicios', 'Rutas']);
         $this->set(compact('xservReserva'));
     }
 
@@ -313,6 +329,28 @@ class XservReservasController extends AppController
                 $this->Flash->success('Reserva creada correctamente.');
                 return $this->redirect(['action' => 'index']);
             }
+            $this->Flash->error(__('The xserv reserva could not be saved. Please, try again.'));
+        }
+        $clientes = $this->XservReservas->Clientes->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($cliente) {
+                return $cliente->usuario->nombre ?? $cliente->usuario->username ?? 'Sin nombre';
+            }
+        ])->contain(['XservUsuarios'])->order(['XservUsuarios.nombre' => 'ASC'])->all();
+        
+        $servicios = $this->XservReservas->Servicios->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'nombre'
+        ])->order(['nombre' => 'ASC'])->all();
+        
+        $rutas = $this->XservReservas->Rutas->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($ruta) {
+                return $ruta->origen->nombre . ' → ' . $ruta->destino->nombre;
+            }
+        ])->contain(['Origens', 'Destinos'])->order(['Origens.nombre' => 'ASC'])->all();
+        
+        $this->set(compact('xservReserva', 'clientes', 'servicios', 'rutas'));
 
             debug($xservReserva->getErrors());
             die();
@@ -406,9 +444,25 @@ class XservReservasController extends AppController
             }
             $this->Flash->error(__('The xserv reserva could not be saved. Please, try again.'));
         }
-        $clientes = $this->XservReservas->Clientes->find('list', limit: 200)->all();
-        $servicios = $this->XservReservas->Servicios->find('list', limit: 200)->all();
-        $rutas = $this->XservReservas->Rutas->find('list', limit: 200)->all();
+        $clientes = $this->XservReservas->Clientes->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($cliente) {
+                return $cliente->usuario->nombre ?? $cliente->usuario->username ?? 'Sin nombre';
+            }
+        ])->contain(['XservUsuarios'])->order(['XservUsuarios.nombre' => 'ASC'])->all();
+        
+        $servicios = $this->XservReservas->Servicios->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'nombre'
+        ])->order(['nombre' => 'ASC'])->all();
+        
+        $rutas = $this->XservReservas->Rutas->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($ruta) {
+                return $ruta->origen->nombre . ' → ' . $ruta->destino->nombre;
+            }
+        ])->contain(['Origens', 'Destinos'])->order(['Origens.nombre' => 'ASC'])->all();
+        
         $this->set(compact('xservReserva', 'clientes', 'servicios', 'rutas'));
     }
 

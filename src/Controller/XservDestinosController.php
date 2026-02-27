@@ -88,7 +88,10 @@ class XservDestinosController extends AppController
             }
             $this->Flash->error(__('The xserv destino could not be saved. Please, try again.'));
         }
-        $ubicacions = $this->XservDestinos->Ubicacions->find('list', limit: 200)->all();
+        $ubicacions = $this->XservDestinos->Ubicacions->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'nombre'
+        ])->order(['nombre' => 'ASC'])->all();
         $this->set(compact('xservDestino', 'ubicacions'));
     }
 
@@ -111,7 +114,10 @@ class XservDestinosController extends AppController
             }
             $this->Flash->error(__('The xserv destino could not be saved. Please, try again.'));
         }
-        $ubicacions = $this->XservDestinos->Ubicacions->find('list', limit: 200)->all();
+        $ubicacions = $this->XservDestinos->Ubicacions->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'nombre'
+        ])->order(['nombre' => 'ASC'])->all();
         $this->set(compact('xservDestino', 'ubicacions'));
     }
 

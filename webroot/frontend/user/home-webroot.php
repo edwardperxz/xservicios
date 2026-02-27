@@ -710,6 +710,145 @@
       color: var(--gold);
     }
 
+    /* Quote Form Section */
+    .quote-section {
+      padding: 4rem;
+      background: var(--dark-card);
+      border-top: 2px solid var(--gold);
+      border-bottom: 2px solid var(--gold);
+      position: relative;
+      z-index: 1;
+    }
+
+    .quote-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: var(--dark-lighter);
+      padding: 2rem;
+      border-radius: 12px;
+      border: 1px solid rgba(201, 169, 98, 0.3);
+    }
+
+    .quote-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      color: var(--text-white);
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .quote-subtitle {
+      text-align: center;
+      color: var(--text-gray);
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(201, 169, 98, 0.3);
+      border-radius: 6px;
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: var(--text-gray);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .passengers-group {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .passengers-container {
+      display: flex;
+      align-items: center;
+      border: 1px solid rgba(201, 169, 98, 0.3);
+      border-radius: 6px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.05);
+      flex-grow: 1;
+    }
+
+    .counter-button {
+      background: transparent;
+      border: none;
+      color: var(--gold);
+      font-size: 1.25rem;
+      padding: 0.5rem 0.75rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .counter-button:hover {
+      background: rgba(201, 169, 98, 0.2);
+    }
+
+    .passengers-input {
+      border: none !important;
+      background: transparent !important;
+      width: 60px;
+      text-align: center;
+      color: var(--text-white);
+      font-weight: 600;
+      padding: 0.5rem 0 !important;
+    }
+
+    .passengers-input:focus {
+      outline: none;
+    }
+
+    .passengers-error {
+      color: #ef4444;
+      font-size: 0.75rem;
+      display: none;
+      margin-child-start: 0;
+    }
+
+    .passengers-error.show {
+      display: block;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--dark-bg);
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 1rem;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(201, 169, 98, 0.3);
+    }
+
     /* Responsive */
     @media (max-width: 1024px) {
       .hero-title {
@@ -1014,6 +1153,37 @@
     </div>
   </section>
 
+  <!-- Quote Form Section -->
+  <section class="quote-section">
+    <div class="quote-container" id="quoteContainer">
+      <h2 class="quote-title" data-i18n="fleet.quoteTitle">Solicita tu Cotización</h2>
+      <p class="quote-subtitle" data-i18n="fleet.quoteSubtitle">Completa el formulario y te contactaremos pronto</p>
+      <form>
+        <div class="form-group">
+          <input type="text" id="quoteName" placeholder="Tu nombre completo" data-i18n-placeholder="fleet.quoteName">
+        </div>
+        <div class="form-group">
+          <input type="email" id="quoteEmail" placeholder="Correo electrónico" data-i18n-placeholder="fleet.quoteEmail">
+        </div>
+        <div class="form-group">
+          <input type="text" id="quoteDestination" placeholder="Destino deseado" data-i18n-placeholder="fleet.quoteDestination">
+        </div>
+        <div class="form-group">
+          <textarea id="quoteNotes" rows="3" placeholder="Notas adicionales"></textarea>
+        </div>
+        <div class="form-group passengers-group">
+          <div class="passengers-container">
+            <button type="button" class="counter-button minus" id="minusBtn" onclick="decrementPassengers(event)">−</button>
+            <input type="number" id="passengersInput" class="passengers-input" placeholder="0" data-i18n-placeholder="fleet.quotePassengers" min="1" max="99" value="1">
+            <button type="button" class="counter-button plus" id="plusBtn" onclick="incrementPassengers(event)">+</button>
+          </div>
+          <span class="passengers-error" id="passengersError" data-i18n="fleet.quotePassengersError">Mínimo 1 pasajero requerido</span>
+        </div>
+        <button type="submit" class="btn-primary" data-i18n="fleet.quoteSubmit">Solicitar Cotización</button>
+      </form>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer class="footer">
     <p class="footer-text" data-i18n="footer.text">© 2026 <span>Xservicios</span> - Transporte Turístico de Lujo. Todos los derechos reservados.</p>
@@ -1023,5 +1193,43 @@
   <script src="/js/header-loader.js"></script>
   <script src="/js/header-dynamic.js"></script>
   <script src="/js/i18n.js"></script>
+  
+  <script>
+    // Passengers counter functionality
+    function incrementPassengers(e) {
+      e.preventDefault();
+      const input = document.getElementById('passengersInput');
+      const currentValue = parseInt(input.value) || 0;
+      if (currentValue < 99) {
+        input.value = currentValue + 1;
+        validatePassengers();
+      }
+    }
+
+    function decrementPassengers(e) {
+      e.preventDefault();
+      const input = document.getElementById('passengersInput');
+      const currentValue = parseInt(input.value) || 0;
+      if (currentValue > 1) {
+        input.value = currentValue - 1;
+        validatePassengers();
+      }
+    }
+
+    function validatePassengers() {
+      const input = document.getElementById('passengersInput');
+      const errorMsg = document.getElementById('passengersError');
+      const value = parseInt(input.value);
+
+      if (isNaN(value) || value < 1) {
+        input.value = 1;
+        errorMsg.classList.add('show');
+        return false;
+      } else {
+        errorMsg.classList.remove('show');
+        return true;
+      }
+    }
+  </script>
 </body>
 </html>

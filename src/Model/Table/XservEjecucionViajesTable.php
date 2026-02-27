@@ -46,6 +46,10 @@ class XservEjecucionViajesTable extends Table
             'className' => 'XservAsignaciones',
             'joinType' => 'INNER',
         ]);
+        $this->hasMany('XservIncidenciasViaje', [
+            'foreignKey' => 'ejecucion_id',
+            'className' => 'XservIncidenciasViaje',
+        ]);
     }
 
     /**

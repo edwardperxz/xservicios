@@ -94,9 +94,9 @@ $this->assign('header-title', 'Editar Reserva');
             <h3 class="form-section-title">Información Básica</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label class="form-label required">Código de Reserva</label>
-                    <?= $this->Form->control('codigo_reserva', ['class' => 'form-input', 'label' => false, 'placeholder' => 'ej: RSV-2024-001', 'required' => true]) ?>
-                    <span class="form-help">Identificador único de la reserva</span>
+                    <label class="form-label">Código de Reserva</label>
+                    <?= $this->Form->control('codigo_reserva', ['class' => 'form-input', 'label' => false, 'readonly' => true]) ?>
+                    <span class="form-help">El código de reserva no se puede modificar</span>
                 </div>
                 <div class="form-group">
                     <label class="form-label required">Cliente</label>
@@ -164,16 +164,48 @@ $this->assign('header-title', 'Editar Reserva');
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label">Precio Pactado</label>
-                    <?= $this->Form->control('precio_pactado', ['type' => 'number', 'step' => '0.01', 'min' => 0, 'class' => 'form-input', 'label' => false, 'placeholder' => '0.00']) ?>
-                    <span class="form-help">Precio acordado en USD</span>
+                    <?= $this->Form->control('precio_pactado', ['type' => 'number', 'step' => '0.01', 'min' => 0, 'class' => 'form-input', 'label' => false, 'placeholder' => '0.00', 'id' => 'precio-pactado']) ?>
+                    <span class="form-help">Precio base acordado en USD</span>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">ITBMS Pactado</label>
-                    <?= $this->Form->control('itbms_pactado', ['type' => 'number', 'step' => '0.01', 'min' => 0, 'class' => 'form-input', 'label' => false, 'placeholder' => '0.00']) ?>
-                    <span class="form-help">Impuesto aplicado en USD</span>
+                    <label class="form-label">ITBMS (7%)</label>
+                    <?= $this->Form->control('itbms_pactado', ['type' => 'number', 'step' => '0.01', 'min' => 0, 'class' => 'form-input', 'label' => false, 'placeholder' => '0.00', 'readonly' => true, 'id' => 'itbms-pactado']) ?>
+                    <span class="form-help">Impuesto calculado automáticamente</span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Total</label>
+                    <input type="text" class="form-input" id="precio-total" readonly style="font-weight: 600; font-size: 1.1em; color: #2196f3;" placeholder="0.00">
+                    <span class="form-help">Precio total (Precio + ITBMS)</span>
                 </div>
             </div>
         </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const precioPactadoInput = document.getElementById('precio-pactado');
+    const itbmsPactadoInput = document.getElementById('itbms-pactado');
+    const precioTotalInput = document.getElementById('precio-total');
+    
+    function calcularITBMS() {
+        const precio = parseFloat(precioPactadoInput.value) || 0;
+        const itbms = precio * 0.07;
+        const total = precio + itbms;
+        
+        itbmsPactadoInput.value = itbms.toFixed(2);
+        precioTotalInput.value = total.toFixed(2);
+    }
+    
+    precioPactadoInput.addEventListener('input', calcularITBMS);
+    precioPactadoInput.addEventListener('change', calcularITBMS);
+    
+    // Calcular al cargar si ya hay un valor
+    if (precioPactadoInput.value) {
+        calcularITBMS();
+    }
+});
+</script>
 
         <div class="form-section">
             <h3 class="form-section-title">Estados y Observaciones</h3>
@@ -201,11 +233,7 @@ $this->assign('header-title', 'Editar Reserva');
 
         <div class="form-actions">
             <div class="form-actions-left">
-                <?= $this->Form->postLink(
-                    'Eliminar',
-                    ['action' => 'delete', $xservReserva->id],
-                    ['confirm' => '¿Está seguro de eliminar esta reserva?', 'class' => 'btn btn-danger']
-                ) ?>
+                <!-- Botón de eliminar movido fuera del formulario -->
             </div>
             <div class="form-actions-right">
                 <a href="<?= $this->Url->build(['action' => 'index']) ?>" class="btn btn-secondary">Cancelar</a>
@@ -214,5 +242,13 @@ $this->assign('header-title', 'Editar Reserva');
         </div>
         
         <?= $this->Form->end() ?>
+        
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--dark-lighter, #2a2a2a);">
+            <?= $this->Form->postLink(
+                'Eliminar Reserva',
+                ['action' => 'delete', $xservReserva->id],
+                ['confirm' => '¿Está seguro de eliminar esta reserva? Esta acción no se puede deshacer.', 'class' => 'btn btn-danger']
+            ) ?>
+        </div>
     </div>
 </div>

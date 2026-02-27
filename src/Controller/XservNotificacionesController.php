@@ -115,9 +115,25 @@ class XservNotificacionesController extends AppController
             }
             $this->Flash->error(__('The xserv notificacion could not be saved. Please, try again.'));
         }
-        $usuarios = $this->XservNotificaciones->Usuarios->find('list', limit: 200)->all();
-        $clientes = $this->XservNotificaciones->Clientes->find('list', limit: 200)->all();
-        $reservas = $this->XservNotificaciones->Reservas->find('list', limit: 200)->all();
+        $usuarios = $this->XservNotificaciones->Usuarios->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($usuario) {
+                return $usuario->username . ' - ' . $usuario->nombre;
+            }
+        ])->order(['username' => 'ASC'])->all();
+        
+        $clientes = $this->XservNotificaciones->Clientes->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($cliente) {
+                return $cliente->usuario->nombre ?? 'Sin nombre';
+            }
+        ])->contain(['XservUsuarios'])->order(['XservUsuarios.nombre' => 'ASC'])->all();
+        
+        $reservas = $this->XservNotificaciones->Reservas->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'codigo_reserva'
+        ])->order(['codigo_reserva' => 'ASC'])->all();
+        
         $this->set(compact('xservNotificacione', 'usuarios', 'clientes', 'reservas'));
     }
 
@@ -140,9 +156,25 @@ class XservNotificacionesController extends AppController
             }
             $this->Flash->error(__('The xserv notificacion could not be saved. Please, try again.'));
         }
-        $usuarios = $this->XservNotificaciones->Usuarios->find('list', limit: 200)->all();
-        $clientes = $this->XservNotificaciones->Clientes->find('list', limit: 200)->all();
-        $reservas = $this->XservNotificaciones->Reservas->find('list', limit: 200)->all();
+        $usuarios = $this->XservNotificaciones->Usuarios->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($usuario) {
+                return $usuario->username . ' - ' . $usuario->nombre;
+            }
+        ])->order(['username' => 'ASC'])->all();
+        
+        $clientes = $this->XservNotificaciones->Clientes->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($cliente) {
+                return $cliente->usuario->nombre ?? 'Sin nombre';
+            }
+        ])->contain(['XservUsuarios'])->order(['XservUsuarios.nombre' => 'ASC'])->all();
+        
+        $reservas = $this->XservNotificaciones->Reservas->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'codigo_reserva'
+        ])->order(['codigo_reserva' => 'ASC'])->all();
+        
         $this->set(compact('xservNotificacione', 'usuarios', 'clientes', 'reservas'));
     }
 

@@ -225,23 +225,13 @@ $this->assign('header-title', 'Gestion de Clientes');
         <?= $this->Form->create(null, ['type' => 'get']) ?>
         <div class="filters-row">
             <div class="filter-group">
-                <label class="filter-label">Buscar por nombre</label>
+                <label class="filter-label">Buscar por ID Fiscal</label>
                 <input
                     type="text"
-                    name="nombre"
+                    name="identificacion_fiscal"
                     class="search-input"
-                    placeholder="Nombre del cliente..."
-                    value="<?= h($filters['nombre'] ?? '') ?>"
-                >
-            </div>
-            <div class="filter-group">
-                <label class="filter-label">Buscar por correo</label>
-                <input
-                    type="text"
-                    name="correo"
-                    class="search-input"
-                    placeholder="Correo del cliente..."
-                    value="<?= h($filters['correo'] ?? '') ?>"
+                    placeholder="RUC/NIT del cliente..."
+                    value="<?= h($filters['identificacion_fiscal'] ?? '') ?>"
                 >
             </div>
             <div class="filter-group">
@@ -271,9 +261,8 @@ $this->assign('header-title', 'Gestion de Clientes');
             <thead>
                 <tr>
                     <th><?= $this->Paginator->sort('id', 'ID') ?></th>
-                    <th><?= $this->Paginator->sort('nombre', 'Nombre') ?></th>
-                    <th><?= $this->Paginator->sort('correo', 'Correo') ?></th>
-                    <th><?= $this->Paginator->sort('telefono', 'Telefono') ?></th>
+                    <th><?= $this->Paginator->sort('XservUsuarios.username', 'Usuario') ?></th>
+                    <th><?= $this->Paginator->sort('XservUsuarios.nombre', 'Nombre') ?></th>
                     <th><?= $this->Paginator->sort('identificacion_fiscal', 'ID Fiscal') ?></th>
                     <th><?= $this->Paginator->sort('idioma_preferido', 'Idioma') ?></th>
                     <th><?= $this->Paginator->sort('created_at', 'Creado') ?></th>
@@ -282,11 +271,15 @@ $this->assign('header-title', 'Gestion de Clientes');
             </thead>
             <tbody>
                 <?php foreach ($xservClientes as $cliente): ?>
+                <?php $usuario = $cliente->usuario ?? null; ?>
+                <?php $username = $usuario->username ?? null; ?>
+                <?php $nombre = $usuario->nombre ?? null; ?>
                 <tr>
                     <td><strong><?= h($cliente->id) ?></strong></td>
-                    <td><?= h($cliente->nombre) ?></td>
-                    <td><?= h($cliente->correo) ?></td>
-                    <td><?= h($cliente->telefono) ?></td>
+                    <td><?= $usuario && $username !== null && $username !== ''
+                        ? $this->Html->link($username, ['controller' => 'XservUsuarios', 'action' => 'view', $usuario->id])
+                        : 'Sin usuario' ?></td>
+                    <td><?= $nombre !== null && $nombre !== '' ? h($nombre) : 'Sin nombre' ?></td>
                     <td><?= h($cliente->identificacion_fiscal) ?></td>
                     <td><?= h($cliente->idioma_preferido) ?></td>
                     <td><?= h($cliente->created_at) ?></td>

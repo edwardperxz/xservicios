@@ -68,6 +68,21 @@ class XservReservasTable extends Table
             'className' => 'XservRutas',
         ]);
         
+        $this->hasMany('Asignaciones', [
+        'foreignKey' => 'reserva_id',
+        'className' => 'XservAsignaciones',
+        'dependent' => true,
+        ]);
+        $this->belongsTo('Choferes', [
+            'foreignKey' => 'chofer_id',
+            'className' => 'XservChoferes',
+            'joinType' => 'INNER',
+        ]);
+        $this->belongsTo('Vehiculos', [
+            'foreignKey' => 'vehiculo_id',
+            'className' => 'XservVehiculos',
+            'joinType' => 'INNER',
+        ]);
         // Generar código automático antes de guardar
         $this->getEventManager()->on('Model.beforeSave', function ($event, $entity, $options) {
             if ($entity->isNew() && empty($entity->codigo_reserva)) {

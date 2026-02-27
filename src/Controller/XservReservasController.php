@@ -350,8 +350,6 @@ class XservReservasController extends AppController
         
         $this->set(compact('xservReserva', 'clientes', 'servicios', 'rutas'));
 
-            debug($xservReserva->getErrors());
-            die();
             $this->Flash->error('Error al guardar la reserva.');
 
             $this->Flash->error('La reserva no pudo guardarse. Intente nuevamente.');

@@ -8,8 +8,9 @@ $userInitial = strtoupper(substr($userName, 0, 1));
 // Determinar URLs según el rol
 $isAdmin = $userRole === 'admin';
 $isOperador = $userRole === 'operador';
-$dashboardUrl = $isAdmin ? '/panel/admin' : '/panel/operador';
-$roleLabel = $isAdmin ? 'Administrador' : ($isOperador ? 'Operador' : ucfirst($userRole));
+$isChofer = $userRole === 'chofer';
+$dashboardUrl = $isAdmin ? '/panel/admin' : ($isOperador ? '/panel/operador' : '/xserv-ejecucion-viajes/chofer-panel');
+$roleLabel = $isAdmin ? 'Administrador' : ($isOperador ? 'Operador' : ($isChofer ? 'Chofer' : ucfirst($userRole)));
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -485,7 +486,7 @@ $roleLabel = $isAdmin ? 'Administrador' : ($isOperador ? 'Operador' : ucfirst($u
             <nav class="sidebar-nav">
                 <div class="nav-section">
                     <div class="nav-section-title">Principal</div>
-                    <a href="<?= $dashboardUrl ?>" class="nav-item <?= in_array($this->request->getParam('action'), ['adminPanel', 'operadorPanel']) ? 'active' : '' ?>">
+                    <a href="<?= $dashboardUrl ?>" class="nav-item <?= in_array($this->request->getParam('action'), ['adminPanel', 'operadorPanel', 'choferPanel']) ? 'active' : '' ?>">
                         <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                         </svg>
@@ -493,6 +494,19 @@ $roleLabel = $isAdmin ? 'Administrador' : ($isOperador ? 'Operador' : ucfirst($u
                     </a>
                 </div>
 
+                <?php if ($isChofer): ?>
+                <div class="nav-section">
+                    <div class="nav-section-title">Mis Servicios</div>
+                    <a href="/xserv-ejecucion-viajes/chofer-panel" class="nav-item <?= $this->request->getParam('action') === 'choferPanel' ? 'active' : '' ?>">
+                        <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+                        </svg>
+                        Servicios Asignados
+                    </a>
+                </div>
+                <?php endif; ?>
+
+                <?php if (!$isChofer): ?>
                 <div class="nav-section">
                     <div class="nav-section-title">Gestión</div>
                     <?php if ($isAdmin): ?>
@@ -522,6 +536,7 @@ $roleLabel = $isAdmin ? 'Administrador' : ($isOperador ? 'Operador' : ucfirst($u
                         Clientes
                     </a>
                 </div>
+                <?php endif; ?>
 
                 <?php if ($isAdmin): ?>
                 <div class="nav-section">
@@ -548,6 +563,7 @@ $roleLabel = $isAdmin ? 'Administrador' : ($isOperador ? 'Operador' : ucfirst($u
                 </div>
                 <?php endif; ?>
 
+                <?php if (!$isChofer): ?>
                 <div class="nav-section">
                     <div class="nav-section-title">Operaciones</div>
                     <a href="/xserv-reservas" class="nav-item <?= $this->request->getParam('controller') === 'XservReservas' ? 'active' : '' ?>">
@@ -575,7 +591,9 @@ $roleLabel = $isAdmin ? 'Administrador' : ($isOperador ? 'Operador' : ucfirst($u
                         Incidencias
                     </a>
                 </div>
+                <?php endif; ?>
 
+                <?php if (!$isChofer): ?>
                 <div class="nav-section">
                     <div class="nav-section-title">Comunicación</div>
                     <a href="/xserv-notificaciones" class="nav-item <?= $this->request->getParam('controller') === 'XservNotificaciones' ? 'active' : '' ?>">
@@ -591,6 +609,7 @@ $roleLabel = $isAdmin ? 'Administrador' : ($isOperador ? 'Operador' : ucfirst($u
                         Valoraciones
                     </a>
                 </div>
+                <?php endif; ?>
 
                 <?php if ($isAdmin ): ?>
                 <div class="nav-section">

@@ -457,6 +457,7 @@ class XservUsuariosController extends AppController
     public function changePassword()
     {
         $this->Authorization->skipAuthorization(); // temporal si no quieres autorización complicada
+        $this->viewBuilder()->disableAutoLayout();
 
         $user = $this->Authentication->getIdentity();
         if (!$user) {

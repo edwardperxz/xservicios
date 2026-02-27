@@ -571,6 +571,306 @@ $emailjsTemplateAutoReply = getenv('template_id_autoreply') ?: '';
       -webkit-appearance: none;
       margin: 0;
     }
+
+    /* ===================== DESTINOS TURISTICOS CHIRIQUI ===================== */
+    .destinations-section {
+      padding: 4rem 3rem;
+      background: var(--dark-bg);
+    }
+
+    .destinations-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .destinations-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 400;
+      color: var(--text-white);
+      margin-bottom: 0.75rem;
+    }
+
+    .destinations-header h2 span {
+      color: var(--gold);
+      font-style: italic;
+    }
+
+    .destinations-header p {
+      color: var(--text-gray);
+      font-size: 1rem;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .destinations-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .destination-card {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      height: 320px;
+      cursor: pointer;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .destination-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(201, 169, 98, 0.2);
+    }
+
+    .destination-card.large {
+      grid-column: span 2;
+      height: 380px;
+    }
+
+    .destination-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .destination-card:hover img {
+      transform: scale(1.08);
+    }
+
+    .destination-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.1) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      transition: background 0.3s ease;
+    }
+
+    .destination-card:hover .destination-overlay {
+      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.2) 100%);
+    }
+
+    .destination-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(201, 169, 98, 0.9);
+      color: var(--dark-bg);
+      padding: 0.3rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      width: fit-content;
+      margin-bottom: 0.75rem;
+    }
+
+    .destination-tag svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .destination-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--text-white);
+      margin-bottom: 0.5rem;
+    }
+
+    .destination-card.large .destination-name {
+      font-size: 1.85rem;
+    }
+
+    .destination-desc {
+      color: var(--text-gray);
+      font-size: 0.85rem;
+      line-height: 1.5;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+    }
+
+    .destination-card:hover .destination-desc {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .destination-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding: 0.6rem 1.2rem;
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 0.8rem;
+      font-weight: 500;
+      border-radius: 6px;
+      text-decoration: none;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+    }
+
+    .destination-card:hover .destination-btn {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .destination-btn:hover {
+      background: var(--gold);
+      color: var(--dark-bg);
+    }
+
+    .destination-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* Segunda fila de destinos */
+    .destinations-row-2 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 1.5rem auto 0;
+    }
+
+    .destinations-row-2 .destination-card {
+      height: 280px;
+    }
+
+    .destinations-row-2 .destination-card.large {
+      grid-column: span 1;
+      height: 280px;
+    }
+
+    /* Seccion de info destacada */
+    .chiriqui-highlight {
+      padding: 3rem;
+      background: linear-gradient(135deg, rgba(201, 169, 98, 0.08), transparent);
+      border-top: 1px solid var(--dark-lighter);
+      border-bottom: 1px solid var(--dark-lighter);
+      margin-top: 2rem;
+    }
+
+    .highlight-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .highlight-content h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--text-white);
+      margin-bottom: 1rem;
+    }
+
+    .highlight-content h3 span {
+      color: var(--gold);
+    }
+
+    .highlight-content p {
+      color: var(--text-gray);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .highlight-features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .highlight-feature {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--text-white);
+      font-size: 0.9rem;
+    }
+
+    .highlight-feature svg {
+      width: 20px;
+      height: 20px;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .highlight-image {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      height: 350px;
+    }
+
+    .highlight-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .highlight-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 2px solid var(--gold);
+      border-radius: 12px;
+      opacity: 0.5;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .destinations-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .destination-card.large {
+        grid-column: span 2;
+      }
+      .destinations-row-2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .highlight-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .destinations-section {
+        padding: 3rem 1.5rem;
+      }
+      .destinations-header h2 {
+        font-size: 1.75rem;
+      }
+      .destinations-grid,
+      .destinations-row-2 {
+        grid-template-columns: 1fr;
+      }
+      .destination-card,
+      .destination-card.large,
+      .destinations-row-2 .destination-card {
+        grid-column: span 1;
+        height: 280px;
+      }
+      .highlight-features {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
@@ -660,6 +960,147 @@ $emailjsTemplateAutoReply = getenv('template_id_autoreply') ?: '';
         </svg>
         <h3 class="feature-title" data-i18n="homePublic.feature3Title">Calidad Garantizada</h3>
         <p class="feature-description" data-i18n="homePublic.feature3Desc">Vehículos de lujo mantenidos en excelentes condiciones.</p>
+      </div>
+    </section>
+
+    <!-- Destinos Turisticos de Chiriqui -->
+    <section class="destinations-section" id="destinos">
+      <div class="destinations-header">
+        <h2>Descubre <span>Chiriqui</span></h2>
+        <p>La tierra de la eterna primavera te espera. Explora los destinos mas impresionantes del occidente de Panama con nuestro servicio de transporte de lujo.</p>
+      </div>
+
+      <!-- Primera fila: 3 columnas con una grande -->
+      <div class="destinations-grid">
+        <div class="destination-card large">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Telephoto_shot_of_Volcan_Baru_as_seen_from_the_town_of_Volcan.jpg/1280px-Telephoto_shot_of_Volcan_Baru_as_seen_from_the_town_of_Volcan.jpg" alt="Volcan Baru, Chiriqui">
+          <div class="destination-overlay">
+            <span class="destination-tag">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              Destino Emblematico
+            </span>
+            <h3 class="destination-name">Volcan Baru</h3>
+            <p class="destination-desc">El punto mas alto de Panama (3,475 m). Desde su cumbre puedes ver ambos oceanos en un dia despejado. Ideal para senderismo y avistamiento de estrellas.</p>
+            <a href="/services?destination=volcan-baru" class="destination-btn">
+              Reservar Traslado
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="destination-card">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/56/DirkvdM_sendero_quetzales.jpg" alt="Boquete, Chiriqui">
+          <div class="destination-overlay">
+            <span class="destination-tag">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              Mas Popular
+            </span>
+            <h3 class="destination-name">Boquete</h3>
+            <p class="destination-desc">Pueblo de montana famoso por su cafe de clase mundial, clima primaveral y el Sendero de los Quetzales.</p>
+            <a href="/services?destination=boquete" class="destination-btn">
+              Reservar Traslado
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Segunda fila: 4 columnas iguales -->
+      <div class="destinations-row-2">
+        <div class="destination-card">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Los_Cangilones_de_Gualaca.png/1280px-Los_Cangilones_de_Gualaca.png" alt="Los Cangilones de Gualaca">
+          <div class="destination-overlay">
+            <span class="destination-tag">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              Aventura
+            </span>
+            <h3 class="destination-name">Los Cangilones</h3>
+            <p class="destination-desc">Canon natural de aguas cristalinas perfecto para nadar y saltar desde las rocas.</p>
+            <a href="/services?destination=cangilones" class="destination-btn">
+              Reservar
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="destination-card">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/7/76/Playas_Las_Lajas_Chiriqui.jpg" alt="Playa La Barqueta">
+          <div class="destination-overlay">
+            <span class="destination-tag">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+              Playa
+            </span>
+            <h3 class="destination-name">Playa La Barqueta</h3>
+            <p class="destination-desc">Extensa playa de arena oscura ideal para surfear y observar tortugas marinas.</p>
+            <a href="/services?destination=la-barqueta" class="destination-btn">
+              Reservar
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="destination-card">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Boca_Chica_Chiriqu%C3%ADpma.jpg" alt="Boca Chica, Chiriqui">
+          <div class="destination-overlay">
+            <span class="destination-tag">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Islas
+            </span>
+            <h3 class="destination-name">Boca Chica</h3>
+            <p class="destination-desc">Puerta de entrada al Parque Nacional Marino Golfo de Chiriqui y sus islas paradisiacas.</p>
+            <a href="/services?destination=boca-chica" class="destination-btn">
+              Reservar
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="destination-card">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Cerro_Punta_aerial.jpg/1280px-Cerro_Punta_aerial.jpg" alt="Cerro Punta, Chiriqui">
+          <div class="destination-overlay">
+            <span class="destination-tag">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg>
+              Montana
+            </span>
+            <h3 class="destination-name">Cerro Punta</h3>
+            <p class="destination-desc">El pueblo mas alto de Panama, conocido por sus fresas, hortalizas y clima fresco todo el ano.</p>
+            <a href="/services?destination=cerro-punta" class="destination-btn">
+              Reservar
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seccion destacada sobre Chiriqui -->
+      <div class="chiriqui-highlight">
+        <div class="highlight-container">
+          <div class="highlight-content">
+            <h3>Tu aventura en <span>Chiriqui</span> comienza aqui</h3>
+            <p>Chiriqui es conocida como la "Tierra de los Valles y las Flores", ofreciendo una diversidad unica de paisajes: desde playas virgenes en el Pacifico hasta bosques nubosos en las tierras altas. Con Xservicios, viaja con la comodidad y seguridad que mereces.</p>
+            <div class="highlight-features">
+              <div class="highlight-feature">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Conductores locales expertos</span>
+              </div>
+              <div class="highlight-feature">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Vehiculos climatizados</span>
+              </div>
+              <div class="highlight-feature">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Rutas personalizadas</span>
+              </div>
+              <div class="highlight-feature">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Servicio 24/7</span>
+              </div>
+            </div>
+          </div>
+          <div class="highlight-image">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/9f/Playa_Blanca_Resort.jpg" alt="Playa Blanca, Chiriqui">
+          </div>
+        </div>
       </div>
     </section>
 

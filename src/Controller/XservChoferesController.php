@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\ORM\TableRegistry;
+
 /**
  * XservChoferes Controller
  *
@@ -269,9 +271,9 @@ class XservChoferesController extends AppController
         
         $xservChofere = $this->XservChoferes->get($id, contain: ['Usuarios']);
         
-        $this->loadModel('XservAsignaciones');
+        $asignacionesTable = TableRegistry::getTableLocator()->get('XservAsignaciones');
         
-        $query = $this->XservAsignaciones->find()
+        $query = $asignacionesTable->find()
             ->where(['chofer_id' => $id])
             ->contain(['Reservas', 'Vehiculos'])
             ->order(['created_at' => 'DESC']);
@@ -294,19 +296,19 @@ class XservChoferesController extends AppController
         
         $xservChofere = $this->XservChoferes->get($id, contain: ['Usuarios']);
         
-        $this->loadModel('XservValoraciones');
-        $this->loadModel('XservAsignaciones');
-        $this->loadModel('XservReservas');
+        $valoracionesTable = TableRegistry::getTableLocator()->get('XservValoraciones');
+        $asignacionesTable = TableRegistry::getTableLocator()->get('XservAsignaciones');
+        $reservasTable = TableRegistry::getTableLocator()->get('XservReservas');
         
         // Get all assignments for this driver
-        $asignacionesIds = $this->XservAsignaciones->find()
+        $asignacionesIds = $asignacionesTable->find()
             ->where(['chofer_id' => $id])
             ->select(['reserva_id'])
             ->extract('reserva_id')
             ->toList();
         
         // Get ratings for those reservations
-        $query = $this->XservValoraciones->find()
+        $query = $valoracionesTable->find()
             ->whereInList('reserva_id', $asignacionesIds)
             ->contain(['Reservas'])
             ->order(['created_at' => 'DESC']);
@@ -342,40 +344,40 @@ class XservChoferesController extends AppController
         
         $xservChofere = $this->XservChoferes->get($id, contain: ['Usuarios']);
         
-        $this->loadModel('XservAsignaciones');
-        $this->loadModel('XservValoraciones');
-        $this->loadModel('XservEjecucionViajes');
+        $asignacionesTable = TableRegistry::getTableLocator()->get('XservAsignaciones');
+        $valoracionesTable = TableRegistry::getTableLocator()->get('XservValoraciones');
+        $ejecucionViajesTable = TableRegistry::getTableLocator()->get('XservEjecucionViajes');
         
         // Total trips
-        $totalViajes = $this->XservAsignaciones->find()
+        $totalViajes = $asignacionesTable->find()
             ->where(['chofer_id' => $id])
             ->count();
         
         // Completed trips
-        $viajuesCompletados = $this->XservAsignaciones->find()
+        $viajuesCompletados = $asignacionesTable->find()
             ->where(['chofer_id' => $id, 'estado_asignacion' => 'finalizada'])
             ->count();
         
         // Current assignments
-        $asignacionesActuales = $this->XservAsignaciones->find()
+        $asignacionesActuales = $asignacionesTable->find()
             ->where(['chofer_id' => $id, 'estado_asignacion' => 'en_curso'])
             ->contain(['Reservas', 'Vehiculos'])
             ->all();
         
         // Get ratings info
-        $asignacionesIds = $this->XservAsignaciones->find()
+        $asignacionesIds = $asignacionesTable->find()
             ->where(['chofer_id' => $id])
             ->select(['reserva_id'])
             ->extract('reserva_id')
             ->toList();
         
-        $promediCalificacion = $this->XservValoraciones->find()
-            ->select(['promedio' => $this->XservValoraciones->find()->func('AVG', ['calificacion'])])
+        $promediCalificacion = $valoracionesTable->find()
+            ->select(['promedio' => $valoracionesTable->find()->func('AVG', ['calificacion'])])
             ->whereInList('reserva_id', $asignacionesIds)
             ->first()
             ->promedio ?? 0;
         
-        $totalValoraciones = $this->XservValoraciones->find()
+        $totalValoraciones = $valoracionesTable->find()
             ->whereInList('reserva_id', $asignacionesIds)
             ->count();
         

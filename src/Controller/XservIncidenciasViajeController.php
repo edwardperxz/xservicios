@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 namespace App\Controller;
-
+use Cake\ORM\TableRegistry;
 /**
  * XservIncidenciasViaje Controller
  *
@@ -241,4 +241,158 @@ class XservIncidenciasViajeController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    /**
+     * Reportar incidencia - API endpoint para choferes
+     *
+     * @return \Cake\Http\Response|null JSON response
+     */
+    public function reportarIncidencia()
+    {
+        $this->request->allowMethod(['post']);
+        $this->viewBuilder()->setClassName('Json');
+        
+        $user = $this->Authentication->getIdentity();
+        
+        if (!$user || $user->rol !== 'chofer') {
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode(['success' => false, 'message' => 'No autorizado']));
+        }
+
+        $data = $this->request->getData();
+        $ejecucionId = $data['ejecucion_id'] ?? null;
+        $tipoIncidencia = $data['tipo_incidencia'] ?? null;
+        $descripcion = $data['descripcion'] ?? '';
+        $severidad = $data['severidad'] ?? 'baja';
+        $latitud = $data['latitud_incidencia'] ?? null;
+        $longitud = $data['longitud_incidencia'] ?? null;
+
+        if (!$ejecucionId || !$tipoIncidencia || !$latitud || !$longitud) {
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode(['success' => false, 'message' => 'Datos incompletos']));
+        }
+
+        // Verificar que la ejecución pertenece al chofer
+        $choferesTable = TableRegistry::getTableLocator()->get('XservChoferes');
+        $chofer = $choferesTable->find()
+            ->where(['usuario_id' => $user->id])
+            ->first();
+
+        if (!$chofer) {
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode(['success' => false, 'message' => 'Chofer no encontrado']));
+        }
+
+        $ejecucionesTable = TableRegistry::getTableLocator()->get('XservEjecucionViajes');
+        $ejecucion = $ejecucionesTable->get($ejecucionId, ['contain' => ['Asignacions']]);
+        
+        if ($ejecucion->asignacion->chofer_id != $chofer->id) {
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode(['success' => false, 'message' => 'Ejecución no pertenece a este chofer']));
+        }
+
+        // Crear incidencia
+        $incidencia = $this->XservIncidenciasViaje->newEmptyEntity();
+        $incidenciaData = [
+            'ejecucion_id' => $ejecucionId,
+            'tipo_incidencia' => $tipoIncidencia,
+            'descripcion' => $descripcion,
+            'latitud_incidencia' => $latitud,
+            'longitud_incidencia' => $longitud,
+            'severidad' => $severidad,
+            'resuelto' => 0
+        ];
+        
+        $incidencia = $this->XservIncidenciasViaje->patchEntity($incidencia, $incidenciaData);
+        
+        if ($this->XservIncidenciasViaje->save($incidencia)) {
+            // Actualizar estado de ejecución si la severidad es crítica
+            if ($severidad === 'critica') {
+                $ejecucion->estado_ejecucion = 'detenido_incidencia';
+                $this->XservEjecucionViajes->save($ejecucion);
+            }
+            
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode(['success' => true, 'message' => 'Incidencia reportada correctamente', 'incidencia_id' => $incidencia->id]));
+        } else {
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode(['success' => false, 'message' => 'Error al reportar incidencia']));
+        }
+    }
+
+    /**
+     * Resolver incidencia - API endpoint para choferes
+     *
+     * @return \Cake\Http\Response|null JSON response
+     */
+    public function resolverIncidencia()
+    {
+        $this->request->allowMethod(['post']);
+        $this->viewBuilder()->setClassName('Json');
+        
+        $user = $this->Authentication->getIdentity();
+        
+        if (!$user || $user->rol !== 'chofer') {
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode(['success' => false, 'message' => 'No autorizado']));
+        }
+
+        $data = $this->request->getData();
+        $incidenciaId = $data['incidencia_id'] ?? null;
+
+        if (!$incidenciaId) {
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode(['success' => false, 'message' => 'ID de incidencia requerido']));
+        }
+
+        // Verificar que la incidencia pertenece al chofer
+        $choferesTable = TableRegistry::getTableLocator()->get('XservChoferes');
+        $chofer = $choferesTable->find()
+            ->where(['usuario_id' => $user->id])
+            ->first();
+
+        if (!$chofer) {
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode(['success' => false, 'message' => 'Chofer no encontrado']));
+        }
+
+        $incidencia = $this->XservIncidenciasViaje->get($incidenciaId, ['contain' => ['Ejecucions' => ['Asignacions']]]);
+        
+        if ($incidencia->ejecucion->asignacion->chofer_id != $chofer->id) {
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode(['success' => false, 'message' => 'Incidencia no pertenece a este chofer']));
+        }
+
+        // Marcar como resuelta
+        $incidencia->resuelto = 1;
+        
+        if ($this->XservIncidenciasViaje->save($incidencia)) {
+            // Si era crítica, restaurar estado de ejecución
+            if ($incidencia->severidad === 'critica' && $incidencia->ejecucion->estado_ejecucion === 'detenido_incidencia') {
+                $ejecucionesTable = TableRegistry::getTableLocator()->get('XservEjecucionViajes');
+                $ejecucion = $ejecucionesTable->get($incidencia->ejecucion_id);
+                $ejecucion->estado_ejecucion = 'en_progreso';
+                $ejecucionesTable->save($ejecucion);
+            }
+            
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode(['success' => true, 'message' => 'Incidencia resuelta correctamente']));
+        } else {
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode(['success' => false, 'message' => 'Error al resolver incidencia']));
+        }
+    }
 }
+

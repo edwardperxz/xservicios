@@ -61,16 +61,18 @@ class LocaleMiddleware implements MiddlewareInterface
         
         // Guardar locale en cookie para siguiente visita (30 días)
         if ($locale !== 'es') {
-            $response = $response->withCookie(new Cookie(
+            $cookie = new Cookie(
                 'locale',
                 $locale,
                 new \DateTime('+30 days'),
                 '/',
                 null,
-                false,
-                false,
+                false, // secure
+                false, // httpOnly
                 null
-            ));
+            );
+            
+            $response = $response->withAddedHeader('Set-Cookie', $cookie->toHeaderValue());
         }
         
         return $response;

@@ -81,6 +81,8 @@
       this.userAvatarMobile = document.getElementById('xservUserAvatarMobile');
       this.userNameMobile = document.getElementById('xservUserNameMobile');
       this.logoutBtnMobile = document.getElementById('xservLogoutBtnMobile');
+      this.settingsLink = document.getElementById('xservSettingsLink');
+      this.settingsLinkMobile = document.getElementById('xservSettingsLinkMobile');
 
       // Si encontramos al menos el botón de login O el perfil de usuario, podemos continuar
       return !!(this.loginBtn || this.userProfileWrapper || this.loginBtnMobile || this.userProfileMobile);
@@ -192,6 +194,22 @@
 
       // Actualizar información del usuario
       this.updateUserInfo(user);
+      this.updateRoleAccess(user);
+    }
+
+    /**
+     * Oculta accesos segun rol
+     */
+    updateRoleAccess(user) {
+      const isOperador = user && user.rol === 'operador';
+
+      if (this.settingsLink) {
+        this.settingsLink.classList.toggle('is-hidden', isOperador);
+      }
+
+      if (this.settingsLinkMobile) {
+        this.settingsLinkMobile.classList.toggle('is-hidden', isOperador);
+      }
     }
 
     /**

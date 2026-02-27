@@ -592,7 +592,7 @@ $roleLabel = $isAdmin ? 'Administrador' : ($isOperador ? 'Operador' : ucfirst($u
                     </a>
                 </div>
 
-                <?php if ($isAdmin): ?>
+                <?php if ($isAdmin ): ?>
                 <div class="nav-section">
                     <div class="nav-section-title">Configuración</div>
                     <a href="/xserv-configuraciones" class="nav-item <?= $this->request->getParam('controller') === 'XservConfiguraciones' ? 'active' : '' ?>">

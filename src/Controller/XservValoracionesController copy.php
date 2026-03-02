@@ -1,0 +1,225 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Controller;
+
+/**
+ * XservValoraciones Controller
+ *
+ * @property \App\Model\Table\XservValoracionesTable $XservValoraciones
+ */
+class XservValoracionesController extends AppController
+{
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+        $this->Authorization->skipAuthorization();
+        
+        // Usar layout admin si el usuario es admin
+        $user = $this->Authentication->getIdentity();
+        if ($user && $user->rol === 'admin') {
+            $this->viewBuilder()->setLayout('admin');
+        }
+    }
+
+    /**
+     * Index method
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function index()
+    {
+        $this->Authorization->skipAuthorization();
+        $user = $this->Authentication->getIdentity();
+        $isAdmin = $user && $user->rol === 'admin';
+        $filters = $this->request->getQuery();
+
+        $query = $this->XservValoraciones->find()
+            ->contain(['XservReservas']);
+
+        if ($filters['mostrar_en_web'] ?? '' !== '') {
+            $query->where(['mostrar_en_web' => (int)$filters['mostrar_en_web']]);
+        }
+
+        if (!empty($filters['estado_moderacion'])) {
+            $query->where(['estado_moderacion' => $filters['estado_moderacion']]);
+        }
+
+        $xservValoraciones = $this->paginate($query);
+
+        // Si es una petición JSON/AJAX
+        if ($this->request->is('json') || $this->request->getHeader('X-Requested-With') === 'XMLHttpRequest') {
+            $this->response = $this->response->withType('application/json');
+            return $this->response->withStringBody(json_encode([
+                'xservValoraciones' => $xservValoraciones->toArray()
+            ]));
+        }
+
+        // Obtener valores distinctos para filtros
+        $estadosModeracion = $this->XservValoraciones->find()
+            ->select(['estado_moderacion'])
+            ->distinct(['estado_moderacion'])
+            ->where(['estado_moderacion IS NOT' => null])
+            ->order(['estado_moderacion' => 'ASC'])
+            ->all()
+            ->extract('estado_moderacion')
+            ->toList();
+
+        $this->set(compact('xservValoraciones', 'filters', 'estadosModeracion'));
+
+        if ($isAdmin) {
+            $this->render('admin_index');
+        }
+    }
+
+    /**
+     * Admin index method
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function adminIndex()
+    {
+        $this->Authorization->skipAuthorization();
+
+        $user = $this->Authentication->getIdentity();
+        if (!$user || $user->rol !== 'admin') {
+            return $this->redirect(['controller' => 'XservUsuarios', 'action' => 'profile']);
+        }
+
+        $this->viewBuilder()->setLayout('admin');
+        $filters = $this->request->getQuery();
+
+        $query = $this->XservValoraciones->find()
+            ->contain(['XservReservas']);
+
+        if ($filters['mostrar_en_web'] ?? '' !== '') {
+            $query->where(['mostrar_en_web' => (int)$filters['mostrar_en_web']]);
+        }
+
+        if (!empty($filters['estado_moderacion'])) {
+            $query->where(['estado_moderacion' => $filters['estado_moderacion']]);
+        }
+
+        $xservValoraciones = $this->paginate($query);
+
+        // Obtener valores distinctos para filtros
+        $estadosModeracion = $this->XservValoraciones->find()
+            ->select(['estado_moderacion'])
+            ->distinct(['estado_moderacion'])
+            ->where(['estado_moderacion IS NOT' => null])
+            ->order(['estado_moderacion' => 'ASC'])
+            ->all()
+            ->extract('estado_moderacion')
+            ->toList();
+
+        $this->set(compact('xservValoraciones', 'filters', 'estadosModeracion'));
+        $this->render('admin_index');
+    }
+
+    /**
+     * View method
+     *
+    * @param string|null $id Xserv Valoracion id.
+     * @return \Cake\Http\Response|null|void Renders view
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function view(?string $id = null)
+    {
+        $this->Authorization->skipAuthorization();
+        $xservValoracione = $this->XservValoraciones->get($id, contain: ['XservReservas']);
+        $this->set(compact('xservValoracione'));
+    }
+
+    /**
+     * Add method
+     *
+     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
+     */
+    public function add()
+    {
+        $this->Authorization->skipAuthorization();
+        $xservValoracione = $this->XservValoraciones->newEmptyEntity();
+        if ($this->request->is('post')) {
+            $xservValoracione = $this->XservValoraciones->patchEntity($xservValoracione, $this->request->getData());
+            if ($this->XservValoraciones->save($xservValoracione)) {
+                // Si es una petición AJAX, retornar JSON
+                if ($this->request->is('json') || $this->request->getHeader('X-Requested-With') === 'XMLHttpRequest') {
+                    $this->response = $this->response->withType('application/json');
+                    return $this->response->withStringBody(json_encode([
+                        'success' => true,
+                        'message' => 'Valoración guardada correctamente',
+                        'data' => $xservValoracione
+                    ]));
+                }
+                
+                $this->Flash->success(__('The xserv valoracion has been saved.'));
+                return $this->redirect(['action' => 'index']);
+            }
+            
+            // Si es una petición AJAX, retornar error JSON
+            if ($this->request->is('json') || $this->request->getHeader('X-Requested-With') === 'XMLHttpRequest') {
+                $this->response = $this->response->withType('application/json')->withStatus(400);
+                return $this->response->withStringBody(json_encode([
+                    'success' => false,
+                    'message' => 'Error al guardar la valoración',
+                    'errors' => $xservValoracione->getErrors()
+                ]));
+            }
+            
+            $this->Flash->error(__('The xserv valoracion could not be saved. Please, try again.'));
+        }
+        $xservReservas = $this->XservValoraciones->XservReservas->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'codigo_reserva'
+        ])->order(['codigo_reserva' => 'ASC'])->all();
+        $this->set(compact('xservValoracione', 'xservReservas'));
+    }
+
+    /**
+     * Edit method
+     *
+    * @param string|null $id Xserv Valoracion id.
+     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function edit(?string $id = null)
+    {
+        $this->Authorization->skipAuthorization();
+        $xservValoracione = $this->XservValoraciones->get($id, contain: []);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $xservValoracione = $this->XservValoraciones->patchEntity($xservValoracione, $this->request->getData());
+            if ($this->XservValoraciones->save($xservValoracione)) {
+                $this->Flash->success(__('The xserv valoracion has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The xserv valoracion could not be saved. Please, try again.'));
+        }
+        $xservReservas = $this->XservValoraciones->XservReservas->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'codigo_reserva'
+        ])->order(['codigo_reserva' => 'ASC'])->all();
+        $this->set(compact('xservValoracione', 'xservReservas'));
+    }
+
+    /**
+     * Delete method
+     *
+    * @param string|null $id Xserv Valoracion id.
+     * @return \Cake\Http\Response|null Redirects to index.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function delete(?string $id = null)
+    {
+        $this->Authorization->skipAuthorization();
+        $this->request->allowMethod(['post', 'delete']);
+        $xservValoracione = $this->XservValoraciones->get($id);
+        if ($this->XservValoraciones->delete($xservValoracione)) {
+            $this->Flash->success(__('The xserv valoracion has been deleted.'));
+        } else {
+            $this->Flash->error(__('The xserv valoracion could not be deleted. Please, try again.'));
+        }
+
+        return $this->redirect(['action' => 'index']);
+    }
+}

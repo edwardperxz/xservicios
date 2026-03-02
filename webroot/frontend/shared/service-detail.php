@@ -680,7 +680,8 @@
     const renderService = () => {
       if (!servicioData) return;
 
-      const t = window.translate ? window.translate : (key) => key;
+      // Usar la función de traducción global que está siempre disponible
+      const t = window.t || window.__translate || ((key) => key);
       
       const servicio = servicioData;
       const status = String(servicio.estado || '').toLowerCase();
@@ -827,7 +828,8 @@
     // Escuchar cambios de idioma para re-renderizar los datos del servicio
     window.addEventListener('languageChanged', renderService);
   </script>
-  <script src="/js/header-loader.js"></script>
-  <script src="/js/header-dynamic.js"></script>
+  <script src="/js/header-loader.js" defer></script>
+  <script src="/js/header-dynamic.js" defer></script>
+  <script src="/js/i18n.js" defer></script>
 </body>
 </html>

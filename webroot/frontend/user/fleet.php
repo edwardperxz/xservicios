@@ -958,7 +958,7 @@
 
   <!-- Hero Section -->
   <section class="hero-section">
-    <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1600&h=900&fit=crop" alt="Transporte de pasajeros" class="hero-bg">
+    <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1600&h=900&fit=crop" alt="Transporte de pasajeros" class="hero-bg" loading="lazy" decoding="async">
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <span class="hero-subtitle" data-i18n="fleet.heroSubtitle">Transporte Premium</span>
@@ -1001,7 +1001,7 @@
             endif;
             ?>
             <?php if ($imagenVehiculo): ?>
-              <img src="<?= $imagenVehiculo ?>" alt="<?= h($vehiculo->nombre_unidad) ?>" style="width: 100%; height: 200px; object-fit: cover;">
+              <img src="<?= $imagenVehiculo ?>" loading="lazy" decoding="async" alt="<?= h($vehiculo->nombre_unidad) ?>" style="width: 100%; height: 200px; object-fit: cover;">
             <?php else: ?>
               <div style="width: 100%; height: 200px; background: #2a2a2a; display: flex; align-items: center; justify-content: center; color: #a0a0a0;">Sin imagen</div>
             <?php endif; ?>
@@ -1025,7 +1025,7 @@
         <?php foreach ($choferes as $index => $chofer): ?>
           <div class="driver-card <?= ($index >= 4) ? 'hidden' : '' ?>">
             <?php if (!empty($chofer->foto_url)): ?>
-              <img src="<?= h($chofer->foto_url) ?>" alt="<?= h($chofer->usuario->nombre ?? 'Chofer') ?>" class="driver-image" style="width: 100%; height: 250px; object-fit: cover;">
+              <img src="<?= h($chofer->foto_url) ?>" loading="lazy" decoding="async" alt="<?= h($chofer->usuario->nombre ?? 'Chofer') ?>" class="driver-image" style="width: 100%; height: 250px; object-fit: cover;">
             <?php else: ?>
               <div class="driver-image" style="width: 100%; height: 250px; background: #2a2a2a; display: flex; align-items: center; justify-content: center; color: #a0a0a0;">Sin foto</div>
             <?php endif; ?>
@@ -1195,9 +1195,9 @@
       }
     }
   </script>
-  <script src="/js/i18n.js"></script>
-  <script src="/js/header-loader.js"></script>
-  <script src="/js/header-dynamic.js"></script>
+  <script src="/js/i18n.js" defer></script>
+  <script src="/js/header-loader.js" defer></script>
+  <script src="/js/header-dynamic.js" defer></script>
   <script>
     (function preselectService() {
       const params = new URLSearchParams(window.location.search);

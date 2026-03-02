@@ -27,71 +27,118 @@ class XservReservasController extends AppController
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->XservServicios = $this->getTableLocator()->get('XservServicios');
+        $this->XservRutas = $this->getTableLocator()->get('XservRutas');
+        $this->XservAsignaciones = $this->getTableLocator()->get('XservAsignaciones');
+
+
+    }
+
     public function index()
     {
         $this->Authorization->skipAuthorization();
-        
+
         $user = $this->Authentication->getIdentity();
         $isAdmin = $user && $user->rol === 'admin';
-        
+
+        // --- CONSULTA BASE ---
         $query = $this->XservReservas->find()
-            ->contain(['Clientes' => ['XservUsuarios'], 'Servicios', 'Rutas']);
-        
+            ->contain([
+                'Clientes' => ['XservUsuarios'],
+                'Servicios',
+                'Rutas',
+                'Asignaciones' => [
+                    'Choferes',
+                    'Vehiculos'
+                ]
+            ])
+            ->order(['XservReservas.created_at' => 'DESC']);
+
+        // --- FILTROS ---
         $filters = $this->request->getQuery();
-        
+
+        if (!empty($filters['cliente_id'])) {
+            $query->where(['XservReservas.cliente_id' => $filters['cliente_id']]);
+        }
+
         if (!empty($filters['estado'])) {
             $query->where(['XservReservas.estado' => $filters['estado']]);
         }
-        
+
         if (!empty($filters['codigo'])) {
-            $query->where(['codigo_reserva LIKE' => '%' . $filters['codigo'] . '%']);
+            $query->where(['XservReservas.codigo_reserva LIKE' => '%' . $filters['codigo'] . '%']);
         }
         
         if (!empty($filters['cliente_id'])) {
             $query->where(['XservReservas.cliente_id' => $filters['cliente_id']]);
         }
         
+
+        // --- PAGINAR ---
         $xservReservas = $this->paginate($query);
 
-        // Si es una petición JSON/AJAX
-        if ($this->request->is('json') || $this->request->getHeader('X-Requested-With') === 'XMLHttpRequest') {
-            $this->response = $this->response->withType('application/json');
-            return $this->response->withStringBody(json_encode([
-                'xservReservas' => $xservReservas->toArray()
-            ]));
+        // --- DATOS PARA FILTROS ---
+        $clientes = $this->XservReservas->Clientes->find('list')->toArray();
+
+        $estados = $this->XservReservas->find()
+            ->select(['estado'])
+            ->distinct(['estado'])
+            ->all()
+            ->extract('estado')
+            ->toList();
+
+        // --- JSON (AJAX) ---
+        if ($this->request->is('json') || 
+            $this->request->getHeaderLine('X-Requested-With') === 'XMLHttpRequest') {
+
+            return $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode([
+                    'xservReservas' => $xservReservas->toArray()
+                ]));
         }
 
-        $this->set(compact('xservReservas', 'filters'));
-        
+        // --- VISTA ---
+        $this->set(compact(
+            'xservReservas',
+            'clientes',
+            'estados',
+            'filters'
+        ));
+
         if ($isAdmin) {
             $this->render('admin_index');
         }
     }
+        /**
+         * Admin index method
+         *
+         * @return \Cake\Http\Response|null|void Renders view
+         */
+        public function adminIndex()
+        {
+            $this->Authorization->skipAuthorization();
 
-    /**
-     * Admin index method
-     *
-     * @return \Cake\Http\Response|null|void Renders view
-     */
-    public function adminIndex()
-    {
-        $this->Authorization->skipAuthorization();
+            $user = $this->Authentication->getIdentity();
+            if (!$user || $user->rol !== 'admin') {
+                return $this->redirect(['controller' => 'XservUsuarios', 'action' => 'profile']);
+            }
 
-        $user = $this->Authentication->getIdentity();
-        if (!$user || $user->rol !== 'admin') {
-            return $this->redirect(['controller' => 'XservUsuarios', 'action' => 'profile']);
-        }
-
-        $this->viewBuilder()->setLayout('admin');
+            $this->viewBuilder()->setLayout('admin');
 
         $query = $this->XservReservas->find()
             ->contain(['Clientes' => ['XservUsuarios'], 'Servicios', 'Rutas']);
+            $query = $this->XservReservas->find()
+                ->contain(['Clientes', 'Servicios', 'Rutas']);
 
-        $filters = $this->request->getQuery();
+            $filters = $this->request->getQuery();
 
-        if (!empty($filters['estado'])) {
-            $query->where(['XservReservas.estado' => $filters['estado']]);
-        }
+            if (!empty($filters['estado'])) {
+                $query->where(['XservReservas.estado' => $filters['estado']]);
+            }
 
         if (!empty($filters['codigo'])) {
             $query->where(['codigo_reserva LIKE' => '%' . $filters['codigo'] . '%']);
@@ -100,12 +147,15 @@ class XservReservasController extends AppController
         if (!empty($filters['cliente_id'])) {
             $query->where(['XservReservas.cliente_id' => $filters['cliente_id']]);
         }
+            if (!empty($filters['codigo'])) {
+                $query->where(['codigo_reserva LIKE' => '%' . $filters['codigo'] . '%']);
+            }
 
-        $xservReservas = $this->paginate($query);
+            $xservReservas = $this->paginate($query);
 
-        $this->set(compact('xservReservas', 'filters'));
-        $this->render('admin_index');
-    }
+            $this->set(compact('xservReservas', 'filters'));
+            $this->render('admin_index');
+        }
 
     /**
      * View method
@@ -130,13 +180,151 @@ class XservReservasController extends AppController
     public function add()
     {
         $this->Authorization->skipAuthorization();
-        
-        $xservReserva = $this->XservReservas->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $xservReserva = $this->XservReservas->patchEntity($xservReserva, $this->request->getData());
-            if ($this->XservReservas->save($xservReserva)) {
-                $this->Flash->success(__('The xserv reserva has been saved.'));
 
+
+        $xservReserva = $this->XservReservas->newEmptyEntity();
+
+
+        if ($this->request->is('post')) {
+
+            $data = $this->request->getData();
+
+            // =========================
+            // DATOS GENERADOS POR SISTEMA
+            // =========================
+
+            $usuario = $this->Authentication->getIdentity();
+            $cliente = $this->XservReservas->Clientes
+                ->find()
+                ->where(['usuario_id' => $usuario->id])
+                ->first();
+            if (!$cliente) {
+                $this->Flash->error('El usuario no tiene cliente asociado.');
+                return $this->redirect(['action' => 'index']);
+            }
+            $data['cliente_id'] = $cliente->id;
+
+
+            $data['codigo_reserva'] = 'RSV-' . date('Y') . '-' . 
+                str_pad((string) rand(1,9999), 4, '0', STR_PAD_LEFT);
+
+            $servicio = $this->XservReservas->Servicios->get($data['servicio_id']);
+            $data['precio_pactado'] = $servicio->precio_base;
+
+            $data['itbms_pactado'] = $data['precio_pactado'] * 0.07;
+
+            $data['estado'] = 'pendiente';
+            $data['estado_pago'] = 'pendiente';
+
+            // =========================
+            // DATOS OPERATIVOS
+            // =========================
+
+            $choferId = $data['chofer_id'] ?? null;
+            $vehiculoId = $data['vehiculo_id'] ?? null;
+
+            unset($data['chofer_id'], $data['vehiculo_id']);
+
+            // =========================
+            // PATCH
+            // =========================
+
+            $xservReserva = $this->XservReservas->patchEntity($xservReserva, $data);
+
+
+            $data = $this->request->getData();
+
+            // =========================
+            // DATOS GENERADOS POR SISTEMA
+            // =========================
+
+            $usuario = $this->Authentication->getIdentity();
+
+            $cliente = $this->XservReservas->Clientes
+                ->find()
+                ->where(['usuario_id' => $usuario->id])
+                ->first();
+
+            if (!$cliente) {
+                $this->Flash->error('El usuario no tiene cliente asociado.');
+                return $this->redirect(['action' => 'index']);
+            }
+
+            $data['cliente_id'] = $cliente->id;
+
+            $data['codigo_reserva'] = 'RSV-' . date('Y') . '-' .
+                str_pad((string) rand(1, 9999), 4, '0', STR_PAD_LEFT);
+
+            $servicio = $this->XservReservas->Servicios->get($data['servicio_id']);
+            $data['precio_pactado'] = $servicio->precio_base;
+            $data['itbms_pactado'] = $data['precio_pactado'] * 0.07;
+
+            $data['estado'] = 'pendiente';
+            $data['estado_pago'] = 'pendiente';
+
+            // =========================
+            // DATOS OPERATIVOS
+            // =========================
+
+            $choferId = $data['chofer_id'] ?? null;
+            $vehiculoId = $data['vehiculo_id'] ?? null;
+
+            unset($data['chofer_id'], $data['vehiculo_id']);
+
+            // =========================
+            // PATCH
+            // =========================
+
+            $xservReserva = $this->XservReservas->patchEntity($xservReserva, $data);
+
+            if ($this->XservReservas->save($xservReserva)) {
+
+                if ($choferId && $vehiculoId) {
+
+                    $asignacion = $this->XservReservas->Asignaciones->newEmptyEntity();
+
+                    $asignacion->reserva_id = $xservReserva->id;
+                    $asignacion->chofer_id = $choferId;
+                    $asignacion->vehiculo_id = $vehiculoId;
+                    $asignacion->asignado_por_id = $usuario->id;
+
+                    $fechaInicio = $xservReserva->fecha->format('Y-m-d') . ' ' .
+                                $xservReserva->hora->format('H:i:s');
+
+                    $asignacion->fecha_inicio_pactada = $fechaInicio;
+                    $asignacion->fecha_fin_pactada = date(
+                        'Y-m-d H:i:s',
+                        strtotime('+2 hours', strtotime($fechaInicio))
+                    );
+
+                    $this->XservReservas->Asignaciones->save($asignacion);
+                }
+
+                $this->Flash->success('Reserva creada correctamente.');
+
+                // Crear asignación si se enviaron chofer y vehículo
+                if ($choferId && $vehiculoId) {
+
+                    $asignacion = $this->XservReservas->Asignaciones->newEmptyEntity();
+
+                    $asignacion->reserva_id = $xservReserva->id;
+                    $asignacion->chofer_id = $choferId;
+                    $asignacion->vehiculo_id = $vehiculoId;
+                    $asignacion->asignado_por_id = $usuario->id;
+
+                    $fechaInicio = $xservReserva->fecha->format('Y-m-d') . ' ' .
+                                $xservReserva->hora->format('H:i:s');
+
+                    $asignacion->fecha_inicio_pactada = $fechaInicio;
+                    $asignacion->fecha_fin_pactada = date(
+                        'Y-m-d H:i:s',
+                        strtotime('+2 hours', strtotime($fechaInicio))
+                    );
+
+                    $this->XservReservas->Asignaciones->save($asignacion);
+                }
+
+                $this->Flash->success('Reserva creada correctamente.');
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The xserv reserva could not be saved. Please, try again.'));
@@ -161,7 +349,74 @@ class XservReservasController extends AppController
         ])->contain(['Origens', 'Destinos'])->order(['Origens.nombre' => 'ASC'])->all();
         
         $this->set(compact('xservReserva', 'clientes', 'servicios', 'rutas'));
+
+            $this->Flash->error('Error al guardar la reserva.');
+
+            $this->Flash->error('La reserva no pudo guardarse. Intente nuevamente.');
+
+        // Listas para formulario
+        $clientes = $this->XservReservas->Clientes->find('list')->all();
+        $servicios = $this->XservReservas->Servicios->find('list')->all();
+        $rutas = $this->XservReservas->Rutas->find('list')->all();
+
+        $choferes = $this->XservReservas->Asignaciones->Choferes
+            ->find('list', [
+                'keyField' => 'id',
+                'valueField' => 'usuario.nombre'
+            ])
+            ->contain(['Usuarios'])
+            ->where([
+                'Choferes.estado' => 'activo',
+                'Choferes.disponibilidad' => 'disponible'
+            ])
+            ->all();
+
+        $vehiculos = $this->XservReservas->Asignaciones->Vehiculos
+            ->find('list')
+            ->where(['estado_operativo' => 'disponible'])
+            ->all();
+
+        $this->set(compact(
+            'xservReserva',
+            'clientes',
+            'servicios',
+            'rutas',
+            'choferes',
+            'vehiculos'
+        ));
+
+        // =========================
+        // LISTAS PARA FORMULARIO
+        // =========================
+
+        $clientes = $this->XservReservas->Clientes->find('list', limit: 200)->all();
+        $servicios = $this->XservReservas->Servicios->find('list', limit: 200)->all();
+        $rutas = $this->XservReservas->Rutas->find('list', limit: 200)->all();
+
+        $choferes = $this->XservReservas->Asignaciones->Choferes
+            ->find('list')
+            ->where(['estado' => 'activo'])
+            ->all();
+
+        $vehiculos = $this->XservReservas->Asignaciones->Vehiculos
+            ->find('list')
+            ->where(['estado_operativo' => 'disponible'])
+            ->all();
+
+        $this->set(compact(
+            'xservReserva',
+            'clientes',
+            'servicios',
+            'rutas',
+            'choferes',
+            'vehiculos'
+        ));
     }
+
+
+
+
+
 
     /**
      * Edit method
@@ -236,11 +491,10 @@ class XservReservasController extends AppController
     {
         $this->Authorization->skipAuthorization();
         $this->request->allowMethod(['get']);
-        
-        $user = $this->Authentication->getIdentity();
-        
-        // Si no hay usuario autenticado, retornar error
-        if (!$user) {
+
+        $usuario = $this->Authentication->getIdentity();
+
+        if (!$usuario) {
             $this->response = $this->response->withStatus(401)->withType('application/json');
             return $this->response->withStringBody(json_encode([
                 'success' => false,
@@ -249,19 +503,33 @@ class XservReservasController extends AppController
         }
 
         try {
-            // Obtener todas las reservas del usuario
-            $query = $this->XservReservas->find()
-                ->contain(['Clientes', 'Servicios', 'Rutas'])
-                ->where(['XservReservas.cliente_id' => $user->id])
-                ->orderBy(['XservReservas.fecha' => 'DESC']);
+            // Obtener el cliente asociado al usuario
+            $cliente = $this->XservReservas->Clientes
+                ->find()
+                ->where(['usuario_id' => $usuario->id])
+                ->first();
 
-            $allReservas = $query->all();
-            
+            if (!$cliente) {
+                $this->response = $this->response->withStatus(404)->withType('application/json');
+                return $this->response->withStringBody(json_encode([
+                    'success' => false,
+                    'error' => 'Cliente no encontrado para este usuario'
+                ]));
+            }
+
+            // Obtener todas las reservas del cliente
+            $allReservas = $this->XservReservas->find()
+                ->contain(['Clientes', 'Servicios', 'Rutas'])
+                ->where(['XservReservas.cliente_id' => $cliente->id])
+                ->order(['XservReservas.fecha' => 'DESC'])
+                ->all();
+
             // Categorizar reservas
             $categorized = [
-                'proximos' => [],      // Reservas futuras (no completada ni cancelada)
-                'completadas' => [],   // Reservas completadas
-                'canceladas' => []     // Reservas canceladas
+                'pendientes' => [],
+                'proximos' => [],
+                'completadas' => [],
+                'canceladas' => []
             ];
 
             foreach ($allReservas as $reserva) {
@@ -284,13 +552,21 @@ class XservReservasController extends AppController
                         'nombre' => $reserva->servicio->nombre
                     ] : null
                 ];
-                
-                if ($estado === 'cancelada') {
-                    $categorized['canceladas'][] = $reservaArray;
-                } elseif ($estado === 'completada') {
-                    $categorized['completadas'][] = $reservaArray;
-                } else {
-                    $categorized['proximos'][] = $reservaArray;
+
+                switch ($estado) {
+                    case 'pendiente':
+                        $categorized['pendientes'][] = $reservaArray;
+                        break;
+                    case 'confirmada':
+                    case 'asignada':
+                        $categorized['proximos'][] = $reservaArray;
+                        break;
+                    case 'completada':
+                        $categorized['completadas'][] = $reservaArray;
+                        break;
+                    case 'cancelada':
+                        $categorized['canceladas'][] = $reservaArray;
+                        break;
                 }
             }
 
@@ -299,6 +575,7 @@ class XservReservasController extends AppController
                 'success' => true,
                 'reservations' => $categorized
             ]));
+
         } catch (\Exception $e) {
             $this->response = $this->response->withStatus(500)->withType('application/json');
             return $this->response->withStringBody(json_encode([

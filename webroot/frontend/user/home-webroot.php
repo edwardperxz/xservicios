@@ -940,7 +940,7 @@
 
   <!-- Hero Section -->
   <section class="hero-section">
-    <img src="https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=1920&h=1080&fit=crop" alt="Bocas del Toro" class="hero-image">
+    <img src="https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=1920&h=1080&fit=crop" alt="Bocas del Toro" class="hero-image" loading="lazy" decoding="async">
     <div class="hero-overlay"></div>
     
     <div class="hero-content">
@@ -981,7 +981,7 @@
     
     <div class="destinations-grid">
       <div class="destination-card">
-        <img src="https://images.unsplash.com/photo-1567597243073-3c64c4c75de3?w=400&h=500&fit=crop" alt="Boca Chica">
+        <img src="https://images.unsplash.com/photo-1567597243073-3c64c4c75de3?w=400&h=500&fit=crop" alt="Boca Chica" loading="lazy" decoding="async">
         <div class="destination-overlay">
           <div class="destination-rank">1er lugar</div>
           <div class="destination-name">Boca Chica</div>
@@ -989,7 +989,7 @@
       </div>
       
       <div class="destination-card">
-        <img src="https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=400&h=500&fit=crop" alt="Cangilones de Gualaca">
+        <img src="https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=400&h=500&fit=crop" alt="Cangilones de Gualaca" loading="lazy" decoding="async">
         <div class="destination-overlay">
           <div class="destination-rank">2do lugar</div>
           <div class="destination-name">Los Cangilones de Gualaca</div>
@@ -997,7 +997,7 @@
       </div>
       
       <div class="destination-card">
-        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=500&fit=crop" alt="Volcán Barú">
+        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=500&fit=crop" alt="Volcán Barú" loading="lazy" decoding="async">
         <div class="destination-overlay">
           <div class="destination-rank">3er lugar</div>
           <div class="destination-name">Volcán Barú</div>
@@ -1005,7 +1005,7 @@
       </div>
       
       <div class="destination-card">
-        <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=500&fit=crop" alt="San Blas">
+        <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=500&fit=crop" alt="San Blas" loading="lazy" decoding="async">
         <div class="destination-overlay">
           <div class="destination-rank">4to lugar</div>
           <div class="destination-name">Islas de San Blas</div>
@@ -1020,7 +1020,7 @@
     
     <div class="reviews-container">
       <div class="review-card">
-        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop" alt="Usuario" class="review-avatar">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop" alt="Usuario" class="review-avatar" loading="lazy" decoding="async">
         <div class="review-content">
           <div class="review-header">
             <div class="review-stars">
@@ -1038,7 +1038,7 @@
       </div>
       
       <div class="review-card">
-        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop" alt="Usuario" class="review-avatar">
+        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop" alt="Usuario" class="review-avatar" loading="lazy" decoding="async">
         <div class="review-content">
           <div class="review-header">
             <div class="review-stars">
@@ -1056,7 +1056,7 @@
       </div>
       
       <div class="review-card">
-        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop" alt="Usuario" class="review-avatar">
+        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop" alt="Usuario" class="review-avatar" loading="lazy" decoding="async">
         <div class="review-content">
           <div class="review-header">
             <div class="review-stars">
@@ -1074,7 +1074,7 @@
       </div>
       
       <div class="review-card">
-        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop" alt="Usuario" class="review-avatar">
+        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop" alt="Usuario" class="review-avatar" loading="lazy" decoding="async">
         <div class="review-content">
           <div class="review-header">
             <div class="review-stars">
@@ -1092,7 +1092,7 @@
       </div>
       
       <div class="review-card">
-        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop" alt="Usuario" class="review-avatar">
+        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop" alt="Usuario" class="review-avatar" loading="lazy" decoding="async">
         <div class="review-content">
           <div class="review-header">
             <div class="review-stars">
@@ -1132,19 +1132,19 @@
       
       <div class="travel-images">
         <div class="travel-image-card">
-          <img src="https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=400&h=600&fit=crop" alt="Playa Panamá">
+          <img src="https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=400&h=600&fit=crop" alt="Playa Panamá" loading="lazy" decoding="async">
           <div class="play-button">
             <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           </div>
         </div>
         <div class="travel-image-card">
-          <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=400&h=280&fit=crop" alt="Costa panameña">
+          <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=400&h=280&fit=crop" alt="Costa panameña" loading="lazy" decoding="async">
           <div class="play-button">
             <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           </div>
         </div>
         <div class="travel-image-card">
-          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=280&fit=crop" alt="Playa tropical">
+          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=280&fit=crop" alt="Playa tropical" loading="lazy" decoding="async">
           <div class="play-button">
             <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           </div>
@@ -1189,10 +1189,10 @@
     <p class="footer-text" data-i18n="footer.text">© 2026 <span>Xservicios</span> - Transporte Turístico de Lujo. Todos los derechos reservados.</p>
   </footer>
   
-  <!-- Scripts: El orden es importante -->
-  <script src="/js/header-loader.js"></script>
-  <script src="/js/header-dynamic.js"></script>
-  <script src="/js/i18n.js"></script>
+  <!-- Scripts: El orden es importante - loaded asynchronously with defer -->
+  <script src="/js/header-loader.js" defer></script>
+  <script src="/js/header-dynamic.js" defer></script>
+  <script src="/js/i18n.js" defer></script>
   
   <script>
     // Passengers counter functionality

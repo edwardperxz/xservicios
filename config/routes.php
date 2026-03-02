@@ -41,7 +41,6 @@ return function (RouteBuilder $routes): void {
 
         // Rutas de roles
         $builder->connect('/panel/admin', ['controller' => 'Dashboard', 'action' => 'adminPanel']);
-        $builder->connect('/panel/operador', ['controller' => 'Dashboard', 'action' => 'operadorPanel']);
         $builder->connect('/panel/chofer', ['controller' => 'Dashboard', 'action' => 'choferPanel']);
         $builder->connect('/requests', ['controller' => 'Dashboard', 'action' => 'requests']);
         $builder->connect('/notifications', ['controller' => 'Dashboard', 'action' => 'choferNotifications']);
@@ -72,6 +71,10 @@ return function (RouteBuilder $routes): void {
         $builder->connect('/api/chofer/asignaciones', ['controller' => 'Dashboard', 'action' => 'getAsignaciones']);
         $builder->connect('/api/chofer/stats', ['controller' => 'Dashboard', 'action' => 'getChoferStats']);
         $builder->connect('/api/chofer/asignacion/update', ['controller' => 'Dashboard', 'action' => 'updateAsignacion']);
+
+        //Ruta para crear las reservas
+        $builder->connect('/reservations', ['controller' => 'XservReservas', 'action' => 'reservations']);
+
 
         // ==============================
         // XservServicios

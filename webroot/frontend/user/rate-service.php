@@ -1430,7 +1430,8 @@
     }
 
     function renderViajesSinValorar() {
-      const t = window.translate ? window.translate : (key) => key;
+      // Usar la función de traducción global que está siempre disponible
+      const t = window.t || window.__translate || ((key) => key);
       const totalPages = Math.ceil(viajesSinValorar.length / PAGE_SIZE);
       if (pageViajes >= totalPages) pageViajes = 0;
 
@@ -1483,7 +1484,8 @@
     }
 
     function renderValoracionPanel(viaje, idx) {
-      const t = window.translate ? window.translate : (key) => key;
+      // Usar la función de traducción global que está siempre disponible
+      const t = window.t || window.__translate || ((key) => key);
       return `
         <div class="valoracion-panel">
           <div class="panel-header">
@@ -1555,7 +1557,8 @@
     }
 
     function enviarValoracion(idx, tipo) {
-      const t = window.translate ? window.translate : (key) => key;
+      // Usar la función de traducción global que está siempre disponible
+      const t = window.t || window.__translate || ((key) => key);
       const rating = ratings[tipo];
       const comentario = document.getElementById(`comentario-${tipo}-${idx}`).value;
       
@@ -1608,7 +1611,8 @@
     }
 
     async function finalizarValoracion(idx) {
-      const t = window.translate ? window.translate : (key) => key;
+      // Usar la función de traducción global que está siempre disponible
+      const t = window.t || window.__translate || ((key) => key);
       const viaje = viajesSinValorar[idx];
       
       // Verificar que al menos una valoración fue enviada
@@ -1661,7 +1665,8 @@
 
     function renderValoracionesPasadas() {
       const filtered = filtro === 'todos' ? valoracionesPasadas : valoracionesPasadas.filter(v => v.tipo === filtro);
-      const t = window.translate ? window.translate : (key) => key;
+      // Usar la función de traducción global que está siempre disponible
+      const t = window.t || window.__translate || ((key) => key);
 
       const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
       if (pageValoraciones >= totalPages) pageValoraciones = 0;
@@ -1792,8 +1797,8 @@
       renderValoracionesPasadas();
     });
   </script>
-  <script src="/js/i18n.js"></script>
-  <script src="/js/header-loader.js"></script>
-  <script src="/js/header-dynamic.js"></script>
+  <script src="/js/i18n.js" defer></script>
+  <script src="/js/header-loader.js" defer></script>
+  <script src="/js/header-dynamic.js" defer></script>
 </body>
 </html>

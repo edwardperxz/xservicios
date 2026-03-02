@@ -324,7 +324,7 @@
 
         <div class="ficha-body">
           <div class="ficha-image">
-            <img src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=300&h=200&fit=crop" alt="Coaster Toyota">
+            <img src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=300&h=200&fit=crop" alt="Coaster Toyota" loading="lazy" decoding="async">
           </div>
           
           <div class="ficha-info">
@@ -407,7 +407,7 @@
 
         <div class="ficha-body">
           <div class="ficha-image">
-            <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=300&h=200&fit=crop" alt="Bus 15 pasajeros">
+            <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=300&h=200&fit=crop" alt="Bus 15 pasajeros" loading="lazy" decoding="async">
           </div>
           
           <div class="ficha-info">
@@ -490,7 +490,7 @@
 
         <div class="ficha-body">
           <div class="ficha-image">
-            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop" alt="Coaster Toyota 2">
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop" alt="Coaster Toyota 2" loading="lazy" decoding="async">
           </div>
           
           <div class="ficha-info">
@@ -573,7 +573,7 @@
 
         <div class="ficha-body">
           <div class="ficha-image">
-            <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=300&h=200&fit=crop" alt="Bus 15 pasajeros 2">
+            <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=300&h=200&fit=crop" alt="Bus 15 pasajeros 2" loading="lazy" decoding="async">
           </div>
           
           <div class="ficha-info">
@@ -636,9 +636,9 @@
     </div>
 
   </div>
-  <script src="/js/i18n.js"></script>
-  <script src="/js/header-loader.js"></script>
-  <script src="/js/header-dynamic.js"></script>
+  <script src="/js/i18n.js" defer></script>
+  <script src="/js/header-loader.js" defer></script>
+  <script src="/js/header-dynamic.js" defer></script>
 </body>
 </html>
 `,

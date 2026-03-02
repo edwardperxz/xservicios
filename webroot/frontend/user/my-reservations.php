@@ -540,6 +540,10 @@
           <span data-i18n="reservations.cancelled">Canceladas</span>
           <span class="category-count" id="count-canceladas">0</span>
         </button>
+        <button class="category-tab" data-category="pendientes">
+        <span data-i18n="reservations.pending">Pendientes</span>
+        <span class="category-count" id="count-pendientes">0</span>
+      </button>
       </div>
 
       <!-- Reservations List -->
@@ -555,6 +559,7 @@
     let currentCategory = 'proximos';
     let expandedReservation = null;
     let reservationsData = {
+      pendientes: [],
       proximos: [],
       completadas: [],
       canceladas: []
@@ -567,7 +572,8 @@
           headers: {
             'Accept': 'application/json',
             'X-Requested-With': 'XMLHttpRequest'
-          }
+          },
+          credentials: 'include' // Incluir cookies de sesión
         });
 
         if (!response.ok) {
@@ -606,6 +612,7 @@
       document.getElementById('count-proximos').textContent = reservationsData.proximos.length;
       document.getElementById('count-completadas').textContent = reservationsData.completadas.length;
       document.getElementById('count-canceladas').textContent = reservationsData.canceladas.length;
+      document.getElementById('count-pendientes').textContent = reservationsData.pendientes.length;
     }
 
     // Formatear fecha
@@ -625,7 +632,8 @@
     function renderReservations(category) {
       const reservations = reservationsData[category] || [];
       const container = document.getElementById('reservations-container');
-      const t = window.translate ? window.translate : (key) => key;
+      // Usar la función de traducción global que está siempre disponible
+      const t = window.t || window.__translate || ((key) => key);
 
       if (reservations.length === 0) {
         container.innerHTML = `
@@ -756,6 +764,26 @@
                     <span class="detail-label">${t('reservations.paymentStatus')}</span>
                     <span class="detail-value">${res.estado_pago ? res.estado_pago.charAt(0).toUpperCase() + res.estado_pago.slice(1) : 'Pendiente'}</span>
                   </div>
+                  ${res.estado === 'completada' ? `
+                    <div style="margin-top: 1.5rem; text-align: right;">
+                      <a href="/xserv-valoraciones/add?reserva_id=${res.id}"
+                        style="
+                          background: var(--gold);
+                          color: var(--dark-bg);
+                          padding: 0.6rem 1.2rem;
+                          border-radius: 6px;
+                          font-weight: 600;
+                          text-decoration: none;
+                          transition: 0.3s;
+                          display: inline-block;
+                        "
+                        onmouseover="this.style.background='var(--gold-dark)'"
+                        onmouseout="this.style.background='var(--gold)'"
+                      >
+                        Valorar
+                      </a>
+                    </div>
+                  ` : ''}
                 </div>
               </div>
             ` : ''}
@@ -789,8 +817,8 @@
     // Cargar reservas al iniciar
     loadReservations();
   </script>
-  <script src="/js/i18n.js"></script>
-  <script src="/js/header-loader.js"></script>
-  <script src="/js/header-dynamic.js"></script>
+  <script src="/js/i18n.js" defer></script>
+  <script src="/js/header-loader.js" defer></script>
+  <script src="/js/header-dynamic.js" defer></script>
 </body>
 </html>

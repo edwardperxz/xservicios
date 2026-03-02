@@ -1028,7 +1028,8 @@
 
     const renderServicio = () => {
       if (!serviceDetail || !serviceDetailEmpty) return;
-      const t = window.translate ? window.translate : (key) => key;
+      // Usar la función de traducción global que está siempre disponible
+      const t = window.t || window.__translate || ((key) => key);
       const lang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'es';
 
       if (!servicioActual) {
@@ -1040,7 +1041,15 @@
       const nombre = servicioActual.nombre || servicioActual.titulo || t('services.defaultName');
       const descripcion = getDescripcion(servicioActual, lang) || t('services.defaultDesc');
       const precio = formatPrice(servicioActual.precio_base ?? servicioActual.precio ?? servicioActual.costo);
-      const variantes = normalizeVariants(servicioActual.variantes);
+      
+      // Obtener variantes del i18n con fallback a base de datos
+      const variantsKey = `service.${servicioActual.id}.variants`;
+      const variantsRaw = t(variantsKey) || servicioActual.variantes || '';
+      const variantes = variantsRaw
+        .split(/\r?\n|\s*;\s*|\s*,\s*/)
+        .map(v => v.trim())
+        .filter(v => v.length > 0);
+      
       const estadoActivo = String(servicioActual.estado ?? '1') !== '0';
       const href = servicioActual.id ? `/newreservation?service_id=${servicioActual.id}` : '/newreservation';
       const index = servicioActual.__index ?? 0;
@@ -1108,10 +1117,37 @@
       }
     };
 
+    // Función para actualizar todos los elementos con data-i18n
+    const updateDataI18nElements = () => {
+      const elements = document.querySelectorAll('[data-i18n]');
+      elements.forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const translation = window.t ? window.t(key) : window.__translate ? window.__translate(key) : key;
+        
+        // Si es input/textarea, usar value
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+          el.value = translation;
+          el.placeholder = translation;
+        } else {
+          // Para otros elementos, usar textContent
+          el.textContent = translation;
+        }
+      });
+    };
+
     cargarServicio();
-    window.addEventListener('languageChanged', renderServicio);
+    
+    // Actualizar elementos data-i18n cuando cambia el idioma
+    window.addEventListener('languageChanged', () => {
+      console.log('🌍 Idioma cambió - actualizando new-reservation.php');
+      updateDataI18nElements();
+      renderServicio();
+    });
+
+    // Actualizar elementos data-i18n al cargar la página
+    document.addEventListener('DOMContentLoaded', updateDataI18nElements);
   </script>
-  <script src="/js/header-loader.js"></script>
-  <script src="/js/header-dynamic.js"></script>
+  <script src="/js/header-loader.js" defer></script>
+  <script src="/js/header-dynamic.js" defer></script>
 </body>
 </html>

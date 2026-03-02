@@ -423,7 +423,7 @@
 
         <div class="ficha-content">
           <div class="ficha-image-container">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=400&fit=crop&crop=face" alt="Carlos Mendoza" class="ficha-image">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=400&fit=crop&crop=face" alt="Carlos Mendoza" class="ficha-image" loading="lazy" decoding="async">
           </div>
 
           <div class="ficha-details">
@@ -510,7 +510,7 @@
 
         <div class="ficha-content">
           <div class="ficha-image-container">
-            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=400&fit=crop&crop=face" alt="Roberto Castillo" class="ficha-image">
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=400&fit=crop&crop=face" alt="Roberto Castillo" class="ficha-image" loading="lazy" decoding="async">
           </div>
 
           <div class="ficha-details">
@@ -597,7 +597,7 @@
 
         <div class="ficha-content">
           <div class="ficha-image-container">
-            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&h=400&fit=crop&crop=face" alt="Miguel Ángel Torres" class="ficha-image">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&h=400&fit=crop&crop=face" alt="Miguel Ángel Torres" class="ficha-image" loading="lazy" decoding="async">
           </div>
 
           <div class="ficha-details">
@@ -684,7 +684,7 @@
 
         <div class="ficha-content">
           <div class="ficha-image-container">
-            <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=300&h=400&fit=crop&crop=face" alt="David Hernández" class="ficha-image">
+            <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=300&h=400&fit=crop&crop=face" alt="David Hernández" class="ficha-image" loading="lazy" decoding="async">
           </div>
 
           <div class="ficha-details">
@@ -755,9 +755,9 @@
     </div>
 
   </div>
-  <script src="/js/i18n.js"></script>
-  <script src="/js/header-loader.js"></script>
-  <script src="/js/header-dynamic.js"></script>
+  <script src="/js/i18n.js" defer></script>
+  <script src="/js/header-loader.js" defer></script>
+  <script src="/js/header-dynamic.js" defer></script>
 </body>
 </html>
 `

@@ -62,6 +62,18 @@ class XservVehiculosController extends AppController
         }
     }
 
+    public function vehicles()
+    {
+        $this->Authorization->skipAuthorization();
+        $this->viewBuilder()->setLayout('vehicles');
+
+        $vehiculos = $this->paginate(
+            $this->XservVehiculos->find()->order(['anio' => 'DESC'])
+        );
+
+        $this->set(compact('vehiculos'));
+    }
+
     /**
      * Admin index method
      *

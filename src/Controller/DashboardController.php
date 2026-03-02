@@ -62,10 +62,10 @@ class DashboardController extends AppController
         // Reservas por estado
         $reservasPorEstado = $reservasTable->find()
             ->select([
-                'estado',
+                'estado' => 'XservReservas.estado',
                 'total' => $reservasTable->find()->func()->count('*')
             ])
-            ->group('estado')
+            ->group('XservReservas.estado')
             ->toArray();
 
         // Tasa de ocupación de flota
@@ -165,7 +165,7 @@ class DashboardController extends AppController
         
         // Reservas pendientes de asignación
         $reservasPendientes = $reservasTable->find()
-            ->where(['estado' => 'pendiente'])
+            ->where(['XservReservas.estado' => 'pendiente'])
             ->count();
         
         // Asignaciones activas
@@ -188,7 +188,7 @@ class DashboardController extends AppController
             ->contain(['Clientes', 'Servicios'])
             ->where([
                 'DATE(fecha)' => $hoy->format('Y-m-d'),
-                'estado IN' => ['pendiente', 'confirmada', 'asignada']
+                'XservReservas.estado IN' => ['pendiente', 'confirmada', 'asignada']
             ])
             ->order(['hora' => 'ASC'])
             ->limit(10)

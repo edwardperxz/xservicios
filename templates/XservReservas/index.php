@@ -7,6 +7,44 @@
 <div class="xservReservas index content">
     <?= $this->Html->link(__('New Xserv Reserva'), ['action' => 'add'], ['class' => 'button float-right']) ?>
     <h3><?= __('Xserv Reservas') ?></h3>
+    <!-- === PANEL DE FILTROS === -->
+    <div class="filter-panel" style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+        <?= $this->Form->create(null, ['type' => 'get', 'valueSources' => ['query']]) ?>
+            <div style="display:flex; gap:10px; flex-wrap: wrap; align-items: center;">
+                <!-- Filtrar por Cliente -->
+                <div>
+                    <?= $this->Form->control('cliente_id', [
+                        'type' => 'select',
+                        'options' => $clientes,
+                        'empty' => 'Todos los clientes',
+                        'label' => 'Cliente'
+                    ]) ?>
+                </div>
+
+                <!-- Filtrar por Estado -->
+                <div>
+                    <?= $this->Form->control('estado', [
+                        'type' => 'select',
+                        'options' => $estados,
+                        'empty' => 'Todos los estados',
+                        'label' => 'Estado'
+                    ]) ?>
+                </div>
+
+                <!-- Botón de aplicar filtro -->
+                <div>
+                    <?= $this->Form->button(__('Filtrar'), ['class' => 'button']) ?>
+                </div>
+
+                <!-- Botón de limpiar filtro -->
+                <div>
+                    <?= $this->Html->link(__('Limpiar'), ['action' => 'index'], ['class' => 'button']) ?>
+                </div>
+            </div>
+        <?= $this->Form->end() ?>
+    </div>
+
+    <!-- === TABLA DE RESERVAS === -->
     <div class="table-responsive">
         <table>
             <thead>

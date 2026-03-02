@@ -13,7 +13,6 @@ class XservReservasController extends AppController
     public function beforeFilter(\Cake\Event\EventInterface $event)
     {
         parent::beforeFilter($event);
-        $this->Authorization->skipAuthorization();
         
         // Usar layout admin si el usuario es admin
         $user = $this->Authentication->getIdentity();
@@ -37,6 +36,229 @@ class XservReservasController extends AppController
 
     }
 
+    /**
+     * Crear reserva rápida - NUEVO DESDE CERO
+     * POST /xserv-reservas/reserva-rapida
+     */
+    public function reservaRapida()
+    {
+        // Deshabilitar autorización PRIMERO
+        $this->Authorization->skipAuthorization();
+        $this->autoRender = false;
+        
+        // Configurar respuesta como JSON
+        $this->response = $this->response->withType('application/json');
+        
+        // Solo permitir POST
+        if (!$this->request->is('post')) {
+            return $this->response
+                ->withStatus(405)
+                ->withStringBody(json_encode(['success' => false, 'message' => 'Método no permitido'], JSON_UNESCAPED_UNICODE));
+        }
+
+        // Obtener usuario autenticado
+        $usuario = $this->Authentication->getIdentity();
+        if (!$usuario) {
+            return $this->response
+                ->withStatus(401)
+                ->withStringBody(json_encode(['success' => false, 'message' => 'No autenticado'], JSON_UNESCAPED_UNICODE));
+        }
+
+        // Obtener service_id del body
+        $requestData = $this->request->getData();
+        $serviceId = $requestData['service_id'] ?? null;
+
+        if (!$serviceId) {
+            return $this->response
+                ->withStatus(400)
+                ->withStringBody(json_encode(['success' => false, 'message' => 'service_id es requerido'], JSON_UNESCAPED_UNICODE));
+        }
+
+        // Buscar cliente del usuario
+        $clientesTable = $this->getTableLocator()->get('XservClientes');
+        $cliente = $clientesTable->find()
+            ->where(['usuario_id' => $usuario->id])
+            ->first();
+
+        // Si no existe el cliente, crear uno automáticamente
+        if (!$cliente) {
+            $cliente = $clientesTable->newEmptyEntity();
+            $cliente = $clientesTable->patchEntity($cliente, [
+                'usuario_id' => $usuario->id,
+                'identificacion_fiscal' => '',
+                'direccion_facturacion' => '',
+                'idioma_preferido' => 'es'
+            ]);
+            
+            if (!$clientesTable->save($cliente)) {
+                return $this->response
+                    ->withStatus(500)
+                    ->withStringBody(json_encode([
+                        'success' => false, 
+                        'message' => 'Error al crear el perfil de cliente',
+                        'errors' => $cliente->getErrors()
+                    ], JSON_UNESCAPED_UNICODE));
+            }
+        }
+
+        // Buscar servicio
+        $serviciosTable = $this->getTableLocator()->get('XservServicios');
+        try {
+            $servicio = $serviciosTable->get($serviceId);
+        } catch (\Exception $e) {
+            return $this->response
+                ->withStatus(404)
+                ->withStringBody(json_encode(['success' => false, 'message' => 'Servicio no encontrado'], JSON_UNESCAPED_UNICODE));
+        }
+
+        // Crear nueva reserva
+        $reserva = $this->XservReservas->newEmptyEntity();
+        
+        $nuevaReserva = [
+            'cliente_id' => $cliente->id,
+            'servicio_id' => $serviceId,
+            'fecha' => date('Y-m-d'),
+            'hora' => date('H:i:s'),
+            'pasajeros' => 1,
+            'precio_pactado' => $servicio->precio_base ?? 0,
+            'itbms_pactado' => ($servicio->precio_base ?? 0) * 0.07,
+            'punto_recogida' => 'Por definir',
+            'punto_destino' => 'Por definir',
+            'estado' => 'pendiente',
+            'estado_pago' => 'pendiente'
+        ];
+
+        $reserva = $this->XservReservas->patchEntity($reserva, $nuevaReserva);
+
+        // Guardar en base de datos
+        if ($this->XservReservas->save($reserva)) {
+            return $this->response
+                ->withStatus(200)
+                ->withStringBody(json_encode([
+                    'success' => true,
+                    'message' => 'Reserva creada exitosamente',
+                    'reserva_id' => $reserva->id,
+                    'codigo_reserva' => $reserva->codigo_reserva
+                ], JSON_UNESCAPED_UNICODE));
+        } else {
+            return $this->response
+                ->withStatus(500)
+                ->withStringBody(json_encode([
+                    'success' => false,
+                    'message' => 'Error al guardar la reserva',
+                    'errors' => $reserva->getErrors()
+                ], JSON_UNESCAPED_UNICODE));
+        }
+    }
+
+    /**
+     * Crear una reservación rápida desde el servicio
+     * POST /xserv-reservas/quick-reserve
+     * Body: { service_id: number }
+     */
+    public function quickReserve()
+    {
+        $this->request->allowMethod(['post']);
+        $this->Authorization->skipAuthorization();
+        $this->viewBuilder()->setLayout(false);
+        $this->autoRender = false;
+        
+        $usuario = $this->Authentication->getIdentity();
+        if (!$usuario) {
+            $this->response = $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode([
+                    'success' => false,
+                    'message' => 'Usuario no autenticado'
+                ], JSON_UNESCAPED_UNICODE));
+            return $this->response;
+        }
+
+        // Obtener datos JSON
+        $data = json_decode($this->request->getBody(), true) ?? [];
+        $serviceId = $data['service_id'] ?? $this->request->getData('service_id');
+
+        if (!$serviceId) {
+            $this->response = $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode([
+                    'success' => false,
+                    'message' => 'service_id requerido'
+                ], JSON_UNESCAPED_UNICODE));
+            return $this->response;
+        }
+
+        // Obtener cliente del usuario
+        $cliente = $this->XservReservas->Clientes
+            ->find()
+            ->where(['usuario_id' => $usuario->id])
+            ->first();
+
+        if (!$cliente) {
+            $this->response = $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode([
+                    'success' => false,
+                    'message' => 'Usuario no tiene cliente asociado'
+                ], JSON_UNESCAPED_UNICODE));
+            return $this->response;
+        }
+
+        // Obtener servicio
+        try {
+            $servicio = $this->XservReservas->Servicios->get($serviceId);
+        } catch (\Cake\Datasource\Exception\RecordNotFoundException $e) {
+            $this->response = $this->response
+                ->withType('application/json')
+                ->withStringBody(json_encode([
+                    'success' => false,
+                    'message' => 'Servicio no encontrado'
+                ], JSON_UNESCAPED_UNICODE));
+            return $this->response;
+        }
+
+        // Crear reservación
+        $reserva = $this->XservReservas->newEmptyEntity();
+        
+        $reservaData = [
+            'cliente_id' => $cliente->id,
+            'servicio_id' => $serviceId,
+            // codigo_reserva se genera automáticamente en el modelo
+            'fecha' => date('Y-m-d'),
+            'hora' => date('H:i:s'),
+            'pasajeros' => 1,
+            'precio_pactado' => $servicio->precio_base,
+            'itbms_pactado' => $servicio->precio_base * 0.07,
+            'punto_recogida' => 'Por definir',
+            'punto_destino' => 'Por definir',
+            'estado' => 'pendiente',
+            'estado_pago' => 'pendiente'
+        ];
+
+        $reserva = $this->XservReservas->patchEntity($reserva, $reservaData);
+
+        if ($this->XservReservas->save($reserva)) {
+            $response = [
+                'success' => true,
+                'message' => 'Reserva creada exitosamente',
+                'reserva_id' => $reserva->id,
+                'codigo_reserva' => $reserva->codigo_reserva
+            ];
+        } else {
+            $response = [
+                'success' => false,
+                'message' => 'Error al crear la reserva',
+                'errors' => $reserva->getErrors()
+            ];
+        }
+        
+        $this->response = $this->response
+            ->withType('application/json')
+            ->withStringBody(json_encode($response, JSON_UNESCAPED_UNICODE));
+        
+        return $this->response;
+    }
+
     public function index()
     {
         $this->Authorization->skipAuthorization();
@@ -51,7 +273,7 @@ class XservReservasController extends AppController
                 'Servicios',
                 'Rutas',
                 'Asignaciones' => [
-                    'Choferes',
+                    'Chofer',
                     'Vehiculos'
                 ]
             ])

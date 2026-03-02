@@ -291,6 +291,22 @@ $this->assign('header-title', 'Detalle de Chofer');
                     </span>
                 </div>
             </div>
+            <?php if ($totalValoraciones > 0): ?>
+            <div class="stat-card">
+                <div class="stat-label">Calificación Promedio</div>
+                <div style="margin-top: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="color: var(--gold);">
+                        <path d="M12 1.27l3.82 7.75h8.51l-6.88 5 2.63 8.63-7.38-5.36-7.38 5.36 2.63-8.63-6.88-5h8.51L12 1.27z"/>
+                    </svg>
+                    <span style="color: var(--gold); font-weight: 600; font-size: 1.25rem;">
+                        <?= number_format($promedioCalificacion, 1) ?>
+                    </span>
+                    <span style="color: var(--text-gray); font-size: 0.875rem;">
+                        (<?= $totalValoraciones ?> <?= $totalValoraciones == 1 ? 'valoración' : 'valoraciones' ?>)
+                    </span>
+                </div>
+            </div>
+            <?php endif; ?>
         </div>
 
         <!-- Details Grid -->

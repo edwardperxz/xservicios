@@ -920,7 +920,7 @@
   <!-- Vehicle Park Section -->
   <section class="vehicle-section">
     <div class="section-header">
-      <h2 class="section-title">Parque <span>Vehicular</span></h2>
+      <h2 class="section-title">Flota <span>Vehicular</span></h2>
       <div class="nav-arrows">
         <div class="nav-arrow">
           <svg viewBox="0 0 24 24" strokeWidth="2">
@@ -1362,7 +1362,7 @@
 
   <!-- Footer -->
   <footer class="footer">
-    <p class="footer-text">2026 <span>Xservicios</span>. Todos los derechos reservados.</p>
+    <p class="footer-text" data-i18n="footer.text">© 2026 <span>Xservicios</span> - Transporte Turístico de Lujo. Todos los derechos reservados.</p>
   </footer>
 
   <script src="/js/header-template.js"></script>

@@ -496,7 +496,7 @@ $isAdmin = $authUser && $authUser->rol === 'admin';
                     <a href="<?= $this->Url->build(['action' => 'index']) ?>" class="btn btn-secondary">Volver al Listado</a>
                     <?= $this->Form->postLink('Eliminar', ['action' => 'delete', $xservServicio->id], ['confirm' => '¿Está seguro?', 'class' => 'btn btn-danger']) ?>
                 <?php else: ?>
-                    <a href="/services" class="btn btn-secondary">Volver a Servicios</a>
+                    <a href="/services" class="btn btn-secondary" data-i18n="btn.backServices">Volver a Servicios</a>
                 <?php endif; ?>
             </div>
         </div>

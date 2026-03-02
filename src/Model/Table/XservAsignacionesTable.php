@@ -11,7 +11,7 @@ use Cake\Validation\Validator;
  * XservAsignaciones Model
  *
  * @property \App\Model\Table\XservReservasTable&\Cake\ORM\Association\BelongsTo $Reservas
- * @property \App\Model\Table\XservChoferesTable&\Cake\ORM\Association\BelongsTo $Chofers
+ * @property \App\Model\Table\XservChoferesTable&\Cake\ORM\Association\BelongsTo $Chofer
  * @property \App\Model\Table\XservVehiculosTable&\Cake\ORM\Association\BelongsTo $Vehiculos
  * @property \App\Model\Table\XservUsuariosTable&\Cake\ORM\Association\BelongsTo $AsignadoPors
  * @method \App\Model\Entity\XservAsignacion newEmptyEntity()
@@ -50,7 +50,7 @@ class XservAsignacionesTable extends Table
             'className' => 'XservReservas',
             'joinType' => 'INNER',
         ]);
-        $this->belongsTo('Choferes', [
+        $this->belongsTo('Chofer', [
             'foreignKey' => 'chofer_id',
             'className' => 'XservChoferes',
             'joinType' => 'INNER',
@@ -134,7 +134,7 @@ class XservAsignacionesTable extends Table
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->existsIn(['reserva_id'], 'Reservas'), ['errorField' => 'reserva_id']);
-        $rules->add($rules->existsIn(['chofer_id'], 'Chofers'), ['errorField' => 'chofer_id']);
+        $rules->add($rules->existsIn(['chofer_id'], 'Chofer'), ['errorField' => 'chofer_id']);
         $rules->add($rules->existsIn(['vehiculo_id'], 'Vehiculos'), ['errorField' => 'vehiculo_id']);
         $rules->add($rules->existsIn(['asignado_por_id'], 'AsignadoPors'), ['errorField' => 'asignado_por_id']);
 

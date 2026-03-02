@@ -150,7 +150,7 @@ class XservEjecucionViajesController extends AppController
             'valueField' => function($asignacion) {
                 return $asignacion->reserva->codigo_reserva . ' - ' . $asignacion->chofer->usuario->nombre . ' / ' . $asignacion->vehiculo->placa;
             }
-        ])->contain(['Reservas', 'Chofers' => ['Usuarios'], 'Vehiculos'])->order(['Reservas.codigo_reserva' => 'ASC'])->all();
+        ])->contain(['Reservas', 'Chofer' => ['Usuarios'], 'Vehiculos'])->order(['Reservas.codigo_reserva' => 'ASC'])->all();
         $this->set(compact('xservEjecucionViaje', 'asignacions'));
     }
 
@@ -178,7 +178,7 @@ class XservEjecucionViajesController extends AppController
             'valueField' => function($asignacion) {
                 return $asignacion->reserva->codigo_reserva . ' - ' . $asignacion->chofer->usuario->nombre . ' / ' . $asignacion->vehiculo->placa;
             }
-        ])->contain(['Reservas', 'Chofers' => ['Usuarios'], 'Vehiculos'])->order(['Reservas.codigo_reserva' => 'ASC'])->all();
+        ])->contain(['Reservas', 'Chofer' => ['Usuarios'], 'Vehiculos'])->order(['Reservas.codigo_reserva' => 'ASC'])->all();
         $this->set(compact('xservEjecucionViaje', 'asignacions'));
     }
 

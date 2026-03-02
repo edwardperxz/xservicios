@@ -57,49 +57,7 @@
     }
 
     html { scroll-behavior: smooth; }
-
-    /* Animations */
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    @keyframes slideInLeft {
-        from {
-            opacity: 0;
-            transform: translateX(-20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
-
-    @keyframes slideInRight {
-        from {
-            opacity: 0;
-            transform: translateX(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
-
-    @keyframes pulse {
-        0%, 100% {
-            box-shadow: 0 0 0 0 rgba(201, 169, 98, 0.4);
-        }
-        50% {
-            box-shadow: 0 0 0 10px rgba(201, 169, 98, 0);
-        }
-    }
+    /* Animations Disabled */
 
     /* Container */
     .profile-container {
@@ -107,7 +65,6 @@
         margin: 0 auto;
         padding: 1.5rem 2rem 2rem;
         width: 100%;
-        animation: fadeInUp 0.8s ease-out;
     }
 
     /* ===== PROFILE HEADER ===== */
@@ -171,19 +128,15 @@
         color: var(--dark-bg);
         box-shadow: 0 12px 36px rgba(201, 169, 98, 0.35);
         border: 3px solid rgba(255, 255, 255, 0.1);
-        animation: slideInLeft 0.8s ease-out;
     }
 
     .profile-avatar:hover {
-        animation: pulse 2s infinite;
-        transform: scale(1.05);
-        transition: transform 0.3s ease;
+        border-color: rgba(255, 255, 255, 0.1);
     }
 
     .profile-info {
         flex: 1;
         min-width: 280px;
-        animation: slideInRight 0.8s ease-out;
     }
 
     .profile-info h1 {
@@ -209,12 +162,10 @@
         gap: 0.6rem;
         color: var(--text-gray);
         font-size: 0.95rem;
-        transition: all 0.3s ease;
     }
 
     .profile-meta-item:hover {
-        color: var(--primary-color);
-        transform: translateX(4px);
+        color: var(--text-gray);
     }
 
     .profile-meta-item svg {
@@ -242,32 +193,23 @@
         border-radius: 16px;
         padding: 2rem;
         box-shadow: var(--shadow-md);
-        transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
         position: relative;
         overflow: hidden;
         cursor: pointer;
     }
 
     .profile-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-        transition: left 0.5s ease;
+        display: none;
     }
 
     .profile-card:hover::before {
-        left: 100%;
+        display: none;
     }
 
     .profile-card:hover {
-        transform: translateY(-8px) translateX(-2px);
-        border-color: var(--border-color-strong);
-        box-shadow: 0 25px 50px rgba(201, 169, 98, 0.15);
-        background: linear-gradient(135deg, rgba(201, 169, 98, 0.12) 0%, rgba(201, 169, 98, 0.04) 100%);
+        border-color: var(--border-color);
+        box-shadow: var(--shadow-md);
+        background: linear-gradient(135deg, rgba(201, 169, 98, 0.08) 0%, rgba(201, 169, 98, 0.02) 100%);
     }
 
     .profile-card h3 {
@@ -344,14 +286,11 @@
         border-radius: 16px;
         padding: 1.5rem;
         box-shadow: var(--shadow-md);
-        transition: all 0.4s ease;
-        animation: fadeInUp 0.8s ease-out;
     }
 
     .profile-section:hover {
-        border-color: var(--border-color-strong);
-        box-shadow: 0 15px 40px rgba(201, 169, 98, 0.1);
-        transform: translateY(-4px);
+        border-color: var(--border-color);
+        box-shadow: var(--shadow-md);
     }
 
     .profile-section-header {
@@ -388,13 +327,12 @@
         padding: 0.8rem;
         border-radius: 8px;
         background: rgba(255, 255, 255, 0.02);
-        transition: all 0.3s ease;
         border: 1px solid transparent;
     }
 
     .info-row:hover {
-        background: rgba(201, 169, 98, 0.05);
-        border-color: var(--border-color);
+        background: rgba(255, 255, 255, 0.02);
+        border-color: transparent;
     }
 
     .info-label {
@@ -433,7 +371,6 @@
         font-weight: 600;
         text-decoration: none;
         cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
         white-space: nowrap;
         text-transform: uppercase;
         letter-spacing: 0.05em;
@@ -453,12 +390,11 @@
     }
 
     .btn-primary:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 36px rgba(201, 169, 98, 0.4);
+        box-shadow: 0 8px 24px rgba(201, 169, 98, 0.3);
     }
 
     .btn-primary:active {
-        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(201, 169, 98, 0.3);
     }
 
     .btn-secondary {
@@ -471,11 +407,10 @@
     .btn-secondary:hover {
         background: rgba(201, 169, 98, 0.1);
         box-shadow: 0 8px 24px rgba(201, 169, 98, 0.2);
-        transform: translateY(-2px);
     }
 
     .btn-secondary:active {
-        transform: translateY(0);
+        background: rgba(201, 169, 98, 0.1);
     }
 
     /* ===== RESPONSIVE DESIGN ===== */

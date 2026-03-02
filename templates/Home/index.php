@@ -871,9 +871,150 @@ $emailjsTemplateAutoReply = getenv('template_id_autoreply') ?: '';
         grid-template-columns: 1fr;
       }
     }
+
+    /* Modal styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .modal-content {
+      background: var(--dark-card);
+      border: 1px solid var(--dark-lighter);
+      border-radius: 12px;
+      padding: 2.5rem;
+      max-width: 450px;
+      width: 90%;
+      text-align: center;
+      animation: slideUp 0.3s ease;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 1.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--dark-lighter);
+    }
+
+    .modal-icon.success {
+      background: rgba(74, 222, 128, 0.2);
+      border: 2px solid var(--green);
+    }
+
+    .modal-icon.error {
+      background: rgba(239, 68, 68, 0.2);
+      border: 2px solid #ef4444;
+    }
+
+    .modal-icon svg {
+      width: 32px;
+      height: 32px;
+      stroke-width: 3;
+      fill: none;
+      stroke: currentColor;
+    }
+
+    .modal-icon.success svg {
+      color: var(--green);
+    }
+
+    .modal-icon.error svg {
+      color: #ef4444;
+    }
+
+    .modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--text-white);
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .modal-message {
+      color: var(--text-gray);
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .modal-button {
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--dark-bg);
+      border: none;
+      padding: 0.875rem 3rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      max-width: 200px;
+    }
+
+    .modal-button:hover {
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(201, 169, 98, 0.3);
+    }
+
+    .modal-button:active {
+      transform: translateY(0);
+    }
   </style>
 </head>
 <body>
+  <!-- Modal para alertas -->
+  <div class="modal-overlay" id="alertModal">
+    <div class="modal-content">
+      <div class="modal-icon" id="modalIcon">
+        <svg viewBox="0 0 24 24" id="modalIconSvg">
+          <path d="M20 6L9 17l-5-5"/>
+        </svg>
+      </div>
+      <h3 class="modal-title" id="modalTitle">Mensaje</h3>
+      <p class="modal-message" id="modalMessage">Contenido del mensaje</p>
+      <button class="modal-button" id="modalButton" onclick="closeModal()">OK</button>
+    </div>
+  </div>
+
   <!-- Header será cargado dinámicamente por header-loader.js -->
 
   <!-- Hero Section -->
@@ -887,7 +1028,7 @@ $emailjsTemplateAutoReply = getenv('template_id_autoreply') ?: '';
       <?php else: ?>
         <div class="hero-actions">
           <a href="/services" class="btn-primary" data-i18n="homePublic.newReservation">Nueva Reserva</a>
-          <a href="#features" class="btn-secondary" data-i18n="homePublic.learnMore">Conocer Más</a>
+          <a href="/about" class="btn-secondary" data-i18n="homePublic.learnMore">Conocer Más</a>
         </div>
       <?php endif; ?>
     </div>
@@ -1020,8 +1161,8 @@ $emailjsTemplateAutoReply = getenv('template_id_autoreply') ?: '';
     <!-- Destinos Turisticos de Chiriqui -->
     <section class="destinations-section" id="destinos">
       <div class="destinations-header">
-        <h2>Descubre <span>Chiriqui</span></h2>
-        <p>La tierra de la eterna primavera te espera. Explora los destinos mas impresionantes del occidente de Panama con nuestro servicio de transporte de lujo.</p>
+        <h2><span data-i18n="destinations.discover">Descubre</span> <span>Chiriqui</span></h2>
+        <p data-i18n="destinations.subtitle">La tierra de la eterna primavera te espera. Explora los destinos mas impresionantes del occidente de Panama con nuestro servicio de transporte de lujo.</p>
       </div>
 
       <!-- Primera fila: 3 columnas con una grande -->
@@ -1031,12 +1172,12 @@ $emailjsTemplateAutoReply = getenv('template_id_autoreply') ?: '';
           <div class="destination-overlay">
             <span class="destination-tag">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              Destino Emblematico
+              <span data-i18n="destinations.tags.emblematic">Destino Emblematico</span>
             </span>
-            <h3 class="destination-name">Volcan Baru</h3>
-            <p class="destination-desc">El punto mas alto de Panama (3,475 m). Desde su cumbre puedes ver ambos oceanos en un dia despejado. Ideal para senderismo y avistamiento de estrellas.</p>
+            <h3 class="destination-name" data-i18n="destinations.volcanBaru.name">Volcan Baru</h3>
+            <p class="destination-desc" data-i18n="destinations.volcanBaru.desc">El punto mas alto de Panama (3,475 m). Desde su cumbre puedes ver ambos oceanos en un dia despejado. Ideal para senderismo y avistamiento de estrellas.</p>
             <a href="/services?destination=volcan-baru" class="destination-btn">
-              Reservar Traslado
+              <span data-i18n="destinations.bookTransfer">Reservar Traslado</span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </a>
           </div>
@@ -1047,12 +1188,12 @@ $emailjsTemplateAutoReply = getenv('template_id_autoreply') ?: '';
           <div class="destination-overlay">
             <span class="destination-tag">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-              Mas Popular
+              <span data-i18n="destinations.tags.popular">Mas Popular</span>
             </span>
-            <h3 class="destination-name">Boquete</h3>
-            <p class="destination-desc">Pueblo de montana famoso por su cafe de clase mundial, clima primaveral y el Sendero de los Quetzales.</p>
+            <h3 class="destination-name" data-i18n="destinations.boquete.name">Boquete</h3>
+            <p class="destination-desc" data-i18n="destinations.boquete.desc">Pueblo de montana famoso por su cafe de clase mundial, clima primaveral y el Sendero de los Quetzales.</p>
             <a href="/services?destination=boquete" class="destination-btn">
-              Reservar Traslado
+              <span data-i18n="destinations.bookTransfer">Reservar Traslado</span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </a>
           </div>
@@ -1066,12 +1207,12 @@ $emailjsTemplateAutoReply = getenv('template_id_autoreply') ?: '';
           <div class="destination-overlay">
             <span class="destination-tag">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-              Aventura
+              <span data-i18n="destinations.tags.adventure">Aventura</span>
             </span>
-            <h3 class="destination-name">Los Cangilones</h3>
-            <p class="destination-desc">Canon natural de aguas cristalinas perfecto para nadar y saltar desde las rocas.</p>
+            <h3 class="destination-name" data-i18n="destinations.cangilones.name">Los Cangilones</h3>
+            <p class="destination-desc" data-i18n="destinations.cangilones.desc">Canon natural de aguas cristalinas perfecto para nadar y saltar desde las rocas.</p>
             <a href="/services?destination=cangilones" class="destination-btn">
-              Reservar
+              <span data-i18n="destinations.book">Reservar</span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </a>
           </div>
@@ -1082,12 +1223,12 @@ $emailjsTemplateAutoReply = getenv('template_id_autoreply') ?: '';
           <div class="destination-overlay">
             <span class="destination-tag">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
-              Playa
+              <span data-i18n="destinations.tags.beach">Playa</span>
             </span>
-            <h3 class="destination-name">Playa La Barqueta</h3>
-            <p class="destination-desc">Extensa playa de arena oscura ideal para surfear y observar tortugas marinas.</p>
+            <h3 class="destination-name" data-i18n="destinations.barqueta.name">Playa La Barqueta</h3>
+            <p class="destination-desc" data-i18n="destinations.barqueta.desc">Extensa playa de arena oscura ideal para surfear y observar tortugas marinas.</p>
             <a href="/services?destination=la-barqueta" class="destination-btn">
-              Reservar
+              <span data-i18n="destinations.book">Reservar</span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </a>
           </div>
@@ -1098,12 +1239,12 @@ $emailjsTemplateAutoReply = getenv('template_id_autoreply') ?: '';
           <div class="destination-overlay">
             <span class="destination-tag">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              Islas
+              <span data-i18n="destinations.tags.islands">Islas</span>
             </span>
-            <h3 class="destination-name">Boca Chica</h3>
-            <p class="destination-desc">Puerta de entrada al Parque Nacional Marino Golfo de Chiriqui y sus islas paradisiacas.</p>
+            <h3 class="destination-name" data-i18n="destinations.bocaChica.name">Boca Chica</h3>
+            <p class="destination-desc" data-i18n="destinations.bocaChica.desc">Puerta de entrada al Parque Nacional Marino Golfo de Chiriqui y sus islas paradisiacas.</p>
             <a href="/services?destination=boca-chica" class="destination-btn">
-              Reservar
+              <span data-i18n="destinations.book">Reservar</span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </a>
           </div>
@@ -1114,12 +1255,12 @@ $emailjsTemplateAutoReply = getenv('template_id_autoreply') ?: '';
           <div class="destination-overlay">
             <span class="destination-tag">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg>
-              Montana
+              <span data-i18n="destinations.tags.mountain">Montana</span>
             </span>
-            <h3 class="destination-name">Cerro Punta</h3>
-            <p class="destination-desc">El pueblo mas alto de Panama, conocido por sus fresas, hortalizas y clima fresco todo el ano.</p>
+            <h3 class="destination-name" data-i18n="destinations.cerroPunta.name">Cerro Punta</h3>
+            <p class="destination-desc" data-i18n="destinations.cerroPunta.desc">El pueblo mas alto de Panama, conocido por sus fresas, hortalizas y clima fresco todo el ano.</p>
             <a href="/services?destination=cerro-punta" class="destination-btn">
-              Reservar
+              <span data-i18n="destinations.book">Reservar</span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </a>
           </div>
@@ -1130,24 +1271,24 @@ $emailjsTemplateAutoReply = getenv('template_id_autoreply') ?: '';
       <div class="chiriqui-highlight">
         <div class="highlight-container">
           <div class="highlight-content">
-            <h3>Tu aventura en <span>Chiriqui</span> comienza aqui</h3>
-            <p>Chiriqui es conocida como la "Tierra de los Valles y las Flores", ofreciendo una diversidad unica de paisajes: desde playas virgenes en el Pacifico hasta bosques nubosos en las tierras altas. Con Xservicios, viaja con la comodidad y seguridad que mereces.</p>
+            <h3><span data-i18n="destinations.highlight.title">Tu aventura en</span> <span>Chiriqui</span> <span data-i18n="destinations.highlight.titleEnd">comienza aqui</span></h3>
+            <p data-i18n="destinations.highlight.desc">Chiriqui es conocida como la "Tierra de los Valles y las Flores", ofreciendo una diversidad unica de paisajes: desde playas virgenes en el Pacifico hasta bosques nubosos en las tierras altas. Con Xservicios, viaja con la comodidad y seguridad que mereces.</p>
             <div class="highlight-features">
               <div class="highlight-feature">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Conductores locales expertos</span>
+                <span data-i18n="destinations.highlight.feature1">Conductores locales expertos</span>
               </div>
               <div class="highlight-feature">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Vehiculos climatizados</span>
+                <span data-i18n="destinations.highlight.feature2">Vehiculos climatizados</span>
               </div>
               <div class="highlight-feature">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Rutas personalizadas</span>
+                <span data-i18n="destinations.highlight.feature3">Rutas personalizadas</span>
               </div>
               <div class="highlight-feature">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Servicio 24/7</span>
+                <span data-i18n="destinations.highlight.feature4">Servicio 24/7</span>
               </div>
             </div>
           </div>
@@ -1164,7 +1305,6 @@ $emailjsTemplateAutoReply = getenv('template_id_autoreply') ?: '';
       <p class="cta-description" data-i18n="homePublic.ctaDesc">Reserva ahora y disfruta del transporte turístico más elegante de Chiriquí.</p>
       <div class="hero-actions" style="justify-content: center;">
         <a href="/services" class="btn-primary" data-i18n="homePublic.bookNow">Reservar Ahora</a>
-        <a href="https://wa.me/507XXXXXXXXXXXX" class="btn-secondary" target="_blank" data-i18n="homePublic.support">Hablar con Soporte</a>
       </div>
     </section>
   <?php endif; ?>
@@ -1187,7 +1327,7 @@ $emailjsTemplateAutoReply = getenv('template_id_autoreply') ?: '';
             <input type="text" id="quoteDestination" name="destination" placeholder="Destino deseado" data-i18n-placeholder="fleet.quoteDestination">
           </div>
           <div class="form-group">
-            <textarea id="quoteNotes" name="notes" rows="3" placeholder="Notas adicionales"></textarea>
+            <textarea id="quoteNotes" name="notes" rows="3" placeholder="Notas adicionales" data-i18n-placeholder="fleet.quoteNotes"></textarea>
           </div>
         </div>
         <div id="customFields" class="is-hidden">
@@ -1256,6 +1396,51 @@ $emailjsTemplateAutoReply = getenv('template_id_autoreply') ?: '';
     waitForEmailJS();
   </script>
   <script defer>
+    // Función para mostrar modal personalizado
+    function showModal(title, message, type = 'success') {
+      const modal = document.getElementById('alertModal');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalMessage = document.getElementById('modalMessage');
+      const modalIcon = document.getElementById('modalIcon');
+      const modalIconSvg = document.getElementById('modalIconSvg');
+      const modalButton = document.getElementById('modalButton');
+      const t = window.t || window.__translate || ((key) => key);
+      
+      modalTitle.textContent = title;
+      modalMessage.textContent = message;
+      modalButton.textContent = t('modal.ok');
+      
+      // Cambiar icono según el tipo
+      if (type === 'error') {
+        modalIcon.classList.add('error');
+        modalIconSvg.innerHTML = '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>';
+      } else {
+        modalIcon.classList.remove('error');
+        modalIconSvg.innerHTML = '<path d="M20 6L9 17l-5-5"/>';
+      }
+      
+      modal.classList.add('show');
+    }
+    
+    function closeModal() {
+      const modal = document.getElementById('alertModal');
+      modal.classList.remove('show');
+    }
+    
+    // Cerrar modal con ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    });
+    
+    // Cerrar modal al hacer click fuera
+    document.getElementById('alertModal')?.addEventListener('click', (e) => {
+      if (e.target.id === 'alertModal') {
+        closeModal();
+      }
+    });
+
     function loadScriptFrom(src) {
       return new Promise((resolve) => {
         const script = document.createElement('script');
@@ -1462,33 +1647,34 @@ $emailjsTemplateAutoReply = getenv('template_id_autoreply') ?: '';
       const email = document.getElementById('quoteEmail').value.trim();
       const passengers = parseInt(document.getElementById('passengersInput').value, 10);
       const isCustomMode = document.getElementById('defaultFields').classList.contains('is-hidden');
+      const t = window.t || window.__translate || ((key) => key);
 
       if (!name || name.length < 3) {
-        alert('Por favor ingresa un nombre válido (mínimo 3 caracteres)');
+        showModal(t('modal.error'), t('modal.invalidName'), 'error');
         return false;
       }
 
       if (!email || !email.includes('@')) {
-        alert('Por favor ingresa un correo electrónico válido');
+        showModal(t('modal.error'), t('modal.invalidEmail'), 'error');
         return false;
       }
 
       if (isNaN(passengers) || passengers < 1 || passengers > 99) {
-        alert('Por favor ingresa un número válido de pasajeros (1-99)');
+        showModal(t('modal.error'), t('modal.invalidPassengers'), 'error');
         return false;
       }
 
       if (!isCustomMode) {
         const destination = document.getElementById('quoteDestination').value.trim();
         if (!destination) {
-          alert('Por favor ingresa un destino deseado');
+          showModal(t('modal.error'), t('modal.missingDestination'), 'error');
           return false;
         }
       } else {
         const pickup = document.getElementById('quotePickup').value.trim();
         const dropoff = document.getElementById('quoteDropoff').value.trim();
         if (!pickup || !dropoff) {
-          alert('Por favor ingresa punto de recogida y destino');
+          showModal(t('modal.error'), t('modal.missingPickupDropoff'), 'error');
           return false;
         }
       }
@@ -1576,12 +1762,14 @@ $emailjsTemplateAutoReply = getenv('template_id_autoreply') ?: '';
 
         // Si al menos uno de los envíos fue exitoso, considerar exitosa la operación
         if (adminSuccess || userSuccess) {
+          const t = window.t || window.__translate || ((key) => key);
+          
           // Limpiar formulario
           document.getElementById('quoteForm').reset();
           document.getElementById('passengersInput').value = '1';
 
           // Mostrar mensaje de éxito
-          alert('¡Cotización enviada exitosamente! Te contactaremos pronto.');
+          showModal(t('modal.success'), t('modal.quoteSuccess'), 'success');
         } else {
           // Si ambos fallaron, mostrar error
           throw new Error('No se pudo enviar la cotización');
@@ -1590,8 +1778,9 @@ $emailjsTemplateAutoReply = getenv('template_id_autoreply') ?: '';
         submitBtn.disabled = false;
         submitBtn.textContent = originalText;
       } catch (error) {
+        const t = window.t || window.__translate || ((key) => key);
         console.error('Error crítico al enviar cotización:', error);
-        alert('Hubo un error al enviar tu cotización. Por favor intenta de nuevo.');
+        showModal(t('modal.error'), t('modal.quoteError'), 'error');
         submitBtn.disabled = false;
         submitBtn.textContent = originalText;
       }
@@ -1644,6 +1833,48 @@ $emailjsTemplateAutoReply = getenv('template_id_autoreply') ?: '';
 
       });
     });
+
+    // Función para actualizar todos los elementos con data-i18n
+    const updateDataI18nElements = () => {
+      const t = window.t || window.__translate || ((key) => key);
+      
+      // Actualizar elementos con data-i18n
+      const elements = document.querySelectorAll('[data-i18n]');
+      elements.forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const translation = t(key);
+        
+        // Actualizar el contenido del elemento
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+          if (el.type !== 'submit' && el.type !== 'button') {
+            el.value = translation;
+          }
+        } else if (el.tagName === 'BUTTON' || el.type === 'submit') {
+          el.textContent = translation;
+        } else {
+          el.textContent = translation;
+        }
+      });
+
+      // Actualizar elementos con data-i18n-placeholder
+      const placeholderElements = document.querySelectorAll('[data-i18n-placeholder]');
+      placeholderElements.forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        const translation = t(key);
+        if (el.hasAttribute('placeholder')) {
+          el.placeholder = translation;
+        }
+      });
+    };
+
+    // Actualizar elementos data-i18n cuando cambia el idioma
+    window.addEventListener('languageChanged', () => {
+      console.log('🌍 Idioma cambió - actualizando index.php');
+      updateDataI18nElements();
+    });
+
+    // Actualizar elementos data-i18n al cargar la página
+    updateDataI18nElements();
 
   });
   </script>

@@ -736,7 +736,6 @@
       <div class="about-content">
         <h2 data-i18n="about.title">Quiénes Somos</h2>
         <p data-i18n="about.description">En Xservicios somos un sistema de transporte turístico de lujo enfocado en ofrecer traslados seguros, eficientes y de alta calidad. Nuestra operación está diseñada para atender a clientes que valoran el confort, la puntualidad y un servicio confiable, brindando una experiencia de movilidad alineada con estándares premium en cada recorrido.</p>
-        <a href="#" class="btn-secondary" data-i18n="about.button">Conoce Nuestra Historia</a>
       </div>
     </div>
   </section>

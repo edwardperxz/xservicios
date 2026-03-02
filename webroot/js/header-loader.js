@@ -28,6 +28,7 @@
 
     const path = window.location.pathname.toLowerCase();
 
+    if (path.includes('myreservations')) return 'myreservations';
     if (path.includes('requests')) return 'requests';
     if (path.includes('trips')) return 'trips';
     if (path.includes('messages')) return 'messages';
@@ -66,7 +67,7 @@
             <span data-i18n="nav.home">Inicio</span>
           </a>
           <!-- My Reservations (Desktop Only, Logged In Users) -->
-          <a href="/myreservations" class="xserv-nav-item xserv-nav-item-auth is-hidden" id="xservNavMyReservations" data-i18n="profile.myReservations">Mis Reservas</a>
+          <a href="/myreservations" class="xserv-nav-item xserv-nav-item-auth is-hidden ${isActive('myreservations')}" id="xservNavMyReservations" data-i18n="profile.myReservations">Mis Reservas</a>
           <a href="/fleet" class="xserv-nav-item ${isActive('fleet')}">
             <span data-i18n="nav.fleet">Ver flota</span>
           </a>
@@ -101,7 +102,7 @@
               <span data-i18n="nav.home">Inicio</span>
             </a>
             <!-- My Reservations (Mobile Only, Logged In Users) -->
-            <a href="/myreservations" class="xserv-nav-item-mobile xserv-nav-item-auth is-hidden" id="xservNavMyReservationsMobile">
+            <a href="/myreservations" class="xserv-nav-item-mobile xserv-nav-item-auth is-hidden ${isActive('myreservations')}" id="xservNavMyReservationsMobile">
               <svg class="xserv-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
                 <line x1="16" y1="2" x2="16" y2="6"/>

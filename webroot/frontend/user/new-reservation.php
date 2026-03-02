@@ -1117,11 +1117,37 @@
       }
     };
 
+    // Función para actualizar todos los elementos con data-i18n
+    const updateDataI18nElements = () => {
+      const elements = document.querySelectorAll('[data-i18n]');
+      elements.forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const translation = window.t ? window.t(key) : window.__translate ? window.__translate(key) : key;
+        
+        // Si es input/textarea, usar value
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+          el.value = translation;
+          el.placeholder = translation;
+        } else {
+          // Para otros elementos, usar textContent
+          el.textContent = translation;
+        }
+      });
+    };
+
     cargarServicio();
-    window.addEventListener('languageChanged', renderServicio);
+    
+    // Actualizar elementos data-i18n cuando cambia el idioma
+    window.addEventListener('languageChanged', () => {
+      console.log('🌍 Idioma cambió - actualizando new-reservation.php');
+      updateDataI18nElements();
+      renderServicio();
+    });
+
+    // Actualizar elementos data-i18n al cargar la página
+    document.addEventListener('DOMContentLoaded', updateDataI18nElements);
   </script>
   <script src="/js/header-loader.js" defer></script>
   <script src="/js/header-dynamic.js" defer></script>
-  <script src="/js/i18n.js" defer></script>
 </body>
 </html>

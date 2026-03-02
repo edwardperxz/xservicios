@@ -707,7 +707,7 @@
 
   <!-- Hero Section -->
   <section class="hero-section">
-    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&h=900&fit=crop" alt="Paisaje turístico" class="hero-bg">
+    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&h=900&fit=crop" alt="Paisaje turístico" class="hero-bg" loading="lazy" decoding="async">
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <h1 class="hero-title"><span data-i18n="hero.titlePart1">Transporte Turístico</span> <span data-i18n="hero.titlePart2">de Lujo</span></h1>
@@ -731,7 +731,7 @@
   <section class="about-section">
     <div class="about-container">
       <div class="about-image">
-        <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=600&h=500&fit=crop" alt="Equipo Xservicios" >
+        <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=600&h=500&fit=crop" alt="Equipo Xservicios" loading="lazy" decoding="async">
       </div>
       <div class="about-content">
         <h2 data-i18n="about.title">Quiénes Somos</h2>
@@ -747,16 +747,16 @@
     <p class="gallery-subtitle" data-i18n="gallery.subtitle">Descubre los lugares más hermosos de Chiriquí con nosotros</p>
     <div class="gallery-grid">
       <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=400&h=300&fit=crop" alt="Destino turístico 1">
+        <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=400&h=300&fit=crop" alt="Destino turístico 1" loading="lazy" decoding="async">
       </div>
       <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&h=300&fit=crop" alt="Destino turístico 2">
+        <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&h=300&fit=crop" alt="Destino turístico 2" loading="lazy" decoding="async">
       </div>
       <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=300&fit=crop" alt="Destino turístico 3">
+        <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=300&fit=crop" alt="Destino turístico 3" loading="lazy" decoding="async">
       </div>
       <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=400&h=300&fit=crop" alt="Destino turístico 4">
+        <img src="https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=400&h=300&fit=crop" alt="Destino turístico 4" loading="lazy" decoding="async">
       </div>
     </div>
   </section>
@@ -769,14 +769,14 @@
         <p data-i18n="fleet.description">Nuestra flota está compuesta por unidades modernas y cuidadosamente mantenidas, pensadas para garantizar comodidad y seguridad en todo momento. Contamos con dos buses tipo Coaster y dos buses con capacidad para 15 pasajeros, lo que nos permite atender traslados turísticos y corporativos con eficiencia, adaptándonos a diferentes necesidades sin comprometer la calidad del servicio.</p>
       </div>
       <div class="fleet-image">
-        <img src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=600&h=450&fit=crop" alt="Nuestra flota de buses">
+        <img src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=600&h=450&fit=crop" alt="Nuestra flota de buses" loading="lazy" decoding="async">
       </div>
     </div>
   </section>
 
   <!-- Team Section - Nuestros Colaboradores -->
   <section class="team-section">
-    <img src="https://images.unsplash.com/photo-1449965408869-euj32f9b8d0?w=1600&h=700&fit=crop" alt="Nuestros colaboradores" class="team-bg">
+    <img src="https://images.unsplash.com/photo-1449965408869-euj32f9b8d0?w=1600&h=700&fit=crop" alt="Nuestros colaboradores" class="team-bg" loading="lazy" decoding="async">
     <div class="team-overlay"></div>
     <div class="team-content">
       <h2 data-i18n="team.title">Nuestros Colaboradores</h2>
@@ -832,9 +832,9 @@
     <p class="footer-text" data-i18n="footer.text">© 2026 <span>Xservicios</span> - Transporte Turístico de Lujo. Todos los derechos reservados.</p>
   </footer>
   
-  <!-- Scripts: El orden es importante - i18n.js debe cargar primero -->
-  <script src="/js/i18n.js"></script>
-  <script src="/js/header-loader.js"></script>
-  <script src="/js/header-dynamic.js"></script>
+  <!-- Scripts: El orden es importante - loaded asynchronously with defer -->
+  <script src="/js/i18n.js" defer></script>
+  <script src="/js/header-loader.js" defer></script>
+  <script src="/js/header-dynamic.js" defer></script>
 </body>
 </html>

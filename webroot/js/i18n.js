@@ -3,6 +3,12 @@
  * Maneja la traducción de contenido entre español e inglés
  */
 
+// Evitar cargar dos veces el mismo archivo
+if (typeof window.i18nLoaded !== 'undefined' && window.i18nLoaded) {
+  console.log('⚠️ i18n.js ya está cargado - omitiendo duplicado');
+} else {
+  window.i18nLoaded = true;
+
 const translations = {
   es: {
     // Navegación
@@ -131,6 +137,12 @@ const translations = {
     'services.loading': 'Cargando servicios...',
     'services.description': 'Descripción',
     'services.variants': 'Variantes',
+    'services.lead': 'Explora experiencias pensadas para reservar rápido: precio base, disponibilidad y detalles claros antes de elegir.',
+    'services.cardTitle': 'Reserva con confianza',
+    'services.cardText': 'Compara opciones, revisa condiciones y asegura tu servicio en menos pasos.',
+    'services.pill1': 'Confirmación rápida',
+    'services.pill2': 'Precios claros',
+    'services.pill3': 'Soporte 24/7',
     
     // Service Detail
     'service.basePrice': 'Precio base',
@@ -283,6 +295,7 @@ const translations = {
     'fleet.quoteEmail': 'Correo electrónico',
     'fleet.quoteDestination': 'Destino deseado',
     'fleet.quotePassengers': 'Número de pasajeros',
+    'fleet.quoteNotes': 'Notas adicionales (opcional)',
     'fleet.quotePassengersError': 'Mínimo 1 pasajero requerido',
     'fleet.quoteSubmit': 'Solicitar Cotización',
     'fleet.feature1Title': 'Cobertura Regional',
@@ -332,6 +345,49 @@ const translations = {
     'newReservation.scheduled': 'Reserva agendada:',
     'newReservation.dateLabel': 'Fecha',
     'newReservation.at': 'a las',
+    
+    // Destinations
+    'destinations.discover': 'Descubre',
+    'destinations.subtitle': 'La tierra de la eterna primavera te espera. Explora los destinos mas impresionantes del occidente de Panama con nuestro servicio de transporte de lujo.',
+    'destinations.tags.emblematic': 'Destino Emblematico',
+    'destinations.tags.popular': 'Mas Popular',
+    'destinations.tags.adventure': 'Aventura',
+    'destinations.tags.beach': 'Playa',
+    'destinations.tags.islands': 'Islas',
+    'destinations.tags.mountain': 'Montana',
+    'destinations.bookTransfer': 'Reservar Traslado',
+    'destinations.book': 'Reservar',
+    'destinations.volcanBaru.name': 'Volcan Baru',
+    'destinations.volcanBaru.desc': 'El punto mas alto de Panama (3,475 m). Desde su cumbre puedes ver ambos oceanos en un dia despejado. Ideal para senderismo y avistamiento de estrellas.',
+    'destinations.boquete.name': 'Boquete',
+    'destinations.boquete.desc': 'Pueblo de montana famoso por su cafe de clase mundial, clima primaveral y el Sendero de los Quetzales.',
+    'destinations.cangilones.name': 'Los Cangilones',
+    'destinations.cangilones.desc': 'Canon natural de aguas cristalinas perfecto para nadar y saltar desde las rocas.',
+    'destinations.barqueta.name': 'Playa La Barqueta',
+    'destinations.barqueta.desc': 'Extensa playa de arena oscura ideal para surfear y observar tortugas marinas.',
+    'destinations.bocaChica.name': 'Boca Chica',
+    'destinations.bocaChica.desc': 'Puerta de entrada al Parque Nacional Marino Golfo de Chiriqui y sus islas paradisiacas.',
+    'destinations.cerroPunta.name': 'Cerro Punta',
+    'destinations.cerroPunta.desc': 'El pueblo mas alto de Panama, conocido por sus fresas, hortalizas y clima fresco todo el ano.',
+    'destinations.highlight.title': 'Tu aventura en',
+    'destinations.highlight.titleEnd': 'comienza aqui',
+    'destinations.highlight.desc': 'Chiriqui es conocida como la "Tierra de los Valles y las Flores", ofreciendo una diversidad unica de paisajes: desde playas virgenes en el Pacifico hasta bosques nubosos en las tierras altas. Con Xservicios, viaja con la comodidad y seguridad que mereces.',
+    'destinations.highlight.feature1': 'Conductores locales expertos',
+    'destinations.highlight.feature2': 'Vehiculos climatizados',
+    'destinations.highlight.feature3': 'Rutas personalizadas',
+    'destinations.highlight.feature4': 'Servicio 24/7',
+    
+    // Modal
+    'modal.ok': 'OK',
+    'modal.success': '¡Éxito!',
+    'modal.error': 'Error',
+    'modal.invalidName': 'Por favor ingresa un nombre válido (mínimo 3 caracteres)',
+    'modal.invalidEmail': 'Por favor ingresa un correo electrónico válido',
+    'modal.invalidPassengers': 'Por favor ingresa un número válido de pasajeros (1-99)',
+    'modal.missingDestination': 'Por favor ingresa un destino deseado',
+    'modal.missingPickupDropoff': 'Por favor ingresa punto de recogida y destino',
+    'modal.quoteSuccess': '¡Cotización enviada exitosamente! Te contactaremos pronto.',
+    'modal.quoteError': 'Hubo un error al enviar tu cotización. Por favor intenta de nuevo.',
     
     // Forms
     'form.name': 'Nombre',
@@ -536,6 +592,12 @@ const translations = {
     'services.loading': 'Loading services...',
     'services.description': 'Description',
     'services.variants': 'Variants',
+    'services.lead': 'Explore experiences designed for quick bookings: base price, availability and clear details before you choose.',
+    'services.cardTitle': 'Book with confidence',
+    'services.cardText': 'Compare options, review conditions and secure your service in fewer steps.',
+    'services.pill1': 'Fast confirmation',
+    'services.pill2': 'Clear prices',
+    'services.pill3': '24/7 Support',
     
     // Service Detail
     'service.basePrice': 'Base price',
@@ -688,6 +750,8 @@ const translations = {
     'fleet.quoteEmail': 'Email address',
     'fleet.quoteDestination': 'Desired destination',
     'fleet.quotePassengers': 'Number of passengers',
+    'fleet.quoteNotes': 'Additional notes (optional)',
+    'fleet.adittionalNote': 'Additional notes (optional)',
     'fleet.quotePassengersError': 'Minimum 1 passenger required',
     'fleet.quoteSubmit': 'Request Quote',
     'fleet.feature1Title': 'Regional Coverage',
@@ -737,6 +801,49 @@ const translations = {
     'newReservation.scheduled': 'Reservation scheduled:',
     'newReservation.dateLabel': 'Date',
     'newReservation.at': 'at',
+    
+    // Destinations
+    'destinations.discover': 'Discover',
+    'destinations.subtitle': 'The land of eternal spring awaits you. Explore the most impressive destinations in western Panama with our luxury transportation service.',
+    'destinations.tags.emblematic': 'Iconic Destination',
+    'destinations.tags.popular': 'Most Popular',
+    'destinations.tags.adventure': 'Adventure',
+    'destinations.tags.beach': 'Beach',
+    'destinations.tags.islands': 'Islands',
+    'destinations.tags.mountain': 'Mountain',
+    'destinations.bookTransfer': 'Book Transfer',
+    'destinations.book': 'Book',
+    'destinations.volcanBaru.name': 'Baru Volcano',
+    'destinations.volcanBaru.desc': 'The highest point in Panama (3,475 m). From its summit you can see both oceans on a clear day. Ideal for hiking and stargazing.',
+    'destinations.boquete.name': 'Boquete',
+    'destinations.boquete.desc': 'Mountain town famous for its world-class coffee, spring climate, and the Quetzal Trail.',
+    'destinations.cangilones.name': 'Los Cangilones',
+    'destinations.cangilones.desc': 'Natural canyon with crystal-clear waters perfect for swimming and jumping off rocks.',
+    'destinations.barqueta.name': 'La Barqueta Beach',
+    'destinations.barqueta.desc': 'Extensive dark sand beach ideal for surfing and observing sea turtles.',
+    'destinations.bocaChica.name': 'Boca Chica',
+    'destinations.bocaChica.desc': 'Gateway to the Gulf of Chiriqui Marine National Park and its paradise islands.',
+    'destinations.cerroPunta.name': 'Cerro Punta',
+    'destinations.cerroPunta.desc': 'The highest town in Panama, known for its strawberries, vegetables, and cool climate year-round.',
+    'destinations.highlight.title': 'Your adventure in',
+    'destinations.highlight.titleEnd': 'starts here',
+    'destinations.highlight.desc': 'Chiriqui is known as the "Land of Valleys and Flowers", offering a unique diversity of landscapes: from pristine Pacific beaches to cloud forests in the highlands. With Xservicios, travel with the comfort and safety you deserve.',
+    'destinations.highlight.feature1': 'Expert local drivers',
+    'destinations.highlight.feature2': 'Air-conditioned vehicles',
+    'destinations.highlight.feature3': 'Personalized routes',
+    'destinations.highlight.feature4': '24/7 Service',
+    
+    // Modal
+    'modal.ok': 'OK',
+    'modal.success': 'Success!',
+    'modal.error': 'Error',
+    'modal.invalidName': 'Please enter a valid name (minimum 3 characters)',
+    'modal.invalidEmail': 'Please enter a valid email address',
+    'modal.invalidPassengers': 'Please enter a valid number of passengers (1-99)',
+    'modal.missingDestination': 'Please enter a desired destination',
+    'modal.missingPickupDropoff': 'Please enter pickup and drop-off locations',
+    'modal.quoteSuccess': 'Quote sent successfully! We will contact you soon.',
+    'modal.quoteError': 'There was an error sending your quote. Please try again.',
     
     // Forms
     'form.name': 'Name',
@@ -1094,6 +1201,28 @@ if (document.readyState === 'loading') {
   window.i18n = new I18n();
 }
 
+/**
+ * Función global de traducción que funciona inmediatamente
+ * No depende de que la clase I18n se haya inicializado
+ */
+window.__translate = (key) => {
+  // Obtener idioma preferido o usar español por defecto
+  const lang = localStorage.getItem('preferredLanguage') || window.__i18nPreloadLang || 'es';
+  
+  // Si el objeto translations existe, usarlo
+  if (typeof translations !== 'undefined' && translations[lang] && translations[lang][key]) {
+    return translations[lang][key];
+  }
+  
+  // Fallback a español si el idioma actual no tiene la traducción
+  if (typeof translations !== 'undefined' && translations['es'] && translations['es'][key]) {
+    return translations['es'][key];
+  }
+  
+  // Si nada funciona, retornar la clave (nunca debería pasar)
+  return key;
+};
+
 // Exponer funciones útiles globalmente
 window.setLanguage = (lang) => {
   if (window.i18n) {
@@ -1102,9 +1231,14 @@ window.setLanguage = (lang) => {
 };
 
 window.getCurrentLanguage = () => {
-  return window.i18n ? window.i18n.getCurrentLanguage() : 'es';
+  return window.i18n ? window.i18n.getCurrentLanguage() : (localStorage.getItem('preferredLanguage') || 'es');
 };
 
 window.translate = (key) => {
-  return window.i18n ? window.i18n.t(key) : key;
+  return window.i18n ? window.i18n.t(key) : window.__translate(key);
 };
+
+// Alias corto para facilitar el uso
+window.t = window.__translate;
+
+} // Cierre del condicional if (!window.i18nLoaded)

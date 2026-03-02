@@ -41,7 +41,8 @@ class XservChoferesTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
         $this->setEntityClass('App\\Model\\Entity\\XservChofer');
-
+        
+        $this->setDisplayField('usuario_id');
         $this->belongsTo('Usuarios', [
             'foreignKey' => 'usuario_id',
             'className' => 'XservUsuarios',

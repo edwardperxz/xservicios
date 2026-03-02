@@ -105,6 +105,14 @@
 
       // Cerrar dropdown al hacer clic fuera
       this.setupOutsideClick();
+
+      window.addEventListener('languageChanged', () => {
+        console.log('🌐 Idioma cambió - actualizando header');
+        // Actualizar la UI del header cuando cambie el idioma
+        if (this.userData) {
+          this.updateUserInfo(this.userData);
+        }
+      });
       
       console.log('✅ HeaderAuthManager inicializado correctamente');
     }
@@ -114,43 +122,59 @@
      */
     async checkAuth() {
       try {
+        console.log('🔍 [checkAuth] Verificando autenticación...');
+        
         // Primero intentar obtener usuario del localStorage (cache)
         const cachedUser = this.getCachedUser();
         if (cachedUser) {
+          console.log('✓ [checkAuth] Usuario encontrado en cache local:', cachedUser.email);
           this.handleAuthSuccess(cachedUser);
         }
 
         // Luego verificar con el servidor
+        console.log('🌐 [checkAuth] Consultando servidor en', this.API_ME);
+        
         const response = await fetch(this.API_ME, {
+          credentials: 'include',
           method: 'GET',
           headers: {
             'X-Requested-With': 'XMLHttpRequest',
             'Accept': 'application/json'
-          },
-          credentials: 'same-origin'
+          }
         });
+
+        console.log(`📡 [checkAuth] Respuesta del servidor:`, response.status, response.statusText);
 
         if (response.ok) {
           // Verificar que la respuesta sea JSON
           const contentType = response.headers.get('content-type');
           if (contentType && contentType.includes('application/json')) {
             const data = await response.json();
+            console.log('📊 [checkAuth] Datos recibidos - success:', data.success, '- hasUser:', !!data.user);
+            
             // El endpoint devuelve { success: true, user: {...} }
             if (data.success && data.user) {
+              console.log('✅ [checkAuth] Autenticado correctamente con rol:', data.user.rol);
               this.handleAuthSuccess(data.user);
               this.cacheUser(data.user);
             } else {
+              console.log('❌ [checkAuth] Respuesta sin usuario válido');
               this.handleAuthFailure();
             }
           } else {
             // Si no es JSON, probablemente no está autenticado
+            console.log('⚠️ [checkAuth] Respuesta no es JSON');
             this.handleAuthFailure();
           }
+        } else if (response.status === 401 || response.status === 403) {
+          console.log('🔐 [checkAuth] No autenticado (401/403)');
+          this.handleAuthFailure();
         } else {
+          console.warn(`⚠️ [checkAuth] Error del servidor:`, response.status);
           this.handleAuthFailure();
         }
       } catch (error) {
-        console.warn('Error checking authentication:', error);
+        console.warn('❌ [checkAuth] Error:', error.message);
         this.handleAuthFailure();
       }
     }
@@ -159,6 +183,13 @@
      * Maneja autenticación exitosa
      */
     handleAuthSuccess(user) {
+      console.log('✅ AUTENTICACIÓN EXITOSA - Datos del usuario:', {
+        nombre: user?.nombre,
+        email: user?.email,
+        rol: user?.rol,
+        id: user?.id
+      });
+      
       this.isAuthenticated = true;
       this.userData = user;
 
@@ -198,19 +229,32 @@
     }
 
     /**
-     * Oculta accesos segun rol
+     * Actualiza acceso según el rol del usuario
      */
     updateRoleAccess(user) {
-      const isOperador = user && user.rol === 'operador';
+      if (!user) {
+        console.warn('⚠️ [updateRoleAccess] Usuario es null/undefined');
+        return;
+      }
 
+      const rolValue = user?.rol || 'sin-rol';
+      const isOperador = rolValue === 'operador';
+      
+      console.log(`🔐 [updateRoleAccess] Procesando rol: "${rolValue}" | ¿Es operador? ${isOperador}`);
+
+      // Ocultar settings link para operadores
       if (this.settingsLink) {
         this.settingsLink.classList.toggle('is-hidden', isOperador);
+        console.log(`  └─ Settings link desktop: ${isOperador ? 'OCULTO' : 'VISIBLE'}`);
       }
 
       if (this.settingsLinkMobile) {
         this.settingsLinkMobile.classList.toggle('is-hidden', isOperador);
+        console.log(`  └─ Settings link mobile: ${isOperador ? 'OCULTO' : 'VISIBLE'}`);
       }
     }
+
+
 
     /**
      * Maneja fallo de autenticación
@@ -501,6 +545,7 @@
         console.log('📤 Enviando petición a:', this.API_LOGOUT);
         
         const response = await fetch(this.API_LOGOUT, {
+          credentials: 'include',
           method: 'POST',
           headers: headers,
           credentials: 'same-origin'

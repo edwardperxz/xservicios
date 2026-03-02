@@ -597,10 +597,10 @@
     </div>
   </section>
 
-  <!-- Scripts: El orden es importante -->
-  <script src="/js/i18n.js"></script>
-  <script src="/js/header-loader.js"></script>
-  <script src="/js/header-dynamic.js"></script>
+  <!-- Scripts: El orden es importante - loaded asynchronously with defer -->
+  <script src="/js/i18n.js" defer></script>
+  <script src="/js/header-loader.js" defer></script>
+  <script src="/js/header-dynamic.js" defer></script>
   <script>
     const API_ME = '/xserv-usuarios/me';
     const API_RESERVAS = '/xserv-reservas?api=json';
@@ -696,6 +696,7 @@
       try {
         const res = await fetch(API_ME, {
           headers: { 'X-Requested-With': 'XMLHttpRequest' },
+          credentials: 'include'
         });
 
         if (!res.ok) {
@@ -724,6 +725,7 @@
       try {
         const res = await fetch(API_RESERVAS, {
           headers: { 'X-Requested-With': 'XMLHttpRequest' },
+          credentials: 'include'
         });
         if (!res.ok) return [];
         

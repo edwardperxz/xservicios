@@ -407,7 +407,7 @@
         <h3 data-i18n="services.cardTitle">Reserva con confianza</h3>
         <p data-i18n="services.cardText">Compara opciones, revisa condiciones y asegura tu servicio en menos pasos.</p>
         <div class="hero-pills">
-          <span class="hero-pill" data-i18n="services.pill1">Confirmacion rapida</span>
+          <span class="hero-pill" data-i18n="services.pill1">Confirmación rápida</span>
           <span class="hero-pill" data-i18n="services.pill2">Precios claros</span>
           <span class="hero-pill" data-i18n="services.pill3">Soporte 24/7</span>
         </div>
@@ -518,7 +518,8 @@
     };
 
     const buildServiceCard = (servicio, index, lang) => {
-      const t = window.translate ? window.translate : (key) => key;
+      // Usar la función de traducción global que está siempre disponible
+      const t = window.t || window.__translate || ((key) => key);
       const nombre = servicio.nombre || servicio.titulo || t('services.defaultName');
       const descriptionKey = `service.${servicio.id}.description`;
       const descripcion = t(descriptionKey) || t('services.defaultDesc');
@@ -556,7 +557,8 @@
 
     const renderServicios = (append = false) => {
       if (!servicesGrid) return;
-      const t = window.translate ? window.translate : (key) => key;
+      // Usar la función de traducción global que está siempre disponible
+      const t = window.t || window.__translate || ((key) => key);
       const lang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'es';
 
       if (!serviciosCache.length) {
@@ -647,7 +649,8 @@
     cargarServicios(1);
     window.addEventListener('languageChanged', handleLanguageChange);
   </script>
-  <script src="/js/header-loader.js"></script>
-  <script src="/js/header-dynamic.js"></script>
+  <script src="/js/i18n.js" defer></script>
+  <script src="/js/header-loader.js" defer></script>
+  <script src="/js/header-dynamic.js" defer></script>
 </body>
 </html>

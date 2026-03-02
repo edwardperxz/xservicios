@@ -156,13 +156,14 @@ $this->assign('header-title', 'Nueva Reserva');
         </div>
 
         <div class="form-section">
-            <h3 class="form-section-title">Costos</h3>
+            <h3 class="form-section-title">Vehiculo y Chofer (Opcional)</h3>
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label required">Precio Pactado</label>
                     <?= $this->Form->control('precio_pactado', ['type' => 'number', 'step' => '0.01', 'min' => 0, 'class' => 'form-input', 'label' => false, 'placeholder' => '0.00', 'required' => true, 'id' => 'precio-pactado']) ?>
                     <span class="form-help">Precio base acordado en USD</span>
                 </div>
+
                 <div class="form-group">
                     <label class="form-label">ITBMS (7%)</label>
                     <?= $this->Form->control('itbms_pactado', ['type' => 'number', 'step' => '0.01', 'min' => 0, 'class' => 'form-input', 'label' => false, 'placeholder' => '0.00', 'readonly' => true, 'id' => 'itbms-pactado']) ?>
@@ -204,20 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
         <div class="form-section">
-            <h3 class="form-section-title">Estados y Observaciones</h3>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label required">Estado de Reserva</label>
-                    <?= $this->Form->control('estado', ['options' => $estadoOptions, 'empty' => 'Seleccione un estado', 'class' => 'form-select', 'label' => false, 'required' => true]) ?>
-                    <span class="form-help">Estado actual de la reserva</span>
-                </div>
-                <div class="form-group">
-                    <label class="form-label required">Estado de Pago</label>
-                    <?= $this->Form->control('estado_pago', ['options' => $estadoPagoOptions, 'empty' => 'Seleccione estado de pago', 'class' => 'form-select', 'label' => false, 'required' => true]) ?>
-                    <span class="form-help">Estado del pago</span>
-                </div>
-            </div>
-            
+            <h3 class="form-section-title">Observaciones</h3>       
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label">Observaciones</label>

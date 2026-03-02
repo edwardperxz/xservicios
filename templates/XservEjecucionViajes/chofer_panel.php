@@ -703,6 +703,7 @@ async function iniciarServicio(event) {
                 'Content-Type': 'application/json',
                 'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
             },
+            credentials: 'include',
             body: JSON.stringify(data)
         });
 
@@ -741,6 +742,7 @@ async function finalizarServicio(event) {
                 'Content-Type': 'application/json',
                 'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
             },
+            credentials: 'include',
             body: JSON.stringify(data)
         });
 
@@ -780,6 +782,7 @@ async function reportarIncidencia(event) {
                 'Content-Type': 'application/json',
                 'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
             },
+            credentials: 'include',
             body: JSON.stringify(data)
         });
 
@@ -809,6 +812,7 @@ async function resolverIncidencia(incidenciaId) {
                 'Content-Type': 'application/json',
                 'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
             },
+            credentials: 'include',
             body: JSON.stringify({ incidencia_id: incidenciaId })
         });
 

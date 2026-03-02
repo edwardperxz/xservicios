@@ -23,6 +23,94 @@ class XservChoferesController extends AppController
     }
 
     /**
+     * Profile method - Show driver profile with dynamic data
+     *
+     * @param string|null $id Xserv Chofer id (optional, gets current user's driver if not provided)
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function profile(?string $id = null)
+    {
+        $this->Authorization->skipAuthorization();
+        
+        $currentUser = $this->Authentication->getIdentity();
+        
+        // If no ID provided, get the current user's driver profile
+        if (!$id && $currentUser) {
+            $chofer = $this->XservChoferes->find()
+                ->contain(['Usuarios'])
+                ->where(['usuario_id' => $currentUser->id])
+                ->first();
+            
+            if (!$chofer) {
+                return $this->redirect(['controller' => 'Pages', 'action' => 'home']);
+            }
+        } else {
+            // Get specific driver profile
+            $chofer = $this->XservChoferes->get($id, contain: ['Usuarios']);
+        }
+        
+        // Load models for stats
+        $this->loadModel('XservAsignaciones');
+        $this->loadModel('XservValoraciones');
+        
+        // Get assignments for this driver
+        $asignacionesIds = $this->XservAsignaciones->find()
+            ->where(['chofer_id' => $chofer->id])
+            ->select(['id', 'reserva_id'])
+            ->toArray();
+        
+        $reservasIds = array_column($asignacionesIds, 'reserva_id');
+        
+        // Calculate statistics
+        $totalViajes = count($asignacionesIds);
+        $viajuesCompletados = $this->XservAsignaciones->find()
+            ->where(['chofer_id' => $chofer->id, 'estado_asignacion' => 'finalizada'])
+            ->count();
+        
+        $promediCalificacion = 0;
+        $totalValoraciones = 0;
+        
+        if (!empty($reservasIds)) {
+            $promediCalificacion = $this->XservValoraciones->find()
+                ->select(['promedio' => $this->XservValoraciones->find()->func('AVG', ['calificacion'])])
+                ->whereInList('reserva_id', $reservasIds)
+                ->first()
+                ->promedio ?? 0;
+            
+            $totalValoraciones = $this->XservValoraciones->find()
+                ->whereInList('reserva_id', $reservasIds)
+                ->count();
+        }
+        
+        // Get recent ratings
+        $valoraciones = $this->XservValoraciones->find()
+            ->whereInList('reserva_id', $reservasIds)
+            ->contain(['Reservas.Clientes.Usuarios'])
+            ->order(['created_at' => 'DESC'])
+            ->limit(5)
+            ->all();
+        
+        // Get recent activity
+        $actividadReciente = $this->XservAsignaciones->find()
+            ->where(['chofer_id' => $chofer->id])
+            ->contain(['Reservas.Clientes.Usuarios'])
+            ->order(['created_at' => 'DESC'])
+            ->limit(6)
+            ->all();
+        
+        $estadisticas = [
+            'total_viajes' => $totalViajes,
+            'viajes_completados' => $viajuesCompletados,
+            'promedio_calificacion' => round((float)$promediCalificacion, 1),
+            'total_valoraciones' => $totalValoraciones,
+            'clientes_atendidos' => count(array_unique(array_column($actividadReciente->toArray(), 'reserva_id'))),
+        ];
+        
+        $this->set(compact('chofer', 'estadisticas', 'valoraciones', 'actividadReciente'));
+        $this->viewBuilder()->setLayout('');
+    }
+
+    /**
      * Index method
      *
      * @return \Cake\Http\Response|null|void Renders view

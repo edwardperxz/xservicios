@@ -109,6 +109,19 @@ return function (RouteBuilder $routes): void {
             ['controller' => 'XservUsuarios', 'action' => 'me', '_ext' => 'json']
         );
 
+        // ==============================
+        // XservChoferes
+        // ==============================
+        $builder->connect(
+            '/xserv-choferes/profile',
+            ['controller' => 'XservChoferes', 'action' => 'profile']
+        );
+        $builder->connect(
+            '/xserv-choferes/profile/:id',
+            ['controller' => 'XservChoferes', 'action' => 'profile'],
+            ['id' => '[0-9]+', 'pass' => ['id']]
+        );
+
         $builder->connect('/', [
             'controller' => 'Home',
             'action' => 'index'

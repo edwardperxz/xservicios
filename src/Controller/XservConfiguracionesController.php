@@ -10,6 +10,18 @@ namespace App\Controller;
  */
 class XservConfiguracionesController extends AppController
 {
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+        $this->Authorization->skipAuthorization();
+        
+        // Usar layout admin si el usuario es admin
+        $user = $this->Authentication->getIdentity();
+        if ($user && $user->rol === 'admin') {
+            $this->viewBuilder()->setLayout('admin');
+        }
+    }
+
     /**
      * Index method
      *
@@ -17,16 +29,47 @@ class XservConfiguracionesController extends AppController
      */
     public function index()
     {
+        $user = $this->Authentication->getIdentity();
+        $isAdmin = $user && $user->rol === 'admin';
+        $filters = $this->request->getQuery();
+
         $query = $this->XservConfiguraciones->find();
+
+        if (!empty($filters['grupo'])) {
+            $query->where(['grupo' => $filters['grupo']]);
+        }
+
+        if (!empty($filters['clave'])) {
+            $query->where(['clave LIKE' => '%' . $filters['clave'] . '%']);
+        }
+
+        if ($filters['editable_por_admin'] ?? '' !== '') {
+            $query->where(['editable_por_admin' => (int)$filters['editable_por_admin']]);
+        }
+
         $xservConfiguraciones = $this->paginate($query);
 
-        $this->set(compact('xservConfiguraciones'));
+        // Obtener valores distinctos para filtros
+        $grupos = $this->XservConfiguraciones->find()
+            ->select(['grupo'])
+            ->distinct(['grupo'])
+            ->where(['grupo IS NOT' => null])
+            ->order(['grupo' => 'ASC'])
+            ->all()
+            ->extract('grupo')
+            ->toList();
+
+        $this->set(compact('xservConfiguraciones', 'filters', 'grupos'));
+
+        if ($isAdmin) {
+            $this->render('admin_index');
+        }
     }
 
     /**
      * View method
      *
-     * @param string|null $id Xserv Configuracione id.
+    * @param string|null $id Xserv Configuracion id.
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
@@ -47,11 +90,11 @@ class XservConfiguracionesController extends AppController
         if ($this->request->is('post')) {
             $xservConfiguracione = $this->XservConfiguraciones->patchEntity($xservConfiguracione, $this->request->getData());
             if ($this->XservConfiguraciones->save($xservConfiguracione)) {
-                $this->Flash->success(__('The xserv configuracione has been saved.'));
+                $this->Flash->success(__('The xserv configuracion has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The xserv configuracione could not be saved. Please, try again.'));
+            $this->Flash->error(__('The xserv configuracion could not be saved. Please, try again.'));
         }
         $this->set(compact('xservConfiguracione'));
     }
@@ -59,7 +102,7 @@ class XservConfiguracionesController extends AppController
     /**
      * Edit method
      *
-     * @param string|null $id Xserv Configuracione id.
+    * @param string|null $id Xserv Configuracion id.
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
@@ -69,11 +112,11 @@ class XservConfiguracionesController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $xservConfiguracione = $this->XservConfiguraciones->patchEntity($xservConfiguracione, $this->request->getData());
             if ($this->XservConfiguraciones->save($xservConfiguracione)) {
-                $this->Flash->success(__('The xserv configuracione has been saved.'));
+                $this->Flash->success(__('The xserv configuracion has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The xserv configuracione could not be saved. Please, try again.'));
+            $this->Flash->error(__('The xserv configuracion could not be saved. Please, try again.'));
         }
         $this->set(compact('xservConfiguracione'));
     }
@@ -81,7 +124,7 @@ class XservConfiguracionesController extends AppController
     /**
      * Delete method
      *
-     * @param string|null $id Xserv Configuracione id.
+    * @param string|null $id Xserv Configuracion id.
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
@@ -90,9 +133,9 @@ class XservConfiguracionesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $xservConfiguracione = $this->XservConfiguraciones->get($id);
         if ($this->XservConfiguraciones->delete($xservConfiguracione)) {
-            $this->Flash->success(__('The xserv configuracione has been deleted.'));
+            $this->Flash->success(__('The xserv configuracion has been deleted.'));
         } else {
-            $this->Flash->error(__('The xserv configuracione could not be deleted. Please, try again.'));
+            $this->Flash->error(__('The xserv configuracion could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);

@@ -10,6 +10,18 @@ namespace App\Controller;
  */
 class XservVehiculosController extends AppController
 {
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+        $this->Authorization->skipAuthorization();
+        
+        // Usar layout admin si el usuario es admin
+        $user = $this->Authentication->getIdentity();
+        if ($user && $user->rol === 'admin') {
+            $this->viewBuilder()->setLayout('admin');
+        }
+    }
+
     /**
      * Index method
      *
@@ -18,10 +30,77 @@ class XservVehiculosController extends AppController
     public function index()
     {
         $this->Authorization->skipAuthorization();
+        
+        $user = $this->Authentication->getIdentity();
+        $isAdmin = $user && $user->rol === 'admin';
+        
         $query = $this->XservVehiculos->find();
+        
+        $filters = $this->request->getQuery();
+        
+        if (!empty($filters['tipo'])) {
+            $query->where(['tipo' => $filters['tipo']]);
+        }
+        
+        if (!empty($filters['estado_operativo'])) {
+            $query->where(['estado_operativo' => $filters['estado_operativo']]);
+        }
+        
+        if (!empty($filters['placa'])) {
+            $query->where(['OR' => [
+                'placa LIKE' => '%' . $filters['placa'] . '%',
+                'nombre_unidad LIKE' => '%' . $filters['placa'] . '%'
+            ]]);
+        }
+        
+        $xservVehiculos = $this->paginate($query);
+        
+        $this->set(compact('xservVehiculos', 'filters'));
+        
+        if ($isAdmin) {
+            $this->render('admin_index');
+        }
+    }
+
+    /**
+     * Admin index method
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     */
+    public function adminIndex()
+    {
+        $this->Authorization->skipAuthorization();
+
+        $user = $this->Authentication->getIdentity();
+        if (!$user || $user->rol !== 'admin') {
+            return $this->redirect(['controller' => 'XservUsuarios', 'action' => 'profile']);
+        }
+
+        $this->viewBuilder()->setLayout('admin');
+
+        $query = $this->XservVehiculos->find();
+
+        $filters = $this->request->getQuery();
+
+        if (!empty($filters['tipo'])) {
+            $query->where(['tipo' => $filters['tipo']]);
+        }
+
+        if (!empty($filters['estado_operativo'])) {
+            $query->where(['estado_operativo' => $filters['estado_operativo']]);
+        }
+
+        if (!empty($filters['placa'])) {
+            $query->where(['OR' => [
+                'placa LIKE' => '%' . $filters['placa'] . '%',
+                'nombre_unidad LIKE' => '%' . $filters['placa'] . '%'
+            ]]);
+        }
+
         $xservVehiculos = $this->paginate($query);
 
-        $this->set(compact('xservVehiculos'));
+        $this->set(compact('xservVehiculos', 'filters'));
+        $this->render('admin_index');
     }
 
     /**
@@ -48,7 +127,36 @@ class XservVehiculosController extends AppController
         $this->Authorization->skipAuthorization();
         $xservVehiculo = $this->XservVehiculos->newEmptyEntity();
         if ($this->request->is('post')) {
-            $xservVehiculo = $this->XservVehiculos->patchEntity($xservVehiculo, $this->request->getData());
+            $data = $this->request->getData();
+            
+            // Manejar carga de archivo
+            if (!empty($data['foto']) && $data['foto']->getSize() > 0) {
+                $uploadDir = WWW_ROOT . 'img' . DS . 'vehiculos' . DS;
+                
+                // Crear directorio si no existe
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+                
+                $file = $data['foto'];
+                $filename = time() . '_' . $file->getClientFilename();
+                $filepath = $uploadDir . $filename;
+                
+                // Mover archivo cargado
+                try {
+                    $file->moveTo($filepath);
+                    $data['foto_url'] = '/img/vehiculos/' . $filename;
+                } catch (\Exception $e) {
+                    $this->Flash->error(__('Error al subir la imagen.'));
+                    $this->set(compact('xservVehiculo'));
+                    return;
+                }
+            }
+            
+            // Eliminar la clave 'foto' si existe (no es parte del modelo)
+            unset($data['foto']);
+            
+            $xservVehiculo = $this->XservVehiculos->patchEntity($xservVehiculo, $data);
             if ($this->XservVehiculos->save($xservVehiculo)) {
                 $this->Flash->success(__('The xserv vehiculo has been saved.'));
 
@@ -71,7 +179,44 @@ class XservVehiculosController extends AppController
         $this->Authorization->skipAuthorization();
         $xservVehiculo = $this->XservVehiculos->get($id, contain: []);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $xservVehiculo = $this->XservVehiculos->patchEntity($xservVehiculo, $this->request->getData());
+            $data = $this->request->getData();
+            
+            // Manejar carga de archivo
+            if (!empty($data['foto']) && $data['foto']->getSize() > 0) {
+                $uploadDir = WWW_ROOT . 'img' . DS . 'vehiculos' . DS;
+                
+                // Crear directorio si no existe
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+                
+                // Eliminar foto anterior si existe
+                if (!empty($xservVehiculo->foto_url)) {
+                    $oldPath = WWW_ROOT . ltrim($xservVehiculo->foto_url, '/');
+                    if (is_file($oldPath)) {
+                        unlink($oldPath);
+                    }
+                }
+                
+                $file = $data['foto'];
+                $filename = time() . '_' . $file->getClientFilename();
+                $filepath = $uploadDir . $filename;
+                
+                // Mover archivo cargado
+                try {
+                    $file->moveTo($filepath);
+                    $data['foto_url'] = '/img/vehiculos/' . $filename;
+                } catch (\Exception $e) {
+                    $this->Flash->error(__('Error al subir la imagen.'));
+                    $this->set(compact('xservVehiculo'));
+                    return;
+                }
+            }
+            
+            // Eliminar la clave 'foto' si existe (no es parte del modelo)
+            unset($data['foto']);
+            
+            $xservVehiculo = $this->XservVehiculos->patchEntity($xservVehiculo, $data);
             if ($this->XservVehiculos->save($xservVehiculo)) {
                 $this->Flash->success(__('The xserv vehiculo has been saved.'));
 

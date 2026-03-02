@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\I18n\I18n;
+
 /**
  * XservServicios Controller
  *
@@ -10,6 +12,22 @@ namespace App\Controller;
  */
 class XservServiciosController extends AppController
 {
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+        $this->Authentication->addUnauthenticatedActions(['index', 'view']);
+        $this->Authorization->skipAuthorization();
+        
+        // Usar layout admin si el usuario es admin
+        $user = $this->Authentication->getIdentity();
+        if ($user && $user->rol === 'admin') {
+            $this->viewBuilder()->setLayout('admin');
+        }
+
+        // Asegurar que Translate use el locale actual
+        $this->XservServicios->setLocale(I18n::getLocale());
+    }
+
     /**
      * Index method
      *
@@ -18,18 +36,60 @@ class XservServiciosController extends AppController
     public function index()
     {
         $this->Authorization->skipAuthorization();
+        
+        $user = $this->Authentication->getIdentity();
+        $isAdmin = $user && $user->rol === 'admin';
 
         $query = $this->XservServicios->find();
+        
+        $filters = $this->request->getQuery();
+        
+        // Para frontend público: mostrar solo servicios activos por defecto
+        if (!$isAdmin) {
+            $query->where(['estado' => 'activo']);
+        }
+        
+        if (!empty($filters['estado'])) {
+            $query->where(['estado' => $filters['estado']]);
+        }
+        
+        if (!empty($filters['nombre'])) {
+            $query->where(['nombre LIKE' => '%' . $filters['nombre'] . '%']);
+        }
+        
+        // Configurar paginación: 12 items por página
+        $this->paginate = [
+            'limit' => 12,
+            'order' => ['XservServicios.created_at' => 'DESC']
+        ];
+        
         $xservServicios = $this->paginate($query);
 
         if ($this->request->is('json') || $this->request->getHeader('X-Requested-With') === 'XMLHttpRequest') {
             $this->response = $this->response->withType('application/json');
+            
+            // Obtener información de paginación
+            $paging = $this->request->getAttribute('paging');
+            $pagingInfo = $paging['XservServicios'] ?? [];
+            
             return $this->response->withStringBody(json_encode([
                 'xservServicios' => $xservServicios->toArray(),
+                'pagination' => [
+                    'page' => $pagingInfo['page'] ?? 1,
+                    'pageCount' => $pagingInfo['pageCount'] ?? 1,
+                    'total' => $pagingInfo['count'] ?? 0,
+                    'limit' => $pagingInfo['perPage'] ?? 12,
+                    'hasPrevious' => !empty($pagingInfo['prevPage']),
+                    'hasNext' => !empty($pagingInfo['nextPage']),
+                ]
             ]));
         }
 
-        $this->set(compact('xservServicios'));
+        $this->set(compact('xservServicios', 'filters'));
+        
+        if ($isAdmin) {
+            $this->render('admin_index');
+        }
     }
 
     /**
@@ -43,7 +103,28 @@ class XservServiciosController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
+        $queryLang = $this->request->getQuery('lang');
+        $cookieLang = $this->request->getCookie('locale');
+        $locale = $queryLang ?: ($cookieLang ?: I18n::getLocale());
+        if (in_array($locale, ['es', 'en'], true)) {
+            I18n::setLocale($locale);
+            $this->XservServicios->setLocale($locale);
+        }
+
         $xservServicio = $this->XservServicios->get($id, contain: []);
+        if ($this->request->is('json') || $this->request->getHeader('X-Requested-With') === 'XMLHttpRequest') {
+            $this->response = $this->response->withType('application/json');
+            return $this->response->withStringBody(json_encode([
+                'xservServicio' => [
+                    'id' => $xservServicio->id,
+                    'nombre' => $xservServicio->nombre,
+                    'estado' => $xservServicio->estado,
+                    'precio_base' => $xservServicio->precio_base,
+                    'variantes' => $xservServicio->variantes,
+                ],
+            ]));
+        }
+
         $this->set(compact('xservServicio'));
     }
 
@@ -54,6 +135,9 @@ class XservServiciosController extends AppController
      */
     public function add()
     {
+        // Siempre guardar descripcion base en espanol
+        $this->XservServicios->setLocale('es');
+
         $xservServicio = $this->XservServicios->newEmptyEntity();
         if ($this->request->is('post')) {
             $xservServicio = $this->XservServicios->patchEntity($xservServicio, $this->request->getData());
@@ -76,6 +160,9 @@ class XservServiciosController extends AppController
      */
     public function edit(?string $id = null)
     {
+        // Siempre editar descripcion base en espanol
+        $this->XservServicios->setLocale('es');
+
         $xservServicio = $this->XservServicios->get($id, contain: []);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $xservServicio = $this->XservServicios->patchEntity($xservServicio, $this->request->getData());

@@ -47,6 +47,13 @@ class XservUsuariosTable extends Table
             'dependent' => false,
             'className' => 'XservChoferes'
         ]);
+
+        // Asociación con clientes
+        $this->hasOne('XservClientes', [
+            'foreignKey' => 'usuario_id',
+            'dependent' => false,
+            'className' => 'XservClientes'
+        ]);
     }
 
     /**
@@ -70,12 +77,29 @@ class XservUsuariosTable extends Table
         $validator
             ->email('correo', true, 'Debe ingresar un correo electrónico válido')
             ->requirePresence('correo', 'create')
-            ->notEmptyString('correo', 'El correo electrónico es requerido')
+            ->notEmptyString('correo')
             ->add('correo', 'unique', [
                 'rule' => 'validateUnique',
                 'provider' => 'table',
                 'message' => 'Este correo electrónico ya está registrado'
             ]);
+
+        $validator
+            ->scalar('nombre')
+            ->maxLength('nombre', 100)
+            ->requirePresence('nombre', 'create')
+            ->notEmptyString('nombre');
+
+        $validator
+            ->scalar('telefono')
+            ->maxLength('telefono', 20)
+            ->requirePresence('telefono', 'create')
+            ->notEmptyString('telefono');
+
+        $validator
+            ->scalar('identificacion')
+            ->maxLength('identificacion', 50)
+            ->allowEmptyString('identificacion');
 
         $validator
             ->scalar('password')

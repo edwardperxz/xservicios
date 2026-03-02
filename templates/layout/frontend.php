@@ -10,14 +10,14 @@
     <?= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $this->fetch('title') ?: 'Xservicios' ?></title>
-    <?= $this->Html->meta('csrfToken', $this->request->getAttribute('csrfToken')) ?>
+    <meta name="csrf-token" content="<?= $this->request->getAttribute('csrfToken') ?>">
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
     <style>
         .flash-container {
             position: fixed;
-            top: 20px;
+            top: 90px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 9999;

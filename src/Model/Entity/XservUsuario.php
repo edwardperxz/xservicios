@@ -14,6 +14,10 @@ use Cake\ORM\Entity;
  * @property string $password
  * @property string $rol
  * @property string|null $estado
+ * @property string $correo
+ * @property string $nombre
+ * @property string $telefono
+ * @property string|null $identificacion
  * @property \Cake\I18n\DateTime|null $created_at
  * @property \Cake\I18n\DateTime|null $updated_at
  */
@@ -33,6 +37,10 @@ class XservUsuario extends Entity
         'password' => true,
         'rol' => true,
         'estado' => true,
+        'correo' => true,
+        'nombre' => true,
+        'telefono' => true,
+        'identificacion' => true,
     ];
 
     /**

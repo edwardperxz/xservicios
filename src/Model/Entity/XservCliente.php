@@ -9,14 +9,14 @@ use Cake\ORM\Entity;
  * XservCliente Entity
  *
  * @property int $id
- * @property string $nombre
+ * @property int|null $usuario_id
  * @property string|null $identificacion_fiscal
- * @property string $correo
- * @property string $telefono
  * @property string|null $direccion_facturacion
  * @property string|null $idioma_preferido
  * @property \Cake\I18n\DateTime|null $created_at
  * @property \Cake\I18n\DateTime|null $updated_at
+ *
+ * @property \App\Model\Entity\XservUsuario $usuario
  */
 class XservCliente extends Entity
 {
@@ -30,13 +30,12 @@ class XservCliente extends Entity
      * @var array<string, bool>
      */
     protected array $_accessible = [
-        'nombre' => true,
+        'usuario_id' => true,
         'identificacion_fiscal' => true,
-        'correo' => true,
-        'telefono' => true,
         'direccion_facturacion' => true,
         'idioma_preferido' => true,
         'created_at' => true,
         'updated_at' => true,
+        'usuario' => true,
     ];
 }

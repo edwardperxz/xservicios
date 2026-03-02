@@ -12,27 +12,26 @@
             <thead>
                 <tr>
                     <th><?= $this->Paginator->sort('id') ?></th>
-                    <th><?= $this->Paginator->sort('nombre') ?></th>
+                    <th><?= $this->Paginator->sort('XservUsuarios.username', 'Usuario') ?></th>
+                    <th><?= $this->Paginator->sort('XservUsuarios.nombre', 'Nombre') ?></th>
                     <th><?= $this->Paginator->sort('identificacion_fiscal') ?></th>
-                    <th><?= $this->Paginator->sort('correo') ?></th>
-                    <th><?= $this->Paginator->sort('telefono') ?></th>
                     <th><?= $this->Paginator->sort('idioma_preferido') ?></th>
                     <th><?= $this->Paginator->sort('created_at') ?></th>
-                    <th><?= $this->Paginator->sort('updated_at') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($xservClientes as $xservCliente): ?>
+                <?php $usuario = $xservCliente->usuario ?? null; ?>
+                <?php $username = $usuario->username ?? null; ?>
+                <?php $nombre = $usuario->nombre ?? null; ?>
                 <tr>
                     <td><?= $this->Number->format($xservCliente->id) ?></td>
-                    <td><?= h($xservCliente->nombre) ?></td>
+                    <td><?= $usuario && $username !== null && $username !== '' ? h($username) : 'Sin usuario' ?></td>
+                    <td><?= $nombre !== null && $nombre !== '' ? h($nombre) : 'Sin nombre' ?></td>
                     <td><?= h($xservCliente->identificacion_fiscal) ?></td>
-                    <td><?= h($xservCliente->correo) ?></td>
-                    <td><?= h($xservCliente->telefono) ?></td>
                     <td><?= h($xservCliente->idioma_preferido) ?></td>
                     <td><?= h($xservCliente->created_at) ?></td>
-                    <td><?= h($xservCliente->updated_at) ?></td>
                     <td class="actions">
                         <?= $this->Html->link(__('View'), ['action' => 'view', $xservCliente->id]) ?>
                         <?= $this->Html->link(__('Edit'), ['action' => 'edit', $xservCliente->id]) ?>

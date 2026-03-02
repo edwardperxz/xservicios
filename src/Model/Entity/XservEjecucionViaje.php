@@ -23,7 +23,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\DateTime|null $created_at
  * @property \Cake\I18n\DateTime|null $updated_at
  *
- * @property \App\Model\Entity\XservAsignacione $asignacion
+ * @property \App\Model\Entity\XservAsignacion $asignacion
  */
 class XservEjecucionViaje extends Entity
 {

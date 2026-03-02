@@ -1,11 +1,11 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var iterable<\App\Model\Entity\XservChofere> $xservChoferes
+ * @var iterable<\App\Model\Entity\XservChofer> $xservChoferes
  */
 ?>
 <div class="xservChoferes index content">
-    <?= $this->Html->link(__('New Xserv Chofere'), ['action' => 'add'], ['class' => 'button float-right']) ?>
+    <?= $this->Html->link(__('New Xserv Chofer'), ['action' => 'add'], ['class' => 'button float-right']) ?>
     <h3><?= __('Xserv Choferes') ?></h3>
     <div class="table-responsive">
         <table>
@@ -13,10 +13,10 @@
                 <tr>
                     <th><?= $this->Paginator->sort('id') ?></th>
                     <th><?= $this->Paginator->sort('usuario_id') ?></th>
-                    <th><?= $this->Paginator->sort('nombre') ?></th>
-                    <th><?= $this->Paginator->sort('identificacion') ?></th>
-                    <th><?= $this->Paginator->sort('telefono') ?></th>
-                    <th><?= $this->Paginator->sort('correo') ?></th>
+                    <th><?= $this->Paginator->sort('Usuarios.nombre', 'Nombre') ?></th>
+                    <th><?= $this->Paginator->sort('Usuarios.identificacion', 'Identificacion') ?></th>
+                    <th><?= $this->Paginator->sort('Usuarios.telefono', 'Telefono') ?></th>
+                    <th><?= $this->Paginator->sort('Usuarios.correo', 'Correo') ?></th>
                     <th><?= $this->Paginator->sort('estado') ?></th>
                     <th><?= $this->Paginator->sort('fecha_ingreso') ?></th>
                     <th><?= $this->Paginator->sort('tipo_licencia') ?></th>
@@ -31,10 +31,10 @@
                 <tr>
                     <td><?= $this->Number->format($xservChofere->id) ?></td>
                     <td><?= $xservChofere->hasValue('usuario') ? $this->Html->link($xservChofere->usuario->username, ['controller' => 'XservUsuarios', 'action' => 'view', $xservChofere->usuario->id]) : '' ?></td>
-                    <td><?= h($xservChofere->nombre) ?></td>
-                    <td><?= h($xservChofere->identificacion) ?></td>
-                    <td><?= h($xservChofere->telefono) ?></td>
-                    <td><?= h($xservChofere->correo) ?></td>
+                    <td><?= h($xservChofere->usuario->nombre ?? '') ?></td>
+                    <td><?= h($xservChofere->usuario->identificacion ?? '') ?></td>
+                    <td><?= h($xservChofere->usuario->telefono ?? '') ?></td>
+                    <td><?= h($xservChofere->usuario->correo ?? '') ?></td>
                     <td><?= h($xservChofere->estado) ?></td>
                     <td><?= h($xservChofere->fecha_ingreso) ?></td>
                     <td><?= h($xservChofere->tipo_licencia) ?></td>

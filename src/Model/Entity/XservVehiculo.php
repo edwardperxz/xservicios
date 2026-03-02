@@ -13,6 +13,8 @@ use Cake\ORM\Entity;
  * @property string|null $nombre_unidad
  * @property int $capacidad_max
  * @property string $placa
+ * @property string|null $color
+ * @property string|null $foto_url
  * @property int|null $anio
  * @property int|null $kilometraje_actual
  * @property string|null $estado_operativo
@@ -35,6 +37,8 @@ class XservVehiculo extends Entity
         'nombre_unidad' => true,
         'capacidad_max' => true,
         'placa' => true,
+        'color' => true,
+        'foto_url' => true,
         'anio' => true,
         'kilometraje_actual' => true,
         'estado_operativo' => true,

@@ -86,8 +86,8 @@ class XservUsuariosController extends AppController
     {
         $this->Authorization->skipAuthorization();
 
-        $user = $this->Authentication->getIdentity();
-        if (!$user) {
+        $userIdentity = $this->Authentication->getIdentity();
+        if (!$userIdentity) {
             $this->Flash->error('Debe iniciar sesión para ver el perfil', [
                 'params' => ['i18n' => 'errors.mustLoginProfile'],
             ]);
@@ -95,10 +95,10 @@ class XservUsuariosController extends AppController
         }
 
         // Solo redirigir si es chofer
-        if ($user->rol === 'chofer') {
+        if ($userIdentity->rol === 'chofer') {
             $chofer = $this->XservUsuarios->XservChoferes
                 ->find()
-                ->where(['usuario_id' => $user->id])
+                ->where(['usuario_id' => $userIdentity->id])
                 ->first();
 
             if ($chofer) {
@@ -111,8 +111,11 @@ class XservUsuariosController extends AppController
             }
         }
 
-        // Para admin u operador, puedes mostrar profile normal
-        $this->set(compact('user'));
+        // Para admin u operador, mostrar interfaz completa del perfil
+        $usuario = $this->XservUsuarios->get($userIdentity->id);
+        $this->set(compact('usuario'));
+        $this->viewBuilder()->disableAutoLayout();
+        $this->render('/Profile/index');
     }
 
     public function me(): ?Response
@@ -145,7 +148,7 @@ class XservUsuariosController extends AppController
                 'user' => [
                     'id' => $user->id ?? null,
                     'username' => $user->username ?? null,
-                    'nombre' => $user->nombre ?? null,
+                    'correo' => $user->correo ?? null,
                     'rol' => $user->rol ?? null,
                 ],
             ]));
@@ -164,6 +167,15 @@ class XservUsuariosController extends AppController
     public function index()
     {
         $this->Authorization->skipAuthorization();
+        
+        // Obtener usuario autenticado
+        $user = $this->Authentication->getIdentity();
+        $isAdmin = $user && $user->rol === 'admin';
+        
+        // Configurar layout para admin
+        if ($isAdmin) {
+            $this->viewBuilder()->setLayout('admin');
+        }
 
         $query = $this->XservUsuarios->find();
 
@@ -183,7 +195,12 @@ class XservUsuariosController extends AppController
 
         $xservUsuarios = $this->paginate($query);
 
-        $this->set(compact('xservUsuarios', 'filters'));
+        $this->set(compact('xservUsuarios', 'filters', 'user'));
+        
+        // Renderizar vista específica para admin
+        if ($isAdmin) {
+            $this->render('admin_index');
+        }
     }
 
 
@@ -198,8 +215,15 @@ class XservUsuariosController extends AppController
     public function view(?string $id = null)
     {
         $this->Authorization->skipAuthorization();
-        $xservUsuario = $this->XservUsuarios->get($id, contain: []);
-        $this->set(compact('xservUsuario'));
+        
+        // Usar layout admin para usuarios con rol admin
+        $authUser = $this->Authentication->getIdentity();
+        if ($authUser && $authUser->rol === 'admin') {
+            $this->viewBuilder()->setLayout('admin');
+        }
+        
+        $xservUsuario = $this->XservUsuarios->get($id, contain: ['XservChoferes', 'XservClientes']);
+        $this->set(compact('xservUsuario', 'authUser'));
     }
 
     /**
@@ -209,22 +233,46 @@ class XservUsuariosController extends AppController
      */
     public function add()
     {
+        $this->Authorization->skipAuthorization();
+        
+        // Verificar si el usuario autenticado es admin
+        $authUser = $this->Authentication->getIdentity();
+        $isAdmin = $authUser && $authUser->rol === 'admin';
+        
+        if ($isAdmin) {
+            $this->viewBuilder()->setLayout('admin');
+        }
+        
         $xservUsuario = $this->XservUsuarios->newEmptyEntity();
+        
         if ($this->request->is('post')) {
-            $xservUsuario = $this->XservUsuarios->patchEntity($xservUsuario, $this->request->getData());
-
-            // Forzamos el rol si no viene en el form para evitar inyecciones de privilegios
-            $xservUsuario->rol = 'cliente';
-            $xservUsuario->estado = 'activo';
+            $data = $this->request->getData();
+            
+            // Si es admin, puede asignar cualquier rol, sino forzamos cliente
+            if (!$isAdmin) {
+                $data['rol'] = 'cliente';
+                $data['estado'] = 'activo';
+            }
+            
+            $xservUsuario = $this->XservUsuarios->patchEntity($xservUsuario, $data);
 
             if ($this->XservUsuarios->save($xservUsuario)) {
-                $this->Flash->success(__('Cuenta creada con éxito. Ya puedes iniciar sesión.'));
-
-                return $this->redirect(['action' => 'login']);
+                if ($isAdmin) {
+                    $this->Flash->success(__('El usuario ha sido creado exitosamente.'));
+                    return $this->redirect(['action' => 'index']);
+                } else {
+                    $this->Flash->success(__('Cuenta creada con éxito. Ya puedes iniciar sesión.'));
+                    return $this->redirect(['action' => 'login']);
+                }
             }
-            $this->Flash->error(__('No se pudo crear la cuenta. Por favor, intente de nuevo.'));
+            $this->Flash->error(__('No se pudo crear el usuario. Por favor, intente de nuevo.'));
         }
-        $this->set(compact('xservUsuario'));
+        
+        $this->set(compact('xservUsuario', 'authUser', 'isAdmin'));
+        
+        if ($isAdmin) {
+            $this->render('admin_form');
+        }
     }
 
     /**
@@ -236,19 +284,37 @@ class XservUsuariosController extends AppController
      */
     public function edit(?string $id = null)
     {
-        
         $this->Authorization->skipAuthorization();
+        
+        // Usar layout admin para usuarios con rol admin
+        $authUser = $this->Authentication->getIdentity();
+        $isAdmin = $authUser && $authUser->rol === 'admin';
+        
+        if ($isAdmin) {
+            $this->viewBuilder()->setLayout('admin');
+        }
+        
         $xservUsuario = $this->XservUsuarios->get($id, contain: []);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $xservUsuario = $this->XservUsuarios->patchEntity($xservUsuario, $this->request->getData());
+            $data = $this->request->getData();
+            
+            // No permitir cambio de contraseña vacía
+            if (empty($data['password'])) {
+                unset($data['password']);
+            }
+            
+            $xservUsuario = $this->XservUsuarios->patchEntity($xservUsuario, $data);
             if ($this->XservUsuarios->save($xservUsuario)) {
-                $this->Flash->success(__('The xserv usuario has been saved.'));
-
+                $this->Flash->success(__('El usuario ha sido actualizado.'));
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The xserv usuario could not be saved. Please, try again.'));
+            $this->Flash->error(__('El usuario no pudo ser actualizado. Por favor, intente de nuevo.'));
         }
-        $this->set(compact('xservUsuario'));
+        $this->set(compact('xservUsuario', 'authUser', 'isAdmin'));
+        
+        if ($isAdmin) {
+            $this->render('admin_form');
+        }
     }
 
     /**
@@ -260,12 +326,23 @@ class XservUsuariosController extends AppController
      */
     public function delete(?string $id = null)
     {
+        $this->Authorization->skipAuthorization();
         $this->request->allowMethod(['post', 'delete']);
+        
+        // Obtener el usuario autenticado
+        $authUser = $this->Authentication->getIdentity();
+        
+        // Verificar que el usuario no intente eliminarse a sí mismo
+        if ($authUser && $authUser->id == $id) {
+            $this->Flash->error(__('No puedes eliminarte a ti mismo.'));
+            return $this->redirect(['action' => 'index']);
+        }
+        
         $xservUsuario = $this->XservUsuarios->get($id);
         if ($this->XservUsuarios->delete($xservUsuario)) {
-            $this->Flash->success(__('The xserv usuario has been deleted.'));
+            $this->Flash->success(__('El usuario ha sido eliminado.'));
         } else {
-            $this->Flash->error(__('The xserv usuario could not be deleted. Please, try again.'));
+            $this->Flash->error(__('El usuario no pudo ser eliminado. Por favor, intente de nuevo.'));
         }
 
         return $this->redirect(['action' => 'index']);
@@ -380,6 +457,7 @@ class XservUsuariosController extends AppController
     public function changePassword()
     {
         $this->Authorization->skipAuthorization(); // temporal si no quieres autorización complicada
+        $this->viewBuilder()->disableAutoLayout();
 
         $user = $this->Authentication->getIdentity();
         if (!$user) {

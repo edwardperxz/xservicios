@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
+use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
@@ -10,19 +11,19 @@ use Cake\Validation\Validator;
  * XservValoraciones Model
  *
  * @property \App\Model\Table\XservReservasTable&\Cake\ORM\Association\BelongsTo $XservReservas
- * @method \App\Model\Entity\XservValoracione newEmptyEntity()
- * @method \App\Model\Entity\XservValoracione newEntity(array $data, array $options = [])
- * @method array<\App\Model\Entity\XservValoracione> newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\XservValoracione get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
- * @method \App\Model\Entity\XservValoracione findOrCreate($search, ?callable $callback = null, array $options = [])
- * @method \App\Model\Entity\XservValoracione patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method array<\App\Model\Entity\XservValoracione> patchEntities(iterable $entities, array $data, array $options = [])
- * @method \App\Model\Entity\XservValoracione|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
- * @method \App\Model\Entity\XservValoracione saveOrFail(\Cake\Datasource\EntityInterface $entity, array $options = [])
- * @method iterable<\App\Model\Entity\XservValoracione>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservValoracione>|false saveMany(iterable $entities, array $options = [])
- * @method iterable<\App\Model\Entity\XservValoracione>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservValoracione> saveManyOrFail(iterable $entities, array $options = [])
- * @method iterable<\App\Model\Entity\XservValoracione>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservValoracione>|false deleteMany(iterable $entities, array $options = [])
- * @method iterable<\App\Model\Entity\XservValoracione>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservValoracione> deleteManyOrFail(iterable $entities, array $options = [])
+ * @method \App\Model\Entity\XservValoracion newEmptyEntity()
+ * @method \App\Model\Entity\XservValoracion newEntity(array $data, array $options = [])
+ * @method array<\App\Model\Entity\XservValoracion> newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\XservValoracion get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
+ * @method \App\Model\Entity\XservValoracion findOrCreate($search, ?callable $callback = null, array $options = [])
+ * @method \App\Model\Entity\XservValoracion patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method array<\App\Model\Entity\XservValoracion> patchEntities(iterable $entities, array $data, array $options = [])
+ * @method \App\Model\Entity\XservValoracion|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
+ * @method \App\Model\Entity\XservValoracion saveOrFail(\Cake\Datasource\EntityInterface $entity, array $options = [])
+ * @method iterable<\App\Model\Entity\XservValoracion>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservValoracion>|false saveMany(iterable $entities, array $options = [])
+ * @method iterable<\App\Model\Entity\XservValoracion>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservValoracion> saveManyOrFail(iterable $entities, array $options = [])
+ * @method iterable<\App\Model\Entity\XservValoracion>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservValoracion>|false deleteMany(iterable $entities, array $options = [])
+ * @method iterable<\App\Model\Entity\XservValoracion>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\XservValoracion> deleteManyOrFail(iterable $entities, array $options = [])
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class XservValoracionesTable extends Table
@@ -40,6 +41,7 @@ class XservValoracionesTable extends Table
         $this->setTable('xserv_valoraciones');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
+        $this->setEntityClass('App\\Model\\Entity\\XservValoracion');
 
         $this->addBehavior('Timestamp');
 
@@ -60,6 +62,11 @@ class XservValoracionesTable extends Table
         $validator
             ->integer('id')
             ->allowEmptyString('id', null, 'create');
+
+        $validator
+            ->integer('reserva_id')
+            ->requirePresence('reserva_id', 'create')
+            ->notEmptyString('reserva_id');
 
         $validator
             ->integer('calificacion')
@@ -85,5 +92,19 @@ class XservValoracionesTable extends Table
             ->allowEmptyString('estado_moderacion');
 
         return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules): RulesChecker
+    {
+        $rules->add($rules->existsIn(['reserva_id'], 'XservReservas'), ['errorField' => 'reserva_id']);
+
+        return $rules;
     }
 }

@@ -54,8 +54,18 @@ class XservServiciosDestinosController extends AppController
             }
             $this->Flash->error(__('The xserv servicios destino could not be saved. Please, try again.'));
         }
-        $servicios = $this->XservServiciosDestinos->Servicios->find('list', limit: 200)->all();
-        $destinos = $this->XservServiciosDestinos->Destinos->find('list', limit: 200)->all();
+        $servicios = $this->XservServiciosDestinos->Servicios->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'nombre'
+        ])->order(['nombre' => 'ASC'])->all();
+        
+        $destinos = $this->XservServiciosDestinos->Destinos->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($destino) {
+                return $destino->nombre . ' (' . $destino->ubicacion->nombre . ')';
+            }
+        ])->contain(['Ubicacions'])->order(['nombre' => 'ASC'])->all();
+        
         $this->set(compact('xservServiciosDestino', 'servicios', 'destinos'));
     }
 
@@ -78,8 +88,18 @@ class XservServiciosDestinosController extends AppController
             }
             $this->Flash->error(__('The xserv servicios destino could not be saved. Please, try again.'));
         }
-        $servicios = $this->XservServiciosDestinos->Servicios->find('list', limit: 200)->all();
-        $destinos = $this->XservServiciosDestinos->Destinos->find('list', limit: 200)->all();
+        $servicios = $this->XservServiciosDestinos->Servicios->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'nombre'
+        ])->order(['nombre' => 'ASC'])->all();
+        
+        $destinos = $this->XservServiciosDestinos->Destinos->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($destino) {
+                return $destino->nombre . ' (' . $destino->ubicacion->nombre . ')';
+            }
+        ])->contain(['Ubicacions'])->order(['nombre' => 'ASC'])->all();
+        
         $this->set(compact('xservServiciosDestino', 'servicios', 'destinos'));
     }
 

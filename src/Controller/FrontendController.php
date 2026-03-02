@@ -5,29 +5,46 @@ namespace App\Controller;
 
 use Cake\Event\EventInterface;
 use Cake\Http\Response;
+use Cake\ORM\TableRegistry;
 
 /**
  * Frontend Controller
- * Sirve archivos HTML estáticos del frontend
+ * Sirve archivos HTML del frontend con datos dinámicos
  */
 class FrontendController extends AppController
 {
+    public function initialize(): void
+    {
+        parent::initialize();
+        // Cargar modelos necesarios
+        $this->XservVehiculos = TableRegistry::getTableLocator()->get('XservVehiculos');
+        $this->XservChoferes = TableRegistry::getTableLocator()->get('XservChoferes');
+    }
+
     public function beforeFilter(\Cake\Event\EventInterface $event)
     {
         parent::beforeFilter($event);
         // Permitir acceso sin autenticación para todas las acciones públicas
-        $this->Authentication->addUnauthenticatedActions(['fleet', 'services', 'about', 'newreservation', 'myreservations', 'rateservice', 'signup', 'login']);
+        $this->Authentication->addUnauthenticatedActions(['fleet', 'services', 'service', 'about', 'newreservation', 'rateservice', 'signup', 'login']);
         // Saltar verificación de autorización para acciones públicas
-        $this->Authorization->skipAuthorization(['fleet', 'services', 'about', 'newreservation', 'myreservations', 'rateservice', 'signup', 'login']);
+        $this->Authorization->skipAuthorization(['fleet', 'services', 'service', 'about', 'newreservation', 'rateservice', 'signup', 'login']);
     }
 
     /**
-     * Fleet page (fleet.php)
+     * Fleet page - Carga datos reales de vehículos y choferes
      */
     public function fleet()
     {
+        // Cargar datos reales de la BD
+        $vehiculos = $this->XservVehiculos->find()->toArray();
+        $choferes = $this->XservChoferes->find()->contain('Usuarios')->toArray();
+
+        // Renderizar con datos
+        ob_start();
+        include ROOT . '/webroot/frontend/user/fleet.php';
+        $content = ob_get_clean();
+        
         $this->response = $this->response->withType('text/html');
-        $content = file_get_contents(ROOT . '/webroot/frontend/user/fleet.php');
         $content = $this->injectCsrfToken($content);
         return $this->response->withStringBody($content);
     }
@@ -39,6 +56,24 @@ class FrontendController extends AppController
     {
         $this->response = $this->response->withType('text/html');
         $content = file_get_contents(ROOT . '/webroot/frontend/shared/services.php');
+        $content = $this->injectCsrfToken($content);
+        return $this->response->withStringBody($content);
+    }
+
+    /**
+     * Service detail page (service-detail.php)
+     */
+    public function service(...$pass)
+    {
+        // Extraer el ID del primer elemento del array de parámetros
+        $id = $pass[0] ?? null;
+        
+        if (!$id) {
+            return $this->redirect('/services');
+        }
+        
+        $this->response = $this->response->withType('text/html');
+        $content = file_get_contents(ROOT . '/webroot/frontend/shared/service-detail.php');
         $content = $this->injectCsrfToken($content);
         return $this->response->withStringBody($content);
     }

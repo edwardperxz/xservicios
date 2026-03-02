@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Event\EventInterface;
+use Cake\ORM\TableRegistry;
 
 class HomeController extends AppController
 {
@@ -13,8 +14,9 @@ class HomeController extends AppController
         $this->loadComponent('Authentication.Authentication');
         $this->loadComponent('Authorization.Authorization');
         
-        // Use clean frontend layout without CakePHP UI
-        $this->viewBuilder()->setLayout('frontend');
+        // Cargar modelos
+        $this->XservVehiculos = TableRegistry::getTableLocator()->get('XservVehiculos');
+        $this->XservChoferes = TableRegistry::getTableLocator()->get('XservChoferes');
     }
 
     public function beforeFilter(EventInterface $event): void
@@ -36,36 +38,25 @@ class HomeController extends AppController
                 return $this->redirect('/panel/admin');
             }
 
-            if ($rol === 'operador') {
-                $this->set('isAuthenticated', true);
-                $this->set('user', $user);
-                return $this->render('/Home/home_login');
-            }
-
             if ($rol === 'chofer') {
                 return $this->redirect('/panel/chofer');
             }
 
-            // Usuario autenticado sin rol de panel
+            // Usuario autenticado (operador u otro)
             $this->set('isAuthenticated', true);
             $this->set('user', $user);
-            return $this->render('/Home/home_login');
+        } else {
+            // Usuario no autenticado
+            $this->set('isAuthenticated', false);
         }
 
-        // Usuario no autenticado - mostrar home-public
-        $this->set('isAuthenticated', false);
-        return $this->render('/Home/home_public');
-    }
+        // Cargar datos reales de vehículos y choferes
+        $vehiculos = $this->XservVehiculos->find()->where(['estado_operativo' => 'disponible'])->limit(4)->toArray();
+        $choferes = $this->XservChoferes->find()->contain('Usuarios')->where(['XservChoferes.estado' => 'activo'])->limit(6)->toArray();
 
-    public function home_login()
-    {
-        $this->Authorization->skipAuthorization();
-        $user = $this->request->getAttribute('identity');
-
-        if (!$user) {
-            return $this->redirect(['action' => 'index']);
-        }
-
-        $this->set('user', $user);
+        $this->set(compact('vehiculos', 'choferes'));
+        
+        // Renderiza el archivo unificado index.php sin layout
+        $this->viewBuilder()->disableAutoLayout();
     }
 }

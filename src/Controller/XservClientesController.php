@@ -10,6 +10,18 @@ namespace App\Controller;
  */
 class XservClientesController extends AppController
 {
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+        $this->Authorization->skipAuthorization();
+        
+        // Usar layout admin si el usuario es admin
+        $user = $this->Authentication->getIdentity();
+        if ($user && $user->rol === 'admin') {
+            $this->viewBuilder()->setLayout('admin');
+        }
+    }
+
     /**
      * Index method
      *
@@ -17,10 +29,38 @@ class XservClientesController extends AppController
      */
     public function index()
     {
-        $query = $this->XservClientes->find();
+        $user = $this->Authentication->getIdentity();
+        $isAdmin = $user && $user->rol === 'admin';
+        $filters = $this->request->getQuery();
+
+        $query = $this->XservClientes->find()
+            ->contain(['XservUsuarios']);
+
+        if (!empty($filters['identificacion_fiscal'])) {
+            $query->where(['XservClientes.identificacion_fiscal LIKE' => '%' . $filters['identificacion_fiscal'] . '%']);
+        }
+
+        if (!empty($filters['idioma_preferido'])) {
+            $query->where(['XservClientes.idioma_preferido' => $filters['idioma_preferido']]);
+        }
+
         $xservClientes = $this->paginate($query);
 
-        $this->set(compact('xservClientes'));
+        // Obtener valores distinctos para filtros
+        $idiomas = $this->XservClientes->find()
+            ->select(['idioma_preferido'])
+            ->distinct(['idioma_preferido'])
+            ->where(['idioma_preferido IS NOT' => null])
+            ->order(['idioma_preferido' => 'ASC'])
+            ->all()
+            ->extract('idioma_preferido')
+            ->toList();
+
+        $this->set(compact('xservClientes', 'filters', 'idiomas'));
+
+        if ($isAdmin) {
+            $this->render('admin_index');
+        }
     }
 
     /**
@@ -32,7 +72,7 @@ class XservClientesController extends AppController
      */
     public function view(?string $id = null)
     {
-        $xservCliente = $this->XservClientes->get($id, contain: []);
+        $xservCliente = $this->XservClientes->get($id, contain: ['XservUsuarios']);
         $this->set(compact('xservCliente'));
     }
 
@@ -53,7 +93,15 @@ class XservClientesController extends AppController
             }
             $this->Flash->error(__('The xserv cliente could not be saved. Please, try again.'));
         }
-        $this->set(compact('xservCliente'));
+        $usuarios = $this->XservClientes->XservUsuarios->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($usuario) {
+                return $usuario->username . ' - ' . $usuario->nombre;
+            }
+        ])
+        ->where(['rol' => 'operador'])
+        ->orderBy(['username' => 'ASC']);
+        $this->set(compact('xservCliente', 'usuarios'));
     }
 
     /**
@@ -65,7 +113,7 @@ class XservClientesController extends AppController
      */
     public function edit(?string $id = null)
     {
-        $xservCliente = $this->XservClientes->get($id, contain: []);
+        $xservCliente = $this->XservClientes->get($id, contain: ['XservUsuarios']);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $xservCliente = $this->XservClientes->patchEntity($xservCliente, $this->request->getData());
             if ($this->XservClientes->save($xservCliente)) {
@@ -75,7 +123,15 @@ class XservClientesController extends AppController
             }
             $this->Flash->error(__('The xserv cliente could not be saved. Please, try again.'));
         }
-        $this->set(compact('xservCliente'));
+        $usuarios = $this->XservClientes->XservUsuarios->find('list', [
+            'keyField' => 'id',
+            'valueField' => function($usuario) {
+                return $usuario->username . ' - ' . $usuario->nombre;
+            }
+        ])
+        ->where(['rol' => 'operador'])
+        ->orderBy(['username' => 'ASC']);
+        $this->set(compact('xservCliente', 'usuarios'));
     }
 
     /**

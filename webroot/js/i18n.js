@@ -10,6 +10,11 @@ const translations = {
     'nav.fleet': 'Ver flota',
     'nav.services': 'Servicios',
     'nav.about': 'Nosotros',
+    'nav.trips': 'Viajes',
+    'nav.messages': 'Mensajes',
+    
+    // Común
+    'common.loading': 'Cargando...',
     
     // Autenticación
     'auth.login': 'Iniciar sesión',
@@ -21,6 +26,12 @@ const translations = {
     'auth.loginSubtitle': 'Inicia sesión en cualquiera de tus cuentas existentes',
     'auth.signUpTitle': 'Crea una cuenta',
     'auth.signUpSubtitle': 'Regístrate para continuar',
+    'auth.changePasswordTitle': 'Cambiar Contraseña',
+    'auth.changePasswordSubtitle': 'Actualiza tu contraseña de acceso de forma segura',
+    'auth.currentPassword': 'Contraseña actual',
+    'auth.newPassword': 'Nueva contraseña',
+    'auth.confirmPassword': 'Confirmar nueva contraseña',
+    'auth.updatePassword': 'Actualizar Contraseña',
     'auth.username': 'Nombre de Usuario',
     'auth.noAccount': '¿No tienes una cuenta?',
     'auth.haveAccount': '¿Ya tienes cuenta?',
@@ -117,6 +128,39 @@ const translations = {
     'services.defaultDesc': 'Servicio disponible.',
     'services.consult': 'Consultar',
     'services.none': 'No hay servicios disponibles.',
+    'services.loading': 'Cargando servicios...',
+    'services.description': 'Descripción',
+    'services.variants': 'Variantes',
+    
+    // Service Detail
+    'service.basePrice': 'Precio base',
+    'service.status': 'Estado',
+    'service.active': 'Activo',
+    'service.inactive': 'Inactivo',
+
+    // Service Descriptions and Variants
+    'service.2.description': 'Servicio puerta a puerta al aeropuerto. Traslado seguro, puntual y cómodo en vehículos de lujo.',
+    'service.2.variants': 'Traslado sencillo; Traslado con espera; Servicio compartido',
+    'service.3.description': 'Excursión guiada a destinos de montaña. Descubre la belleza natural de Chiriquí con paradas fotográficas y guía experto.',
+    'service.3.variants': 'Tour de medio día; Tour de día completo; Tour privado',
+    'service.4.description': 'Servicio para eventos y viajes de empresa. Transporte seguro y profesional para tus grupos corporativos.',
+    'service.4.variants': 'Transporte simple; Transporte con almuerzo; Paquete completo',
+    'service.5.description': 'Ruta escolar segura y puntual. Recogida y entrega puntuales con máximas medidas de seguridad.',
+    'service.5.variants': 'Ruta simple ida y vuelta; Ruta con actividades; Paquete semestral',
+    'service.6.description': 'Recorrido por playas y puntos panorámicos de la costa chiriquense. Disfruta de vistas espectaculares.',
+    'service.6.variants': 'Tour matutino; Tour vespertino; Tour nocturno',
+    'service.7.description': 'Traslado entre David y Boquete. Servicio rápido y cómodo por carretera en vehículos de primera clase.',
+    'service.7.variants': 'Traslado privado; Compartido; Ida y vuelta',
+    'service.8.description': 'Tour completo de Boquete con paradas en los mejores lugares. Vistas del Volcán Barú y fincas de café.',
+    'service.8.variants': 'Tour regular; Tour VIP con almuerzo; Tour fotográfico',
+    'service.9.description': 'Ascenso al Volcán Barú en 4x4 seguido de caminata. Experiencia única al punto más alto de Panamá.',
+    'service.9.variants': 'Ascenso amanecer; Ascenso nocturno; Tour completo dos días',
+    'service.10.description': 'Tour a las aguas termales naturales en Caldera. Relájate en aguas cálidas rodeado de naturaleza.',
+    'service.10.variants': 'Tour semi privado; Grupo reducido; Tour con almuerzo',
+    'service.11.description': 'Recorrido por Volcán y Tierras Altas. Descubre pueblos pintorescos, miradores y flora nativa.',
+    'service.11.variants': 'Tour regular; Tour VIP; Tour con estadía',
+    'service.12.description': 'Traslado a la hermosa Playa Las Lajas. Arena blanca y aguas tranquilas del Pacífico.',
+    'service.12.variants': 'Solo ida; Ida y vuelta en el día; Paquete fin de semana',
     
     // Reservations
     'reservations.title': 'Mis Reservas',
@@ -135,9 +179,45 @@ const translations = {
     'reservations.cancel': 'Cancelar',
     'reservations.details': 'Ver Detalles',
     'reservations.pageTitle': 'Mis <span>Reservas</span>',
+    'reservations.subtitle': 'Gestiona y visualiza tus reservas de transporte',
+    'reservations.upcoming': 'Próximos Viajes',
+    'reservations.completed': 'Completadas',
+    'reservations.cancelled': 'Canceladas',
     'reservations.current': 'Reservas Actuales',
     'reservations.future': 'Futuras Reservas',
     'reservations.history': 'Historial de Reservas',
+    'reservations.empty': 'No hay reservas en esta categoría',
+    'reservations.bookNow': 'Crea tu primera reserva',
+    'reservations.origin': 'Origen',
+    'reservations.destination': 'Destino',
+    'reservations.receiptTitle': 'Comprobante de Reserva',
+    'reservations.tripDetails': 'Detalles del Viaje',
+    'reservations.pickupTime': 'Hora de recogida',
+    'reservations.duration': 'Duración',
+    'reservations.transports': 'Transportes Utilizados',
+    'reservations.unitDriver': 'Unidad y Conductor',
+    'reservations.plate': 'Placa',
+    'reservations.capacity': 'Capacidad',
+    'reservations.passengers': 'pasajeros',
+    'reservations.color': 'Color',
+    'reservations.experience': 'Experiencia',
+    'reservations.trips': 'Viajes completados',
+    'reservations.totalAmount': 'Monto Total',
+    'reservations.total': 'Total',
+    'reservations.basePrice': 'Precio Base',
+    'reservations.itbms': 'ITBMS',
+    'reservations.serviceInfo': 'Información del Servicio',
+    'reservations.service': 'Servicio',
+    'reservations.pricing': 'Precios',
+    'reservations.paymentStatus': 'Estado de Pago',
+    'reservations.notes': 'Notas',
+    'reservations.status.pendiente': 'Pendiente',
+    'reservations.status.confirmada': 'Confirmada',
+    'reservations.status.completada': 'Completada',
+    'reservations.status.cancelada': 'Cancelada',
+    'reservations.error': 'Error al cargar las reservas',
+    'reservations.errorMessage': 'Intenta nuevamente en unos momentos',
+
     'reservations.empty': 'No hay reservas en esta sección',
     'reservations.origin': 'Origen',
     'reservations.receiptTitle': 'Comprobante de Reserva',
@@ -303,6 +383,7 @@ const translations = {
     'btn.reserve': 'Reservar',
     'btn.book': 'Reservar Ahora',
     'btn.viewMore': 'Ver Más',
+    'btn.loadMore': 'Cargar más servicios',
     'btn.back': 'Volver',
     'btn.next': 'Siguiente',
     'btn.previous': 'Anterior',
@@ -318,6 +399,7 @@ const translations = {
     'page.title.services': 'Xservicios - Nuestros Servicios | Tours y Traslados',
     'page.title.login': 'Xservicios - Iniciar Sesión',
     'page.title.signup': 'Xservicios - Crear Cuenta',
+    'page.title.changePassword': 'Xservicios - Cambiar Contraseña',
     'page.title.newReservation': 'Xservicios - Nueva Reserva',
     'page.title.myReservations': 'Xservicios - Mis Reservas',
     'page.title.profile': 'Xservicios - Mi Perfil',
@@ -333,6 +415,11 @@ const translations = {
     'nav.fleet': 'View Fleet',
     'nav.services': 'Services',
     'nav.about': 'About Us',
+    'nav.trips': 'Trips',
+    'nav.messages': 'Messages',
+    
+    // Common
+    'common.loading': 'Loading...',
     
     // Authentication
     'auth.login': 'Log In',
@@ -344,6 +431,12 @@ const translations = {
     'auth.loginSubtitle': 'Log in to any of your existing accounts',
     'auth.signUpTitle': 'Create an account',
     'auth.signUpSubtitle': 'Sign up to continue',
+    'auth.changePasswordTitle': 'Change Password',
+    'auth.changePasswordSubtitle': 'Update your account password securely',
+    'auth.currentPassword': 'Current password',
+    'auth.newPassword': 'New password',
+    'auth.confirmPassword': 'Confirm new password',
+    'auth.updatePassword': 'Update Password',
     'auth.username': 'Username',
     'auth.noAccount': "Don't have an account?",
     'auth.haveAccount': 'Already have an account?',
@@ -440,6 +533,39 @@ const translations = {
     'services.defaultDesc': 'Service available.',
     'services.consult': 'Consult',
     'services.none': 'No services available.',
+    'services.loading': 'Loading services...',
+    'services.description': 'Description',
+    'services.variants': 'Variants',
+    
+    // Service Detail
+    'service.basePrice': 'Base price',
+    'service.status': 'Status',
+    'service.active': 'Active',
+    'service.inactive': 'Inactive',
+
+    // Service Descriptions and Variants
+    'service.2.description': 'Door-to-door airport service. Safe, punctual and comfortable transfer in luxury vehicles.',
+    'service.2.variants': 'Simple transfer; Transfer with wait; Shared service',
+    'service.3.description': 'Guided excursion to mountain destinations. Discover the natural beauty of Chiriquí with photo stops and expert guide.',
+    'service.3.variants': 'Half-day tour; Full-day tour; Private tour',
+    'service.4.description': 'Service for events and company trips. Safe and professional transport for your corporate groups.',
+    'service.4.variants': 'Simple transport; Transport with lunch; Complete package',
+    'service.5.description': 'Safe and punctual school route. Pickup and delivery with maximum safety measures.',
+    'service.5.variants': 'Simple round trip route; Route with activities; Semester package',
+    'service.6.description': 'Tour of beaches and scenic viewpoints on the Chiriquí coast. Enjoy spectacular views.',
+    'service.6.variants': 'Morning tour; Afternoon tour; Night tour',
+    'service.7.description': 'Transfer between David and Boquete. Quick and comfortable service on first-class vehicles.',
+    'service.7.variants': 'Private transfer; Shared; Round trip',
+    'service.8.description': 'Complete tour of Boquete with stops at the best places. Views of Barú Volcano and coffee farms.',
+    'service.8.variants': 'Regular tour; VIP tour with lunch; Photography tour',
+    'service.9.description': 'Ascent to Barú Volcano by 4x4 followed by hiking. Unique experience at the highest point in Panama.',
+    'service.9.variants': 'Sunrise ascent; Night ascent; Two-day complete tour',
+    'service.10.description': 'Tour to natural hot springs in Caldera. Relax in warm waters surrounded by nature.',
+    'service.10.variants': 'Semi-private tour; Small group; Tour with lunch',
+    'service.11.description': 'Tour of Volcán and Highlands. Discover picturesque towns, viewpoints and native flora.',
+    'service.11.variants': 'Regular tour; VIP tour; Tour with lodging',
+    'service.12.description': 'Transfer to beautiful Las Lajas Beach. White sand and calm Pacific waters.',
+    'service.12.variants': 'One way only; Round trip same day; Weekend package',
     
     // Reservations
     'reservations.title': 'My Reservations',
@@ -458,9 +584,45 @@ const translations = {
     'reservations.cancel': 'Cancel',
     'reservations.details': 'View Details',
     'reservations.pageTitle': 'My <span>Reservations</span>',
+    'reservations.subtitle': 'Manage and view your transport reservations',
+    'reservations.upcoming': 'Upcoming Trips',
+    'reservations.completed': 'Completed',
+    'reservations.cancelled': 'Cancelled',
     'reservations.current': 'Current Reservations',
     'reservations.future': 'Upcoming Reservations',
     'reservations.history': 'Reservation History',
+    'reservations.empty': 'No reservations in this category',
+    'reservations.bookNow': 'Create your first reservation',
+    'reservations.origin': 'Origin',
+    'reservations.destination': 'Destination',
+    'reservations.receiptTitle': 'Reservation Receipt',
+    'reservations.tripDetails': 'Trip Details',
+    'reservations.pickupTime': 'Pickup time',
+    'reservations.duration': 'Duration',
+    'reservations.transports': 'Transports Used',
+    'reservations.unitDriver': 'Vehicle and Driver',
+    'reservations.plate': 'Plate',
+    'reservations.capacity': 'Capacity',
+    'reservations.passengers': 'passengers',
+    'reservations.color': 'Color',
+    'reservations.experience': 'Experience',
+    'reservations.trips': 'Completed trips',
+    'reservations.totalAmount': 'Total Amount',
+    'reservations.total': 'Total',
+    'reservations.basePrice': 'Base Price',
+    'reservations.itbms': 'ITBMS',
+    'reservations.serviceInfo': 'Service Information',
+    'reservations.service': 'Service',
+    'reservations.pricing': 'Pricing',
+    'reservations.paymentStatus': 'Payment Status',
+    'reservations.notes': 'Notes',
+    'reservations.status.pendiente': 'Pending',
+    'reservations.status.confirmada': 'Confirmed',
+    'reservations.status.completada': 'Completed',
+    'reservations.status.cancelada': 'Cancelled',
+    'reservations.error': 'Error loading reservations',
+    'reservations.errorMessage': 'Try again in a few moments',
+
     'reservations.empty': 'No reservations in this section',
     'reservations.origin': 'Origin',
     'reservations.receiptTitle': 'Reservation Receipt',
@@ -626,6 +788,7 @@ const translations = {
     'btn.reserve': 'Reserve',
     'btn.book': 'Book Now',
     'btn.viewMore': 'View More',
+    'btn.loadMore': 'Load More Services',
     'btn.back': 'Back',
     'btn.next': 'Next',
     'btn.previous': 'Previous',
@@ -641,6 +804,7 @@ const translations = {
     'page.title.services': 'Xservicios - Our Services | Tours and Transfers',
     'page.title.login': 'Xservicios - Log In',
     'page.title.signup': 'Xservicios - Sign Up',
+    'page.title.changePassword': 'Xservicios - Change Password',
     'page.title.newReservation': 'Xservicios - New Reservation',
     'page.title.myReservations': 'Xservicios - My Reservations',
     'page.title.profile': 'Xservicios - My Profile',
@@ -658,6 +822,13 @@ class I18n {
   constructor() {
     // Prioridad: localStorage > preload > default
     this.currentLang = this.getStoredLanguage() || window.__i18nPreloadLang || 'es';
+    
+    // Almacenar referencias a los handlers para poder removerlos
+    this.handlers = {
+      langToggle: null,
+      langToggleMobile: null
+    };
+    
     this.init();
   }
 
@@ -789,10 +960,20 @@ class I18n {
    * Actualiza el estado activo de los botones de idioma
    */
   updateActiveLanguage() {
-    // Actualizar botón de idioma nuevo (único)
+    // Actualizar botón de idioma de desktop
     const langButton = document.getElementById('langToggle');
     if (langButton) {
       const langCodeSpan = langButton.querySelector('.lang-code');
+      if (langCodeSpan) {
+        // Mostrar el idioma actual (no el opuesto)
+        langCodeSpan.textContent = this.currentLang === 'es' ? 'ES' : 'EN';
+      }
+    }
+
+    // Actualizar botón de idioma del sidebar mobile
+    const langButtonMobile = document.getElementById('langToggleMobile');
+    if (langButtonMobile) {
+      const langCodeSpan = langButtonMobile.querySelector('.lang-code');
       if (langCodeSpan) {
         // Mostrar el idioma actual (no el opuesto)
         langCodeSpan.textContent = this.currentLang === 'es' ? 'ES' : 'EN';
@@ -815,10 +996,16 @@ class I18n {
    * Agrega eventos de clic a los botones de idioma
    */
   attachLanguageButtons() {
-    // Manejar botón único de idioma
+    // Manejar botón de idioma del header (desktop)
     const langToggle = document.getElementById('langToggle');
     if (langToggle) {
-      langToggle.addEventListener('click', () => {
+      // Remover listener anterior si existe
+      if (this.handlers.langToggle) {
+        langToggle.removeEventListener('click', this.handlers.langToggle);
+      }
+      
+      // Crear y almacenar el nuevo handler
+      this.handlers.langToggle = () => {
         const newLang = this.currentLang === 'es' ? 'en' : 'es';
         this.setLanguage(newLang);
         
@@ -827,7 +1014,42 @@ class I18n {
         setTimeout(() => {
           langToggle.style.transform = 'scale(1)';
         }, 150);
-      });
+      };
+      
+      langToggle.addEventListener('click', this.handlers.langToggle);
+    }
+
+    // Manejar botón de idioma del sidebar mobile
+    const langToggleMobile = document.getElementById('langToggleMobile');
+    if (langToggleMobile) {
+      // Remover listener anterior si existe
+      if (this.handlers.langToggleMobile) {
+        langToggleMobile.removeEventListener('click', this.handlers.langToggleMobile);
+      }
+      
+      // Crear y almacenar el nuevo handler
+      this.handlers.langToggleMobile = (e) => {
+        e.stopPropagation();
+        const newLang = this.currentLang === 'es' ? 'en' : 'es';
+        this.setLanguage(newLang);
+        
+        // Animación visual de feedback
+        langToggleMobile.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          langToggleMobile.style.transform = 'scale(1)';
+          
+          // Cerrar el sidebar después del cambio de idioma en mobile
+          const navSidebar = document.getElementById('navSidebar');
+          const sidebarOverlay = document.getElementById('sidebarOverlay');
+          if (navSidebar && window.innerWidth <= 1115) {
+            navSidebar.classList.remove('open');
+            sidebarOverlay?.classList.remove('active');
+            document.body.style.overflow = '';
+          }
+        }, 200);
+      };
+      
+      langToggleMobile.addEventListener('click', this.handlers.langToggleMobile);
     }
 
     // Mantener compatibilidad con botones antiguos (si existen)

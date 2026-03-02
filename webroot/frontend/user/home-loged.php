@@ -41,7 +41,7 @@
     .hero {
       position: relative;
       height: 480px;
-      background-image: url('/img/login-bg.jpeg');
+      background-image: url('/img/car-concept.jpeg');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;

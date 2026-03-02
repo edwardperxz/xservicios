@@ -568,7 +568,7 @@ $this->assign('header-title', 'Servicios Disponibles');
                         <span class="meta-badge <?= strtolower($servicio->estado) === 'activo' ? 'badge-active' : 'badge-inactive' ?>" title="Estado: <?= ucfirst(h($servicio->estado)) ?>">
                             <?= ucfirst(h($servicio->estado)) ?>
                         </span>
-                        <span class="meta-badge badge-price" title="Precio base">
+                        <span class="meta-badge badge-price" title="Precio base" data-i18n="service.basePrice">
                             $<?= $this->Number->format($servicio->precio_base) ?>
                         </span>
                     </div>
@@ -582,7 +582,7 @@ $this->assign('header-title', 'Servicios Disponibles');
                 </div>
                 <div class="service-footer">
                     <div class="service-price">
-                        <span class="price-label">Precio base</span>
+                        <span class="price-label" data-i18n="service.basePrice">Precio base</span>
                         <span class="price-value">$<?= $this->Number->format($servicio->precio_base) ?></span>
                     </div>
                     <div class="service-actions">

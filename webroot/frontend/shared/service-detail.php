@@ -543,11 +543,11 @@
         <img id="serviceHeroImage" alt="Imagen del servicio" loading="lazy">
         <div class="hero-meta">
           <div class="hero-meta-item">
-            <span>Precio base</span>
+            <span data-i18n="service.basePrice">Precio base</span>
             <strong id="servicePriceValue">...</strong>
           </div>
           <div class="hero-meta-item">
-            <span>Estado</span>
+            <span data-i18n="service.status">Estado</span>
             <strong id="serviceStatusValue">...</strong>
           </div>
         </div>
@@ -583,7 +583,6 @@
           </div>
           <div class="detail-item full">
             <div class="detail-label" data-i18n="services.variants">Variantes disponibles</div>
-            <div class="detail-text" data-i18n="services.variantsHint">Selecciona las opciones disponibles que se adapten a tus necesidades. Cada variante puede incluir cambios de ruta, horarios o servicios adicionales.</div>
             <ul class="detail-list" id="serviceVariantsList"></ul>
           </div>
         </div>
@@ -818,8 +817,68 @@
         confirmBtn.disabled = !accept.checked;
       });
       confirmBtn.addEventListener('click', async () => {
-        const target = serviceId ? `/newreservation?service_id=${serviceId}` : '/newreservation';
-        window.location.href = target;
+        // Crear reservación
+        const confirmBtnText = confirmBtn.textContent;
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = '...';
+
+        try {
+          // Obtener el token CSRF del meta tag
+          const csrfToken = document.querySelector('meta[name="csrfToken"]')?.getAttribute('content') || 
+                           document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+          
+          const headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+          };
+          
+          // Agregar token CSRF si está disponible
+          if (csrfToken) {
+            headers['X-CSRF-Token'] = csrfToken;
+          }
+          
+          const response = await fetch('/xserv-reservas/reserva-rapida', {
+            method: 'POST',
+            headers: headers,
+            credentials: 'same-origin',
+            body: JSON.stringify({
+              service_id: serviceId,
+              _csrfToken: csrfToken
+            })
+          });
+
+          console.log('Response status:', response.status);
+          console.log('Response headers:', response.headers);
+          
+          // Verificar si la respuesta es JSON
+          const contentType = response.headers.get('content-type');
+          if (!contentType || !contentType.includes('application/json')) {
+            const text = await response.text();
+            console.error('Response no es JSON:', text.substring(0, 500));
+            alert('Error: El servidor no devolvió una respuesta válida. Verifica la consola.');
+            confirmBtn.disabled = false;
+            confirmBtn.textContent = confirmBtnText;
+            return;
+          }
+
+          const result = await response.json();
+          console.log('Result:', result);
+
+          if (result.success) {
+            alert('¡Reserva creada exitosamente! Código: ' + result.codigo_reserva);
+            window.location.href = '/home';
+          } else {
+            confirmBtn.disabled = false;
+            confirmBtn.textContent = confirmBtnText;
+            alert('Error: ' + (result.message || 'No se pudo crear la reserva'));
+          }
+        } catch (error) {
+          confirmBtn.disabled = false;
+          confirmBtn.textContent = confirmBtnText;
+          console.error('Error completo:', error);
+          alert('Error de conexión. Verifica la consola para más detalles.');
+        }
       });
     }
 

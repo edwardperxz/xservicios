@@ -204,6 +204,7 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
     grid-template-columns: auto 1fr auto;
     gap: 1rem;
     align-items: center;
+    cursor: pointer;
   }
 
   .trip-card:hover {
@@ -656,6 +657,16 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
 
   // Renderizar viajes
   let todosViajes = [];
+  function openTripDetail(viajeId) {
+    const parsedId = Number(viajeId);
+    if (!Number.isFinite(parsedId) || parsedId <= 0) {
+      console.warn('ID de viaje inválido para detalle:', viajeId);
+      return;
+    }
+
+    window.location.href = `/chofer/viajes/detalle/${parsedId}`;
+  }
+
   function renderViajes(viajes, filtro = 'todos') {
     const container = document.getElementById('tripsList');
     
@@ -706,8 +717,10 @@ $this->Html->css('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;50
       const statusClass = getStatusClass(viaje.estado_asignacion);
       const statusText = getStatusText(viaje.estado_asignacion);
 
+      const viajeId = Number(viaje.id || 0);
+
       return `
-        <div class="trip-card">
+        <div class="trip-card" role="button" tabindex="0" onclick="openTripDetail(${viajeId})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openTripDetail(${viajeId});}">
           <div class="trip-client">
             <div class="trip-avatar">${iniciales}</div>
             <div class="trip-client-info">

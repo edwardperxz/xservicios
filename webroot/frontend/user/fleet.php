@@ -970,7 +970,7 @@
   <!-- Vehicle Park Section -->
   <section class="vehicle-section">
     <div class="section-header">
-      <h2 class="section-title"><span data-i18n="fleet.vehicleTitle">Parque <span>Vehicular</span></span></h2>
+      <h2 class="section-title"><span data-i18n="fleet.vehicleTitle">Flota <span>Vehicular</span></span></h2>
       <div class="nav-arrows">
         <div class="nav-arrow">
           <svg viewBox="0 0 24 24" strokeWidth="2">
@@ -1015,7 +1015,7 @@
   </section>
 
   <!-- Drivers Section -->
-  <section class="drivers-section">
+  <section class="drivers-section" id="driversSection">
     <div class="drivers-header">
       <h2 class="drivers-title"><span data-i18n="fleet.driversTitle">Nuestros <span>Choferes</span></span></h2>
       <p class="drivers-subtitle" data-i18n="fleet.driversSubtitle">Profesionales responsables, transparentes y comprometidos con brindar el mejor servicio</p>
@@ -1027,7 +1027,7 @@
             <?php if (!empty($chofer->foto_url)): ?>
               <img src="<?= h($chofer->foto_url) ?>" loading="lazy" decoding="async" alt="<?= h($chofer->usuario->nombre ?? 'Chofer') ?>" class="driver-image" style="width: 100%; height: 250px; object-fit: cover;">
             <?php else: ?>
-              <div class="driver-image" style="width: 100%; height: 250px; background: #2a2a2a; display: flex; align-items: center; justify-content: center; color: #a0a0a0;">Sin foto</div>
+              <div class="driver-image" style="width: 100%; height: 250px; background: #2a2a2a; display: flex; align-items: center; justify-content: center; color: #a0a0a0;" data-i18n="fleet.noPicture">Sin foto</div>
             <?php endif; ?>
             <div class="driver-info">
               <h3 class="driver-name"><?= h($chofer->usuario->nombre ?? 'N/A') ?></h3>
@@ -1037,7 +1037,7 @@
                   <circle cx="12" cy="12" r="10"/>
                   <polyline points="12 6 12 12 16 14"/>
                 </svg>
-                Desde <?= h($chofer->fecha_ingreso->format('Y')) ?>
+                <span data-i18n="fleet.since">Desde</span> <?= h($chofer->fecha_ingreso->format('Y')) ?>
               </div>
               <div class="driver-rating">
                 <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
@@ -1045,17 +1045,26 @@
                 <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                 <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                 <svg class="star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <span class="rating-text">5.0</span>
+                <span class="rating-text">
+                  <?php
+                  $rating = $choferesRatings[$chofer->id] ?? ['promedio' => 0, 'total' => 0];
+                  if ($rating['total'] > 0) {
+                    echo number_format($rating['promedio'], 1) . ' (' . $rating['total'] . ')';
+                  } else {
+                    echo 'Sin valoraciones';
+                  }
+                  ?>
+                </span>
               </div>
             </div>
           </div>
         <?php endforeach; ?>
       <?php else: ?>
-        <p style="color: #a0a0a0; text-align: center; padding: 2rem; grid-column: 1/-1;">No hay choferes disponibles</p>
+        <p style="color: #a0a0a0; text-align: center; padding: 2rem; grid-column: 1/-1;" data-i18n="fleet.noDrivers">No hay choferes disponibles</p>
       <?php endif; ?>
     </div>
     <?php if (!empty($choferes) && is_array($choferes) && count($choferes) > 4): ?>
-      <button class="btn-ver-mas" id="btnVerMas" onclick="toggleDrivers()">Ver más</button>
+      <button class="btn-ver-mas" id="btnVerMas" onclick="toggleDrivers()" data-i18n="fleet.viewMore">Ver más</button>
     <?php endif; ?>
   </section>
 
@@ -1069,7 +1078,7 @@
             <polyline points="12 6 12 12 16 14"/>
           </svg>
         </div>
-        <span class="info-title">Siempre Puntuales</span>
+        <span class="info-title" data-i18n="fleet.alwaysPunctual">Siempre Puntuales</span>
       </div>
       <div class="info-item">
         <div class="info-icon-wrapper">
@@ -1077,7 +1086,7 @@
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
           </svg>
         </div>
-        <span class="info-title">100% Seguro</span>
+        <span class="info-title" data-i18n="fleet.safe">100% Seguro</span>
       </div>
       <div class="info-item">
         <div class="info-icon-wrapper">
@@ -1085,7 +1094,7 @@
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
           </svg>
         </div>
-        <span class="info-title">Servicio Premium</span>
+        <span class="info-title" data-i18n="fleet.premiumService">Servicio Premium</span>
       </div>
       <div class="info-item">
         <div class="info-icon-wrapper">
@@ -1093,14 +1102,14 @@
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
           </svg>
         </div>
-        <span class="info-title">Clientes Satisfechos</span>
+        <span class="info-title" data-i18n="fleet.satisfiedCustomers">Clientes Satisfechos</span>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
   <footer class="footer">
-    <p class="footer-text">2026 <span>Xservicios</span>. Todos los derechos reservados.</p>
+    <p class="footer-text" data-i18n="footer.text">© 2026 <span>Xservicios</span> - Transporte Turístico de Lujo. Todos los derechos reservados.</p>
   </footer>
 
   <script>

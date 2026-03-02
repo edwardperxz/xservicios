@@ -50,7 +50,10 @@ return function (RouteBuilder $routes): void {
         $builder->connect('/profile', ['controller' => 'Profile', 'action' => 'index']);
         
         // Rutas específicas para chofer
+        $builder->connect('/chofer', ['controller' => 'Dashboard', 'action' => 'choferViajes']);
         $builder->connect('/chofer/viajes', ['controller' => 'Dashboard', 'action' => 'choferViajes']);
+        $builder->connect('/chofer/viajes/detalle/*', ['controller' => 'Dashboard', 'action' => 'choferViajeDetalle'], ['pass' => ['id']]);
+        $builder->connect('/chofer/viajes/detalle/:id', ['controller' => 'Dashboard', 'action' => 'choferViajeDetalle'], ['id' => '[0-9]+', 'pass' => ['id']]);
         $builder->connect('/chofer/viajes/:id', ['controller' => 'XservChoferes', 'action' => 'viajesHistorial'], ['id' => '[0-9]+', 'pass' => ['id']]);
         
         // Panel de chofer - gestión de servicios
@@ -101,6 +104,18 @@ return function (RouteBuilder $routes): void {
         // ==============================
         // XservReservas
         // ==============================
+        $builder->connect(
+            '/xserv-reservas/reserva-rapida',
+            ['controller' => 'XservReservas', 'action' => 'reservaRapida']
+        );
+        $builder->connect(
+            '/xserv-reservas/quick-reserve',
+            ['controller' => 'XservReservas', 'action' => 'quickReserve']
+        );
+        $builder->connect(
+            '/xserv-reservas/quick-reserve.json',
+            ['controller' => 'XservReservas', 'action' => 'quickReserve', '_ext' => 'json']
+        );
         $builder->connect(
             '/xserv-reservas/my-reservations',
             ['controller' => 'XservReservas', 'action' => 'myReservations']

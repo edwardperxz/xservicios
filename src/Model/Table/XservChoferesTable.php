@@ -47,6 +47,11 @@ class XservChoferesTable extends Table
             'foreignKey' => 'usuario_id',
             'className' => 'XservUsuarios',
         ]);
+        // Relaciones para valoraciones
+        $this->hasMany('Asignaciones', [
+            'foreignKey' => 'chofer_id',
+            'className' => 'XservAsignaciones',
+        ]);
     }
 
     /**

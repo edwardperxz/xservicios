@@ -1059,9 +1059,9 @@ $emailjsTemplateAutoReply = getenv('template_id_autoreply') ?: '';
             <span class="date-day" id="resumenDia"><?= date('d') ?></span>
             <span class="date-month" id="resumenMes"><?= strftime('%B %Y', time()) ?></span>
           </div>
-          <button class="btn-history" data-i18n="homeLogin.serviceHistory">
+          <a href="/myreservations" class="btn-history" data-i18n="homeLogin.serviceHistory">
             Historial de Servicios
-          </button>
+          </a>
         </div>
 
         <div id="tabResumen" class="tab-content active-tab">
@@ -1102,7 +1102,6 @@ $emailjsTemplateAutoReply = getenv('template_id_autoreply') ?: '';
         </div>
 
         <div id="tabMisReservas" class="tab-content" style="display:none;">
-          <h3 style="margin-bottom:1rem;">Todas mis reservas</h3>
 
           <?php if (!empty($misReservas)): ?>
             <?php foreach ($misReservas as $reserva): ?>

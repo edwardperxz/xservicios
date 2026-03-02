@@ -39,6 +39,45 @@ class FrontendController extends AppController
         $vehiculos = $this->XservVehiculos->find()->toArray();
         $choferes = $this->XservChoferes->find()->contain('Usuarios')->toArray();
 
+        // Obtener promedio de valoraciones para cada chofer
+        $choferesRatings = [];
+        $asignacionesTable = TableRegistry::getTableLocator()->get('XservAsignaciones');
+        $valoracionesTable = TableRegistry::getTableLocator()->get('XservValoraciones');
+
+        foreach ($choferes as $chofer) {
+            // Obtener todas las asignaciones del chofer
+            $asignaciones = $asignacionesTable->find()
+                ->where(['chofer_id' => $chofer->id])
+                ->select(['reserva_id'])
+                ->toArray();
+            
+            $reservaIds = array_column($asignaciones, 'reserva_id');
+            
+            $promedioCalificacion = 0;
+            $totalValoraciones = 0;
+            
+            if (!empty($reservaIds)) {
+                $valoraciones = $valoracionesTable->find()
+                    ->where(['reserva_id IN' => $reservaIds, 'calificacion >' => 0])
+                    ->select(['calificacion'])
+                    ->toArray();
+                
+                if (!empty($valoraciones)) {
+                    $totalCalificacion = 0;
+                    foreach ($valoraciones as $val) {
+                        $totalCalificacion += $val->calificacion;
+                    }
+                    $totalValoraciones = count($valoraciones);
+                    $promedioCalificacion = round($totalCalificacion / $totalValoraciones, 1);
+                }
+            }
+            
+            $choferesRatings[$chofer->id] = [
+                'promedio' => $promedioCalificacion,
+                'total' => $totalValoraciones
+            ];
+        }
+
         // Renderizar con datos
         ob_start();
         include ROOT . '/webroot/frontend/user/fleet.php';

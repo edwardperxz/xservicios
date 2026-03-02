@@ -24,7 +24,7 @@ class XservAsignacionesControllerTest extends TestCase
     protected array $fixtures = [
         'app.XservAsignaciones',
         'app.Reservas',
-        'app.Chofers',
+        'app.Choferes',
         'app.Vehiculos',
         'app.AsignadoPors',
     ];

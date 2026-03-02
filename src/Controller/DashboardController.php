@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Datasource\ConnectionManager;
 use Cake\Event\EventInterface;
 use Cake\I18n\FrozenDate;
 
@@ -882,7 +883,7 @@ class DashboardController extends AppController
                 ->toArray();
 
             $asignaciones = $asignacionesTable->find()
-                ->contain(['Chofers' => ['Usuarios'], 'Vehiculos', 'Reservas', 'AsignadoPors'])
+                ->contain(['Chofer' => ['Usuarios'], 'Vehiculos', 'Reservas', 'AsignadoPors'])
                 ->toArray();
 
             $choferes = $choferesTable->find()
@@ -914,7 +915,7 @@ class DashboardController extends AppController
                 ->toArray();
 
             $ejecucionViajes = $ejecucionViajesTable->find()
-                ->contain(['Asignacions' => ['Chofers' => ['Usuarios'], 'Vehiculos']])
+                ->contain(['Asignacions' => ['Chofer' => ['Usuarios'], 'Vehiculos']])
                 ->toArray();
 
             $ubicaciones = $ubicacionesTable->find()->toArray();
@@ -975,6 +976,158 @@ class DashboardController extends AppController
             $this->set(compact('user', 'chofer'));
             $this->render('chofer_trips');
         }
+
+    /**
+     * Detalle de un viaje del chofer autenticado.
+     * Permite finalizar viaje y reportar incidencia para la asignación específica.
+     *
+     * @param int|null $id ID de la asignación
+     * @return \Cake\Http\Response|null|void
+     */
+    public function choferViajeDetalle(?int $id = null)
+    {
+        $user = $this->request->getAttribute('identity');
+        $this->Authorization->skipAuthorization();
+
+        if (!$user || $user->rol !== 'chofer') {
+            return $this->redirect(['controller' => 'Frontend', 'action' => 'login']);
+        }
+
+        if (!$id) {
+            $this->Flash->error('Viaje no válido.');
+            return $this->redirect(['action' => 'choferViajes']);
+        }
+
+        $choferesTable = $this->fetchTable('XservChoferes');
+        $chofer = $choferesTable->find()
+            ->where(['usuario_id' => $user->id])
+            ->first();
+
+        if (!$chofer) {
+            $this->Flash->error('No hay perfil de chofer asociado a tu usuario.');
+            return $this->redirect(['action' => 'choferViajes']);
+        }
+
+        $asignacionesTable = $this->fetchTable('XservAsignaciones');
+        $ejecucionTable = $this->fetchTable('XservEjecucionViajes');
+        $incidenciasTable = $this->fetchTable('XservIncidenciasViaje');
+
+        $viaje = $asignacionesTable->find()
+            ->where([
+                'XservAsignaciones.id' => $id,
+                'XservAsignaciones.chofer_id' => $chofer->id,
+            ])
+            ->contain([
+                'Reservas' => ['Clientes' => ['XservUsuarios'], 'Servicios'],
+                'Vehiculos',
+                'XservEjecucionViajes' => ['XservIncidenciasViaje'],
+            ])
+            ->first();
+
+        if (!$viaje) {
+            $this->Flash->error('No se encontró el viaje solicitado o no te pertenece.');
+            return $this->redirect(['action' => 'choferViajes']);
+        }
+
+        if ($this->request->is('post')) {
+            $accion = (string)$this->request->getData('accion');
+
+            if ($accion === 'finalizar_viaje') {
+                if ($viaje->estado_asignacion !== 'en_curso') {
+                    $this->Flash->error('Solo puedes finalizar viajes en estado EN CURSO.');
+                    return $this->redirect($this->request->getRequestTarget());
+                }
+
+                $connection = ConnectionManager::get('default');
+                $ok = $connection->transactional(function () use ($viaje, $asignacionesTable, $ejecucionTable) {
+                    $asignacion = $asignacionesTable->get($viaje->id);
+                    $asignacion->estado_asignacion = 'finalizada';
+
+                    if (!$asignacionesTable->save($asignacion)) {
+                        return false;
+                    }
+
+                    $ejecucion = $ejecucionTable->find()
+                        ->where(['asignacion_id' => $viaje->id])
+                        ->order(['id' => 'DESC'])
+                        ->first();
+
+                    if (!$ejecucion) {
+                        $ejecucion = $ejecucionTable->newEmptyEntity();
+                        $ejecucion->asignacion_id = $viaje->id;
+                        $ejecucion->hora_inicio_real = new \DateTime();
+                    }
+
+                    $ejecucion->hora_fin_real = new \DateTime();
+                    $ejecucion->estado_ejecucion = 'completado';
+                    $ejecucion->observaciones_finales = (string)$this->request->getData('observaciones_finales', '');
+
+                    return (bool)$ejecucionTable->save($ejecucion);
+                });
+
+                if ($ok) {
+                    $this->Flash->success('Viaje finalizado correctamente.');
+                } else {
+                    $this->Flash->error('No se pudo finalizar el viaje.');
+                }
+
+                return $this->redirect($this->request->getRequestTarget());
+            }
+
+            if ($accion === 'reportar_incidencia') {
+                $tipoIncidencia = (string)$this->request->getData('tipo_incidencia');
+                $descripcion = trim((string)$this->request->getData('descripcion'));
+                $severidad = (string)$this->request->getData('severidad', 'baja');
+
+                if ($tipoIncidencia === '' || $descripcion === '') {
+                    $this->Flash->error('Debes completar tipo y descripción de la incidencia.');
+                    return $this->redirect($this->request->getRequestTarget());
+                }
+
+                $connection = ConnectionManager::get('default');
+                $ok = $connection->transactional(function () use ($viaje, $ejecucionTable, $incidenciasTable, $tipoIncidencia, $descripcion, $severidad) {
+                    $ejecucion = $ejecucionTable->find()
+                        ->where(['asignacion_id' => $viaje->id])
+                        ->order(['id' => 'DESC'])
+                        ->first();
+
+                    if (!$ejecucion) {
+                        $ejecucion = $ejecucionTable->newEmptyEntity();
+                        $ejecucion->asignacion_id = $viaje->id;
+                        $ejecucion->hora_inicio_real = new \DateTime();
+                        $ejecucion->estado_ejecucion = 'en_progreso';
+
+                        if (!$ejecucionTable->save($ejecucion)) {
+                            return false;
+                        }
+                    }
+
+                    $incidencia = $incidenciasTable->newEmptyEntity();
+                    $incidencia = $incidenciasTable->patchEntity($incidencia, [
+                        'ejecucion_id' => $ejecucion->id,
+                        'tipo_incidencia' => $tipoIncidencia,
+                        'descripcion' => $descripcion,
+                        'severidad' => $severidad,
+                        'resuelto' => 0,
+                    ]);
+
+                    return (bool)$incidenciasTable->save($incidencia);
+                });
+
+                if ($ok) {
+                    $this->Flash->success('Incidencia reportada correctamente para este viaje.');
+                } else {
+                    $this->Flash->error('No se pudo registrar la incidencia.');
+                }
+
+                return $this->redirect($this->request->getRequestTarget());
+            }
+        }
+
+        $this->viewBuilder()->setLayout('frontend');
+        $this->set(compact('user', 'chofer', 'viaje'));
+        $this->render('chofer_trip_detail');
+    }
 
     /**
      * API: Aceptar asignación

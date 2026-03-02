@@ -359,6 +359,18 @@
         padding: 1rem 0;
     }
 
+    .profile-actions .btn {
+        min-width: 210px;
+        height: 48px;
+        padding: 0.75rem 1.25rem;
+    }
+
+    .profile-actions .btn svg {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+    }
+
     .btn {
         display: inline-flex;
         align-items: center;
@@ -458,12 +470,18 @@
 
         .profile-actions {
             flex-direction: column;
+            gap: 0.75rem;
         }
 
         .btn {
             width: 100%;
             padding: 0.9rem 1.5rem;
             font-size: 0.95rem;
+        }
+
+        .profile-actions .btn {
+            min-width: 100%;
+            height: 46px;
         }
 
         .info-row {
@@ -515,6 +533,10 @@
             padding: 0.7rem 1.2rem;
             font-size: 0.85rem;
         }
+
+        .profile-actions .btn {
+            height: 44px;
+        }
     }
 </style>
 </head>
@@ -545,42 +567,18 @@
                         </svg>
                         <strong><?= h($usuario['correo'] ?? 'N/A') ?></strong>
                     </div>
-                    <div class="profile-meta-item">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        <span class="profile-badge"><?= h($usuario['rol'] ?? 'Usuario') ?></span>
-                    </div>
+                    
                     <div class="profile-meta-item">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                         <?php if ($usuario['estado'] ?? false): ?>
-                            <span class="status-badge active">Activo</span>
+                            <span class="status-badge active" data-i18n="profile.active">Activo</span>
                         <?php else: ?>
-                            <span class="status-badge inactive">Inactivo</span>
+                            <span class="status-badge inactive" data-i18n="profile.inactive">Inactivo</span>
                         <?php endif; ?>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Stats -->
-    <div class="profile-grid">
-        <div class="profile-card">
-            <h3>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                Estado
-            </h3>
-            <div class="profile-card-value">
-                <?php if ($usuario['estado'] ?? false): ?>
-                    <span class="status-badge active">Activo</span>
-                <?php else: ?>
-                    <span class="status-badge inactive">Inactivo</span>
-                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -594,74 +592,48 @@
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                     </svg>
-                    Información Personal
+                    <span data-i18n="profile.personalInfo">Información Personal</span>
                 </h2>
             </div>
             <div class="profile-section-content">
                 <div class="info-row">
-                    <span class="info-label">Nombre</span>
+                    <span class="info-label" data-i18n="profile.name">Nombre</span>
                     <span class="info-value"><?= h($usuario['nombre'] ?? 'N/A') ?></span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">Usuario</span>
+                    <span class="info-label" data-i18n="profile.username">Usuario</span>
                     <span class="info-value"><?= h($usuario['username'] ?? 'N/A') ?></span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">Email</span>
+                    <span class="info-label" data-i18n="profile.email">Email</span>
                     <span class="info-value"><?= h($usuario['correo'] ?? 'N/A') ?></span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">Teléfono</span>
+                    <span class="info-label" data-i18n="profile.phone">Teléfono</span>
                     <span class="info-value"><?= h($usuario['telefono'] ?? 'N/A') ?></span>
                 </div>
             </div>
         </div>
 
-        <!-- Account Information -->
-        <div class="profile-section">
-            <div class="profile-section-header">
-                <h2>
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                    </svg>
-                    Información de Cuenta
-                </h2>
-            </div>
-            <div class="profile-section-content">
-                <div class="info-row">
-                    <span class="info-label">Rol</span>
-                    <span class="info-value">
-                        <span class="profile-badge"><?= h($usuario['rol'] ?? 'Usuario') ?></span>
-                    </span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Estado</span>
-                    <span class="info-value">
-                        <?php if ($usuario['estado'] ?? false): ?>
-                            <span class="status-badge active">Activo</span>
-                        <?php else: ?>
-                            <span class="status-badge inactive">Inactivo</span>
-                        <?php endif; ?>
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Tab Valoraciones -->
+    <?php if (!empty($usuario->id)): ?>
+        <?= $this->element('Profile/tab_valoracion', ['reservasFinalizadas' => $reservasFinalizadas ?? []]) ?>
+    <?php endif; ?>
 
     <!-- Action Buttons -->
     <div class="profile-actions">
         <?= $this->Html->link(
-            '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>Editar Perfil',
+            '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg><span data-i18n="profile.editProfile">Editar Perfil</span>',
             ['action' => 'edit'],
             ['class' => 'btn btn-primary', 'escape' => false]
         ) ?>
         <?= $this->Html->link(
-            '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>Cambiar Contraseña',
+            '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg><span data-i18n="profile.changePassword">Cambiar Contraseña</span>',
             ['controller' => 'XservUsuarios', 'action' => 'changePassword'],
             ['class' => 'btn btn-secondary', 'escape' => false]
         ) ?>
         <?= $this->Html->link(
-            '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>Volver',
+            '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg><span data-i18n="profile.back">Volver</span>',
             ['controller' => 'Home', 'action' => 'index'],
             ['class' => 'btn btn-secondary', 'escape' => false]
         ) ?>

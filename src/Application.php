@@ -86,9 +86,22 @@ class Application extends BaseApplication implements
                         ->add(new LocaleMiddleware())
             ->add(new BodyParserMiddleware())
             ->add(new AuthenticationMiddleware($this))
-            ->add(new AuthorizationMiddleware($this))
+            ->add(new AuthorizationMiddleware($this, [
+                'requireAuthorizationCheck' => false,
+            ]))
             ->add(new CsrfProtectionMiddleware([
                 'httponly' => false,
+                'skip' => function ($request) {
+                    // Skip CSRF para las rutas de reserva rápida
+                    $path = $request->getUri()->getPath();
+                    $paths = [
+                        '/xserv-reservas/quick-reserve',
+                        '/xserv-reservas/reserva-rapida'
+                    ];
+                    return in_array($path, $paths) || 
+                           str_contains($path, 'reserva-rapida') || 
+                           str_contains($path, 'quick-reserve');
+                },
             ]));
 
         return $middlewareQueue;

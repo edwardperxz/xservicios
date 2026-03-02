@@ -218,7 +218,39 @@ class XservChoferesController extends AppController
     {
         $this->Authorization->skipAuthorization();
         $xservChofere = $this->XservChoferes->get($id, contain: ['Usuarios']);
-        $this->set(compact('xservChofere'));
+        
+        // Obtener promedio de valoraciones
+        $valoracionesTable = $this->fetchTable('XservValoraciones');
+        $asignacionesTable = $this->fetchTable('XservAsignaciones');
+        
+        // Obtener todas las asignaciones del chofer
+        $asignaciones = $asignacionesTable->find()
+            ->where(['chofer_id' => $id])
+            ->select(['reserva_id'])
+            ->toArray();
+        
+        $reservaIds = array_column($asignaciones, 'reserva_id');
+        
+        $promedioCalificacion = 0;
+        $totalValoraciones = 0;
+        
+        if (!empty($reservaIds)) {
+            $valoraciones = $valoracionesTable->find()
+                ->where(['reserva_id IN' => $reservaIds, 'calificacion >' => 0])
+                ->select(['calificacion'])
+                ->toArray();
+            
+            if (!empty($valoraciones)) {
+                $totalCalificacion = 0;
+                foreach ($valoraciones as $val) {
+                    $totalCalificacion += $val->calificacion;
+                }
+                $totalValoraciones = count($valoraciones);
+                $promedioCalificacion = round($totalCalificacion / $totalValoraciones, 1);
+            }
+        }
+        
+        $this->set(compact('xservChofere', 'promedioCalificacion', 'totalValoraciones'));
     }
 
     /**

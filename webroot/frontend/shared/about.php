@@ -326,17 +326,6 @@
       box-shadow: 0 6px 30px rgba(201, 169, 98, 0.5);
     }
 
-    .hero-arrows {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      padding: 0 1rem;
-      z-index: 3;
-    }
-
     .hero-arrow {
       width: 40px;
       height: 40px;
@@ -713,18 +702,6 @@
       <h1 class="hero-title"><span data-i18n="hero.titlePart1">Transporte Turístico</span> <span data-i18n="hero.titlePart2">de Lujo</span></h1>
       <a href="/services" class="btn-primary" data-i18n="hero.bookNow">Reservar Ahora</a>
     </div>
-    <div class="hero-arrows">
-      <div class="hero-arrow">
-        <svg viewBox="0 0 24 24" strokeWidth="2">
-          <polyline points="15 18 9 12 15 6"/>
-        </svg>
-      </div>
-      <div class="hero-arrow">
-        <svg viewBox="0 0 24 24" strokeWidth="2">
-          <polyline points="9 18 15 12 9 6"/>
-        </svg>
-      </div>
-    </div>
   </section>
 
   <!-- About Section - Quiénes Somos -->
@@ -736,26 +713,6 @@
       <div class="about-content">
         <h2 data-i18n="about.title">Quiénes Somos</h2>
         <p data-i18n="about.description">En Xservicios somos un sistema de transporte turístico de lujo enfocado en ofrecer traslados seguros, eficientes y de alta calidad. Nuestra operación está diseñada para atender a clientes que valoran el confort, la puntualidad y un servicio confiable, brindando una experiencia de movilidad alineada con estándares premium en cada recorrido.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Gallery Section -->
-  <section class="gallery-section">
-    <h2 class="gallery-title" data-i18n="gallery.title">Nuestros Destinos</h2>
-    <p class="gallery-subtitle" data-i18n="gallery.subtitle">Descubre los lugares más hermosos de Chiriquí con nosotros</p>
-    <div class="gallery-grid">
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=400&h=300&fit=crop" alt="Destino turístico 1" loading="lazy" decoding="async">
-      </div>
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&h=300&fit=crop" alt="Destino turístico 2" loading="lazy" decoding="async">
-      </div>
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=400&h=300&fit=crop" alt="Destino turístico 3" loading="lazy" decoding="async">
-      </div>
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=400&h=300&fit=crop" alt="Destino turístico 4" loading="lazy" decoding="async">
       </div>
     </div>
   </section>
@@ -780,7 +737,7 @@
     <div class="team-content">
       <h2 data-i18n="team.title">Nuestros Colaboradores</h2>
       <p data-i18n="team.description">Nuestros choferes son profesionales responsables, transparentes y comprometidos con su labor. Cada colaborador representa los valores de Xservicios, destacándose por su puntualidad, trato respetuoso y enfoque en la seguridad, asegurando que cada traslado se realice con el profesionalismo y la confianza que nuestros clientes esperan.</p>
-      <a href="#" class="btn-secondary" data-i18n="team.button">Conocer al Equipo</a>
+      <a href="/fleet#driversSection" class="btn-secondary" data-i18n="team.button">Conocer al Equipo</a>
     </div>
   </section>
 

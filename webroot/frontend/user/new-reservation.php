@@ -1028,7 +1028,8 @@
 
     const renderServicio = () => {
       if (!serviceDetail || !serviceDetailEmpty) return;
-      const t = window.translate ? window.translate : (key) => key;
+      // Usar la función de traducción global que está siempre disponible
+      const t = window.t || window.__translate || ((key) => key);
       const lang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'es';
 
       if (!servicioActual) {
@@ -1040,7 +1041,15 @@
       const nombre = servicioActual.nombre || servicioActual.titulo || t('services.defaultName');
       const descripcion = getDescripcion(servicioActual, lang) || t('services.defaultDesc');
       const precio = formatPrice(servicioActual.precio_base ?? servicioActual.precio ?? servicioActual.costo);
-      const variantes = normalizeVariants(servicioActual.variantes);
+      
+      // Obtener variantes del i18n con fallback a base de datos
+      const variantsKey = `service.${servicioActual.id}.variants`;
+      const variantsRaw = t(variantsKey) || servicioActual.variantes || '';
+      const variantes = variantsRaw
+        .split(/\r?\n|\s*;\s*|\s*,\s*/)
+        .map(v => v.trim())
+        .filter(v => v.length > 0);
+      
       const estadoActivo = String(servicioActual.estado ?? '1') !== '0';
       const href = servicioActual.id ? `/newreservation?service_id=${servicioActual.id}` : '/newreservation';
       const index = servicioActual.__index ?? 0;

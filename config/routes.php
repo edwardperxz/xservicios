@@ -41,7 +41,6 @@ return function (RouteBuilder $routes): void {
 
         // Rutas de roles
         $builder->connect('/panel/admin', ['controller' => 'Dashboard', 'action' => 'adminPanel']);
-        $builder->connect('/panel/operador', ['controller' => 'Dashboard', 'action' => 'operadorPanel']);
         $builder->connect('/panel/chofer', ['controller' => 'Dashboard', 'action' => 'choferPanel']);
         $builder->connect('/requests', ['controller' => 'Dashboard', 'action' => 'requests']);
         $builder->connect('/notifications', ['controller' => 'Dashboard', 'action' => 'choferNotifications']);

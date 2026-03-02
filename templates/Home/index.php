@@ -1233,8 +1233,6 @@ $emailjsTemplateAutoReply = getenv('template_id_autoreply') ?: '';
   <!-- i18n-preload.js ya está cargado en el <head> -->
   <script src="/js/i18n.js"></script>
   <script src="/js/header-loader.js"></script>
-  <script src="/js/i18n.js"></script>
-  <script src="/js/header-loader.js"></script>
   <script src="/js/header-dynamic.js"></script>
   <!-- EmailJS v4 - Sin defer para cargar primero -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>

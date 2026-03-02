@@ -696,6 +696,7 @@
       try {
         const res = await fetch(API_ME, {
           headers: { 'X-Requested-With': 'XMLHttpRequest' },
+          credentials: 'include'
         });
 
         if (!res.ok) {
@@ -724,6 +725,7 @@
       try {
         const res = await fetch(API_RESERVAS, {
           headers: { 'X-Requested-With': 'XMLHttpRequest' },
+          credentials: 'include'
         });
         if (!res.ok) return [];
         

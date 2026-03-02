@@ -572,7 +572,8 @@
           headers: {
             'Accept': 'application/json',
             'X-Requested-With': 'XMLHttpRequest'
-          }
+          },
+          credentials: 'include' // Incluir cookies de sesión
         });
 
         if (!response.ok) {
@@ -631,7 +632,8 @@
     function renderReservations(category) {
       const reservations = reservationsData[category] || [];
       const container = document.getElementById('reservations-container');
-      const t = window.translate ? window.translate : (key) => key;
+      // Usar la función de traducción global que está siempre disponible
+      const t = window.t || window.__translate || ((key) => key);
 
       if (reservations.length === 0) {
         container.innerHTML = `

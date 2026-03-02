@@ -3,6 +3,12 @@
  * Maneja la traducción de contenido entre español e inglés
  */
 
+// Evitar cargar dos veces el mismo archivo
+if (typeof window.i18nLoaded !== 'undefined' && window.i18nLoaded) {
+  console.log('⚠️ i18n.js ya está cargado - omitiendo duplicado');
+} else {
+  window.i18nLoaded = true;
+
 const translations = {
   es: {
     // Navegación
@@ -131,6 +137,12 @@ const translations = {
     'services.loading': 'Cargando servicios...',
     'services.description': 'Descripción',
     'services.variants': 'Variantes',
+    'services.lead': 'Explora experiencias pensadas para reservar rápido: precio base, disponibilidad y detalles claros antes de elegir.',
+    'services.cardTitle': 'Reserva con confianza',
+    'services.cardText': 'Compara opciones, revisa condiciones y asegura tu servicio en menos pasos.',
+    'services.pill1': 'Confirmación rápida',
+    'services.pill2': 'Precios claros',
+    'services.pill3': 'Soporte 24/7',
     
     // Service Detail
     'service.basePrice': 'Precio base',
@@ -536,6 +548,12 @@ const translations = {
     'services.loading': 'Loading services...',
     'services.description': 'Description',
     'services.variants': 'Variants',
+    'services.lead': 'Explore experiences designed for quick bookings: base price, availability and clear details before you choose.',
+    'services.cardTitle': 'Book with confidence',
+    'services.cardText': 'Compare options, review conditions and secure your service in fewer steps.',
+    'services.pill1': 'Fast confirmation',
+    'services.pill2': 'Clear prices',
+    'services.pill3': '24/7 Support',
     
     // Service Detail
     'service.basePrice': 'Base price',
@@ -1094,6 +1112,28 @@ if (document.readyState === 'loading') {
   window.i18n = new I18n();
 }
 
+/**
+ * Función global de traducción que funciona inmediatamente
+ * No depende de que la clase I18n se haya inicializado
+ */
+window.__translate = (key) => {
+  // Obtener idioma preferido o usar español por defecto
+  const lang = localStorage.getItem('preferredLanguage') || window.__i18nPreloadLang || 'es';
+  
+  // Si el objeto translations existe, usarlo
+  if (typeof translations !== 'undefined' && translations[lang] && translations[lang][key]) {
+    return translations[lang][key];
+  }
+  
+  // Fallback a español si el idioma actual no tiene la traducción
+  if (typeof translations !== 'undefined' && translations['es'] && translations['es'][key]) {
+    return translations['es'][key];
+  }
+  
+  // Si nada funciona, retornar la clave (nunca debería pasar)
+  return key;
+};
+
 // Exponer funciones útiles globalmente
 window.setLanguage = (lang) => {
   if (window.i18n) {
@@ -1102,9 +1142,14 @@ window.setLanguage = (lang) => {
 };
 
 window.getCurrentLanguage = () => {
-  return window.i18n ? window.i18n.getCurrentLanguage() : 'es';
+  return window.i18n ? window.i18n.getCurrentLanguage() : (localStorage.getItem('preferredLanguage') || 'es');
 };
 
 window.translate = (key) => {
-  return window.i18n ? window.i18n.t(key) : key;
+  return window.i18n ? window.i18n.t(key) : window.__translate(key);
 };
+
+// Alias corto para facilitar el uso
+window.t = window.__translate;
+
+} // Cierre del condicional if (!window.i18nLoaded)

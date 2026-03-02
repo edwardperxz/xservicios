@@ -1001,7 +1001,7 @@
             endif;
             ?>
             <?php if ($imagenVehiculo): ?>
-              <img src="<?= $imagenVehiculo ? loading="lazy" decoding="async">" alt="<?= h($vehiculo->nombre_unidad) ?>" style="width: 100%; height: 200px; object-fit: cover;">
+              <img src="<?= $imagenVehiculo ?>" loading="lazy" decoding="async" alt="<?= h($vehiculo->nombre_unidad) ?>" style="width: 100%; height: 200px; object-fit: cover;">
             <?php else: ?>
               <div style="width: 100%; height: 200px; background: #2a2a2a; display: flex; align-items: center; justify-content: center; color: #a0a0a0;">Sin imagen</div>
             <?php endif; ?>
@@ -1025,7 +1025,7 @@
         <?php foreach ($choferes as $index => $chofer): ?>
           <div class="driver-card <?= ($index >= 4) ? 'hidden' : '' ?>">
             <?php if (!empty($chofer->foto_url)): ?>
-              <img src="<?= h($chofer- loading="lazy" decoding="async">foto_url) ?>" alt="<?= h($chofer->usuario->nombre ?? 'Chofer') ?>" class="driver-image" style="width: 100%; height: 250px; object-fit: cover;">
+              <img src="<?= h($chofer->foto_url) ?>" loading="lazy" decoding="async" alt="<?= h($chofer->usuario->nombre ?? 'Chofer') ?>" class="driver-image" style="width: 100%; height: 250px; object-fit: cover;">
             <?php else: ?>
               <div class="driver-image" style="width: 100%; height: 250px; background: #2a2a2a; display: flex; align-items: center; justify-content: center; color: #a0a0a0;">Sin foto</div>
             <?php endif; ?>

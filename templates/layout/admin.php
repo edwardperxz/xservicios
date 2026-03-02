@@ -9,7 +9,7 @@ $userInitial = strtoupper(substr($userName, 0, 1));
 $isAdmin = $userRole === 'admin';
 $isOperador = $userRole === 'operador';
 $isChofer = $userRole === 'chofer';
-$dashboardUrl = $isAdmin ? '/panel/admin' : ($isOperador ? '/panel/operador' : '/xserv-ejecucion-viajes/chofer-panel');
+$dashboardUrl = $isAdmin ? '/panel/admin' : '/xserv-ejecucion-viajes/chofer-panel';
 $roleLabel = $isAdmin ? 'Administrador' : ($isOperador ? 'Operador' : ($isChofer ? 'Chofer' : ucfirst($userRole)));
 ?>
 <!DOCTYPE html>

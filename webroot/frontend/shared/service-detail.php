@@ -680,7 +680,8 @@
     const renderService = () => {
       if (!servicioData) return;
 
-      const t = window.translate ? window.translate : (key) => key;
+      // Usar la función de traducción global que está siempre disponible
+      const t = window.t || window.__translate || ((key) => key);
       
       const servicio = servicioData;
       const status = String(servicio.estado || '').toLowerCase();

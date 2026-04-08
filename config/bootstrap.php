@@ -67,8 +67,9 @@ require CAKE . 'functions.php';
  * security risks. See https://github.com/josegonzalez/php-dotenv#general-security-information
  * for more information for recommended practices.
 */
-// Cargar .env desde la raíz del proyecto si existe
-if (file_exists(ROOT . DS . '.env')) {
+// Cargar .env solo cuando el loader de dotenv está disponible.
+// En producción (build con --no-dev) este paquete puede no existir.
+if (file_exists(ROOT . DS . '.env') && class_exists('\josegonzalez\Dotenv\Loader')) {
     $dotenv = new \josegonzalez\Dotenv\Loader([ROOT . DS . '.env']);
     $dotenv->parse()
         ->skipExisting()

@@ -2,6 +2,8 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use App\Utility\DemoData;
+use Cake\Event\EventInterface;
 use Cake\Http\Exception\NotFoundException;
 use Cake\ORM\Locator\LocatorAwareTrait;
 
@@ -9,11 +11,43 @@ class ProfileController extends AppController
 {
     use LocatorAwareTrait;
 
+    public function beforeFilter(EventInterface $event): void
+    {
+        parent::beforeFilter($event);
+
+        if (DemoData::isEnabled()) {
+            $this->Authentication->addUnauthenticatedActions(['index', 'edit', 'settings']);
+            $this->Authorization->skipAuthorization();
+        }
+    }
+
+    private function demoUsuario(): \ArrayObject
+    {
+        return new \ArrayObject([
+            'id' => 101,
+            'nombre' => 'Demo',
+            'username' => 'demo',
+            'correo' => 'demo@xservicios.com',
+            'telefono' => '+507 6000-0000',
+            'estado' => true,
+            'rol' => 'cliente',
+            'pais' => 'PANAMA',
+        ], \ArrayObject::ARRAY_AS_PROPS);
+    }
+
     /**
      * Display user profile page
      */
     public function index()
     {
+        if (DemoData::isEnabled()) {
+            $usuario = $this->demoUsuario();
+            $reservasFinalizadas = [];
+            $this->set(compact('usuario', 'reservasFinalizadas'));
+            $this->viewBuilder()->disableAutoLayout();
+            return;
+        }
+
         // Obtener el usuario autenticado
         $userIdentity = $this->Authentication->getIdentity();
         
@@ -56,6 +90,20 @@ class ProfileController extends AppController
      */
     public function edit()
     {
+        if (DemoData::isEnabled()) {
+            $usuario = $this->demoUsuario();
+            $chofer = null;
+
+            if ($this->getRequest()->is(['post', 'put'])) {
+                $this->Flash->success('Perfil Demo actualizado correctamente.');
+                return $this->redirect(['action' => 'index']);
+            }
+
+            $this->set(compact('usuario', 'chofer'));
+            $this->viewBuilder()->disableAutoLayout();
+            return;
+        }
+
         // Obtener el usuario autenticado
         $userIdentity = $this->Authentication->getIdentity();
         
@@ -187,6 +235,19 @@ class ProfileController extends AppController
      */
     public function settings()
     {
+        if (DemoData::isEnabled()) {
+            $usuario = $this->demoUsuario();
+
+            if ($this->getRequest()->is(['post', 'put'])) {
+                $this->Flash->success('Preferencias Demo guardadas correctamente.');
+                return $this->redirect(['action' => 'settings']);
+            }
+
+            $this->set(compact('usuario'));
+            $this->viewBuilder()->disableAutoLayout();
+            return;
+        }
+
         // Obtener el usuario autenticado
         $userIdentity = $this->Authentication->getIdentity();
         

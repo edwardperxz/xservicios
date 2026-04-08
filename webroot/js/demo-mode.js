@@ -135,17 +135,6 @@
 
   let state = loadState();
 
-  if (!state.user) {
-    state.user = {
-      id: 101,
-      nombre: 'Demo',
-      apellidos: '',
-      email: 'demo@xservicios.com',
-      rol: 'cliente'
-    };
-    saveState();
-  }
-
   const createDemoUser = () => ({
     id: 101,
     nombre: 'Demo',
@@ -159,6 +148,26 @@
     localStorage.setItem(DEMO_USER_KEY, JSON.stringify(state.user));
   };
 
+  // Asegura compatibilidad si el localStorage quedó con estructura vieja.
+  const ensureStateShape = () => {
+    const defaults = defaultState();
+    if (!Array.isArray(state.services) || state.services.length === 0) {
+      state.services = defaults.services;
+    }
+    if (!Array.isArray(state.reservations)) {
+      state.reservations = defaults.reservations;
+    }
+    if (!Array.isArray(state.ratings)) {
+      state.ratings = defaults.ratings;
+    }
+    if (!state.user) {
+      state.user = createDemoUser();
+    }
+    saveState();
+  };
+
+  ensureStateShape();
+
   const clone = (value) => JSON.parse(JSON.stringify(value));
 
   const jsonResponse = (payload, init = {}) => new Response(JSON.stringify(payload), {
@@ -166,10 +175,22 @@
     headers: responseHeaders()
   });
 
-  const normalizePath = (input) => {
-    if (typeof input === 'string') return input;
-    if (input instanceof Request) return input.url;
-    return '';
+  const getUrlData = (input) => {
+    const raw = typeof input === 'string' ? input : (input instanceof Request ? input.url : '');
+    try {
+      const parsed = new URL(raw, window.location.origin);
+      return {
+        raw,
+        pathname: parsed.pathname,
+        search: parsed.search
+      };
+    } catch (error) {
+      return {
+        raw,
+        pathname: raw,
+        search: ''
+      };
+    }
   };
 
   const readJsonBody = async (input, init) => {
@@ -309,50 +330,50 @@
   const originalFetch = window.fetch.bind(window);
 
   window.fetch = async function (input, init) {
-    const url = normalizePath(input);
+    const { pathname } = getUrlData(input);
 
-    if (url.includes('/xserv-usuarios/me')) {
+    if (pathname.includes('/xserv-usuarios/me')) {
       if (!state.user) {
         return jsonResponse({ success: false, message: 'No autenticado' }, { status: 401 });
       }
       return jsonResponse({ success: true, user: clone(state.user) });
     }
 
-    if (url.includes('/xserv-usuarios/logout')) {
+    if (pathname.includes('/xserv-usuarios/logout')) {
       state.user = null;
       saveState();
       return jsonResponse({ success: true, message: 'Sesion cerrada' });
     }
 
-    if (url.includes('/xserv-servicios/view/') && url.endsWith('.json')) {
-      const match = url.match(/\/xserv-servicios\/view\/(\d+)\.json/);
+    if (pathname.includes('/xserv-servicios/view/') && pathname.endsWith('.json')) {
+      const match = pathname.match(/\/xserv-servicios\/view\/(\d+)\.json/);
       const service = match ? state.services.find((item) => Number(item.id) === Number(match[1])) : null;
       return service
         ? jsonResponse({ xservServicio: clone(service) })
         : jsonResponse({ success: false, message: 'Servicio no encontrado' }, { status: 404 });
     }
 
-    if (url === '/xserv-servicios.json' || url.endsWith('/xserv-servicios.json')) {
+    if (pathname === '/xserv-servicios.json') {
       return jsonResponse({ xservServicios: clone(state.services) });
     }
 
-    if (url === '/xserv-reservas.json' || url.endsWith('/xserv-reservas.json')) {
+    if (pathname === '/xserv-reservas.json') {
       return jsonResponse(buildReservationsApi());
     }
 
-    if (url === '/xserv-valoraciones.json' || url.endsWith('/xserv-valoraciones.json')) {
+    if (pathname === '/xserv-valoraciones.json') {
       return jsonResponse(buildRatingsApi());
     }
 
-    if (url.includes('/xserv-reservas/my-reservations.json')) {
+    if (pathname.includes('/xserv-reservas/my-reservations.json')) {
       return jsonResponse({ success: true, reservations: buildReservationsByCategory() });
     }
 
-    if (url.includes('/xserv-reservas/reserva-rapida') || url.includes('/xserv-reservas/quick-reserve')) {
+    if (pathname.includes('/xserv-reservas/reserva-rapida') || pathname.includes('/xserv-reservas/quick-reserve')) {
       return createReservation(input, init);
     }
 
-    if (url.includes('/xserv-valoraciones/add.json')) {
+    if (pathname.includes('/xserv-valoraciones/add.json')) {
       return addRating(input, init);
     }
 
@@ -365,8 +386,8 @@
       window.location.href = '/login';
       return;
     }
-    if (href === '/profile' || href === '/settings') {
-      window.location.href = '/home';
+    if (href === '/settings') {
+      window.location.href = '/profile';
       return;
     }
     window.location.href = href;
@@ -380,7 +401,7 @@
       return;
     }
 
-    const profileLink = event.target instanceof Element ? event.target.closest('a[href="/profile"], a[href="/settings"]') : null;
+    const profileLink = event.target instanceof Element ? event.target.closest('a[href="/settings"]') : null;
     if (profileLink) {
       event.preventDefault();
       demoSafeRedirect(profileLink.getAttribute('href'));

@@ -19,6 +19,16 @@ El proyecto es un sistema bilingüe (español/inglés) para reservas de transpor
 - Git
 - Extensiones PHP requeridas: `intl`, `mbstring`, `pdo_mysql`, `simplexml` (habilitadas por defecto en XAMPP recientes, pero verifica)
 
+## Demo para Render
+Este repositorio incluye un modo demo pensado para portafolio y despliegue en Render.
+
+- No depende de MySQL para las pantallas públicas.
+- Usa datos simulados en el frontend.
+- Guarda reservas y valoraciones de ejemplo en `localStorage`.
+- Se activa con la variable de entorno `DEMO_MODE=true`.
+
+Para Render, usa el `Dockerfile` del proyecto y el blueprint `render.yaml`.
+
 ## Instrucciones para Configurar y Ejecutar el Proyecto
 
 ### 1. Clonar el Repositorio
@@ -123,6 +133,28 @@ Nota: Si usas MySQL nativo, edita el php.ini que carga tu CLI (php --ini para ub
 ```bash
 php bin/cake.php server
 ```
+
+### 7. Desplegar en Render
+
+1. Crea un nuevo Web Service en Render desde este repositorio.
+2. Asegúrate de que Render use el `Dockerfile` del proyecto.
+3. Revisa/define estas variables de entorno:
+   - `DEMO_MODE=true`
+   - `DEBUG=false`
+   - `APP_ENV=production`
+   - `SECURITY_SALT` (secreto)
+   - `APP_FULL_BASE_URL` (URL pública final de Render)
+4. No necesitas configurar MySQL para la demo pública.
+
+Si quieres publicar la versión completa con backend real, entonces sí necesitas una base de datos externa y revisar las rutas privadas.
+
+### 8. Checklist de Producción (Demo)
+
+- El servicio responde en `/` sin depender de base de datos.
+- `DEMO_MODE=true` está activo en Render.
+- `DEBUG=false` en producción.
+- `APP_FULL_BASE_URL` configurado con tu dominio de Render.
+- No subas `config/app_local.php` ni `composer.phar` al repositorio.
 # Esquema de la base de datos
 
 El esquema completo está en: docs/database_schema.sql
@@ -152,10 +184,3 @@ php bin/cake bake view all
 - webroot/ → Assets (CSS con paleta corporativa: negro, verde pastel, chocolate, amarillo amanecer, blanco; JS)
 - config/ → Configuraciones (app_local.php para DB)
 - docs/ → Documentación (esquema SQL, SRS, etc.)
-
-### Equipo
-
-- Edward: Project Manager y coordinación
-- Ana: UX/UI y templates
-- Isaí: Base de datos y backend
-- Fredy: backend, Módulos operativos y pruebas

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Utility\DemoData;
 use Cake\Event\EventInterface;
 use Cake\Http\Response;
 use Cake\ORM\TableRegistry;
@@ -35,47 +36,53 @@ class FrontendController extends AppController
      */
     public function fleet()
     {
-        // Cargar datos reales de la BD
-        $vehiculos = $this->XservVehiculos->find()->toArray();
-        $choferes = $this->XservChoferes->find()->contain('Usuarios')->toArray();
+        if (DemoData::isEnabled()) {
+            $vehiculos = DemoData::fleetVehicles();
+            $choferes = DemoData::fleetDrivers();
+            $choferesRatings = DemoData::fleetRatings();
+        } else {
+            // Cargar datos reales de la BD
+            $vehiculos = $this->XservVehiculos->find()->toArray();
+            $choferes = $this->XservChoferes->find()->contain('Usuarios')->toArray();
 
-        // Obtener promedio de valoraciones para cada chofer
-        $choferesRatings = [];
-        $asignacionesTable = TableRegistry::getTableLocator()->get('XservAsignaciones');
-        $valoracionesTable = TableRegistry::getTableLocator()->get('XservValoraciones');
+            // Obtener promedio de valoraciones para cada chofer
+            $choferesRatings = [];
+            $asignacionesTable = TableRegistry::getTableLocator()->get('XservAsignaciones');
+            $valoracionesTable = TableRegistry::getTableLocator()->get('XservValoraciones');
 
-        foreach ($choferes as $chofer) {
-            // Obtener todas las asignaciones del chofer
-            $asignaciones = $asignacionesTable->find()
-                ->where(['chofer_id' => $chofer->id])
-                ->select(['reserva_id'])
-                ->toArray();
-            
-            $reservaIds = array_column($asignaciones, 'reserva_id');
-            
-            $promedioCalificacion = 0;
-            $totalValoraciones = 0;
-            
-            if (!empty($reservaIds)) {
-                $valoraciones = $valoracionesTable->find()
-                    ->where(['reserva_id IN' => $reservaIds, 'calificacion >' => 0])
-                    ->select(['calificacion'])
+            foreach ($choferes as $chofer) {
+                // Obtener todas las asignaciones del chofer
+                $asignaciones = $asignacionesTable->find()
+                    ->where(['chofer_id' => $chofer->id])
+                    ->select(['reserva_id'])
                     ->toArray();
                 
-                if (!empty($valoraciones)) {
-                    $totalCalificacion = 0;
-                    foreach ($valoraciones as $val) {
-                        $totalCalificacion += $val->calificacion;
+                $reservaIds = array_column($asignaciones, 'reserva_id');
+                
+                $promedioCalificacion = 0;
+                $totalValoraciones = 0;
+                
+                if (!empty($reservaIds)) {
+                    $valoraciones = $valoracionesTable->find()
+                        ->where(['reserva_id IN' => $reservaIds, 'calificacion >' => 0])
+                        ->select(['calificacion'])
+                        ->toArray();
+                    
+                    if (!empty($valoraciones)) {
+                        $totalCalificacion = 0;
+                        foreach ($valoraciones as $val) {
+                            $totalCalificacion += $val->calificacion;
+                        }
+                        $totalValoraciones = count($valoraciones);
+                        $promedioCalificacion = round($totalCalificacion / $totalValoraciones, 1);
                     }
-                    $totalValoraciones = count($valoraciones);
-                    $promedioCalificacion = round($totalCalificacion / $totalValoraciones, 1);
                 }
+                
+                $choferesRatings[$chofer->id] = [
+                    'promedio' => $promedioCalificacion,
+                    'total' => $totalValoraciones
+                ];
             }
-            
-            $choferesRatings[$chofer->id] = [
-                'promedio' => $promedioCalificacion,
-                'total' => $totalValoraciones
-            ];
         }
 
         // Renderizar con datos
@@ -190,8 +197,9 @@ class FrontendController extends AppController
     {
         $csrfToken = $this->request->getAttribute('csrfToken');
         $metaTag = '<meta name="csrfToken" content="' . htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8') . '">';
+        $demoScript = DemoData::isEnabled() ? '<script src="/js/demo-mode.js"></script>' : '';
         
         // Inyectar el meta tag antes del cierre de </head>
-        return str_replace('</head>', $metaTag . "\n</head>", $html);
+        return str_replace('</head>', $metaTag . "\n" . $demoScript . "\n</head>", $html);
     }
 }

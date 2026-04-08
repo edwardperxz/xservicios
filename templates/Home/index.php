@@ -5,6 +5,7 @@
 
 $isAuthenticated = $isAuthenticated ?? false;
 $user = $user ?? null;
+$demoMode = $demoMode ?? false;
 
 // Cargar variables de EmailJS desde el .env
 $emailjsPublicKey = getenv('public_key') ?: '';
@@ -24,6 +25,9 @@ $emailjsTemplateAutoReply = getenv('template_id_autoreply') ?: '';
   
   <!-- Pre-load language from localStorage to avoid flash -->
   <script src="/js/i18n-preload.js"></script>
+  <?php if ($demoMode): ?>
+  <script src="/js/demo-mode.js"></script>
+  <?php endif; ?>
   
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/header-auth.css">

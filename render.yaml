@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: xservicios-demo
+    runtime: docker
+    plan: free
+    autoDeploy: true
+    healthCheckPath: /
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: DEMO_MODE
+        value: "true"
+      - key: DEBUG
+        value: "false"
+      - key: APP_ENV
+        value: "production"
+      - key: SECURITY_SALT
+        generateValue: true
+      - key: APP_FULL_BASE_URL
+        sync: false

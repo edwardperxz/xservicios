@@ -1,0 +1,11 @@
+.git
+.github
+config/app_local.php
+logs
+tmp
+vendor
+tests
+node_modules
+composer.phar
+*.log
+*.sqlite

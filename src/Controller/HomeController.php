@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Utility\DemoData;
 use Cake\Event\EventInterface;
 use Cake\ORM\TableRegistry;
 
@@ -29,6 +30,19 @@ class HomeController extends AppController
     {
         $this->Authorization->skipAuthorization();
         $user = $this->request->getAttribute('identity');
+        $demoMode = DemoData::isEnabled();
+
+        if ($demoMode) {
+            $this->set('isAuthenticated', true);
+            $this->set('user', DemoData::demoUser());
+            $this->set('misReservas', DemoData::homeReservations());
+            $this->set('vehiculos', DemoData::homeVehicles());
+            $this->set('choferes', DemoData::homeDrivers());
+            $this->set('demoMode', true);
+
+            $this->viewBuilder()->disableAutoLayout();
+            return;
+        }
 
 
         // Si hay sesión, redirigir por rol

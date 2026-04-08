@@ -3,15 +3,15 @@ FROM php:8.3-cli AS build
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends git unzip libicu-dev libzip-dev \
-    && docker-php-ext-install intl pdo_mysql zip \
+    && apt-get install -y --no-install-recommends git unzip libicu-dev libzip-dev libxml2-dev libonig-dev \
+    && docker-php-ext-install intl pdo_mysql zip mbstring xml \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 COPY . .
-RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --no-scripts
 
 FROM php:8.3-apache
 
@@ -19,8 +19,8 @@ ENV APACHE_DOCUMENT_ROOT=/var/www/html/webroot
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libicu-dev libzip-dev unzip \
-    && docker-php-ext-install intl pdo_mysql zip \
+    && apt-get install -y --no-install-recommends libicu-dev libzip-dev libxml2-dev libonig-dev unzip \
+    && docker-php-ext-install intl pdo_mysql zip mbstring xml \
     && a2enmod rewrite headers \
     && rm -rf /var/lib/apt/lists/*
 

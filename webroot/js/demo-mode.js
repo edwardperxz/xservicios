@@ -7,8 +7,8 @@
   const defaultState = () => ({
     user: {
       id: 101,
-      nombre: 'Edward',
-      apellidos: 'Perx',
+      nombre: 'Demo',
+      apellidos: '',
       email: 'demo@xservicios.com',
       rol: 'cliente'
     },
@@ -134,6 +134,25 @@
   };
 
   let state = loadState();
+
+  if (!state.user) {
+    state.user = {
+      id: 101,
+      nombre: 'Demo',
+      apellidos: '',
+      email: 'demo@xservicios.com',
+      rol: 'cliente'
+    };
+    saveState();
+  }
+
+  const createDemoUser = () => ({
+    id: 101,
+    nombre: 'Demo',
+    apellidos: '',
+    email: 'demo@xservicios.com',
+    rol: 'cliente'
+  });
 
   const saveState = () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -293,6 +312,9 @@
     const url = normalizePath(input);
 
     if (url.includes('/xserv-usuarios/me')) {
+      if (!state.user) {
+        return jsonResponse({ success: false, message: 'No autenticado' }, { status: 401 });
+      }
       return jsonResponse({ success: true, user: clone(state.user) });
     }
 
@@ -337,7 +359,34 @@
     return originalFetch(input, init);
   };
 
+  const demoSafeRedirect = (href) => {
+    if (!href) return;
+    if (href.startsWith('/xserv-usuarios/')) {
+      window.location.href = '/login';
+      return;
+    }
+    if (href === '/profile' || href === '/settings') {
+      window.location.href = '/home';
+      return;
+    }
+    window.location.href = href;
+  };
+
   document.addEventListener('click', (event) => {
+    const authLink = event.target instanceof Element ? event.target.closest('a[href^="/xserv-usuarios/"]') : null;
+    if (authLink) {
+      event.preventDefault();
+      demoSafeRedirect(authLink.getAttribute('href'));
+      return;
+    }
+
+    const profileLink = event.target instanceof Element ? event.target.closest('a[href="/profile"], a[href="/settings"]') : null;
+    if (profileLink) {
+      event.preventDefault();
+      demoSafeRedirect(profileLink.getAttribute('href'));
+      return;
+    }
+
     const target = event.target instanceof Element ? event.target.closest('a[href*="/xserv-valoraciones/add"]') : null;
     if (!target) {
       return;
@@ -345,6 +394,33 @@
 
     event.preventDefault();
     window.location.href = '/rateservice';
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    if (window.location.pathname.startsWith('/xserv-usuarios/')) {
+      window.location.replace('/login');
+      return;
+    }
+
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+      loginForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        state.user = createDemoUser();
+        saveState();
+        window.location.href = '/home';
+      });
+    }
+
+    const signupForm = document.querySelector('form.register-form');
+    if (signupForm && !document.getElementById('loginForm')) {
+      signupForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        state.user = createDemoUser();
+        saveState();
+        window.location.href = '/home';
+      });
+    }
   });
 
   window.XSERVICIOS_DEMO = true;

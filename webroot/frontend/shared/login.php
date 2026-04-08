@@ -399,8 +399,10 @@
     </div>
   </section>
   <script>
-    // Redirigir al login de CakePHP que genera el token CSRF automáticamente
-    window.location.href = '/xserv-usuarios/login';
+    // En demo mantenemos este formulario para login simulado.
+    if (!window.XSERVICIOS_DEMO) {
+      window.location.href = '/xserv-usuarios/login';
+    }
   </script>
   <script src="/js/i18n.js" defer></script>
   <script src="/js/header-loader.js" defer></script>

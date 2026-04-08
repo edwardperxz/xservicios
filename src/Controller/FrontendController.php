@@ -26,9 +26,9 @@ class FrontendController extends AppController
     {
         parent::beforeFilter($event);
         // Permitir acceso sin autenticación para todas las acciones públicas
-        $this->Authentication->addUnauthenticatedActions(['fleet', 'services', 'service', 'about', 'newreservation', 'rateservice', 'signup', 'login']);
+        $this->Authentication->addUnauthenticatedActions(['fleet', 'services', 'service', 'about', 'newreservation', 'rateservice', 'signup', 'login', 'myreservations']);
         // Saltar verificación de autorización para acciones públicas
-        $this->Authorization->skipAuthorization(['fleet', 'services', 'service', 'about', 'newreservation', 'rateservice', 'signup', 'login']);
+        $this->Authorization->skipAuthorization(['fleet', 'services', 'service', 'about', 'newreservation', 'rateservice', 'signup', 'login', 'myreservations']);
     }
 
     /**

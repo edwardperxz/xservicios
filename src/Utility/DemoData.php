@@ -18,8 +18,8 @@ class DemoData
     {
         return (object)[
             'id' => 101,
-            'nombre' => 'Edward',
-            'apellidos' => 'Perx',
+            'nombre' => 'Demo',
+            'apellidos' => '',
             'email' => 'demo@xservicios.com',
             'rol' => 'cliente',
         ];

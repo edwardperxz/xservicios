@@ -164,12 +164,13 @@ if (PHP_SAPI === 'cli') {
 $fullBaseUrl = Configure::read('App.fullBaseUrl');
 if (!$fullBaseUrl) {
     $httpHost = env('HTTP_HOST');
+    $demoMode = filter_var((string)env('DEMO_MODE', false), FILTER_VALIDATE_BOOLEAN);
 
     /*
      * Only enforce fullBaseUrl requirement when we're in a web request context.
      * This allows CLI tools (like PHPStan) to load the bootstrap without throwing.
      */
-    if (!Configure::read('debug') && $httpHost) {
+    if (!Configure::read('debug') && $httpHost && !$demoMode) {
         throw new CakeException(
             'SECURITY: App.fullBaseUrl is not configured. ' .
             'This is required in production to prevent Host Header Injection attacks. ' .
@@ -188,7 +189,7 @@ if (!$fullBaseUrl) {
         }
         $fullBaseUrl = 'http' . $s . '://' . $httpHost;
     }
-    unset($httpHost, $s);
+    unset($httpHost, $s, $demoMode);
 }
 if ($fullBaseUrl) {
     Router::fullBaseUrl($fullBaseUrl);
